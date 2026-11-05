@@ -1,0 +1,97 @@
+# Offline suite: uv run pytest -v
+tests/contract/test_real_formats.py::test_real_production_rows_match_the_contract PASSED
+tests/contract/test_real_formats.py::test_real_history_rows_match_the_adapter_columns PASSED
+tests/contract/test_real_formats.py::test_real_arcgis_features_validate_and_match_the_adapter PASSED
+tests/contract/test_real_formats.py::test_real_3w_files_match_dataset_ini[2_WELL-*-REAL-2] PASSED
+tests/contract/test_real_formats.py::test_real_3w_files_match_dataset_ini[2_SIMULATED_*-SIMULATED-2] PASSED
+tests/contract/test_real_formats.py::test_real_3w_files_match_dataset_ini[7_DRAWN_*-HAND_DRAWN-7] PASSED
+tests/contract/test_real_formats.py::test_pinned_ini_has_the_contract_version PASSED
+tests/contract/test_real_formats.py::test_every_fixture_records_where_it_came_from PASSED
+tests/integration/test_acquisition.py::test_ocd_batch_preserves_grain_identity_and_provenance PASSED
+tests/integration/test_acquisition.py::test_ocd_invalid_rows_are_quarantined_not_dropped PASSED
+tests/integration/test_acquisition.py::test_ocd_duplicate_production_key_is_quarantined PASSED
+tests/integration/test_acquisition.py::test_ocd_rerun_reuses_batch_without_network_or_download PASSED
+tests/integration/test_acquisition.py::test_ocd_refresh_of_an_unchanged_upstream_version_leaves_raw_immutable PASSED
+tests/integration/test_acquisition.py::test_raw_files_are_read_only_and_checksums_match PASSED
+tests/integration/test_acquisition.py::test_ocd_failures_publish_nothing[http0-ftp0-SourceUnavailable] PASSED
+tests/integration/test_acquisition.py::test_ocd_failures_publish_nothing[http1-ftp1-SourceUnavailable] PASSED
+tests/integration/test_acquisition.py::test_ocd_failures_publish_nothing[http2-ftp2-CountMismatch] PASSED
+tests/integration/test_acquisition.py::test_ocd_failures_publish_nothing[http3-ftp3-SelectionOutOfBounds] PASSED
+tests/integration/test_acquisition.py::test_ocd_low_disk_stops_before_any_download PASSED
+tests/integration/test_acquisition.py::test_ocd_schema_drift_stops_the_batch PASSED
+tests/integration/test_acquisition.py::test_3w_batch_keeps_origin_and_source_identity PASSED
+tests/integration/test_acquisition.py::test_3w_tampered_file_fails_and_publishes_nothing PASSED
+tests/integration/test_acquisition.py::test_3w_rerun_downloads_nothing PASSED
+tests/integration/test_acquisition.py::test_3w_low_disk_stops_before_any_download PASSED
+tests/integration/test_acquisition.py::test_failed_acquisition_reports_failure_and_substitutes_nothing[nm_ocd] PASSED
+tests/integration/test_acquisition.py::test_failed_acquisition_reports_failure_and_substitutes_nothing[petrobras_3w] PASSED
+tests/integration/test_acquisition.py::test_adapters_contain_no_fallback_source PASSED
+tests/unit/test_core_and_transport.py::test_git_blob_hash_matches_known_git_value PASSED
+tests/unit/test_core_and_transport.py::test_preflight_refuses_when_floor_would_be_crossed PASSED
+tests/unit/test_core_and_transport.py::test_freeze_makes_files_read_only PASSED
+tests/unit/test_core_and_transport.py::test_quarantine_keeps_every_record_with_a_reason PASSED
+tests/unit/test_core_and_transport.py::test_http_outage_raises_instead_of_returning_empty PASSED
+tests/unit/test_core_and_transport.py::test_arcgis_error_inside_a_200_response_is_a_failure PASSED
+tests/unit/test_core_and_transport.py::test_non_json_response_is_malformed PASSED
+tests/unit/test_core_and_transport.py::test_ftp_resumes_a_partial_file_when_upstream_is_unchanged PASSED
+tests/unit/test_core_and_transport.py::test_ftp_discards_a_partial_file_from_an_older_upstream_version PASSED
+tests/unit/test_core_and_transport.py::test_ftp_rejects_a_file_that_changes_during_download PASSED
+tests/unit/test_core_and_transport.py::test_ftp_rejects_a_short_download PASSED
+tests/unit/test_core_and_transport.py::test_ftp_outage_raises PASSED
+tests/unit/test_nm_ocd_parsing.py::test_streams_utf16_rows_and_keeps_original_text PASSED
+tests/unit/test_nm_ocd_parsing.py::test_schema_preamble_is_not_mistaken_for_a_row PASSED
+tests/unit/test_nm_ocd_parsing.py::test_missing_closing_tag_is_malformed PASSED
+tests/unit/test_nm_ocd_parsing.py::test_broken_xml_is_malformed PASSED
+tests/unit/test_nm_ocd_parsing.py::test_truncated_zip_is_malformed PASSED
+tests/unit/test_nm_ocd_parsing.py::test_missing_member_is_malformed PASSED
+tests/unit/test_nm_ocd_parsing.py::test_api_number_is_built_from_ocd_parts PASSED
+tests/unit/test_nm_ocd_parsing.py::test_production_window_counts_back_from_file_date PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_production_rows_are_rejected[change0-MISSING_KEY_FIELD] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_production_rows_are_rejected[change1-INVALID_PERIOD] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_production_rows_are_rejected[change2-INVALID_PERIOD] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_production_rows_are_rejected[change3-UNKNOWN_PRODUCT_KIND] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_production_rows_are_rejected[change4-NEGATIVE_VOLUME] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_production_rows_are_rejected[change5-NON_NUMERIC_VOLUME] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_valid_production_row_passes_and_null_volume_is_not_invented PASSED
+tests/unit/test_nm_ocd_parsing.py::test_amended_rows_with_a_new_effective_date_are_distinct_keys PASSED
+tests/unit/test_nm_ocd_parsing.py::test_contradictory_history_timestamps_are_rejected PASSED
+tests/unit/test_nm_ocd_parsing.py::test_open_ended_history_sentinel_is_not_contradictory PASSED
+tests/unit/test_nm_ocd_parsing.py::test_history_coordinates_are_checked PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_well_coordinates_are_quarantined[attributes0-INVALID_COORDINATES] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_well_coordinates_are_quarantined[attributes1-INVALID_COORDINATES] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_invalid_well_coordinates_are_quarantined[attributes2-INVALID_COORDINATES] PASSED
+tests/unit/test_nm_ocd_parsing.py::test_malformed_api_is_quarantined PASSED
+tests/unit/test_nm_ocd_parsing.py::test_conflicting_duplicate_wells_are_both_quarantined PASSED
+tests/unit/test_nm_ocd_parsing.py::test_identical_duplicate_keeps_one_and_records_the_other PASSED
+tests/unit/test_nm_ocd_parsing.py::test_filing_after_the_production_month_is_not_an_anomaly PASSED
+tests/unit/test_nm_ocd_parsing.py::test_effective_date_before_the_production_month_is_flagged PASSED
+tests/unit/test_nm_ocd_parsing.py::test_unparseable_effective_date_raises_instead_of_passing PASSED
+tests/unit/test_petrobras_3w.py::test_origin_comes_from_the_filename_and_real_ids_are_kept PASSED
+tests/unit/test_petrobras_3w.py::test_generated_instances_never_get_a_well_id_or_observed_status PASSED
+tests/unit/test_petrobras_3w.py::test_unrecognized_names_are_not_assumed_to_be_real PASSED
+tests/unit/test_petrobras_3w.py::test_selection_is_deterministic_regardless_of_input_order PASSED
+tests/unit/test_petrobras_3w.py::test_capped_class_spans_every_well PASSED
+tests/unit/test_petrobras_3w.py::test_uncapped_real_instances_are_all_kept_and_generated_ones_limited PASSED
+tests/unit/test_petrobras_3w.py::test_allowed_labels_follow_the_transient_offset PASSED
+tests/unit/test_scaffold.py::test_required_paths_exist PASSED
+tests/unit/test_scaffold.py::test_facility_is_marked_fictional_with_no_operator PASSED
+tests/unit/test_scaffold.py::test_facility_meets_declared_constraints PASSED
+tests/unit/test_scaffold.py::test_aws_placeholders_refuse_rather_than_pretend PASSED
+tests/unit/test_scaffold.py::test_no_raw_data_can_be_committed PASSED
+====================== 79 passed, 10 deselected in 0.82s =======================
+
+# Acquired-data suite: uv run pytest -m acquired -o addopts='' -v
+tests/provenance/test_batches_keep_source_identity.py::test_ocd_bronze_is_observed_and_contains_no_aether_reference PASSED
+tests/provenance/test_batches_keep_source_identity.py::test_3w_generated_instances_are_never_observed_or_tied_to_a_well PASSED
+tests/provenance/test_batches_keep_source_identity.py::test_3w_real_instances_keep_their_source_well_in_the_identifier PASSED
+tests/provenance/test_batches_keep_source_identity.py::test_manifest_checksums_match_raw_files[nm_ocd] PASSED
+tests/provenance/test_batches_keep_source_identity.py::test_manifest_checksums_match_raw_files[petrobras_3w] PASSED
+======================= 5 passed, 84 deselected in 1.00s =======================
+
+# Live endpoint suite: uv run pytest -m live -o addopts='' -v
+tests/integration/test_live_endpoints.py::test_arcgis_selection_is_in_range_and_has_contract_fields PASSED
+tests/integration/test_live_endpoints.py::test_ftp_files_exist[data_dictionary] PASSED
+tests/integration/test_live_endpoints.py::test_ftp_files_exist[wellhistory] PASSED
+tests/integration/test_live_endpoints.py::test_ftp_files_exist[wcproduction] PASSED
+tests/integration/test_live_endpoints.py::test_pinned_3w_commit_is_still_available PASSED
+======================= 5 passed, 84 deselected in 4.80s =======================

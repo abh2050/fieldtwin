@@ -1,0 +1,48 @@
+# Source contract, written from OCD's data dictionary and inspection of real files on 2026-11-05.
+# Types and fill rates measured from the acquired records are in generated/nm_ocd.schema.json.
+# The adapter stops with SchemaDrift if a required column disappears.
+source_system_id: nm_ocd
+provenance_class: OBSERVED
+
+datasets:
+  wells:
+    origin: ArcGIS FeatureServer OCDView/Wells_Public layer 0
+    grain: one row per API number
+    primary_key: [id]
+    crs: EPSG:4269 for service geometry; each well's `projection` field can differ (NAD83, NAD27, WGS84, or blank)
+    required_columns: [id, name, type, status, ogrid, ogrid_name, county, ulstr, latitude, longitude, projection, last_production_date]
+    notes:
+      - OCD describes well locations as approximate.
+      - Not all wells are active. Selection includes New, Cancelled, and Never Drilled records.
+      - Status "New" does not mean non-producing. Many New wells have production rows, so do not infer production from status.
+      - Coordinates can be wrong. 30-015-53569 lies 1 degree north of its PLSS township neighbors, in both OCD systems. Values are kept as reported.
+      - ArcGIS `projection` and FTP `datum` can disagree for identical coordinates. Treat the datum of those wells as unresolved.
+      - Dates are epoch milliseconds. 253402239600000 means 9999-12-31, OCD's "none" value.
+
+  wellhistory:
+    origin: FTP core/wellhistory/wellhistory.zip (one UTF-16 XML member)
+    grain: one row per well per effective period
+    identifier: "api_st_cde + api_cnty_cde + api_well_idn"
+    required_columns: [api_st_cde, api_cnty_cde, api_well_idn, eff_dte, rec_termn_dte, ogrid_cde, well_name, well_typ_cde, latitude, longitude, datum, status]
+    sentinels:
+      - "9999-12-31 in date columns means open-ended or not recorded."
+      - "99999 in elev_gl_num appears to mean not recorded. Confirm in Gate 2."
+
+  wcproduction:
+    origin: FTP volumes/wcproduction/wcproduction.zip (one UTF-16 XML member)
+    grain: well completion by month by product (the C-115 report), one row per product kind
+    candidate_key_from_dictionary: [api_st_cde, api_cnty_cde, api_well_idn, pool_idn, prodn_mth, prodn_yr, ogrid_cde, prd_knd_cde, eff_dte]
+    required_columns: [api_st_cde, api_cnty_cde, api_well_idn, pool_idn, prodn_mth, prodn_yr, ogrid_cde, prd_knd_cde, eff_dte, amend_ind, c115_wc_stat_cde, prod_amt, prodn_day_num, mod_dte]
+    product_kinds: {O: Oil, G: Gas, W: Water}
+    units_as_documented: Volume of fluid produced (MCF or BBLS)
+    units_verified_in: data_contracts/semantic_mappings/ocd_production_units.yaml
+    notes:
+      - This is not lease-level data. Do not allocate or aggregate across grains without a documented method.
+      - Each completion, month, and product has exactly one row in the 2026-11-05 batch, so the extract holds the current version only. amend_ind says it was amended; prior values are not available.
+      - eff_dte is a filing time in recent rows (for example 2024-02-08T19:00:31 for December 2023 production), but month-end in the oldest rows sampled. The dictionary calls it "the date which the RECORD is effective". Do not treat it as the production date.
+      - Rows may include prod_amt of 0. The most recent month is partial because of OCD's reporting lag.
+
+not_available:
+  inspections: >-
+    The OCD Interface v1.1 dictionary lists 22 tables and none covers inspections. A separate OCD
+    system may hold them. No inspection data was acquired, and none is generated in its place.

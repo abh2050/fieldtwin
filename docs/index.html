@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FieldTwin</title>
+<meta name="description" content="FieldTwin project status and documentation. AETHER Field is a fictional facility.">
+<style>
+  :root { --bg:#fff; --fg:#1c2329; --muted:#57636e; --line:#d9dfe4; --note:#fff7e0; --noteline:#c99a1a; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#14181c; --fg:#e7ecf0; --muted:#a2adb7; --line:#2f373e; --note:#2c2614; --noteline:#a07c16; } }
+  * { box-sizing: border-box; }
+  body { margin: 0 auto; max-width: 820px; padding: 32px 16px 64px; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { margin: 0 0 4px; font-size: 1.9rem; }
+  h2 { margin: 36px 0 8px; font-size: 1.2rem; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  p.lead { margin-top: 0; color: var(--muted); }
+  .note { background: var(--note); border-left: 4px solid var(--noteline); padding: 12px 14px; margin: 20px 0; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: .94rem; }
+  th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  a { color: inherit; }
+  code { overflow-wrap: anywhere; }
+  .muted { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>FieldTwin</h1>
+  <p class="lead">Industrial decision support built around provenance and explicit uncertainty.</p>
+</header>
+
+<div class="note" role="note">
+  <strong>AETHER Field is a fictional industrial production environment.</strong>
+  Public industrial datasets have been used for source-grounded experiments, while cross-source asset associations and operational scenarios are explicitly simulated.
+</div>
+
+<main>
+<h2>Overview</h2>
+<p>FieldTwin is meant to carry data from an asset registry through acquisition, reconciliation, fault detection, and inspection evidence to human-approved maintenance. The data foundation and a canonical PostgreSQL schema exist so far. There is no ML model, application UI, or cloud deployment yet.</p>
+
+<h2>Business problem</h2>
+<p>Field data lives in separate systems with different identifiers, units, and reporting grains. A careless join can produce a confident answer that is physically wrong. FieldTwin keeps track of where each value came from and what it can support.</p>
+
+<h2>Status</h2>
+<div class="scroll"><table>
+  <thead><tr><th>Gate</th><th>Scope</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>0</td><td>Project foundation</td><td>Passed (see <code>reports/gates/gate_0.md</code>)</td></tr>
+    <tr><td>1</td><td>Source acquisition</td><td>Passed with documented limits (see <code>reports/gates/gate_1.md</code>)</td></tr>
+    <tr><td>2</td><td>Canonical data model and semantic contracts</td><td>Passed locally, conditional on the first hosted CI run (see <code>reports/gates/gate_2.md</code>)</td></tr>
+    <tr><td>3-10</td><td>Reconciliation through portfolio demonstration</td><td>Not started</td></tr>
+  </tbody>
+</table></div>
+
+<h2>Source data acquired</h2>
+<p class="muted">Measured on 2026-11-05. All records below describe their real sources, not AETHER Field.</p>
+<div class="scroll"><table>
+  <thead><tr><th>Source</th><th>Acquired</th><th>Terms</th></tr></thead>
+  <tbody>
+    <tr><td>New Mexico Oil Conservation Division</td><td>681 gas wells, 1,098 well-history rows, 36,754 production rows (2023-12 to 2026-09)</td><td>No explicit license published</td></tr>
+    <tr><td>Petrobras 3W, dataset 2.0.0</td><td>498 instances (342 real, 136 simulated, 20 hand-drawn), 28.2 million observations</td><td>CC BY 4.0</td></tr>
+    <tr><td>Carbon Mapper, USDA NAIP</td><td>Deferred to Gate 6</td><td>Not yet inspected</td></tr>
+  </tbody>
+</table></div>
+
+<h2>Canonical data model</h2>
+<p>PostgreSQL 16 with PostGIS. Real source assets and fictional facility assets live in separate tables, and foreign keys prevent one standing in for the other. Each record's provenance class must match the transformation that produced it, and sensors can map only within their own equipment class.</p>
+<div class="scroll"><table>
+  <thead><tr><th>Finding</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>OCD production units</td><td>Verified against OCD's C-115 instructions and state rule: gas in MCF at 15.025 psia and 60&nbsp;&deg;F, oil and water in barrels</td></tr>
+    <tr><td>OCD reporting grain</td><td>Well completion, month, and product</td></tr>
+    <tr><td>Spatial population</td><td>645 of 681 wells usable, 1 quarantined for a bad coordinate, 35 with unresolved datum labels</td></tr>
+    <tr><td>3W compared with an AETHER gas well</td><td>0 of 30 variables and 0 of 10 event classes directly compatible</td></tr>
+  </tbody>
+</table></div>
+
+<h2>Test results</h2>
+<p>Executed on 2026-11-05: 129 offline tests, 35 PostgreSQL integration tests, 51 provenance tests, and 17 tests on real data passed. All 21 canonical validation checks passed. Data quality checks: OCD 16 pass, 3 warn, 0 fail; 3W 7 pass, 0 warn, 0 fail. The CI workflow has been run command by command in a clean copy, but not yet on GitHub.</p>
+
+<h2>Known limitations</h2>
+<ul>
+  <li>The two OCD systems appear to share one database, so their agreement isn't independent confirmation.</li>
+  <li>No inspection data was found in the OCD extract, and none was generated in its place.</li>
+  <li>3W comes from offshore oil wells, so it stays a separate benchmark and isn't applied to AETHER Field.</li>
+  <li>The compatibility assessment is engineering judgment, not field validation.</li>
+  <li>OCD's <code>eff_dte</code> meaning is unresolved, and a missing oil or water row isn't assumed to be zero.</li>
+</ul>
+
+<h2>Sections not yet available</h2>
+<p>These have no results, because the work has not been done: digital twin simulation, physics-constrained synthetic telemetry, anomaly detection and model evaluation, decision engine, AWS infrastructure, actual deployment cost, and demo walkthrough.</p>
+</main>
+</body>
+</html>

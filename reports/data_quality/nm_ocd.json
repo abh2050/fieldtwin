@@ -1,0 +1,318 @@
+{
+  "batch_id": "nm_ocd-20261105-15ddeb88ae",
+  "provenance_class": "OBSERVED",
+  "record_counts": {
+    "wells": 681,
+    "wellhistory_rows": 1098,
+    "production_rows": 36754,
+    "production_wells": 438,
+    "production_completions": 441
+  },
+  "wells_by_status": {
+    "Active": 274,
+    "New": 256,
+    "Cancelled": 97,
+    "Plugged (site released)": 33,
+    "Plugged (not released)": 19,
+    "Never Drilled": 1,
+    "Temporary Abandonment (expired)": 1
+  },
+  "production_coverage_by_status": [
+    {
+      "status": "Active",
+      "wells": 274,
+      "with_production_in_window": 274
+    },
+    {
+      "status": "Cancelled",
+      "wells": 97,
+      "with_production_in_window": 0
+    },
+    {
+      "status": "Never Drilled",
+      "wells": 1,
+      "with_production_in_window": 0
+    },
+    {
+      "status": "New",
+      "wells": 256,
+      "with_production_in_window": 151
+    },
+    {
+      "status": "Plugged (not released)",
+      "wells": 19,
+      "with_production_in_window": 9
+    },
+    {
+      "status": "Plugged (site released)",
+      "wells": 33,
+      "with_production_in_window": 3
+    },
+    {
+      "status": "Temporary Abandonment (expired)",
+      "wells": 1,
+      "with_production_in_window": 1
+    }
+  ],
+  "validation_scope": "ArcGIS and FTP are both OCD systems and carry identical values. Agreement shows consistent delivery from one source of record, not independent confirmation.",
+  "coordinate_outliers": [
+    {
+      "id": "30-015-53569",
+      "ulstr": "H-14-23S-28E",
+      "latitude": "33.3074054",
+      "longitude": "-104.050137",
+      "status": "New"
+    }
+  ],
+  "coordinate_datum_counts": {
+    "NAD83": 646,
+    "NAD27": 30,
+    "": 5
+  },
+  "datum_label_pairs_arcgis_vs_ftp": {
+    "NAD83|NAD83": 646,
+    "NAD27|NAD83": 30,
+    "|NAD83": 5
+  },
+  "partial_recent_months": {
+    "2026-09-01": 49
+  },
+  "production_period": {
+    "first": "2023-12-01",
+    "last": "2026-09-01"
+  },
+  "production_rows_by_month": {
+    "2023-12-01": 1052,
+    "2024-01-01": 1054,
+    "2024-02-01": 1044,
+    "2024-03-01": 1043,
+    "2024-04-01": 1058,
+    "2024-05-01": 1046,
+    "2024-06-01": 1071,
+    "2024-07-01": 1070,
+    "2024-08-01": 1067,
+    "2024-09-01": 1068,
+    "2024-10-01": 1075,
+    "2024-11-01": 1064,
+    "2024-12-01": 1104,
+    "2025-01-01": 1085,
+    "2025-02-01": 1112,
+    "2025-03-01": 1110,
+    "2025-04-01": 1114,
+    "2025-05-01": 1107,
+    "2025-06-01": 1112,
+    "2025-07-01": 1128,
+    "2025-08-01": 1144,
+    "2025-09-01": 1150,
+    "2025-10-01": 1153,
+    "2025-11-01": 1161,
+    "2025-12-01": 1159,
+    "2026-01-01": 1172,
+    "2026-02-01": 1189,
+    "2026-03-01": 1186,
+    "2026-04-01": 1160,
+    "2026-05-01": 1154,
+    "2026-06-01": 1160,
+    "2026-07-01": 1168,
+    "2026-08-01": 1165,
+    "2026-09-01": 49
+  },
+  "production_rows_by_kind": {
+    "G": 13543,
+    "W": 11640,
+    "O": 11571
+  },
+  "production_amount_null_rate": 0.0,
+  "amended_rows": {
+    "Y": 23967,
+    "N": 12787
+  },
+  "cross_system_distance_m": {
+    "mean": 0.0,
+    "std": 0.0,
+    "min": 0.0,
+    "50%": 0.0,
+    "95%": 0.0,
+    "max": 0.0
+  },
+  "null_rates": {
+    "wells": {
+      "OBJECTID": 0.0,
+      "id": 0.0,
+      "name": 0.0,
+      "type": 0.0,
+      "status": 0.0,
+      "sub_type_code": 0.1013,
+      "ogrid": 0.0,
+      "ogrid_name": 0.0,
+      "district_code": 0.0,
+      "district": 0.0,
+      "county_code": 0.0,
+      "county": 0.0,
+      "ulstr": 0.0,
+      "latitude": 0.0,
+      "longitude": 0.0,
+      "projection": 0.0,
+      "directional_status": 0.0,
+      "details": 0.0,
+      "files": 0.0,
+      "year_spudded": 0.0,
+      "spud_date": 0.0,
+      "lease_type": 0.0808,
+      "measured_vertical_depth": 0.0,
+      "true_vertical_depth": 0.0,
+      "pool_id_list": 0.0,
+      "last_production_date": 0.0,
+      "plug_date": 0.0,
+      "GlobalID": 0.0,
+      "geometry_x": 0.0,
+      "geometry_y": 0.0,
+      "provenance_class": 0.0,
+      "source_batch_id": 0.0,
+      "has_production": 0.0
+    },
+    "production": {
+      "api": 0.0,
+      "api_st_cde": 0.0,
+      "api_cnty_cde": 0.0,
+      "api_well_idn": 0.0,
+      "pool_idn": 0.0,
+      "prodn_mth": 0.0,
+      "prodn_yr": 0.0,
+      "ogrid_cde": 0.0,
+      "prd_knd_cde": 0.0,
+      "eff_dte": 0.0,
+      "amend_ind": 0.0,
+      "c115_wc_stat_cde": 0.0,
+      "prod_amt": 0.0,
+      "prodn_day_num": 0.0,
+      "mod_dte": 0.0,
+      "provenance_class": 0.0,
+      "source_batch_id": 0.0
+    }
+  },
+  "quarantine_reasons": {
+    "wellhistory:INVALID_COORDINATES": 4
+  },
+  "summary": {
+    "PASS": 16,
+    "WARN": 3,
+    "FAIL": 0
+  },
+  "checks": [
+    {
+      "name": "wells_schema",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Pandera schema has no failure cases"
+    },
+    {
+      "name": "production_schema",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Pandera schema has no failure cases"
+    },
+    {
+      "name": "wells_duplicate_api",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "No duplicate API"
+    },
+    {
+      "name": "wells_in_target_range",
+      "status": "PASS",
+      "measured": 681,
+      "rule": "500-1000 accepted wells"
+    },
+    {
+      "name": "wells_outside_eddy_box_raw",
+      "status": "WARN",
+      "measured": 1,
+      "rule": "Inside approximate box (raw count, before quarantine)"
+    },
+    {
+      "name": "wells_outside_eddy_box_not_quarantined",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Any well outside the box must be excluded by the spatial quarantine rule"
+    },
+    {
+      "name": "registry_wells_in_ftp_history",
+      "status": "PASS",
+      "measured": 1.0,
+      "rule": "PASS at 99%+ of ArcGIS wells present in wellhistory"
+    },
+    {
+      "name": "wells_with_multiple_open_history_rows",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Each well has at most one open (9999-12-31) history row"
+    },
+    {
+      "name": "status_agreement",
+      "status": "PASS",
+      "measured": 1.0,
+      "rule": "PASS at 95%+ of wells with the same status after OCD's decode table"
+    },
+    {
+      "name": "operator_agreement",
+      "status": "PASS",
+      "measured": 1.0,
+      "rule": "PASS at 90%+ of wells with the same OGRID in both systems"
+    },
+    {
+      "name": "datum_label_conflicts_across_systems",
+      "status": "WARN",
+      "measured": 35,
+      "rule": "ArcGIS projection and FTP datum name the same datum"
+    },
+    {
+      "name": "coordinates_within_100m_across_systems",
+      "status": "PASS",
+      "measured": 1.0,
+      "rule": "PASS at 95%+ of wells within 100 m between ArcGIS and wellhistory"
+    },
+    {
+      "name": "active_wells_with_production",
+      "status": "PASS",
+      "measured": 1.0,
+      "rule": "PASS at 90%+ of Active wells with a production row in the window"
+    },
+    {
+      "name": "production_rows_outside_target_wells",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Every production row belongs to a target well"
+    },
+    {
+      "name": "last_production_month_agreement",
+      "status": "PASS",
+      "measured": 0.9656,
+      "rule": "PASS at 90%+ of wells within two months between systems"
+    },
+    {
+      "name": "production_effective_date_before_period",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "eff_dte, a filing time in recent rows, is not before the production month"
+    },
+    {
+      "name": "production_periods_with_multiple_rows",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "One row per completion, month, and product, so volumes cannot double count"
+    },
+    {
+      "name": "production_days_over_31",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "prodn_day_num is 31 or less"
+    },
+    {
+      "name": "quarantined_records",
+      "status": "WARN",
+      "measured": 4,
+      "rule": "No records quarantined"
+    }
+  ]
+}

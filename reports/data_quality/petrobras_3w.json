@@ -1,0 +1,260 @@
+{
+  "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+  "dataset_version": "2.0.0",
+  "commit": "8aaa303f9b9d6ced690d136218d141624b10558d",
+  "record_counts": {
+    "instances": 498,
+    "observations": 28226175,
+    "real_wells": 40
+  },
+  "instances_by_class_and_origin": {
+    "0": {
+      "REAL": 100
+    },
+    "1": {
+      "HAND_DRAWN": 10,
+      "SIMULATED": 20,
+      "REAL": 4
+    },
+    "2": {
+      "SIMULATED": 16,
+      "REAL": 22
+    },
+    "3": {
+      "SIMULATED": 20,
+      "REAL": 32
+    },
+    "4": {
+      "REAL": 60
+    },
+    "5": {
+      "SIMULATED": 20,
+      "REAL": 11
+    },
+    "6": {
+      "SIMULATED": 20,
+      "REAL": 6
+    },
+    "7": {
+      "HAND_DRAWN": 10,
+      "REAL": 36
+    },
+    "8": {
+      "SIMULATED": 20,
+      "REAL": 14
+    },
+    "9": {
+      "SIMULATED": 20,
+      "REAL": 57
+    }
+  },
+  "real_wells_by_class": {
+    "0": 9,
+    "1": 3,
+    "2": 7,
+    "3": 2,
+    "4": 7,
+    "5": 3,
+    "6": 2,
+    "7": 6,
+    "8": 9,
+    "9": 15
+  },
+  "observations_by_origin": {
+    "HAND_DRAWN": 2966410,
+    "REAL": 19700894,
+    "SIMULATED": 5558871
+  },
+  "median_sampling_step_s_by_origin": {
+    "REAL": {
+      "1.0": 342
+    },
+    "HAND_DRAWN": {
+      "1.0": 20
+    },
+    "SIMULATED": {
+      "1.0": 136
+    }
+  },
+  "period_real": {
+    "first": "2011-08-30 23:53:21",
+    "last": "2023-09-26 14:01:25"
+  },
+  "sensor_null_rate_by_origin": {
+    "HAND_DRAWN": 0.8148,
+    "REAL": 0.4838,
+    "SIMULATED": 0.791
+  },
+  "instances_where_sensor_is_entirely_empty": {
+    "REAL": {
+      "ABER-CKGL": 201,
+      "ABER-CKP": 188,
+      "P-JUS-BS": 342,
+      "P-JUS-CKP": 331,
+      "P-MON-CKGL": 340,
+      "P-MON-SDV-P": 342,
+      "PT-P": 342,
+      "QBS": 342,
+      "T-MON-CKP": 327,
+      "ESTADO-DHSV": 208,
+      "ESTADO-M1": 177,
+      "ESTADO-M2": 174,
+      "ESTADO-PXO": 158,
+      "ESTADO-SDV-GL": 156,
+      "ESTADO-SDV-P": 101,
+      "ESTADO-W1": 133,
+      "ESTADO-W2": 157,
+      "ESTADO-XO": 157,
+      "P-JUS-CKGL": 86,
+      "P-MON-CKP": 56,
+      "QGL": 128,
+      "T-JUS-CKP": 129,
+      "T-PDG": 107,
+      "P-PDG": 78,
+      "P-ANULAR": 78,
+      "P-TPT": 41,
+      "T-TPT": 41
+    },
+    "HAND_DRAWN": {
+      "ABER-CKGL": 20,
+      "ABER-CKP": 20,
+      "ESTADO-DHSV": 20,
+      "ESTADO-M1": 20,
+      "ESTADO-M2": 20,
+      "ESTADO-PXO": 20,
+      "ESTADO-SDV-GL": 20,
+      "ESTADO-SDV-P": 20,
+      "ESTADO-W1": 20,
+      "ESTADO-W2": 20,
+      "ESTADO-XO": 20,
+      "P-ANULAR": 20,
+      "P-JUS-BS": 20,
+      "P-JUS-CKGL": 20,
+      "P-JUS-CKP": 20,
+      "P-MON-CKGL": 20,
+      "P-MON-SDV-P": 20,
+      "PT-P": 20,
+      "QBS": 20,
+      "QGL": 20,
+      "T-MON-CKP": 20,
+      "T-PDG": 20
+    },
+    "SIMULATED": {
+      "ABER-CKGL": 136,
+      "ABER-CKP": 136,
+      "ESTADO-DHSV": 136,
+      "ESTADO-M1": 136,
+      "ESTADO-M2": 136,
+      "ESTADO-PXO": 136,
+      "ESTADO-SDV-GL": 136,
+      "ESTADO-SDV-P": 136,
+      "ESTADO-W1": 136,
+      "ESTADO-W2": 136,
+      "ESTADO-XO": 136,
+      "P-ANULAR": 136,
+      "P-JUS-BS": 136,
+      "P-JUS-CKGL": 116,
+      "P-JUS-CKP": 96,
+      "P-MON-CKGL": 136,
+      "P-MON-SDV-P": 136,
+      "PT-P": 136,
+      "QBS": 136,
+      "QGL": 116,
+      "T-MON-CKP": 96,
+      "T-PDG": 136,
+      "T-TPT": 20
+    }
+  },
+  "label_null_rows": 1231200,
+  "state_null_rows": 1231200,
+  "documented_units": {
+    "timestamp": "Instant at which observation was generated",
+    "ABER-CKGL": "Opening of the GLCK (gas lift choke) [%%]",
+    "ABER-CKP": "Opening of the PCK (production choke) [%%]",
+    "ESTADO-DHSV": "State of the DHSV (downhole safety valve) [0, 0.5, or 1]",
+    "ESTADO-M1": "State of the PMV (production master valve) [0, 0.5, or 1]",
+    "ESTADO-M2": "State of the AMV (annulus master valve) [0, 0.5, or 1]",
+    "ESTADO-PXO": "State of the PXO (pig-crossover) valve [0, 0.5, or 1]",
+    "ESTADO-SDV-GL": "State of the gas lift SDV (shutdown valve) [0, 0.5, or 1]",
+    "ESTADO-SDV-P": "State of the production SDV (shutdown valve) [0, 0.5, or 1]",
+    "ESTADO-W1": "State of the PWV (production wing valve) [0, 0.5, or 1]",
+    "ESTADO-W2": "State of the AWV (annulus wing valve) [0, 0.5, or 1]",
+    "ESTADO-XO": "State of the XO (crossover) valve [0, 0.5, or 1]",
+    "P-ANULAR": "Pressure in the well annulus [Pa]",
+    "P-JUS-BS": "Downstream pressure of the SP (service pump) [Pa]",
+    "P-JUS-CKGL": "Downstream pressure of the GLCK (gas lift choke) [Pa]",
+    "P-JUS-CKP": "Downstream pressure of the PCK (production choke) [Pa]",
+    "P-MON-CKGL": "Upstream pressure of the GLCK (gas lift choke) [Pa]",
+    "P-MON-CKP": "Upstream pressure of the PCK (production choke) [Pa]",
+    "P-MON-SDV-P": "Upstream pressure of the production SDV (shutdown valve) [Pa]",
+    "P-PDG": "Downhole pressure at the PDG (permanent downhole gauge) [Pa]",
+    "PT-P": "Subsea Xmas-tree pressure downstream of the PWV (production wing valve) in the production line [Pa]",
+    "P-TPT": "Subsea Xmas-tree pressure at the TPT (temperature and pressure transducer) [Pa]",
+    "QBS": "Flow rate at the SP (service pump) [m3/s]",
+    "QGL": "Gas lift flow rate [m3/s]",
+    "T-JUS-CKP": "Downstream temperature of the PCK (production choke) [oC]",
+    "T-MON-CKP": "Upstream temperature of the PCK (production choke) [oC]",
+    "T-PDG": "Downhole temperature at the PDG (permanent downhole gauge) [oC]",
+    "T-TPT": "Subsea Xmas-tree temperature at the TPT (temperature and pressure transducer) [oC]",
+    "class": "Label of the observation",
+    "state": "Well operational status"
+  },
+  "semantic_findings": [
+    "dataset.ini gives units but not the pressure reference type, so absolute, gauge, and differential cannot be distinguished. Treat the reference type as UNKNOWN.",
+    "The source describes offshore wells with subsea trees, gas lift, and a DHSV. Physical compatibility with an onshore gas well must be assessed before any scenario mapping.",
+    "`class` is per observation. Transient periods use label + 100 and rows can be null."
+  ],
+  "details_of_failing_instances": {
+    "schema": [],
+    "labels": []
+  },
+  "summary": {
+    "PASS": 7,
+    "WARN": 0,
+    "FAIL": 0
+  },
+  "checks": [
+    {
+      "name": "schema_differs_from_dataset_ini",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Columns match the .ini"
+    },
+    {
+      "name": "class_values_outside_directory_label",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "`class` holds only 0, the directory label, or label + 100"
+    },
+    {
+      "name": "non_increasing_timestamps",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Timestamps strictly increase within an instance"
+    },
+    {
+      "name": "origin_label_errors",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Origin never relabeled"
+    },
+    {
+      "name": "all_classes_have_real_instances",
+      "status": "PASS",
+      "measured": 10,
+      "rule": "Classes 0-9 each have a real instance"
+    },
+    {
+      "name": "event_classes_with_fewer_than_two_real_wells",
+      "status": "PASS",
+      "measured": [],
+      "rule": "Well-grouped evaluation needs 2+ real wells per class"
+    },
+    {
+      "name": "instances_with_time_gaps_over_60s",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "No gap above 60 s"
+    }
+  ]
+}

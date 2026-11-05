@@ -1,0 +1,28 @@
+# Petrobras 3W. Repository and version were verified 2026-11-05.
+source_system_id: petrobras_3w
+provider: Petrobras
+source_url: https://github.com/petrobras/3W
+repo: petrobras/3W
+commit: 8aaa303f9b9d6ced690d136218d141624b10558d
+expected_dataset_version: 2.0.0
+license:
+  explicit_license: CC-BY-4.0 (data), Apache-2.0 (code)
+  note: As stated in the repository README at the pinned commit.
+  usage_constraints: Attribution required. See CITATION.md, stored with each batch.
+
+# Stored with each batch for provenance.
+metadata_files:
+  - dataset/dataset.ini
+  - 3W_DATASET_STRUCTURE.md
+  - LICENSE.md
+  - README.md
+  - CITATION.md
+
+# Deterministic bounded subset, about 0.55 GB of 1.79 GB. Files are chosen by sorted name only.
+selection:
+  real_cap_by_class: {0: 100, 4: 60} # Other classes keep every real instance.
+  simulated_per_class: 20
+  drawn_per_class: 20
+
+disk_floor_bytes: 5368709120
+max_concurrent_downloads: 6

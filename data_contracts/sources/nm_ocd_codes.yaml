@@ -1,0 +1,29 @@
+# Code lists read from OCD's consolidated code list and C-115 instructions.
+wellhistory_status:
+  A: Active
+  C: Cancelled
+  D: Dry Hole
+  E: Temporary Abandonment (expired)
+  H: Plugged (not released)
+  I: Reclamation Fund Approved
+  J: Reclamation Fund Pending
+  N: New
+  P: Plugged (site released)
+  Q: Zone Plugged (permanent)
+  S: Shut In
+  T: Temporary Abandonment
+  X: Never Drilled
+  Z: Zone Plugged (temporary)
+c115_completion_status:
+  F: Flowing
+  T: Temporarily Abandoned
+  P: Pumping
+  I: Injection Well (includes shut-in)
+  G: Gas Lift
+  D: Saltwater Disposal Well (includes shut-in)
+  S: Shut-In
+  A: Plugged and Abandoned
+product_kind:
+  O: Oil
+  G: Gas
+  W: Water

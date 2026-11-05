@@ -1,0 +1,87 @@
+{
+  "batch_id": "nm_ocd-20261105-15ddeb88ae",
+  "source_system_id": "nm_ocd",
+  "source_version": "20261105",
+  "config_sha256": "15ddeb88ae2658175bd0a0d6d1e6d1a1283bce1a722161d5afc822112d406cca",
+  "ingestion_timestamp": "2026-11-05T21:12:47Z",
+  "original_checksum": "b9c20868ea5f5a051619cc2301f422f2b7ff904402b592bd61f7f49193ccc90b",
+  "source_record_count": 38537,
+  "accepted_count": 38533,
+  "rejected_count": 4,
+  "processing_status": "COMPLETE",
+  "manifest_uri": "data/manifests/nm_ocd/nm_ocd-20261105-15ddeb88ae.json",
+  "license": {
+    "explicit_license": "none_found",
+    "note": "OCD publishes no explicit data license. Its pages describe the data as publicly available to browse, view, and download. The EMNRD legal disclaimer says the site does \"not constitute an official or final repository\" and assumes no responsibility for errors or omissions.",
+    "disclaimer_url": "https://www.emnrd.nm.gov/officeofsecretary/legal-disclaimer/",
+    "usage_constraints": "Do not describe as openly licensed. Raw data is not committed to this repository. Attribute to NM OCD and treat well locations as approximate."
+  },
+  "files": [
+    {
+      "path": "data/raw/nm_ocd/20261105/nm_ocd-20261105-15ddeb88ae/ftp/OCD Interface v1.1 Data Dictionary.xlsx",
+      "sha256": "eae1cd092e34e84fc9021c533652165c85e2e901705f7fcabb352244eec1eb52",
+      "size_bytes": 30513,
+      "source_url": "ftp://ftp.emnrd.nm.gov/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx",
+      "source_modified": "20231027155929.695",
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/nm_ocd/20261105/nm_ocd-20261105-15ddeb88ae/ftp/wellhistory.zip",
+      "sha256": "4e157259fca2f33390f58161b8c8dc450a0ef42d0a0fdc22fab144f469fe8810",
+      "size_bytes": 44318403,
+      "source_url": "ftp://ftp.emnrd.nm.gov/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip",
+      "source_modified": "20261104235904.406",
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/nm_ocd/20261105/nm_ocd-20261105-15ddeb88ae/ftp/wcproduction.zip",
+      "sha256": "ae1c65569357cee1c87e1fb77dbf5bcc444cb5f438fb2f58fa376d94b411824a",
+      "size_bytes": 974763778,
+      "source_url": "ftp://ftp.emnrd.nm.gov/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip",
+      "source_modified": "20261105012249.844",
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/nm_ocd/20261105/nm_ocd-20261105-15ddeb88ae/arcgis/layer_metadata.json",
+      "sha256": "ee63fd25ee8a4daf8505c9957686d3a9499109be124dafbdd7e22c346db4983b",
+      "size_bytes": 14349,
+      "source_url": "https://gis.emnrd.nm.gov/arcgis/rest/services/OCDView/Wells_Public/FeatureServer/0",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/nm_ocd/20261105/nm_ocd-20261105-15ddeb88ae/arcgis/page_000000.json",
+      "sha256": "d997cbbc0c9d72c5ab05ce57791e4daeca051b63261ce43baece1aa1ecd95e58",
+      "size_bytes": 734231,
+      "source_url": "https://gis.emnrd.nm.gov/arcgis/rest/services/OCDView/Wells_Public/FeatureServer/0",
+      "source_modified": null,
+      "upstream_checksum": null
+    }
+  ],
+  "datasets": {
+    "wells": {
+      "source_records": 681,
+      "accepted": 681
+    },
+    "wellhistory": {
+      "rows_scanned": 322744,
+      "in_scope": 1102,
+      "accepted": 1098
+    },
+    "wcproduction": {
+      "rows_scanned": 48412089,
+      "in_scope": 36754,
+      "accepted": 36754,
+      "first_month": "2023-12",
+      "reporting_grain": "well_completion (API + pool + month + product)",
+      "unit_as_documented": "MCF or BBLS"
+    },
+    "quarantine_reasons": {
+      "wellhistory:INVALID_COORDINATES": 4
+    }
+  },
+  "notes": [
+    "Retrieved 2026-11-05. OCD publishes no checksums and FTP is unencrypted, so SHA-256 values prove only that files are unchanged since receipt.",
+    "ArcGIS is a live service with no version. Its pages reflect the retrieval date."
+  ]
+}

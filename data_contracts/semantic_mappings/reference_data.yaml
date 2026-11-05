@@ -1,0 +1,57 @@
+# Reference data seeded into a fresh database by pipelines.normalize.seed.
+units:
+  - {unit_id: Pa, physical_quantity: pressure, description: Pascal}
+  - {unit_id: psi, physical_quantity: pressure, description: Pound-force per square inch}
+  - {unit_id: degC, physical_quantity: temperature, description: Degrees Celsius}
+  - {unit_id: degF, physical_quantity: temperature, description: Degrees Fahrenheit}
+  - {unit_id: m3_per_s, physical_quantity: volume_flow, description: Cubic metres per second at unspecified conditions}
+  - {unit_id: percent, physical_quantity: fraction_open, description: Percent open}
+  - {unit_id: valve_state, physical_quantity: valve_state, description: "3W valve state: 0, 0.5, or 1"}
+  - {unit_id: MCF_15025PSIA_60F, physical_quantity: gas_volume, description: "1,000 cubic feet of gas at 15.025 psia and 60 degrees F"}
+  - {unit_id: BBL_60F, physical_quantity: liquid_volume, description: 42 US gallons at 60 degrees F and sea-level atmospheric pressure}
+
+unit_conversions:
+  - {from: Pa, to: Pa, quantity: pressure, factor: 1.0, term: 0.0, method: IDENTITY}
+  - {from: psi, to: Pa, quantity: pressure, factor: 6894.757293168, term: 0.0, method: LINEAR_PSI_TO_PA}
+  - {from: degC, to: degC, quantity: temperature, factor: 1.0, term: 0.0, method: IDENTITY}
+  - {from: degF, to: degC, quantity: temperature, factor: 0.5555555555555556, term: -17.77777777777778, method: LINEAR_DEGF_TO_DEGC}
+  - {from: m3_per_s, to: m3_per_s, quantity: volume_flow, factor: 1.0, term: 0.0, method: IDENTITY}
+  - {from: percent, to: percent, quantity: fraction_open, factor: 1.0, term: 0.0, method: IDENTITY}
+  - {from: valve_state, to: valve_state, quantity: valve_state, factor: 1.0, term: 0.0, method: IDENTITY}
+
+equipment_classes:
+  - {id: NM_ONSHORE_WELL, name: New Mexico onshore well, domain: REAL_ONSHORE, description: A real well in the OCD registry., basis: OCD well registry}
+  - {id: OFFSHORE_SUBSEA_WELL, name: Offshore well with subsea tree, domain: REAL_OFFSHORE, description: "A real, anonymized offshore oil well in Petrobras 3W.", basis: 3W README and dataset.ini}
+  - {id: AETHER_ONSHORE_GAS_WELL, name: AETHER onshore gas well, domain: FICTIONAL_ONSHORE, description: A fictional naturally flowing onshore gas well., basis: config/facility/aether_field.yaml}
+  - {id: AETHER_WELL_PAD, name: AETHER well pad, domain: FICTIONAL_ONSHORE, description: A fictional well pad., basis: config/facility/aether_field.yaml}
+  - {id: AETHER_GATHERING, name: AETHER gathering equipment, domain: FICTIONAL_ONSHORE, description: Fictional gathering segments and valves., basis: config/facility/aether_field.yaml}
+  - {id: AETHER_COMPRESSOR, name: AETHER compressor, domain: FICTIONAL_ONSHORE, description: A fictional compressor unit., basis: config/facility/aether_field.yaml}
+  - {id: AETHER_FIELD_OPERATIONS, name: AETHER field operations, domain: FICTIONAL_ONSHORE, description: Fictional operations functions., basis: config/facility/aether_field.yaml}
+
+# Design assumptions for the fictional well. These describe what it would measure, not any data.
+aether_measurements:
+  - {id: aether_well.tubing_head_pressure, quantity: pressure, unit: Pa, location: Surface wellhead tubing head upstream of production choke, reference: GAUGE, capability: EXPECTED}
+  - {id: aether_well.casing_head_pressure, quantity: pressure, unit: Pa, location: Surface wellhead casing head, reference: GAUGE, capability: OPTIONAL}
+  - {id: aether_well.flowline_pressure, quantity: pressure, unit: Pa, location: Surface flowline downstream of production choke, reference: GAUGE, capability: EXPECTED}
+  - {id: aether_well.flowline_temperature, quantity: temperature, unit: degC, location: Surface flowline downstream of production choke, reference: NOT_APPLICABLE, capability: EXPECTED}
+  - {id: aether_well.choke_opening, quantity: fraction_open, unit: percent, location: Surface production choke, reference: NOT_APPLICABLE, capability: EXPECTED}
+
+source_systems:
+  - id: aether_synthetic
+    provider: FieldTwin project
+    source_url: config/facility/aether_field.yaml
+    license: Project-generated
+    usage_constraints: Fictional. Must be labeled SYNTHETIC wherever displayed.
+    is_project_generated: true
+
+transformations:
+  - {id: "aether.facility_config.to_assets@1", name: aether.facility_config.to_assets, version: 1, code: pipelines/normalize/seed.py, description: Builds the fictional hierarchy from the facility configuration., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "ocd.arcgis_wells.to_source_assets@1", name: ocd.arcgis_wells.to_source_assets, version: 1, code: pipelines/normalize/ocd.py, description: Registry rows to real well assets. Reported values are kept unchanged., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "ocd.production_keys.to_completions@1", name: ocd.production_keys.to_completions, version: 1, code: pipelines/normalize/ocd.py, description: Well completions identified by API and pool as reported in production rows., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "ocd.wellhistory.to_history@1", name: ocd.wellhistory.to_history, version: 1, code: pipelines/normalize/ocd.py, description: History rows to temporal records. The open-ended date sentinel becomes NULL., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "ocd.wcproduction.to_production_records@1", name: ocd.wcproduction.to_production_records, version: 1, code: pipelines/normalize/ocd.py, description: Production rows at source grain with volumes unchanged and units attached from verified rules., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "3w.well.to_source_asset@1", name: 3w.well.to_source_asset, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Anonymized well IDs from real instance names., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "3w.real_instance.to_event@1", name: 3w.real_instance.to_event, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Real instance metadata., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "3w.generated_instance.to_event@1", name: 3w.generated_instance.to_event, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Simulated and hand-drawn instance metadata., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "3w.real_series.to_observation@1", name: 3w.real_series.to_observation, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Per-sensor metadata for a real instance. Values stay in Parquet., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "3w.generated_series.to_observation@1", name: 3w.generated_series.to_observation, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Per-sensor metadata for a generated instance., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}

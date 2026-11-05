@@ -1,0 +1,30 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Data: recreated by `make acquire`; data/manifests and data/fixtures stay tracked
+data/raw/*
+!data/raw/README.md
+data/bronze/*
+!data/bronze/README.md
+data/silver/*
+!data/silver/README.md
+data/gold/*
+!data/gold/README.md
+
+# Real OCD samples: no stated redistribution terms
+data/fixtures_local/
+
+# OS
+.DS_Store

@@ -1,0 +1,1544 @@
+{
+  "datasets": {
+    "wcproduction": {
+      "bronze_file": "data/bronze/nm_ocd/nm_ocd-20261105-15ddeb88ae/wcproduction.parquet",
+      "columns": {
+        "amend_ind": {
+          "blank_count": 0,
+          "distinct_count": 2,
+          "documented_description": "Identifies submitted form as an amended form",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 36754
+        },
+        "api": {
+          "blank_count": 0,
+          "distinct_count": 438,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 12,
+          "length_min": 12,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 36754
+        },
+        "api_cnty_cde": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "American Petroleum Institute county code",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "api_st_cde": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "American Petroleum Institute unique state identifier",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "api_well_idn": {
+          "blank_count": 0,
+          "distinct_count": 438,
+          "documented_description": "American Petroleum Institute unique well code, by county",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 5,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "c115_wc_stat_cde": {
+          "blank_count": 0,
+          "distinct_count": 5,
+          "documented_description": "WC Status Code reported on C115",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 36754
+        },
+        "eff_dte": {
+          "blank_count": 0,
+          "distinct_count": 693,
+          "documented_description": "The date which the RECORD is effective",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 23,
+          "length_min": 19,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 36754
+        },
+        "mod_dte": {
+          "blank_count": 0,
+          "distinct_count": 265,
+          "documented_description": "Last modified",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 23,
+          "length_min": 23,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 36754
+        },
+        "ogrid_cde": {
+          "blank_count": 0,
+          "distinct_count": 19,
+          "documented_description": "Oil & Gas Reporting ID",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 6,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "pool_idn": {
+          "blank_count": 0,
+          "distinct_count": 18,
+          "documented_description": "Identifier code for specific pool",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 5,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "prd_knd_cde": {
+          "blank_count": 0,
+          "distinct_count": 3,
+          "documented_description": "Product Kind Code",
+          "documented_type": "char(2)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 36754
+        },
+        "prod_amt": {
+          "blank_count": 0,
+          "distinct_count": 18814,
+          "documented_description": "Volume of fluid produced (MCF or BBLS)",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 6,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "prodn_day_num": {
+          "blank_count": 0,
+          "distinct_count": 32,
+          "documented_description": "Number of days well completion produced or injected",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "prodn_mth": {
+          "blank_count": 0,
+          "distinct_count": 12,
+          "documented_description": "Month in which production occurred",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "prodn_yr": {
+          "blank_count": 0,
+          "distinct_count": 4,
+          "documented_description": "Year that production occurred",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 4,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 36754
+        },
+        "provenance_class": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 8,
+          "length_min": 8,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 36754
+        },
+        "source_batch_id": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 26,
+          "length_min": 26,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 36754
+        }
+      },
+      "documented_columns_not_in_bronze": [],
+      "raw_file": "wcproduction.zip",
+      "raw_sha256": "ae1c65569357cee1c87e1fb77dbf5bcc444cb5f438fb2f58fa376d94b411824a",
+      "row_count": 36754
+    },
+    "wellhistory": {
+      "bronze_file": "data/bronze/nm_ocd/nm_ocd-20261105-15ddeb88ae/wellhistory.parquet",
+      "columns": {
+        "api": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 12,
+          "length_min": 12,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "api_cnty_cde": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "American Petroleum Institute county code",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "api_st_cde": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "American Petroleum Institute unique state identifier",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "api_well_idn": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "documented_description": "American Petroleum Institute unique well code, by county",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 5,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "completed_in_adjacent_state": {
+          "blank_count": 0,
+          "distinct_count": 0,
+          "documented_description": "Handful of directional wells completed in state adjacent to NM",
+          "documented_type": "varchar(2)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": null,
+          "length_min": null,
+          "null_count": 1098,
+          "null_rate": 1.0,
+          "nullable_observed": true,
+          "observed_types": [],
+          "row_count": 1098
+        },
+        "datum": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "OCD is standardizing on NAD83",
+          "documented_type": "varchar(50)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 5,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "directional_status": {
+          "blank_count": 22,
+          "distinct_count": 4,
+          "documented_description": "Differentiate vertical, horizontal, directional",
+          "documented_type": "char(1)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 228,
+          "null_rate": 0.2077,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "dpth_mvd_num": {
+          "blank_count": 0,
+          "distinct_count": 294,
+          "documented_description": "Measured vertical depth for well",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "dpth_tgt_num": {
+          "blank_count": 0,
+          "distinct_count": 475,
+          "documented_description": "Operator-determined well target depth submitted on APD",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "dpth_tvd_num": {
+          "blank_count": 0,
+          "distinct_count": 284,
+          "documented_description": "True vertical depth for well",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "eff_dte": {
+          "blank_count": 0,
+          "distinct_count": 548,
+          "documented_description": "The date which the RECORD is effective",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 19,
+          "length_min": 19,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 1098
+        },
+        "elev_gl_num": {
+          "blank_count": 0,
+          "distinct_count": 166,
+          "documented_description": "Elevation (in ft above sea level) of the ground at site",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "ew_cde": {
+          "blank_count": 0,
+          "distinct_count": 2,
+          "documented_description": "Identifies footage call base line",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "ftg_ew_num": {
+          "blank_count": 0,
+          "distinct_count": 407,
+          "documented_description": "Distance from East or West section line, in feet",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 4,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "ftg_ns_num": {
+          "blank_count": 0,
+          "distinct_count": 352,
+          "documented_description": "Distance from North or South Section Line, in feet",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 4,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "last_apd_apr_date": {
+          "blank_count": 0,
+          "distinct_count": 358,
+          "documented_description": "APD approval date",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 19,
+          "length_min": 19,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 1098
+        },
+        "last_apd_cancel_date": {
+          "blank_count": 0,
+          "distinct_count": 57,
+          "documented_description": "APD cancellation date",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 19,
+          "length_min": 19,
+          "null_count": 980,
+          "null_rate": 0.8925,
+          "nullable_observed": true,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 1098
+        },
+        "last_apd_status": {
+          "blank_count": 0,
+          "distinct_count": 3,
+          "documented_description": "APD status (may have multiple APDs over life of well)",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "latitude": {
+          "blank_count": 0,
+          "distinct_count": 737,
+          "documented_description": "Wellhead surface location",
+          "documented_type": "float",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 22,
+          "length_min": 22,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "float"
+          ],
+          "row_count": 1098
+        },
+        "lease_typ_cde": {
+          "blank_count": 2,
+          "distinct_count": 4,
+          "documented_description": "Lease Type.",
+          "documented_type": "char(2)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "longitude": {
+          "blank_count": 0,
+          "distinct_count": 770,
+          "documented_description": "Wellhead surface location",
+          "documented_type": "float",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 23,
+          "length_min": 23,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "float"
+          ],
+          "row_count": 1098
+        },
+        "lot_idn": {
+          "blank_count": 1097,
+          "distinct_count": 2,
+          "documented_description": "Identifier for Lots with same number in Section",
+          "documented_type": "char(6)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 6,
+          "length_min": 6,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "ns_cde": {
+          "blank_count": 0,
+          "distinct_count": 2,
+          "documented_description": "Identifies footage call base line",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "ocd_district": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "OCD District.",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "ocd_unlt_idn": {
+          "blank_count": 19,
+          "distinct_count": 18,
+          "documented_description": "Identifier for Lots with same number in Section",
+          "documented_type": "char(1)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "integer",
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "ogrid_cde": {
+          "blank_count": 0,
+          "distinct_count": 100,
+          "documented_description": "Oil & Gas Reporting ID",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 6,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "plug_dte": {
+          "blank_count": 0,
+          "distinct_count": 34,
+          "documented_description": "Plug date.",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 19,
+          "length_min": 19,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 1098
+        },
+        "prod_prop_idn": {
+          "blank_count": 0,
+          "distinct_count": 653,
+          "documented_description": "Property Associated with Well",
+          "documented_type": "int",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 6,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "prop_fm_desc": {
+          "blank_count": 426,
+          "distinct_count": 75,
+          "documented_description": "Proposed Formation",
+          "documented_type": "char(40)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 40,
+          "length_min": 40,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "provenance_class": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 8,
+          "length_min": 8,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "rec_termn_dte": {
+          "blank_count": 0,
+          "distinct_count": 220,
+          "documented_description": "Date record no longer effective.",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 19,
+          "length_min": 19,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 1098
+        },
+        "sdiv_rng_idn": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "East-West coordinates of the land from the NM Prime Meridian",
+          "documented_type": "char(3)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 3,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "sdiv_sect_num": {
+          "blank_count": 0,
+          "distinct_count": 36,
+          "documented_description": "1 of 36 numbered portions of land inTwnshp/Range combo",
+          "documented_type": "smallint",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 1098
+        },
+        "sdiv_twp_idn": {
+          "blank_count": 0,
+          "distinct_count": 2,
+          "documented_description": "North South Coordinates of the land from the NM Prime Merid.",
+          "documented_type": "char(3)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 3,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "sdiv_unlt_idn": {
+          "blank_count": 0,
+          "distinct_count": 22,
+          "documented_description": "The smallest unit of land tracked by ONGARD, usually 40 acre",
+          "documented_type": "char(3)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 3,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer",
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "source_batch_id": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 26,
+          "length_min": 26,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "spud_dte": {
+          "blank_count": 0,
+          "distinct_count": 413,
+          "documented_description": "Date well drilling started \"Spudded\"",
+          "documented_type": "datetime",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 19,
+          "length_min": 19,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "datetime"
+          ],
+          "row_count": 1098
+        },
+        "status": {
+          "blank_count": 0,
+          "distinct_count": 10,
+          "documented_description": "calculated well status",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "well_name": {
+          "blank_count": 0,
+          "distinct_count": 768,
+          "documented_description": "Calculated well name: property + number + indicator of comm/unit",
+          "documented_type": "varchar(125)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 45,
+          "length_min": 9,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "well_nbr_idn": {
+          "blank_count": 0,
+          "distinct_count": 135,
+          "documented_description": "Well Number",
+          "documented_type": "char(4)",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 4,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer",
+            "string"
+          ],
+          "row_count": 1098
+        },
+        "well_typ_cde": {
+          "blank_count": 0,
+          "distinct_count": 3,
+          "documented_description": "Identifies the type of well (e.g., oil, gas, service, etc)",
+          "documented_type": "char(1)",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 1098
+        }
+      },
+      "documented_columns_not_in_bronze": [],
+      "raw_file": "wellhistory.zip",
+      "raw_sha256": "4e157259fca2f33390f58161b8c8dc450a0ef42d0a0fdc22fab144f469fe8810",
+      "row_count": 1098
+    },
+    "wells": {
+      "bronze_file": "data/bronze/nm_ocd/nm_ocd-20261105-15ddeb88ae/wells.parquet",
+      "columns": {
+        "GlobalID": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "documented_description": "GlobalID",
+          "documented_type": "esriFieldTypeGlobalID",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 38,
+          "length_min": 38,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "OBJECTID": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "documented_description": "OBJECTID",
+          "documented_type": "esriFieldTypeOID",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 7,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "county": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "County",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 4,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "county_code": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "County FIPS Code",
+          "documented_type": "esriFieldTypeInteger",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 2,
+          "length_min": 2,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "details": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "documented_description": "Link to Well Details",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 117,
+          "length_min": 117,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "directional_status": {
+          "blank_count": 20,
+          "distinct_count": 4,
+          "documented_description": "Well Bore Direction",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "district": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "OCD District Office",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 7,
+          "length_min": 7,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "district_code": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "OCD District Code",
+          "documented_type": "esriFieldTypeInteger",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 1,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "files": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "documented_description": "Link to Scanned Well Files",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 118,
+          "length_min": 118,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "geometry_x": {
+          "blank_count": 0,
+          "distinct_count": 663,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 19,
+          "length_min": 11,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "float"
+          ],
+          "row_count": 681
+        },
+        "geometry_y": {
+          "blank_count": 0,
+          "distinct_count": 632,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 18,
+          "length_min": 17,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "float"
+          ],
+          "row_count": 681
+        },
+        "id": {
+          "blank_count": 0,
+          "distinct_count": 681,
+          "documented_description": "API",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 12,
+          "length_min": 12,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "last_production_date": {
+          "blank_count": 0,
+          "distinct_count": 51,
+          "documented_description": "Last Produced",
+          "documented_type": "esriFieldTypeDate",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 15,
+          "length_min": 12,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "latitude": {
+          "blank_count": 0,
+          "distinct_count": 632,
+          "documented_description": "Latitude",
+          "documented_type": "esriFieldTypeDouble",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 11,
+          "length_min": 8,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "float"
+          ],
+          "row_count": 681
+        },
+        "lease_type": {
+          "blank_count": 1,
+          "distinct_count": 4,
+          "documented_description": "Lease Type",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 7,
+          "length_min": 0,
+          "null_count": 55,
+          "null_rate": 0.0808,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "longitude": {
+          "blank_count": 0,
+          "distinct_count": 663,
+          "documented_description": "Longitude",
+          "documented_type": "esriFieldTypeDouble",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 13,
+          "length_min": 9,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "float"
+          ],
+          "row_count": 681
+        },
+        "measured_vertical_depth": {
+          "blank_count": 0,
+          "distinct_count": 291,
+          "documented_description": "Measured Depth",
+          "documented_type": "esriFieldTypeInteger",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "name": {
+          "blank_count": 0,
+          "distinct_count": 679,
+          "documented_description": "Well Name",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 45,
+          "length_min": 9,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "ogrid": {
+          "blank_count": 0,
+          "distinct_count": 38,
+          "documented_description": "OGRID",
+          "documented_type": "esriFieldTypeInteger",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 6,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "ogrid_name": {
+          "blank_count": 0,
+          "distinct_count": 38,
+          "documented_description": "OGRID Name",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 42,
+          "length_min": 11,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "plug_date": {
+          "blank_count": 0,
+          "distinct_count": 52,
+          "documented_description": "Plug Date",
+          "documented_type": "esriFieldTypeDate",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 15,
+          "length_min": 12,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "pool_id_list": {
+          "blank_count": 4,
+          "distinct_count": 65,
+          "documented_description": "Associated Pools",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 182,
+          "length_min": 0,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "projection": {
+          "blank_count": 5,
+          "distinct_count": 3,
+          "documented_description": "Datum",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 0,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": true,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "provenance_class": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 8,
+          "length_min": 8,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "source_batch_id": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "has_padding": false,
+          "in_source_documentation": false,
+          "length_max": 26,
+          "length_min": 26,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "spud_date": {
+          "blank_count": 0,
+          "distinct_count": 413,
+          "documented_description": "SPUD Date",
+          "documented_type": "esriFieldTypeDate",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 15,
+          "length_min": 12,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "status": {
+          "blank_count": 0,
+          "distinct_count": 7,
+          "documented_description": "Well Status",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 31,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "sub_type_code": {
+          "blank_count": 612,
+          "distinct_count": 2,
+          "documented_description": "Well Subtype Code",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": true,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 0,
+          "null_count": 69,
+          "null_rate": 0.1013,
+          "nullable_observed": true,
+          "observed_types": [],
+          "row_count": 681
+        },
+        "true_vertical_depth": {
+          "blank_count": 0,
+          "distinct_count": 278,
+          "documented_description": "Vertical Depth",
+          "documented_type": "esriFieldTypeInteger",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 5,
+          "length_min": 1,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        },
+        "type": {
+          "blank_count": 0,
+          "distinct_count": 1,
+          "documented_description": "Well Type",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 3,
+          "length_min": 3,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "ulstr": {
+          "blank_count": 0,
+          "distinct_count": 274,
+          "documented_description": "PLSS Location (ULSTR)",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 12,
+          "length_min": 10,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "string"
+          ],
+          "row_count": 681
+        },
+        "year_spudded": {
+          "blank_count": 0,
+          "distinct_count": 41,
+          "documented_description": "SPUD Year",
+          "documented_type": "esriFieldTypeString",
+          "has_padding": false,
+          "in_source_documentation": true,
+          "length_max": 4,
+          "length_min": 4,
+          "null_count": 0,
+          "null_rate": 0.0,
+          "nullable_observed": false,
+          "observed_types": [
+            "integer"
+          ],
+          "row_count": 681
+        }
+      },
+      "documented_columns_not_in_bronze": [],
+      "raw_file": "arcgis/page_*.json",
+      "raw_sha256": null,
+      "row_count": 681
+    }
+  },
+  "generated_from_batch": "nm_ocd-20261105-15ddeb88ae",
+  "lineage": "raw zip or ArcGIS page -> pipelines/acquire/nm_ocd -> bronze Parquet of original text",
+  "source_system_id": "nm_ocd",
+  "values_included": false
+}

@@ -1,0 +1,79 @@
+# Can Petrobras 3W be applied to an AETHER Field onshore gas well? Assessment version 1.
+# Engineering judgment from published definitions. Not field validation or a hydraulic calculation.
+# Report generated from this file: reports/reconciliation/semantic_compatibility.md
+assessment_version: 1
+assessed_on: 2026-11-05
+source_system_id: petrobras_3w
+source_equipment_class_id: OFFSHORE_SUBSEA_WELL
+target_equipment_class_id: AETHER_ONSHORE_GAS_WELL
+
+source_basis:
+  - 3W README describes "offshore oil wells" and "subsea systems".
+  - dataset.ini names subsea Xmas-tree measurements, gas lift, a service pump, and a downhole safety valve.
+  - dataset.ini gives no pressure reference type, and no well geometry, fluid composition, or water depth.
+
+requirements:
+  - {id: REQ-ENV, category: environment, requirement: Telemetry location exists in the target environment, target_value: Onshore surface wellhead, rationale: "Seabed temperature, hydrostatic head, and riser hydraulics have no onshore equivalent."}
+  - {id: REQ-FLUID, category: operating_condition, requirement: Producing fluid regime is comparable, target_value: Gas-dominant, rationale: "Gas is compressible and shows strong expansion cooling. Oil-dominant multiphase signals do not scale to it."}
+  - {id: REQ-LIFT, category: operating_condition, requirement: Lift method matches, target_value: Natural flow with no gas lift, rationale: "Gas lift drives annulus pressure and creates its own instabilities."}
+  - {id: REQ-EQUIP, category: equipment, requirement: The instrumented equipment exists on the target, target_value: See equipment_assumptions in config/facility/aether_field.yaml, rationale: "A signal from equipment the target lacks can't describe that target."}
+  - {id: REQ-REF, category: semantics, requirement: Pressure reference type is known and matches, target_value: GAUGE, rationale: "3W reference types are unknown. Unknown is not treated as gauge."}
+  - {id: REQ-LOC, category: semantics, requirement: Measurement point is physically equivalent, target_value: Same point in the flow path, rationale: "Similar names don't imply the same physical point."}
+  - {id: REQ-MAP, category: governance, requirement: Any association is experimental and versioned, target_value: scenario_mappings with REPLAYED or SYNTHETIC provenance, rationale: "An experimental link must never become an observed one."}
+
+conclusions:
+  - No 3W variable or event class is directly compatible with an AETHER onshore gas well.
+  - 3W stays a separately identified offshore benchmark for detection methods.
+  - The database rejects a scenario mapping for any event class assessed INCOMPATIBLE or INSUFFICIENT_EVIDENCE.
+  - AETHER telemetry for AETHER-FAULT-001 should come from a future physics-constrained synthetic capability labeled SYNTHETIC (ADR 0010).
+
+variables:
+  # Time base
+  - {tag: timestamp, kind: time, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Use relative time only, because no time zone is stated.", "Keep original timestamps with the source record."], reasoning: "A 1-second time index is generic, but absolute times from the source mean nothing at a fictional well."}
+  # Labels
+  - {tag: class, kind: label, classification: INCOMPATIBLE, reasoning: "A per-observation label for 3W's own offshore events. It describes a real or generated 3W instance and cannot be a label for an AETHER asset."}
+  - {tag: state, kind: label, classification: INSUFFICIENT_EVIDENCE, reasoning: "dataset.ini calls it well operational status without defining its values for other well types."}
+  # Choke openings
+  - {tag: ABER-CKP, quantity: fraction_open, unit: percent, location: Production choke opening, classification: CONDITIONALLY_COMPATIBLE, conditions: ["The target well has an adjustable production choke.", "Treat the value as an operating state, not transferable hydraulics."], reasoning: "A production choke exists on an onshore gas well. Percent opening depends on trim and flow characteristic, so the same percent doesn't imply the same restriction."}
+  - {tag: ABER-CKGL, quantity: fraction_open, unit: percent, location: Gas lift choke opening, classification: INCOMPATIBLE, reasoning: "AETHER wells have no gas lift, so this equipment doesn't exist on the target."}
+  # Valve states
+  - {tag: ESTADO-DHSV, quantity: valve_state, unit: valve_state, location: Downhole safety valve, classification: INCOMPATIBLE, reasoning: "AETHER wells declare no downhole safety valve."}
+  - {tag: ESTADO-M1, quantity: valve_state, unit: valve_state, location: Production master valve, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Compare valve state only.", "The target wellhead declares a production master valve."], reasoning: "Surface wellheads also have a production master valve with the same open-or-closed function, though the subsea actuation context differs."}
+  - {tag: ESTADO-M2, quantity: valve_state, unit: valve_state, location: Annulus master valve, classification: INSUFFICIENT_EVIDENCE, reasoning: "Onshore annulus access differs from a subsea tree's annulus master valve, and AETHER's casing valve arrangement isn't defined yet."}
+  - {tag: ESTADO-PXO, quantity: valve_state, unit: valve_state, location: Pig-crossover valve, classification: INCOMPATIBLE, reasoning: "A subsea production-system valve with no declared equivalent on an AETHER wellhead."}
+  - {tag: ESTADO-SDV-GL, quantity: valve_state, unit: valve_state, location: Gas lift shutdown valve, classification: INCOMPATIBLE, reasoning: "Depends on gas lift, which AETHER wells don't have."}
+  - {tag: ESTADO-SDV-P, quantity: valve_state, unit: valve_state, location: Production shutdown valve, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Compare valve state only.", "The target declares a production shutdown valve at a stated location."], reasoning: "Production shutdown is a common function, but dataset.ini doesn't state where this valve sits in the flow path."}
+  - {tag: ESTADO-W1, quantity: valve_state, unit: valve_state, location: Production wing valve, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Compare valve state only.", "The target wellhead declares a production wing valve."], reasoning: "Surface trees have a production wing valve with the same function, though the subsea context differs."}
+  - {tag: ESTADO-W2, quantity: valve_state, unit: valve_state, location: Annulus wing valve, classification: INSUFFICIENT_EVIDENCE, reasoning: "AETHER's annulus valve arrangement isn't defined yet."}
+  - {tag: ESTADO-XO, quantity: valve_state, unit: valve_state, location: Crossover valve, classification: INCOMPATIBLE, reasoning: "A subsea tree valve linking production and annulus paths, with no declared AETHER equivalent."}
+  # Pressures. All have an unknown reference type.
+  - {tag: P-ANULAR, quantity: pressure, unit: Pa, location: Well annulus, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Reference type is established.", "Gas lift influence is excluded from the instance."], reasoning: "Annulus pressure exists on both, but in a gas-lifted well the injected gas drives it, and AETHER has no gas lift. The reference type is unknown."}
+  - {tag: P-JUS-BS, quantity: pressure, unit: Pa, location: Downstream of service pump, classification: INCOMPATIBLE, reasoning: "AETHER wells declare no service pump."}
+  - {tag: P-JUS-CKGL, quantity: pressure, unit: Pa, location: Downstream of gas lift choke, classification: INCOMPATIBLE, reasoning: "Depends on gas lift."}
+  - {tag: P-JUS-CKP, quantity: pressure, unit: Pa, location: Downstream of production choke, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Reference type is established.", "Choke position in the flow path is comparable.", "Fluid regime is accounted for rather than assumed."], reasoning: "Pressure downstream of a choke exists on both, but values depend on the flowline, fluid, and choke location. dataset.ini doesn't state where the choke sits."}
+  - {tag: P-MON-CKGL, quantity: pressure, unit: Pa, location: Upstream of gas lift choke, classification: INCOMPATIBLE, reasoning: "Depends on gas lift."}
+  - {tag: P-MON-CKP, quantity: pressure, unit: Pa, location: Upstream of production choke, classification: CONDITIONALLY_COMPATIBLE, conditions: ["Reference type is established.", "Choke position in the flow path is comparable.", "Fluid regime is accounted for rather than assumed."], reasoning: "Can't be equated with onshore wellhead pressure without knowing how much flow path lies between the well and this choke. Conditional only if that is shown."}
+  - {tag: P-MON-SDV-P, quantity: pressure, unit: Pa, location: Upstream of production shutdown valve, classification: INSUFFICIENT_EVIDENCE, reasoning: "The valve's location in the flow path isn't published, so the measurement point can't be matched."}
+  - {tag: P-PDG, quantity: pressure, unit: Pa, location: Permanent downhole gauge, classification: INSUFFICIENT_EVIDENCE, reasoning: "AETHER declares no downhole gauge, and no well depth or fluid column is available to relate downhole pressure to the surface."}
+  - {tag: PT-P, quantity: pressure, unit: Pa, location: Subsea Xmas-tree production line downstream of production wing valve, classification: INCOMPATIBLE, reasoning: "A seabed measurement point. Depth and subsea conditions separate it from any surface point, so it must not map to onshore wellhead pressure."}
+  - {tag: P-TPT, quantity: pressure, unit: Pa, location: Subsea Xmas-tree temperature and pressure transducer, classification: INCOMPATIBLE, reasoning: "A seabed measurement point on a subsea tree, so it must not map to onshore wellhead pressure."}
+  # Flows
+  - {tag: QBS, quantity: volume_flow, unit: m3_per_s, location: Service pump, classification: INCOMPATIBLE, reasoning: "AETHER wells declare no service pump."}
+  - {tag: QGL, quantity: volume_flow, unit: m3_per_s, location: Gas lift line, classification: INCOMPATIBLE, reasoning: "Depends on gas lift."}
+  # Temperatures
+  - {tag: T-JUS-CKP, quantity: temperature, unit: degC, location: Downstream of production choke, classification: INSUFFICIENT_EVIDENCE, reasoning: "Gas shows strong cooling across a choke while oil-dominant flow behaves differently. Without fluid composition, the signal can't be related to a gas well."}
+  - {tag: T-MON-CKP, quantity: temperature, unit: degC, location: Upstream of production choke, classification: INSUFFICIENT_EVIDENCE, reasoning: "Reflects heat loss along an undocumented offshore flow path and an unknown fluid."}
+  - {tag: T-PDG, quantity: temperature, unit: degC, location: Permanent downhole gauge, classification: INSUFFICIENT_EVIDENCE, reasoning: "AETHER declares no downhole gauge, and no well depth or geothermal data is available."}
+  - {tag: T-TPT, quantity: temperature, unit: degC, location: Subsea Xmas-tree temperature and pressure transducer, classification: INCOMPATIBLE, reasoning: "A seabed temperature set by the marine environment, which onshore wells don't have."}
+
+events:
+  - {event: NORMAL, label: 0, classification: INCOMPATIBLE, reasoning: "Normal operation of an offshore oil well says nothing about normal operation of an onshore gas well. Usable only inside the 3W benchmark."}
+  - {event: ABRUPT_INCREASE_OF_BSW, label: 1, classification: INCOMPATIBLE, reasoning: "BSW is measured in an oil stream. Water problems in a gas well, such as liquid loading, are a different mechanism with a different signature."}
+  - {event: SPURIOUS_CLOSURE_OF_DHSV, label: 2, classification: INCOMPATIBLE, reasoning: "Requires a downhole safety valve, which AETHER wells don't have."}
+  - {event: SEVERE_SLUGGING, label: 3, classification: INCOMPATIBLE, reasoning: "Associated with liquid-rich flow in flowline and riser systems. AETHER has no riser. Any gathering-line liquid behavior would need its own model."}
+  - {event: FLOW_INSTABILITY, label: 4, classification: INSUFFICIENT_EVIDENCE, reasoning: "Gas wells can also show unstable flow, but dataset.ini gives only a name and no mechanism. The signature can't be shown to be equivalent."}
+  - {event: RAPID_PRODUCTIVITY_LOSS, label: 5, classification: CONDITIONALLY_COMPATIBLE, conditions: ["A gas-well mechanism is identified and documented.", "The signal is expressed in measurements AETHER has, not subsea or downhole tags.", "Any use is labeled experimental, with no transfer of magnitudes."], reasoning: "Productivity can fall quickly in a gas well too, so the category carries over. The 3W signal comes from oil-well measurements, so only the category and qualitative pattern could."}
+  - {event: QUICK_RESTRICTION_IN_PCK, label: 6, classification: CONDITIONALLY_COMPATIBLE, conditions: ["The target well has an adjustable production choke.", "Pressure tags are shown equivalent in flow-path position, with reference types established.", "Only the direction of change is carried over, because compressible flow changes magnitudes.", "Any use is labeled experimental."], reasoning: "The closest fit. Restricting a choke should raise upstream and lower downstream pressure in either fluid. Magnitudes and timing won't transfer. Only 6 real instances from 2 wells are available."}
+  - {event: SCALING_IN_PCK, label: 7, classification: INSUFFICIENT_EVIDENCE, reasoning: "Scale needs a particular water chemistry. AETHER has no fluid chemistry, so occurrence and rate can't be supported."}
+  - {event: HYDRATE_IN_PRODUCTION_LINE, label: 8, classification: INSUFFICIENT_EVIDENCE, reasoning: "Hydrates can form in gas systems, but only inside a pressure and temperature envelope set by gas composition. AETHER has no composition, and subsea cooling differs from onshore conditions."}
+  - {event: HYDRATE_IN_SERVICE_LINE, label: 9, classification: INCOMPATIBLE, reasoning: "Requires a service line, which AETHER wells don't have."}

@@ -1,0 +1,20 @@
+{
+  "note": "Real records truncated to a few rows. Values are unchanged. Not for analysis.",
+  "sources": {
+    "petrobras_3w/2_WELL-00002_20131104004101.parquet": {
+      "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+      "cut_from_sha256": "d0ad21a089741bb97c08823eee1e00df2db9915715c8f8c3561dd9ee1e8644e0",
+      "rows": 300
+    },
+    "petrobras_3w/2_SIMULATED_00001.parquet": {
+      "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+      "cut_from_sha256": "743f61fcd36aed3070c817fb035c9ca14aee838126ab55a868da383e31aa4048",
+      "rows": 300
+    },
+    "petrobras_3w/7_DRAWN_00001.parquet": {
+      "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+      "cut_from_sha256": "320cf64fdff616ce2aa7f4e497007f8860e81a2dfd2db74bd016d99e6b473995",
+      "rows": 300
+    }
+  }
+}

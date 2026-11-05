@@ -1,0 +1,89 @@
+# Verified meaning of OCD production fields, 2026-11-05. Seeded into production_unit_rules.
+# Report: reports/data_quality/production_units.md
+source_system_id: nm_ocd
+unit_system: NM_C115
+reporting_grain: WELL_COMPLETION
+
+references:
+  c115_2025:
+    title: OCD C-115 Instructions
+    url: https://www.emnrd.nm.gov/ocd/wp-content/uploads/sites/6/C115-INSTRUCTIONS.pdf
+    sha256: 8ad1356bc2ee72d0b195beb31f02e4c9eb24963ebb3ee748344a8126fd1e70e1
+    pdf_created: 2025-10-10
+  c115_2019:
+    title: OCD C-115 Instructions (2019 edition)
+    url: https://www.emnrd.nm.gov/wp-content/uploads/sites/6/C115_Instructions2019.pdf
+    sha256: d03f286273442c4bafe05ff20a621359f7fcc8ddd995f768585765e3fdaede82
+    pdf_created: 2019-04-18
+  nmac_19_15_2:
+    title: 19.15.2 NMAC, General Provisions (state records copy, amended through 8/23/2022)
+    url: https://www.srca.nm.gov/parts/title19/19.015.0002.pdf
+    sha256: 8c14a30d9da98edd51cbd35a876a05e74643e24ccbe1bdc80e186c4e109ef874
+    pdf_created: 2022-08-23
+  ocd_dictionary:
+    title: OCD Interface v1.1 Data Dictionary, wcproduction
+    url: ftp://ftp.emnrd.nm.gov/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx
+    sha256: eae1cd092e34e84fc9021c533652165c85e2e901705f7fcabb352244eec1eb52
+
+rules:
+  - product_kind: G
+    unit_id: MCF_15025PSIA_60F
+    product_scope: Gas including CO2
+    base_conditions: 15.025 psia and 60 degrees F
+    verification_status: VERIFIED
+    evidence:
+      - {ref: ocd_dictionary, quote: "prd_knd_cde G = Gas; prod_amt = Volume of fluid produced (MCF or BBLS)"}
+      - {ref: c115_2025, page: 17, quote: "Enter the MCF of gas produced (also include CO2) for the month. (Whole amounts, adjusted to 15.025 psia.)"}
+      - {ref: c115_2019, quote: "MCF of gas (including CO2) produced for the month ... Adjustment to 15.025 psia."}
+      - {ref: nmac_19_15_2, page: 3, quote: "computed at a base pressure of 10 ounces per square inch above the average barometric pressure of 14.4 psi (15.025 psi absolute), at a standard base temperature of 60 degrees fahrenheit"}
+  - product_kind: O
+    unit_id: BBL_60F
+    product_scope: Crude oil or condensate
+    base_conditions: 60 degrees F, atmospheric pressure at sea level
+    verification_status: VERIFIED
+    evidence:
+      - {ref: ocd_dictionary, quote: "prd_knd_cde O = Oil; prod_amt = Volume of fluid produced (MCF or BBLS)"}
+      - {ref: c115_2025, page: 17, quote: "Enter the number of barrels of crude oil or condensate produced for the month. (Whole amounts, no decimals.)"}
+      - {ref: c115_2019, quote: "Barrels of crude oil or condensate produced for the month."}
+      - {ref: nmac_19_15_2, quote: "\"Barrel\" means 42 United States gallons measured at 60 degrees fahrenheit and atmospheric pressure at the sea level"}
+  - product_kind: W
+    unit_id: BBL_60F
+    product_scope: Produced water
+    base_conditions: 60 degrees F, atmospheric pressure at sea level
+    verification_status: VERIFIED
+    evidence:
+      - {ref: ocd_dictionary, quote: "prd_knd_cde W = Water; prod_amt = Volume of fluid produced (MCF or BBLS)"}
+      - {ref: c115_2025, page: 17, quote: "Enter the number of barrels of water produced for the month. (Whole amounts, no decimals.)"}
+      - {ref: c115_2019, quote: "Barrels of water produced for the month."}
+      - {ref: nmac_19_15_2, quote: "\"Barrel\" means 42 United States gallons measured at 60 degrees fahrenheit and atmospheric pressure at the sea level"}
+
+dates:
+  production_date:
+    fields: [prodn_yr, prodn_mth]
+    status: VERIFIED
+    meaning: Month and year in which production occurred (OCD dictionary).
+  filing_deadline:
+    status: VERIFIED
+    meaning: 15th day of the second month following the month of production (C-115 2025, PDF page 4).
+  eff_dte:
+    status: UNRESOLVED
+    meaning: >-
+      The dictionary says only "The date which the RECORD is effective". Recent values look like
+      processing times shortly after filing, and old values are month-ends. OCD does not define it as a
+      filing date, so it is stored as source_effective_at and must not be used as a production or filing date.
+  mod_dte:
+    status: VERIFIED
+    meaning: Last modified (OCD dictionary).
+
+amendments:
+  status: VERIFIED
+  meaning: >-
+    An amended report replaces the operator's earlier file for that month: it "will completely erase and take
+    the place of the old file" (C-115 2025, PDF page 31). The extract therefore holds current values only.
+    amend_ind records that a row came from an amended filing. Earlier values cannot be recovered from this source.
+
+unresolved:
+  - Whether a missing oil or water row means zero. It is kept as missing, not assumed zero.
+  - An operator's compliance with the rules cannot be verified from this data. The rules establish what was required.
+  - The state rule copy is amended through 8/23/2022. Later amendments, if any, were not checked.
+  - Whether a given rule edition applied to each production month was not traced. The 2019 and 2025 instructions state the same units, and the window starts in 2023.

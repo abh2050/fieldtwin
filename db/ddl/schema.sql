@@ -1,0 +1,2978 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.4 (Debian 16.4-1.pgdg110+2)
+-- Dumped by pg_dump version 16.4 (Debian 16.4-1.pgdg110+2)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: tiger; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA tiger;
+
+
+--
+-- Name: tiger_data; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA tiger_data;
+
+
+--
+-- Name: topology; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA topology;
+
+
+--
+-- Name: SCHEMA topology; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA topology IS 'PostGIS Topology schema';
+
+
+--
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
+
+
+--
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
+-- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
+
+
+--
+-- Name: postgis_tiger_geocoder; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;
+
+
+--
+-- Name: EXTENSION postgis_tiger_geocoder; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION postgis_tiger_geocoder IS 'PostGIS tiger geocoder and reverse geocoder';
+
+
+--
+-- Name: postgis_topology; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;
+
+
+--
+-- Name: EXTENSION postgis_topology; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION postgis_topology IS 'PostGIS topology spatial types and functions';
+
+
+--
+-- Name: compatibility_class; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.compatibility_class AS ENUM (
+    'DIRECTLY_COMPATIBLE',
+    'CONDITIONALLY_COMPATIBLE',
+    'INCOMPATIBLE',
+    'INSUFFICIENT_EVIDENCE'
+);
+
+
+--
+-- Name: instance_origin; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.instance_origin AS ENUM (
+    'REAL',
+    'SIMULATED',
+    'HAND_DRAWN'
+);
+
+
+--
+-- Name: provenance_class; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.provenance_class AS ENUM (
+    'OBSERVED',
+    'DERIVED',
+    'REPLAYED',
+    'SYNTHETIC',
+    'INFERRED'
+);
+
+
+--
+-- Name: reference_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.reference_type AS ENUM (
+    'ABSOLUTE',
+    'GAUGE',
+    'DIFFERENTIAL',
+    'UNKNOWN',
+    'NOT_APPLICABLE'
+);
+
+
+--
+-- Name: spatial_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.spatial_status AS ENUM (
+    'USABLE',
+    'QUARANTINED',
+    'UNRESOLVED_DATUM',
+    'NO_LOCATION'
+);
+
+
+--
+-- Name: verification_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.verification_status AS ENUM (
+    'VERIFIED',
+    'UNVERIFIED',
+    'UNRESOLVED',
+    'REJECTED'
+);
+
+
+--
+-- Name: enforce_observation_link(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_observation_link() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  observation_system text;
+  asset_system text;
+BEGIN
+  IF TG_OP = 'UPDATE' AND NEW.relationship_type <> OLD.relationship_type THEN
+    RAISE EXCEPTION 'relationship_type is immutable. Add a new reviewed link instead of promoting %', OLD.relationship_type
+      USING ERRCODE = 'restrict_violation';
+  END IF;
+  IF NEW.relationship_type = 'MEASURED_AT' THEN
+    SELECT source_system_id INTO observation_system FROM observations WHERE observation_id = NEW.observation_id;
+    SELECT source_system_id INTO asset_system FROM source_assets WHERE source_asset_id = NEW.source_asset_id;
+    IF observation_system IS DISTINCT FROM asset_system THEN
+      RAISE EXCEPTION 'MEASURED_AT requires one source system: observation is %, asset is %', observation_system, asset_system
+        USING ERRCODE = 'check_violation';
+    END IF;
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_scenario_mapping(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_scenario_mapping() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  assessment domain_compatibility_assessments%ROWTYPE;
+  event_row  telemetry_events%ROWTYPE;
+  target_class text;
+BEGIN
+  SELECT * INTO assessment FROM domain_compatibility_assessments WHERE assessment_id = NEW.compatibility_assessment_id;
+  SELECT * INTO event_row FROM telemetry_events WHERE event_id = NEW.telemetry_event_id;
+  SELECT equipment_class_id INTO target_class FROM assets WHERE asset_id = NEW.target_asset_id;
+
+  IF assessment.subject_type <> 'EVENT_CLASS' OR assessment.subject_id <> event_row.source_event_class
+     OR assessment.source_system_id <> event_row.source_system_id THEN
+    RAISE EXCEPTION 'assessment % does not cover event class %', assessment.assessment_id, event_row.source_event_class
+      USING ERRCODE = 'check_violation';
+  END IF;
+  IF target_class IS DISTINCT FROM assessment.target_equipment_class_id THEN
+    RAISE EXCEPTION 'assessment % does not cover target class %', assessment.assessment_id, target_class
+      USING ERRCODE = 'check_violation';
+  END IF;
+  IF assessment.classification IN ('INCOMPATIBLE', 'INSUFFICIENT_EVIDENCE') THEN
+    RAISE EXCEPTION 'event class % is % for %', event_row.source_event_class, assessment.classification, target_class
+      USING ERRCODE = 'check_violation';
+  END IF;
+  IF assessment.classification = 'CONDITIONALLY_COMPATIBLE'
+     AND (NEW.conditions_satisfied IS NULL OR jsonb_array_length(NEW.conditions_satisfied) < jsonb_array_length(assessment.conditions)) THEN
+    RAISE EXCEPTION 'conditional assessment % needs evidence for every condition', assessment.assessment_id
+      USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: reject_change(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.reject_change() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+  RAISE EXCEPTION '% is immutable; % rejected', TG_TABLE_NAME, TG_OP USING ERRCODE = 'restrict_violation';
+END $$;
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: anomaly_predictions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.anomaly_predictions (
+    prediction_id bigint NOT NULL,
+    scenario_id text,
+    source_event_id text NOT NULL,
+    model_version text NOT NULL,
+    event_timestamp timestamp without time zone NOT NULL,
+    predicted_class text NOT NULL,
+    anomaly_score double precision,
+    decision_threshold double precision,
+    evidence_reference text NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT anomaly_predictions_provenance_class_check CHECK ((provenance_class = ANY (ARRAY['DERIVED'::public.provenance_class, 'INFERRED'::public.provenance_class, 'SYNTHETIC'::public.provenance_class])))
+);
+
+
+--
+-- Name: anomaly_predictions_prediction_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.anomaly_predictions_prediction_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: anomaly_predictions_prediction_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.anomaly_predictions_prediction_id_seq OWNED BY public.anomaly_predictions.prediction_id;
+
+
+--
+-- Name: approval_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.approval_events (
+    approval_id bigint NOT NULL,
+    work_order_id bigint NOT NULL,
+    actor_id text NOT NULL,
+    action text NOT NULL,
+    justification text NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT approval_events_action_check CHECK ((action = ANY (ARRAY['APPROVE'::text, 'REJECT'::text, 'REQUEST_EVIDENCE'::text])))
+);
+
+
+--
+-- Name: approval_events_approval_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.approval_events_approval_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: approval_events_approval_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.approval_events_approval_id_seq OWNED BY public.approval_events.approval_id;
+
+
+--
+-- Name: asset_observation_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.asset_observation_links (
+    link_id bigint NOT NULL,
+    source_asset_id text,
+    asset_id text,
+    observation_id bigint NOT NULL,
+    relationship_type text NOT NULL,
+    evidence_reference text,
+    confidence double precision,
+    verification_status public.verification_status NOT NULL,
+    method_version text NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    scenario_id text,
+    CONSTRAINT asset_observation_links_confidence_check CHECK (((confidence >= (0)::double precision) AND (confidence <= (1)::double precision))),
+    CONSTRAINT asset_observation_links_relationship_type_check CHECK ((relationship_type = ANY (ARRAY['MEASURED_AT'::text, 'IMAGE_COVERS'::text, 'EMISSION_NEAR'::text, 'SOURCE_ATTRIBUTED_TO'::text, 'ASSOCIATED_WITH'::text, 'EXPERIMENTAL_SCENARIO_LINK'::text]))),
+    CONSTRAINT attribution_needs_verified_evidence CHECK (((relationship_type <> 'SOURCE_ATTRIBUTED_TO'::text) OR ((verification_status = 'VERIFIED'::public.verification_status) AND (evidence_reference IS NOT NULL)))),
+    CONSTRAINT confidence_needs_evidence CHECK (((confidence IS NULL) OR (evidence_reference IS NOT NULL))),
+    CONSTRAINT fictional_links_are_experimental CHECK (((asset_id IS NULL) OR ((relationship_type = 'EXPERIMENTAL_SCENARIO_LINK'::text) AND (scenario_id IS NOT NULL) AND (provenance_class = ANY (ARRAY['REPLAYED'::public.provenance_class, 'SYNTHETIC'::public.provenance_class, 'INFERRED'::public.provenance_class])) AND (verification_status <> 'VERIFIED'::public.verification_status)))),
+    CONSTRAINT link_has_one_target CHECK ((num_nonnulls(source_asset_id, asset_id) = 1)),
+    CONSTRAINT proximity_is_not_verified_attribution CHECK (((relationship_type <> 'EMISSION_NEAR'::text) OR (verification_status <> 'VERIFIED'::public.verification_status))),
+    CONSTRAINT real_links_are_not_experimental CHECK (((source_asset_id IS NULL) OR (relationship_type <> 'EXPERIMENTAL_SCENARIO_LINK'::text)))
+);
+
+
+--
+-- Name: TABLE asset_observation_links; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.asset_observation_links IS 'Links from observations to either a real or a fictional asset, never both.';
+
+
+--
+-- Name: asset_observation_links_link_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.asset_observation_links_link_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: asset_observation_links_link_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.asset_observation_links_link_id_seq OWNED BY public.asset_observation_links.link_id;
+
+
+--
+-- Name: asset_relationships; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.asset_relationships (
+    relationship_id bigint NOT NULL,
+    source_asset_id text NOT NULL,
+    target_asset_id text NOT NULL,
+    relationship_type text NOT NULL,
+    evidence_type text NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    effective_from date DEFAULT '-infinity'::date NOT NULL,
+    effective_to date,
+    CONSTRAINT asset_relationships_provenance_class_check CHECK ((provenance_class = ANY (ARRAY['SYNTHETIC'::public.provenance_class, 'INFERRED'::public.provenance_class]))),
+    CONSTRAINT relationship_not_self CHECK ((source_asset_id <> target_asset_id)),
+    CONSTRAINT relationship_validity CHECK (((effective_to IS NULL) OR (effective_to > effective_from)))
+);
+
+
+--
+-- Name: TABLE asset_relationships; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.asset_relationships IS 'Relationships between fictional assets. They can never be OBSERVED.';
+
+
+--
+-- Name: asset_relationships_relationship_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.asset_relationships_relationship_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: asset_relationships_relationship_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.asset_relationships_relationship_id_seq OWNED BY public.asset_relationships.relationship_id;
+
+
+--
+-- Name: assets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.assets (
+    asset_id text NOT NULL,
+    facility_id text NOT NULL,
+    parent_asset_id text,
+    asset_type text NOT NULL,
+    asset_name text NOT NULL,
+    equipment_class_id text,
+    operating_status text,
+    geometry public.geometry(Point,4326),
+    is_fictional boolean NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    transformation_id text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT assets_is_fictional_check CHECK (is_fictional),
+    CONSTRAINT assets_provenance_class_check CHECK ((provenance_class = 'SYNTHETIC'::public.provenance_class))
+);
+
+
+--
+-- Name: TABLE assets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.assets IS 'Facility assets. Currently fictional only and always SYNTHETIC. Geometry is added in Gate 4.';
+
+
+--
+-- Name: audit_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.audit_events (
+    event_id bigint NOT NULL,
+    actor_id text NOT NULL,
+    operation text NOT NULL,
+    target_id text NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT now() NOT NULL,
+    correlation_id text NOT NULL,
+    before_state_reference text,
+    after_state_reference text
+);
+
+
+--
+-- Name: audit_events_event_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.audit_events_event_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: audit_events_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.audit_events_event_id_seq OWNED BY public.audit_events.event_id;
+
+
+--
+-- Name: batch_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.batch_files (
+    batch_id text NOT NULL,
+    path text NOT NULL,
+    sha256 text NOT NULL,
+    size_bytes bigint NOT NULL,
+    source_url text NOT NULL,
+    source_modified text,
+    upstream_checksum text,
+    CONSTRAINT batch_files_sha256_check CHECK ((sha256 ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT batch_files_size_bytes_check CHECK ((size_bytes >= 0))
+);
+
+
+--
+-- Name: TABLE batch_files; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.batch_files IS 'Raw files behind a batch, so a canonical row can be traced to bytes on disk.';
+
+
+--
+-- Name: data_quality_exceptions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.data_quality_exceptions (
+    exception_id bigint NOT NULL,
+    exception_type text NOT NULL,
+    severity text NOT NULL,
+    source_system_id text NOT NULL,
+    batch_id text NOT NULL,
+    dataset text NOT NULL,
+    source_asset_id text,
+    source_record_key text NOT NULL,
+    field_name text,
+    original_values jsonb NOT NULL,
+    evidence jsonb NOT NULL,
+    rule_id text NOT NULL,
+    disposition text NOT NULL,
+    status text NOT NULL,
+    decision_rationale text NOT NULL,
+    detected_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT data_quality_exceptions_disposition_check CHECK ((disposition = ANY (ARRAY['QUARANTINED_FROM_SPATIAL'::text, 'QUARANTINED_RECORD'::text, 'FLAGGED_UNRESOLVED'::text, 'ACCEPTED_WITH_NOTE'::text]))),
+    CONSTRAINT data_quality_exceptions_severity_check CHECK ((severity = ANY (ARRAY['ERROR'::text, 'WARNING'::text, 'INFO'::text]))),
+    CONSTRAINT data_quality_exceptions_status_check CHECK ((status = ANY (ARRAY['OPEN'::text, 'ACCEPTED'::text, 'RESOLVED'::text])))
+);
+
+
+--
+-- Name: TABLE data_quality_exceptions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.data_quality_exceptions IS 'Every known defect, with the original value, evidence, and decision. Exceptions never alter source values.';
+
+
+--
+-- Name: data_quality_exceptions_exception_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.data_quality_exceptions_exception_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: data_quality_exceptions_exception_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.data_quality_exceptions_exception_id_seq OWNED BY public.data_quality_exceptions.exception_id;
+
+
+--
+-- Name: domain_compatibility_assessments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.domain_compatibility_assessments (
+    assessment_id text NOT NULL,
+    source_system_id text NOT NULL,
+    subject_type text NOT NULL,
+    subject_id text NOT NULL,
+    target_equipment_class_id text NOT NULL,
+    classification public.compatibility_class NOT NULL,
+    reasoning text NOT NULL,
+    conditions jsonb DEFAULT '[]'::jsonb NOT NULL,
+    assessment_version integer NOT NULL,
+    assessed_on date NOT NULL,
+    CONSTRAINT conditional_states_conditions CHECK (((classification <> 'CONDITIONALLY_COMPATIBLE'::public.compatibility_class) OR (jsonb_array_length(conditions) > 0))),
+    CONSTRAINT domain_compatibility_assessments_subject_type_check CHECK ((subject_type = ANY (ARRAY['VARIABLE'::text, 'EVENT_CLASS'::text])))
+);
+
+
+--
+-- Name: TABLE domain_compatibility_assessments; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.domain_compatibility_assessments IS 'Engineering judgment, versioned. Not field validation. Generated from data_contracts/semantic_mappings/3w_aether_compatibility.yaml.';
+
+
+--
+-- Name: domain_compatibility_requirements; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.domain_compatibility_requirements (
+    requirement_id text NOT NULL,
+    target_equipment_class_id text NOT NULL,
+    category text NOT NULL,
+    requirement text NOT NULL,
+    target_value text NOT NULL,
+    rationale text NOT NULL
+);
+
+
+--
+-- Name: TABLE domain_compatibility_requirements; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.domain_compatibility_requirements IS 'Equipment and operating conditions that telemetry must meet before it can be applied to an experimental asset.';
+
+
+--
+-- Name: equipment_classes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.equipment_classes (
+    equipment_class_id text NOT NULL,
+    name text NOT NULL,
+    domain text NOT NULL,
+    description text NOT NULL,
+    basis text NOT NULL,
+    CONSTRAINT equipment_classes_domain_check CHECK ((domain = ANY (ARRAY['REAL_ONSHORE'::text, 'REAL_OFFSHORE'::text, 'FICTIONAL_ONSHORE'::text])))
+);
+
+
+--
+-- Name: TABLE equipment_classes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.equipment_classes IS 'Physical classes of equipment. Measurement semantics belong to a class, which is what keeps offshore and onshore measurements apart.';
+
+
+--
+-- Name: equipment_measurement_capabilities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.equipment_measurement_capabilities (
+    equipment_class_id text NOT NULL,
+    measurement_definition_id text NOT NULL,
+    capability text NOT NULL,
+    basis text NOT NULL,
+    CONSTRAINT equipment_measurement_capabilities_capability_check CHECK ((capability = ANY (ARRAY['EXPECTED'::text, 'OPTIONAL'::text, 'SOURCE_REPORTED'::text])))
+);
+
+
+--
+-- Name: TABLE equipment_measurement_capabilities; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.equipment_measurement_capabilities IS 'Which measurements a class can provide. SOURCE_REPORTED means the source publishes it; the others are AETHER design assumptions.';
+
+
+--
+-- Name: facilities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.facilities (
+    facility_id text NOT NULL,
+    facility_name text NOT NULL,
+    facility_type text NOT NULL,
+    region text NOT NULL,
+    is_fictional boolean NOT NULL,
+    disclosure text NOT NULL,
+    geometry public.geometry(Geometry,4326),
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT aether_is_fictional CHECK (((facility_id <> 'AETHER-FIELD'::text) OR is_fictional))
+);
+
+
+--
+-- Name: ingestion_batches; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ingestion_batches (
+    batch_id text NOT NULL,
+    source_system_id text NOT NULL,
+    source_version text NOT NULL,
+    ingestion_timestamp timestamp with time zone NOT NULL,
+    original_checksum text NOT NULL,
+    source_record_count integer NOT NULL,
+    accepted_count integer NOT NULL,
+    rejected_count integer NOT NULL,
+    processing_status text NOT NULL,
+    manifest_uri text NOT NULL,
+    notes jsonb DEFAULT '[]'::jsonb NOT NULL,
+    CONSTRAINT batch_counts_reconcile CHECK (((accepted_count + rejected_count) = source_record_count)),
+    CONSTRAINT ingestion_batches_accepted_count_check CHECK ((accepted_count >= 0)),
+    CONSTRAINT ingestion_batches_original_checksum_check CHECK ((original_checksum ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT ingestion_batches_processing_status_check CHECK ((processing_status = ANY (ARRAY['COMPLETE'::text, 'FAILED'::text]))),
+    CONSTRAINT ingestion_batches_rejected_count_check CHECK ((rejected_count >= 0)),
+    CONSTRAINT ingestion_batches_source_record_count_check CHECK ((source_record_count >= 0))
+);
+
+
+--
+-- Name: TABLE ingestion_batches; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ingestion_batches IS 'One row per acquisition manifest. Accepted plus rejected must equal the source count.';
+
+
+--
+-- Name: inspection_observations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.inspection_observations (
+    inspection_id bigint NOT NULL,
+    observation_id bigint NOT NULL,
+    inspection_type text NOT NULL,
+    source_asset_candidate_id text,
+    asset_candidate_id text,
+    evidence_uri text NOT NULL,
+    finding text,
+    reviewer text,
+    confidence double precision,
+    review_status text NOT NULL,
+    CONSTRAINT candidate_is_real_or_fictional CHECK ((num_nonnulls(source_asset_candidate_id, asset_candidate_id) <= 1)),
+    CONSTRAINT inspection_observations_confidence_check CHECK (((confidence >= (0)::double precision) AND (confidence <= (1)::double precision))),
+    CONSTRAINT inspection_observations_review_status_check CHECK ((review_status = ANY (ARRAY['PENDING'::text, 'REVIEWED'::text, 'REJECTED'::text]))),
+    CONSTRAINT reviewed_has_reviewer CHECK (((review_status = 'PENDING'::text) OR (reviewer IS NOT NULL)))
+);
+
+
+--
+-- Name: inspection_observations_inspection_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.inspection_observations_inspection_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: inspection_observations_inspection_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.inspection_observations_inspection_id_seq OWNED BY public.inspection_observations.inspection_id;
+
+
+--
+-- Name: measurement_definitions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.measurement_definitions (
+    measurement_definition_id text NOT NULL,
+    equipment_class_id text NOT NULL,
+    physical_quantity text NOT NULL,
+    equipment_location text NOT NULL,
+    reference_type public.reference_type NOT NULL,
+    canonical_unit_id text NOT NULL,
+    description text NOT NULL,
+    CONSTRAINT definition_reference_fits_quantity CHECK ((((physical_quantity = 'pressure'::text) AND (reference_type <> 'NOT_APPLICABLE'::public.reference_type)) OR ((physical_quantity <> 'pressure'::text) AND (reference_type = 'NOT_APPLICABLE'::public.reference_type))))
+);
+
+
+--
+-- Name: TABLE measurement_definitions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.measurement_definitions IS 'A measurement belongs to one equipment class. There is no shared generic pressure definition.';
+
+
+--
+-- Name: observations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.observations (
+    observation_id bigint NOT NULL,
+    source_system_id text NOT NULL,
+    source_record_id text NOT NULL,
+    observed_at timestamp without time zone,
+    observation_type text NOT NULL,
+    metric_name text NOT NULL,
+    numeric_value double precision,
+    unit_id text,
+    quality_flag text NOT NULL,
+    geometry public.geometry(Geometry,4326),
+    provenance_class public.provenance_class NOT NULL,
+    original_record_uri text NOT NULL,
+    sensor_tag_id text,
+    telemetry_event_id text,
+    value_count integer,
+    null_count integer,
+    replayed_from_observation_id bigint,
+    scenario_id text,
+    batch_id text,
+    transformation_id text NOT NULL,
+    CONSTRAINT observations_null_count_check CHECK ((null_count >= 0)),
+    CONSTRAINT observations_observation_type_check CHECK ((observation_type = ANY (ARRAY['TELEMETRY_SERIES'::text, 'POINT_VALUE'::text, 'REMOTE_SENSING'::text, 'IMAGE'::text]))),
+    CONSTRAINT observations_value_count_check CHECK ((value_count >= 0)),
+    CONSTRAINT observed_has_batch CHECK (((provenance_class <> 'OBSERVED'::public.provenance_class) OR (batch_id IS NOT NULL))),
+    CONSTRAINT replay_keeps_origin CHECK ((((provenance_class = 'REPLAYED'::public.provenance_class) = (replayed_from_observation_id IS NOT NULL)) AND ((provenance_class <> 'REPLAYED'::public.provenance_class) OR (scenario_id IS NOT NULL))))
+);
+
+
+--
+-- Name: TABLE observations; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.observations IS 'Queryable metadata. High-volume sensor values stay in Parquet; one TELEMETRY_SERIES row describes each sensor in each instance.';
+
+
+--
+-- Name: COLUMN observations.observed_at; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.observations.observed_at IS 'As reported, with no time zone assumed.';
+
+
+--
+-- Name: observations_observation_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.observations_observation_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: observations_observation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.observations_observation_id_seq OWNED BY public.observations.observation_id;
+
+
+--
+-- Name: production_records; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.production_records (
+    record_id bigint NOT NULL,
+    source_system_id text NOT NULL,
+    reporting_entity_id text NOT NULL,
+    reporting_grain text NOT NULL,
+    reporting_period date NOT NULL,
+    product_kind text NOT NULL,
+    reported_volume bigint,
+    unit_id text NOT NULL,
+    unit_system text NOT NULL,
+    pool_code text NOT NULL,
+    operator_code text NOT NULL,
+    days_produced smallint,
+    completion_status_code text,
+    is_amended boolean,
+    source_effective_at timestamp without time zone NOT NULL,
+    source_modified_at timestamp without time zone,
+    original_record_uri text NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    batch_id text NOT NULL,
+    transformation_id text NOT NULL,
+    source_record_key text NOT NULL,
+    CONSTRAINT production_records_days_produced_check CHECK (((days_produced >= 0) AND (days_produced <= 31))),
+    CONSTRAINT production_records_provenance_class_check CHECK ((provenance_class = 'OBSERVED'::public.provenance_class)),
+    CONSTRAINT production_records_reported_volume_check CHECK ((reported_volume >= 0)),
+    CONSTRAINT production_records_reporting_grain_check CHECK ((reporting_grain = ANY (ARRAY['WELL_COMPLETION'::text, 'WELL'::text, 'LEASE'::text, 'OPERATOR'::text]))),
+    CONSTRAINT production_records_reporting_period_check CHECK ((EXTRACT(day FROM reporting_period) = (1)::numeric))
+);
+
+
+--
+-- Name: TABLE production_records; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.production_records IS 'One row per source row: completion, month, and product. Volumes are unaltered. v_production_wide gives the oil, gas, and water columns.';
+
+
+--
+-- Name: COLUMN production_records.reporting_period; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.production_records.reporting_period IS 'First day of the month the fluid was produced. This is the production date.';
+
+
+--
+-- Name: COLUMN production_records.is_amended; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.production_records.is_amended IS 'OCD amend_ind. The current value replaced an earlier report, and the earlier value is not in the extract.';
+
+
+--
+-- Name: COLUMN production_records.source_effective_at; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.production_records.source_effective_at IS 'OCD eff_dte as reported, with no time zone stated. Not the production date. Filing-like in recent rows, but OCD does not define it as a filing date.';
+
+
+--
+-- Name: production_records_record_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.production_records_record_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: production_records_record_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.production_records_record_id_seq OWNED BY public.production_records.record_id;
+
+
+--
+-- Name: production_unit_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.production_unit_rules (
+    source_system_id text NOT NULL,
+    product_kind text NOT NULL,
+    unit_id text NOT NULL,
+    product_scope text NOT NULL,
+    base_conditions text NOT NULL,
+    verification_status public.verification_status NOT NULL,
+    evidence jsonb NOT NULL,
+    CONSTRAINT unit_rule_has_evidence CHECK ((jsonb_array_length(evidence) > 0))
+);
+
+
+--
+-- Name: TABLE production_unit_rules; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.production_unit_rules IS 'Verified meaning of each product kind. A production row must match a rule, so ambiguous units cannot be stored.';
+
+
+--
+-- Name: scenario_mappings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scenario_mappings (
+    mapping_id bigint NOT NULL,
+    scenario_id text NOT NULL,
+    target_asset_id text NOT NULL,
+    telemetry_event_id text NOT NULL,
+    original_source_instance_id text NOT NULL,
+    transformation_config jsonb NOT NULL,
+    compatibility_assessment_id text NOT NULL,
+    conditions_satisfied jsonb,
+    mapping_provenance public.provenance_class NOT NULL,
+    replay_start_time timestamp with time zone,
+    CONSTRAINT scenario_mappings_mapping_provenance_check CHECK ((mapping_provenance = ANY (ARRAY['REPLAYED'::public.provenance_class, 'SYNTHETIC'::public.provenance_class])))
+);
+
+
+--
+-- Name: TABLE scenario_mappings; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.scenario_mappings IS 'Explicit, immutable experimental association. Never OBSERVED, and a new version means a new row.';
+
+
+--
+-- Name: scenario_mappings_mapping_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.scenario_mappings_mapping_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: scenario_mappings_mapping_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.scenario_mappings_mapping_id_seq OWNED BY public.scenario_mappings.mapping_id;
+
+
+--
+-- Name: scenarios; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scenarios (
+    scenario_id text NOT NULL,
+    scenario_name text NOT NULL,
+    scenario_description text NOT NULL,
+    target_facility_id text NOT NULL,
+    scenario_version integer NOT NULL,
+    random_seed bigint NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT scenarios_scenario_version_check CHECK ((scenario_version > 0))
+);
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.schema_migrations (
+    version text NOT NULL,
+    sha256 text NOT NULL,
+    applied_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: sensor_tag_mappings; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sensor_tag_mappings (
+    mapping_id bigint NOT NULL,
+    tag_id text NOT NULL,
+    measurement_definition_id text NOT NULL,
+    equipment_class_id text NOT NULL,
+    reference_type public.reference_type NOT NULL,
+    source_system_id text NOT NULL,
+    original_unit_id text NOT NULL,
+    canonical_unit_id text NOT NULL,
+    conversion_method text NOT NULL,
+    data_quality_state text NOT NULL,
+    mapping_status public.verification_status NOT NULL,
+    rationale text NOT NULL,
+    valid_from date DEFAULT '-infinity'::date NOT NULL,
+    valid_to date,
+    CONSTRAINT sensor_tag_mappings_data_quality_state_check CHECK ((data_quality_state = ANY (ARRAY['SEMANTICS_COMPLETE'::text, 'SEMANTICS_INCOMPLETE'::text, 'NOT_ASSESSED'::text]))),
+    CONSTRAINT tag_mapping_validity CHECK (((valid_to IS NULL) OR (valid_to > valid_from)))
+);
+
+
+--
+-- Name: TABLE sensor_tag_mappings; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sensor_tag_mappings IS 'Same-class semantic mappings. Crossing equipment domains is only possible through a compatibility assessment and an experimental scenario mapping.';
+
+
+--
+-- Name: sensor_tag_mappings_mapping_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sensor_tag_mappings_mapping_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sensor_tag_mappings_mapping_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sensor_tag_mappings_mapping_id_seq OWNED BY public.sensor_tag_mappings.mapping_id;
+
+
+--
+-- Name: sensor_tags; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sensor_tags (
+    tag_id text NOT NULL,
+    source_system_id text NOT NULL,
+    native_tag_name text NOT NULL,
+    canonical_metric text,
+    equipment_position text NOT NULL,
+    equipment_class_id text NOT NULL,
+    physical_quantity text NOT NULL,
+    unit_id text NOT NULL,
+    pressure_reference_type public.reference_type NOT NULL,
+    sampling_frequency text,
+    mapping_status public.verification_status NOT NULL,
+    source_description text NOT NULL,
+    CONSTRAINT tag_reference_fits_quantity CHECK ((((physical_quantity = 'pressure'::text) AND (pressure_reference_type <> 'NOT_APPLICABLE'::public.reference_type)) OR ((physical_quantity <> 'pressure'::text) AND (pressure_reference_type = 'NOT_APPLICABLE'::public.reference_type))))
+);
+
+
+--
+-- Name: TABLE sensor_tags; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sensor_tags IS 'Native tags as published by the source, with their physical class and original unit.';
+
+
+--
+-- Name: source_asset_history; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.source_asset_history (
+    history_id bigint NOT NULL,
+    source_asset_id text NOT NULL,
+    valid_from date NOT NULL,
+    valid_to date,
+    operator_code text,
+    status_code text,
+    well_type_code text,
+    reported_latitude double precision,
+    reported_longitude double precision,
+    reported_datum_label text,
+    attributes jsonb DEFAULT '{}'::jsonb NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    batch_id text NOT NULL,
+    transformation_id text NOT NULL,
+    source_record_key text NOT NULL,
+    CONSTRAINT history_validity CHECK (((valid_to IS NULL) OR (valid_to > valid_from))),
+    CONSTRAINT source_asset_history_provenance_class_check CHECK ((provenance_class = 'OBSERVED'::public.provenance_class))
+);
+
+
+--
+-- Name: TABLE source_asset_history; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.source_asset_history IS 'Temporal well records. OCD''s 9999-12-31 sentinel is stored as an open-ended valid_to.';
+
+
+--
+-- Name: source_asset_history_history_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.source_asset_history_history_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: source_asset_history_history_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.source_asset_history_history_id_seq OWNED BY public.source_asset_history.history_id;
+
+
+--
+-- Name: source_assets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.source_assets (
+    source_asset_id text NOT NULL,
+    source_system_id text NOT NULL,
+    parent_source_asset_id text,
+    asset_type text NOT NULL,
+    external_identifier text NOT NULL,
+    asset_name text,
+    equipment_class_id text NOT NULL,
+    operating_status text,
+    reported_latitude double precision,
+    reported_longitude double precision,
+    reported_datum_label text,
+    geometry public.geometry(Point,4269),
+    spatial_status public.spatial_status NOT NULL,
+    attributes jsonb DEFAULT '{}'::jsonb NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    batch_id text NOT NULL,
+    transformation_id text NOT NULL,
+    source_record_key text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT completion_has_parent CHECK (((asset_type = 'WELL_COMPLETION'::text) = (parent_source_asset_id IS NOT NULL))),
+    CONSTRAINT geometry_only_when_usable CHECK (((spatial_status = 'USABLE'::public.spatial_status) = (geometry IS NOT NULL))),
+    CONSTRAINT source_assets_asset_type_check CHECK ((asset_type = ANY (ARRAY['WELL'::text, 'WELL_COMPLETION'::text]))),
+    CONSTRAINT source_assets_provenance_class_check CHECK ((provenance_class = 'OBSERVED'::public.provenance_class)),
+    CONSTRAINT usable_geometry_is_valid CHECK (((geometry IS NULL) OR (public.st_isvalid(geometry) AND ((public.st_y(geometry) >= ('-90'::integer)::double precision) AND (public.st_y(geometry) <= (90)::double precision)) AND ((public.st_x(geometry) >= ('-180'::integer)::double precision) AND (public.st_x(geometry) <= (180)::double precision)))))
+);
+
+
+--
+-- Name: TABLE source_assets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.source_assets IS 'Real entities named by a source. Always OBSERVED, never part of AETHER Field.';
+
+
+--
+-- Name: COLUMN source_assets.reported_latitude; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.source_assets.reported_latitude IS 'As reported by the source. Never corrected, even when quarantined.';
+
+
+--
+-- Name: COLUMN source_assets.geometry; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.source_assets.geometry IS 'NAD83 point, present only when spatial_status is USABLE.';
+
+
+--
+-- Name: source_event_classes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.source_event_classes (
+    source_system_id text NOT NULL,
+    event_label smallint NOT NULL,
+    event_name text NOT NULL,
+    description text NOT NULL,
+    has_transient boolean
+);
+
+
+--
+-- Name: source_identifiers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.source_identifiers (
+    identifier_id bigint NOT NULL,
+    source_system_id text NOT NULL,
+    canonical_asset_id text,
+    external_identifier text NOT NULL,
+    identifier_type text NOT NULL,
+    valid_from date DEFAULT '-infinity'::date NOT NULL,
+    valid_to date,
+    verification_status public.verification_status NOT NULL,
+    CONSTRAINT identifier_validity CHECK (((valid_to IS NULL) OR (valid_to > valid_from))),
+    CONSTRAINT verified_identifier_has_asset CHECK (((verification_status <> 'VERIFIED'::public.verification_status) OR (canonical_asset_id IS NOT NULL)))
+);
+
+
+--
+-- Name: TABLE source_identifiers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.source_identifiers IS 'Source identifiers for real assets. canonical_asset_id references source_assets only, so no real identifier can resolve to a fictional asset.';
+
+
+--
+-- Name: source_identifiers_identifier_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.source_identifiers_identifier_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: source_identifiers_identifier_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.source_identifiers_identifier_id_seq OWNED BY public.source_identifiers.identifier_id;
+
+
+--
+-- Name: source_reconciliation_evidence; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.source_reconciliation_evidence (
+    evidence_id bigint NOT NULL,
+    source_asset_id text NOT NULL,
+    batch_id text NOT NULL,
+    field_name text NOT NULL,
+    channel_a text NOT NULL,
+    value_a text,
+    channel_b text NOT NULL,
+    value_b text,
+    outcome text NOT NULL,
+    channels_are_independent boolean NOT NULL,
+    method_version text NOT NULL,
+    CONSTRAINT source_reconciliation_evidence_outcome_check CHECK ((outcome = ANY (ARRAY['AGREE'::text, 'CONFLICT'::text, 'MISSING'::text])))
+);
+
+
+--
+-- Name: TABLE source_reconciliation_evidence; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.source_reconciliation_evidence IS 'Field-level comparisons between channels. channels_are_independent records whether agreement can count as confirmation. OCD ArcGIS and FTP are not independent.';
+
+
+--
+-- Name: source_reconciliation_evidence_evidence_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.source_reconciliation_evidence_evidence_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: source_reconciliation_evidence_evidence_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.source_reconciliation_evidence_evidence_id_seq OWNED BY public.source_reconciliation_evidence.evidence_id;
+
+
+--
+-- Name: source_systems; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.source_systems (
+    source_system_id text NOT NULL,
+    provider text NOT NULL,
+    source_url text NOT NULL,
+    source_version text,
+    license text NOT NULL,
+    retrieval_timestamp timestamp with time zone,
+    usage_constraints text NOT NULL,
+    is_project_generated boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE source_systems; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.source_systems IS 'Each independent origin of data, including the project-generated synthetic source.';
+
+
+--
+-- Name: telemetry_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.telemetry_events (
+    event_id text NOT NULL,
+    source_system_id text NOT NULL,
+    source_instance_id text NOT NULL,
+    source_asset_id text,
+    source_event_label smallint NOT NULL,
+    source_event_class text NOT NULL,
+    start_timestamp timestamp without time zone NOT NULL,
+    end_timestamp timestamp without time zone NOT NULL,
+    real_or_simulated_source public.instance_origin NOT NULL,
+    observation_count integer NOT NULL,
+    parquet_uri text NOT NULL,
+    dataset_version text NOT NULL,
+    upstream_checksum text NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    batch_id text NOT NULL,
+    transformation_id text NOT NULL,
+    CONSTRAINT generated_instances_are_synthetic CHECK (((real_or_simulated_source = 'REAL'::public.instance_origin) OR (provenance_class = 'SYNTHETIC'::public.provenance_class))),
+    CONSTRAINT only_real_instances_are_observed CHECK (((real_or_simulated_source = 'REAL'::public.instance_origin) = (provenance_class = 'OBSERVED'::public.provenance_class))),
+    CONSTRAINT real_instance_has_source_well CHECK (((real_or_simulated_source = 'REAL'::public.instance_origin) = (source_asset_id IS NOT NULL))),
+    CONSTRAINT telemetry_events_observation_count_check CHECK ((observation_count >= 0)),
+    CONSTRAINT telemetry_time_order CHECK ((end_timestamp >= start_timestamp))
+);
+
+
+--
+-- Name: TABLE telemetry_events; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.telemetry_events IS 'One row per 3W instance. Instance IDs repeat across classes, so identity includes the event label. Timestamps carry no stated time zone.';
+
+
+--
+-- Name: transformations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.transformations (
+    transformation_id text NOT NULL,
+    name text NOT NULL,
+    version integer NOT NULL,
+    code_reference text NOT NULL,
+    description text NOT NULL,
+    input_provenance public.provenance_class[] NOT NULL,
+    output_provenance public.provenance_class NOT NULL,
+    alters_values boolean NOT NULL,
+    CONSTRAINT observed_output_is_unaltered CHECK (((output_provenance <> 'OBSERVED'::public.provenance_class) OR ((input_provenance = ARRAY['OBSERVED'::public.provenance_class]) AND (NOT alters_values)))),
+    CONSTRAINT synthetic_input_cannot_become_derived CHECK (((output_provenance <> ALL (ARRAY['DERIVED'::public.provenance_class, 'OBSERVED'::public.provenance_class])) OR (NOT ('SYNTHETIC'::public.provenance_class = ANY (input_provenance))))),
+    CONSTRAINT transformations_input_provenance_check CHECK ((cardinality(input_provenance) > 0)),
+    CONSTRAINT transformations_version_check CHECK ((version > 0))
+);
+
+
+--
+-- Name: TABLE transformations; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.transformations IS 'Provenance as a property of the process. Canonical rows reference this with a composite key, so a row cannot claim a class its transformation does not produce.';
+
+
+--
+-- Name: unit_conversions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.unit_conversions (
+    from_unit_id text NOT NULL,
+    to_unit_id text NOT NULL,
+    physical_quantity text NOT NULL,
+    factor double precision NOT NULL,
+    term double precision DEFAULT 0 NOT NULL,
+    method text NOT NULL
+);
+
+
+--
+-- Name: TABLE unit_conversions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.unit_conversions IS 'value_out = value_in * factor + term. Both units must measure the same quantity. Gauge-to-absolute changes are not unit conversions and are not representable here.';
+
+
+--
+-- Name: units; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.units (
+    unit_id text NOT NULL,
+    physical_quantity text NOT NULL,
+    description text NOT NULL
+);
+
+
+--
+-- Name: v_open_quality_exceptions; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_open_quality_exceptions AS
+ SELECT exception_id,
+    exception_type,
+    severity,
+    dataset,
+    source_asset_id,
+    source_record_key,
+    disposition,
+    status,
+    decision_rationale
+   FROM public.data_quality_exceptions
+  WHERE (status = 'OPEN'::text);
+
+
+--
+-- Name: v_production_lineage; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_production_lineage AS
+ SELECT p.record_id,
+    p.reporting_entity_id,
+    parent.external_identifier AS api_number,
+    p.reporting_period,
+    p.product_kind,
+    p.reported_volume,
+    p.unit_id,
+    p.source_effective_at,
+    p.provenance_class,
+    p.source_record_key,
+    p.original_record_uri,
+    t.transformation_id,
+    t.code_reference,
+    t.alters_values,
+    b.batch_id,
+    b.source_system_id,
+    b.source_version,
+    b.manifest_uri,
+    f.path AS raw_file_path,
+    f.sha256 AS raw_file_sha256,
+    f.source_url AS raw_file_source_url
+   FROM (((((public.production_records p
+     JOIN public.source_assets c ON ((c.source_asset_id = p.reporting_entity_id)))
+     JOIN public.source_assets parent ON ((parent.source_asset_id = c.parent_source_asset_id)))
+     JOIN public.transformations t ON ((t.transformation_id = p.transformation_id)))
+     JOIN public.ingestion_batches b ON ((b.batch_id = p.batch_id)))
+     JOIN public.batch_files f ON (((f.batch_id = p.batch_id) AND (f.path = p.original_record_uri))));
+
+
+--
+-- Name: v_production_wide; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_production_wide AS
+ SELECT source_system_id,
+    reporting_entity_id,
+    reporting_grain,
+    reporting_period,
+    max(reported_volume) FILTER (WHERE (product_kind = 'O'::text)) AS oil_volume_bbl,
+    max(reported_volume) FILTER (WHERE (product_kind = 'G'::text)) AS gas_volume_mcf_15025psia_60f,
+    max(reported_volume) FILTER (WHERE (product_kind = 'W'::text)) AS water_volume_bbl
+   FROM public.production_records
+  GROUP BY source_system_id, reporting_entity_id, reporting_grain, reporting_period;
+
+
+--
+-- Name: VIEW v_production_wide; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.v_production_wide IS 'Oil, gas, and water per completion and month. A missing product stays NULL, never zero.';
+
+
+--
+-- Name: v_spatially_usable_source_assets; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_spatially_usable_source_assets AS
+ SELECT source_asset_id,
+    source_system_id,
+    asset_type,
+    external_identifier,
+    operating_status,
+    geometry
+   FROM public.source_assets
+  WHERE ((spatial_status = 'USABLE'::public.spatial_status) AND (geometry IS NOT NULL));
+
+
+--
+-- Name: VIEW v_spatially_usable_source_assets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.v_spatially_usable_source_assets IS 'The only spatial population for analytics. Excludes quarantined coordinates and unresolved datums.';
+
+
+--
+-- Name: v_tag_semantics; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_tag_semantics AS
+ SELECT s.tag_id,
+    s.native_tag_name AS original_source_tag,
+    s.physical_quantity,
+    s.equipment_position AS equipment_location,
+    s.pressure_reference_type AS measurement_reference_type,
+    s.unit_id AS original_unit,
+    m.canonical_unit_id AS canonical_unit,
+    m.conversion_method,
+    s.source_system_id AS source_system,
+    m.data_quality_state,
+    m.measurement_definition_id,
+    s.equipment_class_id
+   FROM (public.sensor_tags s
+     LEFT JOIN public.sensor_tag_mappings m ON ((m.tag_id = s.tag_id)));
+
+
+--
+-- Name: VIEW v_tag_semantics; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.v_tag_semantics IS 'The nine required semantic attributes for each sensor measurement.';
+
+
+--
+-- Name: v_telemetry_lineage; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_telemetry_lineage AS
+ SELECT e.event_id,
+    e.source_instance_id,
+    e.source_event_label,
+    e.source_event_class,
+    e.real_or_simulated_source,
+    e.provenance_class,
+    e.source_asset_id,
+    e.dataset_version,
+    e.parquet_uri,
+    t.transformation_id,
+    t.code_reference,
+    b.batch_id,
+    b.manifest_uri,
+    f.sha256 AS raw_file_sha256,
+    f.upstream_checksum,
+    f.source_url AS raw_file_source_url
+   FROM (((public.telemetry_events e
+     JOIN public.transformations t ON ((t.transformation_id = e.transformation_id)))
+     JOIN public.ingestion_batches b ON ((b.batch_id = e.batch_id)))
+     JOIN public.batch_files f ON (((f.batch_id = e.batch_id) AND (f.path = e.parquet_uri))));
+
+
+--
+-- Name: work_orders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.work_orders (
+    work_order_id bigint NOT NULL,
+    scenario_id text NOT NULL,
+    asset_id text NOT NULL,
+    recommended_action text NOT NULL,
+    severity text NOT NULL,
+    priority integer NOT NULL,
+    status text NOT NULL,
+    estimated_cost numeric(12,2),
+    evidence_reference text NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT work_orders_status_check CHECK ((status = ANY (ARRAY['RECOMMENDED'::text, 'APPROVED'::text, 'REJECTED'::text, 'NEEDS_EVIDENCE'::text, 'COMPLETED'::text])))
+);
+
+
+--
+-- Name: TABLE work_orders; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.work_orders IS 'Simulated work on fictional assets. A work order requires a scenario and cannot point at a real well.';
+
+
+--
+-- Name: work_orders_work_order_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.work_orders_work_order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: work_orders_work_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.work_orders_work_order_id_seq OWNED BY public.work_orders.work_order_id;
+
+
+--
+-- Name: anomaly_predictions prediction_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.anomaly_predictions ALTER COLUMN prediction_id SET DEFAULT nextval('public.anomaly_predictions_prediction_id_seq'::regclass);
+
+
+--
+-- Name: approval_events approval_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.approval_events ALTER COLUMN approval_id SET DEFAULT nextval('public.approval_events_approval_id_seq'::regclass);
+
+
+--
+-- Name: asset_observation_links link_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_observation_links ALTER COLUMN link_id SET DEFAULT nextval('public.asset_observation_links_link_id_seq'::regclass);
+
+
+--
+-- Name: asset_relationships relationship_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_relationships ALTER COLUMN relationship_id SET DEFAULT nextval('public.asset_relationships_relationship_id_seq'::regclass);
+
+
+--
+-- Name: audit_events event_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audit_events ALTER COLUMN event_id SET DEFAULT nextval('public.audit_events_event_id_seq'::regclass);
+
+
+--
+-- Name: data_quality_exceptions exception_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_quality_exceptions ALTER COLUMN exception_id SET DEFAULT nextval('public.data_quality_exceptions_exception_id_seq'::regclass);
+
+
+--
+-- Name: inspection_observations inspection_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_observations ALTER COLUMN inspection_id SET DEFAULT nextval('public.inspection_observations_inspection_id_seq'::regclass);
+
+
+--
+-- Name: observations observation_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations ALTER COLUMN observation_id SET DEFAULT nextval('public.observations_observation_id_seq'::regclass);
+
+
+--
+-- Name: production_records record_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records ALTER COLUMN record_id SET DEFAULT nextval('public.production_records_record_id_seq'::regclass);
+
+
+--
+-- Name: scenario_mappings mapping_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings ALTER COLUMN mapping_id SET DEFAULT nextval('public.scenario_mappings_mapping_id_seq'::regclass);
+
+
+--
+-- Name: sensor_tag_mappings mapping_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings ALTER COLUMN mapping_id SET DEFAULT nextval('public.sensor_tag_mappings_mapping_id_seq'::regclass);
+
+
+--
+-- Name: source_asset_history history_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_asset_history ALTER COLUMN history_id SET DEFAULT nextval('public.source_asset_history_history_id_seq'::regclass);
+
+
+--
+-- Name: source_identifiers identifier_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_identifiers ALTER COLUMN identifier_id SET DEFAULT nextval('public.source_identifiers_identifier_id_seq'::regclass);
+
+
+--
+-- Name: source_reconciliation_evidence evidence_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_reconciliation_evidence ALTER COLUMN evidence_id SET DEFAULT nextval('public.source_reconciliation_evidence_evidence_id_seq'::regclass);
+
+
+--
+-- Name: work_orders work_order_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_orders ALTER COLUMN work_order_id SET DEFAULT nextval('public.work_orders_work_order_id_seq'::regclass);
+
+
+--
+-- Name: anomaly_predictions anomaly_predictions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.anomaly_predictions
+    ADD CONSTRAINT anomaly_predictions_pkey PRIMARY KEY (prediction_id);
+
+
+--
+-- Name: approval_events approval_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.approval_events
+    ADD CONSTRAINT approval_events_pkey PRIMARY KEY (approval_id);
+
+
+--
+-- Name: asset_observation_links asset_observation_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_observation_links
+    ADD CONSTRAINT asset_observation_links_pkey PRIMARY KEY (link_id);
+
+
+--
+-- Name: asset_relationships asset_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_relationships
+    ADD CONSTRAINT asset_relationships_pkey PRIMARY KEY (relationship_id);
+
+
+--
+-- Name: assets assets_asset_id_equipment_class_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assets
+    ADD CONSTRAINT assets_asset_id_equipment_class_id_key UNIQUE (asset_id, equipment_class_id);
+
+
+--
+-- Name: assets assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assets
+    ADD CONSTRAINT assets_pkey PRIMARY KEY (asset_id);
+
+
+--
+-- Name: audit_events audit_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.audit_events
+    ADD CONSTRAINT audit_events_pkey PRIMARY KEY (event_id);
+
+
+--
+-- Name: batch_files batch_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.batch_files
+    ADD CONSTRAINT batch_files_pkey PRIMARY KEY (batch_id, path);
+
+
+--
+-- Name: data_quality_exceptions data_quality_exceptions_batch_id_rule_id_source_record_key_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_quality_exceptions
+    ADD CONSTRAINT data_quality_exceptions_batch_id_rule_id_source_record_key_key UNIQUE (batch_id, rule_id, source_record_key);
+
+
+--
+-- Name: data_quality_exceptions data_quality_exceptions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_quality_exceptions
+    ADD CONSTRAINT data_quality_exceptions_pkey PRIMARY KEY (exception_id);
+
+
+--
+-- Name: domain_compatibility_assessments domain_compatibility_assessme_source_system_id_subject_type_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_compatibility_assessments
+    ADD CONSTRAINT domain_compatibility_assessme_source_system_id_subject_type_key UNIQUE (source_system_id, subject_type, subject_id, target_equipment_class_id, assessment_version);
+
+
+--
+-- Name: domain_compatibility_assessments domain_compatibility_assessments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_compatibility_assessments
+    ADD CONSTRAINT domain_compatibility_assessments_pkey PRIMARY KEY (assessment_id);
+
+
+--
+-- Name: domain_compatibility_requirements domain_compatibility_requirements_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_compatibility_requirements
+    ADD CONSTRAINT domain_compatibility_requirements_pkey PRIMARY KEY (requirement_id);
+
+
+--
+-- Name: equipment_classes equipment_classes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.equipment_classes
+    ADD CONSTRAINT equipment_classes_pkey PRIMARY KEY (equipment_class_id);
+
+
+--
+-- Name: equipment_measurement_capabilities equipment_measurement_capabilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.equipment_measurement_capabilities
+    ADD CONSTRAINT equipment_measurement_capabilities_pkey PRIMARY KEY (equipment_class_id, measurement_definition_id);
+
+
+--
+-- Name: facilities facilities_facility_id_is_fictional_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.facilities
+    ADD CONSTRAINT facilities_facility_id_is_fictional_key UNIQUE (facility_id, is_fictional);
+
+
+--
+-- Name: facilities facilities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.facilities
+    ADD CONSTRAINT facilities_pkey PRIMARY KEY (facility_id);
+
+
+--
+-- Name: source_asset_history history_no_overlap; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_asset_history
+    ADD CONSTRAINT history_no_overlap EXCLUDE USING gist (source_asset_id WITH =, daterange(valid_from, valid_to) WITH &&);
+
+
+--
+-- Name: source_identifiers identifier_no_overlap; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_identifiers
+    ADD CONSTRAINT identifier_no_overlap EXCLUDE USING gist (source_system_id WITH =, identifier_type WITH =, external_identifier WITH =, daterange(valid_from, valid_to) WITH &&);
+
+
+--
+-- Name: ingestion_batches ingestion_batches_batch_id_source_system_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ingestion_batches
+    ADD CONSTRAINT ingestion_batches_batch_id_source_system_id_key UNIQUE (batch_id, source_system_id);
+
+
+--
+-- Name: ingestion_batches ingestion_batches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ingestion_batches
+    ADD CONSTRAINT ingestion_batches_pkey PRIMARY KEY (batch_id);
+
+
+--
+-- Name: inspection_observations inspection_observations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_observations
+    ADD CONSTRAINT inspection_observations_pkey PRIMARY KEY (inspection_id);
+
+
+--
+-- Name: measurement_definitions measurement_definitions_measurement_definition_id_equipment_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.measurement_definitions
+    ADD CONSTRAINT measurement_definitions_measurement_definition_id_equipment_key UNIQUE (measurement_definition_id, equipment_class_id, reference_type, canonical_unit_id);
+
+
+--
+-- Name: measurement_definitions measurement_definitions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.measurement_definitions
+    ADD CONSTRAINT measurement_definitions_pkey PRIMARY KEY (measurement_definition_id);
+
+
+--
+-- Name: observations observations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_pkey PRIMARY KEY (observation_id);
+
+
+--
+-- Name: observations observations_source_system_id_source_record_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_source_system_id_source_record_id_key UNIQUE (source_system_id, source_record_id);
+
+
+--
+-- Name: production_records production_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_pkey PRIMARY KEY (record_id);
+
+
+--
+-- Name: production_records production_records_reporting_entity_id_reporting_period_pro_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_reporting_entity_id_reporting_period_pro_key UNIQUE (reporting_entity_id, reporting_period, product_kind);
+
+
+--
+-- Name: production_unit_rules production_unit_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_unit_rules
+    ADD CONSTRAINT production_unit_rules_pkey PRIMARY KEY (source_system_id, product_kind);
+
+
+--
+-- Name: production_unit_rules production_unit_rules_source_system_id_product_kind_unit_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_unit_rules
+    ADD CONSTRAINT production_unit_rules_source_system_id_product_kind_unit_id_key UNIQUE (source_system_id, product_kind, unit_id);
+
+
+--
+-- Name: asset_relationships relationship_no_overlap; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_relationships
+    ADD CONSTRAINT relationship_no_overlap EXCLUDE USING gist (source_asset_id WITH =, target_asset_id WITH =, relationship_type WITH =, daterange(effective_from, effective_to) WITH &&);
+
+
+--
+-- Name: scenario_mappings scenario_mappings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings
+    ADD CONSTRAINT scenario_mappings_pkey PRIMARY KEY (mapping_id);
+
+
+--
+-- Name: scenario_mappings scenario_mappings_scenario_id_target_asset_id_telemetry_eve_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings
+    ADD CONSTRAINT scenario_mappings_scenario_id_target_asset_id_telemetry_eve_key UNIQUE (scenario_id, target_asset_id, telemetry_event_id);
+
+
+--
+-- Name: scenarios scenarios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenarios
+    ADD CONSTRAINT scenarios_pkey PRIMARY KEY (scenario_id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: sensor_tag_mappings sensor_tag_mappings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings
+    ADD CONSTRAINT sensor_tag_mappings_pkey PRIMARY KEY (mapping_id);
+
+
+--
+-- Name: sensor_tags sensor_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_pkey PRIMARY KEY (tag_id);
+
+
+--
+-- Name: sensor_tags sensor_tags_source_system_id_native_tag_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_source_system_id_native_tag_name_key UNIQUE (source_system_id, native_tag_name);
+
+
+--
+-- Name: sensor_tags sensor_tags_tag_id_equipment_class_id_pressure_reference_ty_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_tag_id_equipment_class_id_pressure_reference_ty_key UNIQUE (tag_id, equipment_class_id, pressure_reference_type, unit_id);
+
+
+--
+-- Name: source_asset_history source_asset_history_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_asset_history
+    ADD CONSTRAINT source_asset_history_pkey PRIMARY KEY (history_id);
+
+
+--
+-- Name: source_assets source_assets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_pkey PRIMARY KEY (source_asset_id);
+
+
+--
+-- Name: source_assets source_assets_source_asset_id_source_system_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_source_asset_id_source_system_id_key UNIQUE (source_asset_id, source_system_id);
+
+
+--
+-- Name: source_assets source_assets_source_system_id_asset_type_external_identifi_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_source_system_id_asset_type_external_identifi_key UNIQUE (source_system_id, asset_type, external_identifier);
+
+
+--
+-- Name: source_event_classes source_event_classes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_event_classes
+    ADD CONSTRAINT source_event_classes_pkey PRIMARY KEY (source_system_id, event_label);
+
+
+--
+-- Name: source_event_classes source_event_classes_source_system_id_event_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_event_classes
+    ADD CONSTRAINT source_event_classes_source_system_id_event_name_key UNIQUE (source_system_id, event_name);
+
+
+--
+-- Name: source_identifiers source_identifiers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_identifiers
+    ADD CONSTRAINT source_identifiers_pkey PRIMARY KEY (identifier_id);
+
+
+--
+-- Name: source_reconciliation_evidence source_reconciliation_evidenc_batch_id_source_asset_id_fiel_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_reconciliation_evidence
+    ADD CONSTRAINT source_reconciliation_evidenc_batch_id_source_asset_id_fiel_key UNIQUE (batch_id, source_asset_id, field_name, channel_a, channel_b);
+
+
+--
+-- Name: source_reconciliation_evidence source_reconciliation_evidence_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_reconciliation_evidence
+    ADD CONSTRAINT source_reconciliation_evidence_pkey PRIMARY KEY (evidence_id);
+
+
+--
+-- Name: source_systems source_systems_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_systems
+    ADD CONSTRAINT source_systems_pkey PRIMARY KEY (source_system_id);
+
+
+--
+-- Name: sensor_tag_mappings tag_mapping_no_overlap; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings
+    ADD CONSTRAINT tag_mapping_no_overlap EXCLUDE USING gist (tag_id WITH =, measurement_definition_id WITH =, daterange(valid_from, valid_to) WITH &&);
+
+
+--
+-- Name: telemetry_events telemetry_events_event_id_source_instance_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_event_id_source_instance_id_key UNIQUE (event_id, source_instance_id);
+
+
+--
+-- Name: telemetry_events telemetry_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_pkey PRIMARY KEY (event_id);
+
+
+--
+-- Name: telemetry_events telemetry_events_source_system_id_source_event_label_source_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_source_system_id_source_event_label_source_key UNIQUE (source_system_id, source_event_label, source_instance_id);
+
+
+--
+-- Name: transformations transformations_name_version_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transformations
+    ADD CONSTRAINT transformations_name_version_key UNIQUE (name, version);
+
+
+--
+-- Name: transformations transformations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transformations
+    ADD CONSTRAINT transformations_pkey PRIMARY KEY (transformation_id);
+
+
+--
+-- Name: transformations transformations_transformation_id_output_provenance_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.transformations
+    ADD CONSTRAINT transformations_transformation_id_output_provenance_key UNIQUE (transformation_id, output_provenance);
+
+
+--
+-- Name: unit_conversions unit_conversions_from_unit_id_to_unit_id_method_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unit_conversions
+    ADD CONSTRAINT unit_conversions_from_unit_id_to_unit_id_method_key UNIQUE (from_unit_id, to_unit_id, method);
+
+
+--
+-- Name: unit_conversions unit_conversions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unit_conversions
+    ADD CONSTRAINT unit_conversions_pkey PRIMARY KEY (from_unit_id, to_unit_id);
+
+
+--
+-- Name: units units_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.units
+    ADD CONSTRAINT units_pkey PRIMARY KEY (unit_id);
+
+
+--
+-- Name: units units_unit_id_physical_quantity_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.units
+    ADD CONSTRAINT units_unit_id_physical_quantity_key UNIQUE (unit_id, physical_quantity);
+
+
+--
+-- Name: work_orders work_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_orders
+    ADD CONSTRAINT work_orders_pkey PRIMARY KEY (work_order_id);
+
+
+--
+-- Name: anomaly_event_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX anomaly_event_idx ON public.anomaly_predictions USING btree (source_event_id);
+
+
+--
+-- Name: assets_geometry_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX assets_geometry_idx ON public.assets USING gist (geometry);
+
+
+--
+-- Name: assets_parent_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX assets_parent_idx ON public.assets USING btree (parent_asset_id);
+
+
+--
+-- Name: facilities_geometry_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX facilities_geometry_idx ON public.facilities USING gist (geometry);
+
+
+--
+-- Name: link_fictional_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX link_fictional_unique ON public.asset_observation_links USING btree (asset_id, observation_id, scenario_id) WHERE (asset_id IS NOT NULL);
+
+
+--
+-- Name: link_real_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX link_real_unique ON public.asset_observation_links USING btree (source_asset_id, observation_id, relationship_type) WHERE (source_asset_id IS NOT NULL);
+
+
+--
+-- Name: observations_event_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX observations_event_idx ON public.observations USING btree (telemetry_event_id);
+
+
+--
+-- Name: observations_geometry_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX observations_geometry_idx ON public.observations USING gist (geometry);
+
+
+--
+-- Name: observations_tag_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX observations_tag_idx ON public.observations USING btree (sensor_tag_id);
+
+
+--
+-- Name: production_batch_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX production_batch_idx ON public.production_records USING btree (batch_id);
+
+
+--
+-- Name: production_period_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX production_period_idx ON public.production_records USING btree (reporting_period);
+
+
+--
+-- Name: quality_exceptions_asset_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quality_exceptions_asset_idx ON public.data_quality_exceptions USING btree (source_asset_id);
+
+
+--
+-- Name: source_assets_geometry_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX source_assets_geometry_idx ON public.source_assets USING gist (geometry);
+
+
+--
+-- Name: source_assets_parent_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX source_assets_parent_idx ON public.source_assets USING btree (parent_source_asset_id);
+
+
+--
+-- Name: telemetry_class_origin_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX telemetry_class_origin_idx ON public.telemetry_events USING btree (source_event_label, real_or_simulated_source);
+
+
+--
+-- Name: approval_events approval_events_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER approval_events_append_only BEFORE DELETE OR UPDATE ON public.approval_events FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: audit_events audit_events_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER audit_events_append_only BEFORE DELETE OR UPDATE ON public.audit_events FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: asset_observation_links observation_link_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER observation_link_guard BEFORE INSERT OR UPDATE ON public.asset_observation_links FOR EACH ROW EXECUTE FUNCTION public.enforce_observation_link();
+
+
+--
+-- Name: scenario_mappings scenario_mapping_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER scenario_mapping_guard BEFORE INSERT ON public.scenario_mappings FOR EACH ROW EXECUTE FUNCTION public.enforce_scenario_mapping();
+
+
+--
+-- Name: scenario_mappings scenario_mapping_immutable; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER scenario_mapping_immutable BEFORE DELETE OR UPDATE ON public.scenario_mappings FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: anomaly_predictions anomaly_predictions_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.anomaly_predictions
+    ADD CONSTRAINT anomaly_predictions_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: anomaly_predictions anomaly_predictions_source_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.anomaly_predictions
+    ADD CONSTRAINT anomaly_predictions_source_event_id_fkey FOREIGN KEY (source_event_id) REFERENCES public.telemetry_events(event_id);
+
+
+--
+-- Name: approval_events approval_events_work_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.approval_events
+    ADD CONSTRAINT approval_events_work_order_id_fkey FOREIGN KEY (work_order_id) REFERENCES public.work_orders(work_order_id);
+
+
+--
+-- Name: asset_observation_links asset_observation_links_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_observation_links
+    ADD CONSTRAINT asset_observation_links_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: asset_observation_links asset_observation_links_observation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_observation_links
+    ADD CONSTRAINT asset_observation_links_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES public.observations(observation_id);
+
+
+--
+-- Name: asset_observation_links asset_observation_links_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_observation_links
+    ADD CONSTRAINT asset_observation_links_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: asset_observation_links asset_observation_links_source_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_observation_links
+    ADD CONSTRAINT asset_observation_links_source_asset_id_fkey FOREIGN KEY (source_asset_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: asset_relationships asset_relationships_source_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_relationships
+    ADD CONSTRAINT asset_relationships_source_asset_id_fkey FOREIGN KEY (source_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: asset_relationships asset_relationships_target_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.asset_relationships
+    ADD CONSTRAINT asset_relationships_target_asset_id_fkey FOREIGN KEY (target_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: assets assets_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assets
+    ADD CONSTRAINT assets_equipment_class_id_fkey FOREIGN KEY (equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: assets assets_facility_id_is_fictional_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assets
+    ADD CONSTRAINT assets_facility_id_is_fictional_fkey FOREIGN KEY (facility_id, is_fictional) REFERENCES public.facilities(facility_id, is_fictional);
+
+
+--
+-- Name: assets assets_parent_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assets
+    ADD CONSTRAINT assets_parent_asset_id_fkey FOREIGN KEY (parent_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: assets assets_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.assets
+    ADD CONSTRAINT assets_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
+
+
+--
+-- Name: batch_files batch_files_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.batch_files
+    ADD CONSTRAINT batch_files_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ingestion_batches(batch_id);
+
+
+--
+-- Name: data_quality_exceptions data_quality_exceptions_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_quality_exceptions
+    ADD CONSTRAINT data_quality_exceptions_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ingestion_batches(batch_id);
+
+
+--
+-- Name: data_quality_exceptions data_quality_exceptions_source_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_quality_exceptions
+    ADD CONSTRAINT data_quality_exceptions_source_asset_id_fkey FOREIGN KEY (source_asset_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: data_quality_exceptions data_quality_exceptions_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.data_quality_exceptions
+    ADD CONSTRAINT data_quality_exceptions_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: domain_compatibility_assessments domain_compatibility_assessments_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_compatibility_assessments
+    ADD CONSTRAINT domain_compatibility_assessments_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: domain_compatibility_assessments domain_compatibility_assessments_target_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_compatibility_assessments
+    ADD CONSTRAINT domain_compatibility_assessments_target_equipment_class_id_fkey FOREIGN KEY (target_equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: domain_compatibility_requirements domain_compatibility_requirement_target_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_compatibility_requirements
+    ADD CONSTRAINT domain_compatibility_requirement_target_equipment_class_id_fkey FOREIGN KEY (target_equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: equipment_measurement_capabilities equipment_measurement_capabiliti_measurement_definition_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.equipment_measurement_capabilities
+    ADD CONSTRAINT equipment_measurement_capabiliti_measurement_definition_id_fkey FOREIGN KEY (measurement_definition_id) REFERENCES public.measurement_definitions(measurement_definition_id);
+
+
+--
+-- Name: equipment_measurement_capabilities equipment_measurement_capabilities_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.equipment_measurement_capabilities
+    ADD CONSTRAINT equipment_measurement_capabilities_equipment_class_id_fkey FOREIGN KEY (equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: ingestion_batches ingestion_batches_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ingestion_batches
+    ADD CONSTRAINT ingestion_batches_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: inspection_observations inspection_observations_asset_candidate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_observations
+    ADD CONSTRAINT inspection_observations_asset_candidate_id_fkey FOREIGN KEY (asset_candidate_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: inspection_observations inspection_observations_observation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_observations
+    ADD CONSTRAINT inspection_observations_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES public.observations(observation_id);
+
+
+--
+-- Name: inspection_observations inspection_observations_source_asset_candidate_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_observations
+    ADD CONSTRAINT inspection_observations_source_asset_candidate_id_fkey FOREIGN KEY (source_asset_candidate_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: sensor_tag_mappings mapping_has_conversion; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings
+    ADD CONSTRAINT mapping_has_conversion FOREIGN KEY (original_unit_id, canonical_unit_id, conversion_method) REFERENCES public.unit_conversions(from_unit_id, to_unit_id, method);
+
+
+--
+-- Name: sensor_tag_mappings mapping_matches_definition; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings
+    ADD CONSTRAINT mapping_matches_definition FOREIGN KEY (measurement_definition_id, equipment_class_id, reference_type, canonical_unit_id) REFERENCES public.measurement_definitions(measurement_definition_id, equipment_class_id, reference_type, canonical_unit_id);
+
+
+--
+-- Name: sensor_tag_mappings mapping_matches_tag; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings
+    ADD CONSTRAINT mapping_matches_tag FOREIGN KEY (tag_id, equipment_class_id, reference_type, original_unit_id) REFERENCES public.sensor_tags(tag_id, equipment_class_id, pressure_reference_type, unit_id);
+
+
+--
+-- Name: measurement_definitions measurement_definitions_canonical_unit_id_physical_quantit_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.measurement_definitions
+    ADD CONSTRAINT measurement_definitions_canonical_unit_id_physical_quantit_fkey FOREIGN KEY (canonical_unit_id, physical_quantity) REFERENCES public.units(unit_id, physical_quantity);
+
+
+--
+-- Name: measurement_definitions measurement_definitions_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.measurement_definitions
+    ADD CONSTRAINT measurement_definitions_equipment_class_id_fkey FOREIGN KEY (equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: observations observation_scenario_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observation_scenario_fk FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: observations observations_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ingestion_batches(batch_id);
+
+
+--
+-- Name: observations observations_replayed_from_observation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_replayed_from_observation_id_fkey FOREIGN KEY (replayed_from_observation_id) REFERENCES public.observations(observation_id);
+
+
+--
+-- Name: observations observations_sensor_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_sensor_tag_id_fkey FOREIGN KEY (sensor_tag_id) REFERENCES public.sensor_tags(tag_id);
+
+
+--
+-- Name: observations observations_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: observations observations_telemetry_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_telemetry_event_id_fkey FOREIGN KEY (telemetry_event_id) REFERENCES public.telemetry_events(event_id);
+
+
+--
+-- Name: observations observations_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
+
+
+--
+-- Name: observations observations_unit_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_unit_id_fkey FOREIGN KEY (unit_id) REFERENCES public.units(unit_id);
+
+
+--
+-- Name: production_records production_records_batch_id_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_batch_id_source_system_id_fkey FOREIGN KEY (batch_id, source_system_id) REFERENCES public.ingestion_batches(batch_id, source_system_id);
+
+
+--
+-- Name: production_records production_records_reporting_entity_id_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_reporting_entity_id_source_system_id_fkey FOREIGN KEY (reporting_entity_id, source_system_id) REFERENCES public.source_assets(source_asset_id, source_system_id);
+
+
+--
+-- Name: production_records production_records_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: production_records production_records_source_system_id_product_kind_unit_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_source_system_id_product_kind_unit_id_fkey FOREIGN KEY (source_system_id, product_kind, unit_id) REFERENCES public.production_unit_rules(source_system_id, product_kind, unit_id);
+
+
+--
+-- Name: production_records production_records_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_records
+    ADD CONSTRAINT production_records_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
+
+
+--
+-- Name: production_unit_rules production_unit_rules_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_unit_rules
+    ADD CONSTRAINT production_unit_rules_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: production_unit_rules production_unit_rules_unit_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.production_unit_rules
+    ADD CONSTRAINT production_unit_rules_unit_id_fkey FOREIGN KEY (unit_id) REFERENCES public.units(unit_id);
+
+
+--
+-- Name: scenario_mappings scenario_mappings_compatibility_assessment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings
+    ADD CONSTRAINT scenario_mappings_compatibility_assessment_id_fkey FOREIGN KEY (compatibility_assessment_id) REFERENCES public.domain_compatibility_assessments(assessment_id);
+
+
+--
+-- Name: scenario_mappings scenario_mappings_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings
+    ADD CONSTRAINT scenario_mappings_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: scenario_mappings scenario_mappings_target_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings
+    ADD CONSTRAINT scenario_mappings_target_asset_id_fkey FOREIGN KEY (target_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: scenario_mappings scenario_mappings_telemetry_event_id_original_source_insta_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_mappings
+    ADD CONSTRAINT scenario_mappings_telemetry_event_id_original_source_insta_fkey FOREIGN KEY (telemetry_event_id, original_source_instance_id) REFERENCES public.telemetry_events(event_id, source_instance_id);
+
+
+--
+-- Name: scenarios scenarios_target_facility_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenarios
+    ADD CONSTRAINT scenarios_target_facility_id_fkey FOREIGN KEY (target_facility_id) REFERENCES public.facilities(facility_id);
+
+
+--
+-- Name: sensor_tag_mappings sensor_tag_mappings_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tag_mappings
+    ADD CONSTRAINT sensor_tag_mappings_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: sensor_tags sensor_tags_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_equipment_class_id_fkey FOREIGN KEY (equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: sensor_tags sensor_tags_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: sensor_tags sensor_tags_unit_id_physical_quantity_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_unit_id_physical_quantity_fkey FOREIGN KEY (unit_id, physical_quantity) REFERENCES public.units(unit_id, physical_quantity);
+
+
+--
+-- Name: source_asset_history source_asset_history_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_asset_history
+    ADD CONSTRAINT source_asset_history_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ingestion_batches(batch_id);
+
+
+--
+-- Name: source_asset_history source_asset_history_source_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_asset_history
+    ADD CONSTRAINT source_asset_history_source_asset_id_fkey FOREIGN KEY (source_asset_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: source_asset_history source_asset_history_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_asset_history
+    ADD CONSTRAINT source_asset_history_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
+
+
+--
+-- Name: source_assets source_assets_batch_id_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_batch_id_source_system_id_fkey FOREIGN KEY (batch_id, source_system_id) REFERENCES public.ingestion_batches(batch_id, source_system_id);
+
+
+--
+-- Name: source_assets source_assets_equipment_class_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_equipment_class_id_fkey FOREIGN KEY (equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: source_assets source_assets_parent_source_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_parent_source_asset_id_fkey FOREIGN KEY (parent_source_asset_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: source_assets source_assets_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: source_assets source_assets_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_assets
+    ADD CONSTRAINT source_assets_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
+
+
+--
+-- Name: source_event_classes source_event_classes_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_event_classes
+    ADD CONSTRAINT source_event_classes_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: source_identifiers source_identifiers_canonical_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_identifiers
+    ADD CONSTRAINT source_identifiers_canonical_asset_id_fkey FOREIGN KEY (canonical_asset_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: source_identifiers source_identifiers_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_identifiers
+    ADD CONSTRAINT source_identifiers_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: source_reconciliation_evidence source_reconciliation_evidence_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_reconciliation_evidence
+    ADD CONSTRAINT source_reconciliation_evidence_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ingestion_batches(batch_id);
+
+
+--
+-- Name: source_reconciliation_evidence source_reconciliation_evidence_source_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.source_reconciliation_evidence
+    ADD CONSTRAINT source_reconciliation_evidence_source_asset_id_fkey FOREIGN KEY (source_asset_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: telemetry_events telemetry_events_batch_id_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_batch_id_source_system_id_fkey FOREIGN KEY (batch_id, source_system_id) REFERENCES public.ingestion_batches(batch_id, source_system_id);
+
+
+--
+-- Name: telemetry_events telemetry_events_source_asset_id_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_source_asset_id_source_system_id_fkey FOREIGN KEY (source_asset_id, source_system_id) REFERENCES public.source_assets(source_asset_id, source_system_id);
+
+
+--
+-- Name: telemetry_events telemetry_events_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: telemetry_events telemetry_events_source_system_id_source_event_label_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_source_system_id_source_event_label_fkey FOREIGN KEY (source_system_id, source_event_label) REFERENCES public.source_event_classes(source_system_id, event_label);
+
+
+--
+-- Name: telemetry_events telemetry_events_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.telemetry_events
+    ADD CONSTRAINT telemetry_events_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
+
+
+--
+-- Name: unit_conversions unit_conversions_from_unit_id_physical_quantity_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unit_conversions
+    ADD CONSTRAINT unit_conversions_from_unit_id_physical_quantity_fkey FOREIGN KEY (from_unit_id, physical_quantity) REFERENCES public.units(unit_id, physical_quantity);
+
+
+--
+-- Name: unit_conversions unit_conversions_to_unit_id_physical_quantity_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.unit_conversions
+    ADD CONSTRAINT unit_conversions_to_unit_id_physical_quantity_fkey FOREIGN KEY (to_unit_id, physical_quantity) REFERENCES public.units(unit_id, physical_quantity);
+
+
+--
+-- Name: work_orders work_orders_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_orders
+    ADD CONSTRAINT work_orders_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: work_orders work_orders_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_orders
+    ADD CONSTRAINT work_orders_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

@@ -1,0 +1,29 @@
+# Source contract, written from dataset.ini and inspection of real files at the pinned commit.
+# Types and fill rates measured from the acquired records are in generated/petrobras_3w.schema.json.
+source_system_id: petrobras_3w
+dataset_version: 2.0.0
+commit: 8aaa303f9b9d6ced690d136218d141624b10558d
+
+grain: one Parquet file per source instance, one row per timestamp
+identity: event label plus instance name. Generated instance names repeat across classes (47 repeats in the acquired subset).
+path_pattern: dataset/<label 0-9>/<instance>.parquet
+authoritative_columns: dataset/dataset.ini [PARQUET_FILE_PROPERTIES], stored with every batch
+
+origins:
+  REAL: {filename: "WELL-<5 digits>_<YYYYMMDDHHMMSS>.parquet", provenance_class: OBSERVED}
+  SIMULATED: {filename: "SIMULATED_<5 digits>.parquet", provenance_class: SYNTHETIC}
+  HAND_DRAWN: {filename: "DRAWN_<5 digits>.parquet", provenance_class: SYNTHETIC}
+
+labels:
+  directory: event type of the instance, as listed in dataset.ini [EVENTS]
+  class_column: per-observation label. May be null, normal (0), the event label, or the transient label (event + 100). Stored as int16, although 3W_DATASET_STRUCTURE.md says Int64.
+  state_column: well operational status
+
+semantics:
+  units: Taken from dataset.ini. Pressure in Pa, temperature in degrees C, flow in m3/s, choke opening in percent.
+  pressure_reference_type: UNKNOWN. The source does not state absolute, gauge, or differential.
+  equipment: Offshore wells with subsea trees, gas lift, DHSV, and production and service lines.
+  rules:
+    - Do not assume a variable measures the same physical point as a similarly named one elsewhere.
+    - Many sensors are entirely empty in a given instance. Absence is not zero.
+    - Keep `source_instance_id` and `source_well_id` unchanged through every later stage.

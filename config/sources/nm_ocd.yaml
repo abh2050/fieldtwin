@@ -1,0 +1,42 @@
+# New Mexico Oil Conservation Division. Endpoints were verified 2026-11-05.
+source_system_id: nm_ocd
+provider: New Mexico Energy, Minerals and Natural Resources Department, Oil Conservation Division
+source_url: https://www.emnrd.nm.gov/ocd/ocd-data/
+license:
+  explicit_license: none_found
+  note: >-
+    OCD publishes no explicit data license. Its pages describe the data as publicly available to
+    browse, view, and download. The EMNRD legal disclaimer says the site does "not constitute an
+    official or final repository" and assumes no responsibility for errors or omissions.
+  disclaimer_url: https://www.emnrd.nm.gov/officeofsecretary/legal-disclaimer/
+  usage_constraints: >-
+    Do not describe as openly licensed. Raw data is not committed to this repository. Attribute to
+    NM OCD and treat well locations as approximate.
+
+arcgis:
+  layer_url: https://gis.emnrd.nm.gov/arcgis/rest/services/OCDView/Wells_Public/FeatureServer/0
+  page_size: 2000
+  # A compact, contiguous, gas-weighted area in the Permian's Delaware Basin. Chosen because the two
+  # townships together fall in the 500-1,000 target. Includes every status; wells are not filtered
+  # to producers, so the profile reports production coverage by status.
+  where: "county='Eddy' AND type='Gas' AND (ulstr LIKE '%-23S-28E' OR ulstr LIKE '%-24S-28E')"
+  min_records: 500
+  max_records: 1000
+
+ftp:
+  host: ftp.emnrd.nm.gov
+  base_path: /Public/OCD/OCD Interface v1.1
+  files:
+    data_dictionary: OCD Interface v1.1 Data Dictionary.xlsx
+    wellhistory: core/wellhistory/wellhistory.zip
+    wcproduction: volumes/wcproduction/wcproduction.zip
+
+production:
+  months: 36 # Counted back from the month of the production file's FTP timestamp.
+
+# Sanity bounds, not legal boundaries. Used to catch bad coordinates, not to establish location.
+bounds:
+  new_mexico: {lat_min: 31.3, lat_max: 37.1, lon_min: -109.1, lon_max: -103.0}
+  eddy_county_approx: {lat_min: 32.0, lat_max: 33.0, lon_min: -104.9, lon_max: -103.6}
+
+disk_floor_bytes: 5368709120 # Abort if a download would leave less than 5 GiB free.

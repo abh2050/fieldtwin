@@ -1,0 +1,133 @@
+{
+  "validated_at": "2026-11-05T21:55:54Z",
+  "passed": true,
+  "failed": [],
+  "checks": [
+    {
+      "name": "wells_match_bronze",
+      "status": "PASS",
+      "measured": "681 vs 681",
+      "rule": "Every accepted well is loaded"
+    },
+    {
+      "name": "history_matches_bronze",
+      "status": "PASS",
+      "measured": "1098 vs 1098",
+      "rule": "Every accepted history row is loaded"
+    },
+    {
+      "name": "production_matches_bronze",
+      "status": "PASS",
+      "measured": "36754 vs 36754",
+      "rule": "Every accepted production row is loaded"
+    },
+    {
+      "name": "completions_match_bronze",
+      "status": "PASS",
+      "measured": "441 vs 441",
+      "rule": "One completion per API and pool"
+    },
+    {
+      "name": "instances_match_bronze",
+      "status": "PASS",
+      "measured": "498 vs 498",
+      "rule": "Every 3W instance is loaded"
+    },
+    {
+      "name": "volume_total_G_matches_bronze",
+      "status": "PASS",
+      "measured": "234786955 vs 234786955",
+      "rule": "Volumes are not altered by loading"
+    },
+    {
+      "name": "volume_total_O_matches_bronze",
+      "status": "PASS",
+      "measured": "28360084 vs 28360084",
+      "rule": "Volumes are not altered by loading"
+    },
+    {
+      "name": "volume_total_W_matches_bronze",
+      "status": "PASS",
+      "measured": "170361799 vs 170361799",
+      "rule": "Volumes are not altered by loading"
+    },
+    {
+      "name": "usable_wells_outside_county_box",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Zero tolerance in the spatial analytics population"
+    },
+    {
+      "name": "non_usable_assets_with_geometry",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Quarantined and unresolved wells have no analytic geometry"
+    },
+    {
+      "name": "quarantined_without_exception",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Every spatial exclusion has a recorded reason"
+    },
+    {
+      "name": "quarantined_without_reported_coordinates",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Original coordinates are preserved"
+    },
+    {
+      "name": "production_lineage_complete",
+      "status": "PASS",
+      "measured": "36754 vs 36754",
+      "rule": "Each row traces to a raw file, process, and batch"
+    },
+    {
+      "name": "telemetry_lineage_complete",
+      "status": "PASS",
+      "measured": "498 vs 498",
+      "rule": "Each instance traces to a raw file, process, and batch"
+    },
+    {
+      "name": "ocd_channels_marked_independent",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "OCD channel agreement is not independent confirmation"
+    },
+    {
+      "name": "scenario_mappings_present",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Gate 2 creates no experimental mappings"
+    },
+    {
+      "name": "experimental_links_present",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Gate 2 creates no asset-observation links"
+    },
+    {
+      "name": "non_synthetic_fictional_assets",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Fictional assets are always SYNTHETIC"
+    },
+    {
+      "name": "generated_instances_marked_observed",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "Generated 3W instances are never OBSERVED"
+    },
+    {
+      "name": "pressure_tags_with_assumed_reference",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "3W pressure references stay UNKNOWN"
+    },
+    {
+      "name": "cross_domain_tag_mappings",
+      "status": "PASS",
+      "measured": 0,
+      "rule": "No sensor maps across equipment classes"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "fieldtwin",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Root placeholder. The web app is added under apps/web in Gate 8.",
+  "workspaces": []
+}

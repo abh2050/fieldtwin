@@ -1,0 +1,913 @@
+{
+  "columns": {
+    "ABER-CKGL": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 201,
+          "null_rate": 0.6608,
+          "nulls": 13017376,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Opening of the GLCK (gas lift choke) [%%]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ABER-CKP": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 188,
+          "null_rate": 0.4661,
+          "nulls": 9182103,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Opening of the PCK (production choke) [%%]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-DHSV": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 208,
+          "null_rate": 0.589,
+          "nulls": 11604540,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the DHSV (downhole safety valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-M1": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 177,
+          "null_rate": 0.3907,
+          "nulls": 7696732,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the PMV (production master valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-M2": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 174,
+          "null_rate": 0.395,
+          "nulls": 7781655,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the AMV (annulus master valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-PXO": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 158,
+          "null_rate": 0.3833,
+          "nulls": 7551706,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the PXO (pig-crossover) valve [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-SDV-GL": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 156,
+          "null_rate": 0.3889,
+          "nulls": 7660966,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the gas lift SDV (shutdown valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-SDV-P": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 101,
+          "null_rate": 0.1108,
+          "nulls": 2182956,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the production SDV (shutdown valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-W1": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 133,
+          "null_rate": 0.3386,
+          "nulls": 6670958,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the PWV (production wing valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-W2": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 157,
+          "null_rate": 0.3774,
+          "nulls": 7434447,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the AWV (annulus wing valve) [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "ESTADO-XO": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 157,
+          "null_rate": 0.3649,
+          "nulls": 7189179,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "State of the XO (crossover) valve [0, 0.5, or 1]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-ANULAR": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 78,
+          "null_rate": 0.2878,
+          "nulls": 5669064,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Pressure in the well annulus [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-JUS-BS": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 342,
+          "null_rate": 1.0,
+          "nulls": 19700894,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Downstream pressure of the SP (service pump) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-JUS-CKGL": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 86,
+          "null_rate": 0.0971,
+          "nulls": 1912329,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 116,
+          "null_rate": 0.8321,
+          "nulls": 4625691,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Downstream pressure of the GLCK (gas lift choke) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-JUS-CKP": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 331,
+          "null_rate": 0.8249,
+          "nulls": 16251993,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 96,
+          "null_rate": 0.7974,
+          "nulls": 4432910,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Downstream pressure of the PCK (production choke) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-MON-CKGL": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 340,
+          "null_rate": 0.9843,
+          "nulls": 19392168,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Upstream pressure of the GLCK (gas lift choke) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-MON-CKP": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 56,
+          "null_rate": 0.0446,
+          "nulls": 879403,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Upstream pressure of the PCK (production choke) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-MON-SDV-P": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 342,
+          "null_rate": 1.0,
+          "nulls": 19700894,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Upstream pressure of the production SDV (shutdown valve) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-PDG": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 78,
+          "null_rate": 0.2494,
+          "nulls": 4913396,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Downhole pressure at the PDG (permanent downhole gauge) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "P-TPT": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 41,
+          "null_rate": 0.1858,
+          "nulls": 3660648,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Subsea Xmas-tree pressure at the TPT (temperature and pressure transducer) [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "PT-P": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 342,
+          "null_rate": 1.0,
+          "nulls": 19700894,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Subsea Xmas-tree pressure downstream of the PWV (production wing valve) in the production line [Pa]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "QBS": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 342,
+          "null_rate": 1.0,
+          "nulls": 19700894,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Flow rate at the SP (service pump) [m3/s]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "QGL": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 128,
+          "null_rate": 0.3299,
+          "nulls": 6499424,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 116,
+          "null_rate": 0.8321,
+          "nulls": 4625691,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Gas lift flow rate [m3/s]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "T-JUS-CKP": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 129,
+          "null_rate": 0.4451,
+          "nulls": 8769252,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Downstream temperature of the PCK (production choke) [oC]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "T-MON-CKP": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 327,
+          "null_rate": 0.7487,
+          "nulls": 14750348,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 96,
+          "null_rate": 0.7974,
+          "nulls": 4432910,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Upstream temperature of the PCK (production choke) [oC]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "T-PDG": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 20,
+          "null_rate": 1.0,
+          "nulls": 2966410,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 107,
+          "null_rate": 0.2193,
+          "nulls": 4320574,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 136,
+          "null_rate": 1.0,
+          "nulls": 5558871,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Downhole temperature at the PDG (permanent downhole gauge) [oC]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "T-TPT": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 41,
+          "null_rate": 0.1798,
+          "nulls": 3541275,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 20,
+          "null_rate": 0.0971,
+          "nulls": 539980,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Subsea Xmas-tree temperature at the TPT (temperature and pressure transducer) [oC]",
+      "nullable_observed": true,
+      "physical_types": [
+        "double"
+      ]
+    },
+    "class": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0625,
+          "nulls": 1231200,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Label of the observation",
+      "nullable_observed": true,
+      "physical_types": [
+        "int16"
+      ]
+    },
+    "state": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0625,
+          "nulls": 1231200,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Well operational status",
+      "nullable_observed": true,
+      "physical_types": [
+        "int16"
+      ]
+    },
+    "timestamp": {
+      "by_origin": {
+        "HAND_DRAWN": {
+          "instances": 20,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 2966410
+        },
+        "REAL": {
+          "instances": 342,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 19700894
+        },
+        "SIMULATED": {
+          "instances": 136,
+          "instances_entirely_null": 0,
+          "null_rate": 0.0,
+          "nulls": 0,
+          "rows": 5558871
+        }
+      },
+      "documented_description": "Instant at which observation was generated",
+      "nullable_observed": false,
+      "physical_types": [
+        "timestamp[ns]"
+      ]
+    }
+  },
+  "commit": "8aaa303f9b9d6ced690d136218d141624b10558d",
+  "dataset_version": "2.0.0",
+  "documented_columns_not_observed": [],
+  "generated_from_batch": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+  "instance_id_repeats_across_classes": 47,
+  "instances_profiled": 498,
+  "lineage": "raw Parquet at the pinned commit; bronze holds an instance index only",
+  "observed_columns_not_documented": [],
+  "source_system_id": "petrobras_3w"
+}

@@ -1,0 +1,48 @@
+{
+  "batch_id": "petrobras_3w-fixture-2.0.0",
+  "source_system_id": "petrobras_3w",
+  "source_version": "2.0.0",
+  "config_sha256": "7dc773471358b802823ffd464382c8b05476e9630c55b8773ec69959e57ff943",
+  "ingestion_timestamp": "2026-11-05T00:00:00Z",
+  "original_checksum": "60f9f23acfb253e85fbfbc8ddb34e19b5ee41d80eafdd262e114e6a172d353da",
+  "source_record_count": 3,
+  "accepted_count": 3,
+  "rejected_count": 0,
+  "processing_status": "COMPLETE",
+  "manifest_uri": "data/manifests/petrobras_3w/petrobras_3w-fixture-2.0.0.json",
+  "license": {
+    "explicit_license": "fixture"
+  },
+  "files": [
+    {
+      "path": "data/raw/petrobras_3w/2.0.0/petrobras_3w-fixture-2.0.0/dataset/2/SIMULATED_00001.parquet",
+      "sha256": "60d445b8bb89ef32ae99001aad1f7dbf8f9690ee5cfbf4c08430c9e9678a2b43",
+      "size_bytes": 18848,
+      "source_url": "fixture://petrobras_3w/dataset/2/SIMULATED_00001.parquet",
+      "source_modified": null,
+      "upstream_checksum": "fixture:truncated-real-record"
+    },
+    {
+      "path": "data/raw/petrobras_3w/2.0.0/petrobras_3w-fixture-2.0.0/dataset/2/WELL-00002_20131104004101.parquet",
+      "sha256": "0cabe64291f82e3aa30ac28a8646fe3f2e810921e9734b97458c442a17b6cd88",
+      "size_bytes": 20400,
+      "source_url": "fixture://petrobras_3w/dataset/2/WELL-00002_20131104004101.parquet",
+      "source_modified": null,
+      "upstream_checksum": "fixture:truncated-real-record"
+    },
+    {
+      "path": "data/raw/petrobras_3w/2.0.0/petrobras_3w-fixture-2.0.0/dataset/7/DRAWN_00001.parquet",
+      "sha256": "fbbe7e1b6f49abfe363f58f1c6a759f0ac676e7e629f7ab44b1d816bac217559",
+      "size_bytes": 17745,
+      "source_url": "fixture://petrobras_3w/dataset/7/DRAWN_00001.parquet",
+      "source_modified": null,
+      "upstream_checksum": "fixture:truncated-real-record"
+    }
+  ],
+  "datasets": {
+    "commit": "fixture"
+  },
+  "notes": [
+    "FIXTURE: real 3W records truncated to 300 rows. CC BY 4.0, Petrobras."
+  ]
+}

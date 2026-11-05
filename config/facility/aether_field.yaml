@@ -1,0 +1,67 @@
+# AETHER Field is entirely fictional. No company, lease, or physical site corresponds to it.
+# This file defines the Gate 0 hierarchy only. Geometry and topology details are built in Gate 4.
+facility:
+  facility_id: AETHER-FIELD
+  facility_name: AETHER Field
+  facility_type: natural_gas_production_field
+  region: Hypothetical, modeled on distributed upstream operations in the Permian Basin
+  is_fictional: true
+  operator: null # Deliberately none. Do not assign a real company.
+  disclosure: >-
+    AETHER Field is a fictional industrial production environment. Public industrial datasets have
+    been used for source-grounded experiments, while cross-source asset associations and
+    operational scenarios are explicitly simulated.
+
+provenance_class: SYNTHETIC
+
+# Design assumptions for each fictional well. Compatibility assessments are judged against these.
+equipment_assumptions:
+  environment: onshore_surface_wellhead
+  fluid_regime: gas_dominant
+  lift_method: natural_flow
+  has:
+    - production_choke
+    - production_master_valve
+    - production_wing_valve
+    - production_shutdown_valve
+  does_not_have:
+    - gas_lift
+    - downhole_safety_valve
+    - permanent_downhole_gauge
+    - service_pump
+    - service_line
+    - subsea_tree
+    - riser
+  not_yet_defined:
+    - annulus_valve_arrangement
+    - gas_composition
+    - water_chemistry
+
+assets:
+  well_pads:
+    - asset_id: PAD-A
+      asset_name: Well Pad A
+      wells: [A-01, A-02, A-03, A-04, A-05, A-06]
+    - asset_id: PAD-B
+      asset_name: Well Pad B
+      wells: [B-01, B-02, B-03, B-04, B-05, B-06]
+  gathering_network:
+    asset_id: GATHERING
+    asset_name: Gathering Network
+    # Segment and valve counts are simplified assumptions, revisited in Gate 4.
+    gathering_segments: [GS-A, GS-B, GS-TRUNK]
+    isolation_valves: [IV-A, IV-B, IV-STATION]
+  compression_station:
+    asset_id: COMP-STATION
+    asset_name: Compression Station
+    compressors: [C-01, C-02, C-03, C-04]
+  field_operations:
+    asset_id: FIELD-OPS
+    asset_name: Field Operations
+    functions: [inspection_missions, maintenance_resources, work_orders]
+
+constraints:
+  well_pads: 2
+  wells_per_pad: 6
+  total_wells: 12
+  compressors: 4
