@@ -1,6 +1,6 @@
 # Gate 3 report: provenance-aware reconciliation and experimental scenario contracts
 
-**Status: IMPLEMENTED, awaiting hosted CI on the branch and review.**
+**Status: ALL 12 ACCEPTANCE TESTS MET, stopped for review.** The work is on branch `gate-3`, with a [successful CI run](https://github.com/abh2050/fieldtwin/actions/runs/42125086105). It isn't merged to `main`.
 
 Date: 2026-11-05. Branch: `gate-3`. Full output of the final local rebuild: [`gate_3_execution_log.txt`](gate_3_execution_log.txt).
 
@@ -17,9 +17,9 @@ Date: 2026-11-05. Branch: `gate-3`. Full output of the final local rebuild: [`ga
 | 7 | AETHER-FAULT-001 uses synthetic onshore telemetry | **Met** | 0 scenario mappings, 0 3W observations linked to AETHER, and all 8 scenario series are `SYNTHETIC` |
 | 8 | The simulator is deterministic and meets its invariants | **Met** | All 12 invariants pass on both cases, and repeat runs match the recorded hashes |
 | 9 | Gate 0 to 2 tests continue to pass | **Met** | All still run and pass. The few edits are listed below. |
-| 10 | New reconciliation and scenario tests execute | **Met** | 237 new tests, all passing |
+| 10 | New reconciliation and scenario tests execute | **Met** | 238 new tests, all passing |
 | 11 | Documentation matches the implementation | **Met** | Reports and schema document are generated, and tests compare them with fresh output |
-| 12 | CI passes on the proposed branch | **Pending** | Awaiting the hosted run on this branch |
+| 12 | CI passes on the proposed branch | **Met** | All six jobs passed in [hosted run 42125086105](https://github.com/abh2050/fieldtwin/actions/runs/42125086105), after one earlier failure listed below |
 
 ## Executed results
 
@@ -28,13 +28,14 @@ Date: 2026-11-05. Branch: `gate-3`. Full output of the final local rebuild: [`ga
 | Migrations on a fresh database | 11 applied, 41 tables |
 | Canonical validation against real bronze | 21 of 21 checks passed |
 | Provenance audit on real data | 12 rules, 0 violations |
-| Offline tests | 276 passed |
+| Offline tests | 277 passed |
 | Database tests on fixtures | 166 passed |
 | Tests on real data | 22 passed |
 | Live endpoint tests | 5 passed |
 | Ruff, format, and mypy on 57 files | Passed |
 | `pip-audit`, `gitleaks`, `actionlint` | No findings |
 | Every CI command in a clean copy | 0 failed, with no raw or bronze data present |
+| Hosted CI on the branch | 6 of 6 jobs passed: 270 unit, 7 contract, 63 integration, and 103 provenance tests |
 
 The physics tests use Hypothesis with a fixed seed: 150 generated parameter sets per property, plus a comparison with the exact closed-form answer when `n = 0.5`.
 
