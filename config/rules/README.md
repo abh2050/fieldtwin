@@ -1,3 +1,3 @@
 # config/rules
 
-Decision rule configuration. Filled in Gate 7.
+Reconciliation algorithm versions and parameters.

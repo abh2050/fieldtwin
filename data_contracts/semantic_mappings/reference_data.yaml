@@ -8,10 +8,15 @@ units:
   - {unit_id: percent, physical_quantity: fraction_open, description: Percent open}
   - {unit_id: valve_state, physical_quantity: valve_state, description: "3W valve state: 0, 0.5, or 1"}
   - {unit_id: MCF_15025PSIA_60F, physical_quantity: gas_volume, description: "1,000 cubic feet of gas at 15.025 psia and 60 degrees F"}
+  - {unit_id: sm3_per_s, physical_quantity: standard_volume_flow, description: Standard cubic metres per second at 101325 Pa and 288.15 K}
+  - {unit_id: ksm3_per_d, physical_quantity: standard_volume_flow, description: Thousand standard cubic metres per day. Display unit.}
   - {unit_id: BBL_60F, physical_quantity: liquid_volume, description: 42 US gallons at 60 degrees F and sea-level atmospheric pressure}
 
 unit_conversions:
   - {from: Pa, to: Pa, quantity: pressure, factor: 1.0, term: 0.0, method: IDENTITY}
+  - {from: Pa, to: psi, quantity: pressure, factor: 0.00014503773773, term: 0.0, method: LINEAR_PA_TO_PSI}
+  - {from: sm3_per_s, to: sm3_per_s, quantity: standard_volume_flow, factor: 1.0, term: 0.0, method: IDENTITY}
+  - {from: sm3_per_s, to: ksm3_per_d, quantity: standard_volume_flow, factor: 86.4, term: 0.0, method: LINEAR_SM3S_TO_KSM3D}
   - {from: psi, to: Pa, quantity: pressure, factor: 6894.757293168, term: 0.0, method: LINEAR_PSI_TO_PA}
   - {from: degC, to: degC, quantity: temperature, factor: 1.0, term: 0.0, method: IDENTITY}
   - {from: degF, to: degC, quantity: temperature, factor: 0.5555555555555556, term: -17.77777777777778, method: LINEAR_DEGF_TO_DEGC}
@@ -36,6 +41,13 @@ aether_measurements:
   - {id: aether_well.flowline_temperature, quantity: temperature, unit: degC, location: Surface flowline downstream of production choke, reference: NOT_APPLICABLE, capability: EXPECTED}
   - {id: aether_well.choke_opening, quantity: fraction_open, unit: percent, location: Surface production choke, reference: NOT_APPLICABLE, capability: EXPECTED}
 
+  - {id: aether_well.gas_flow_rate, quantity: standard_volume_flow, unit: sm3_per_s, location: Surface flow meter on the well's outlet, reference: NOT_APPLICABLE, capability: EXPECTED}
+
+# Measurements on the fictional gathering segment. Design assumptions, like those above.
+aether_gathering_measurements:
+  - {id: aether_gathering.segment_downstream_pressure, quantity: pressure, unit: Pa, location: Downstream end of the gathering segment, reference: GAUGE, capability: EXPECTED}
+  - {id: aether_gathering.segment_differential_pressure, quantity: pressure, unit: Pa, location: Across the gathering segment from wellhead to downstream end, reference: DIFFERENTIAL, capability: EXPECTED}
+
 source_systems:
   - id: aether_synthetic
     provider: FieldTwin project
@@ -55,3 +67,17 @@ transformations:
   - {id: "3w.generated_instance.to_event@1", name: 3w.generated_instance.to_event, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Simulated and hand-drawn instance metadata., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
   - {id: "3w.real_series.to_observation@1", name: 3w.real_series.to_observation, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Per-sensor metadata for a real instance. Values stay in Parquet., inputs: [OBSERVED], output: OBSERVED, alters: false}
   - {id: "3w.generated_series.to_observation@1", name: 3w.generated_series.to_observation, version: 1, code: pipelines/normalize/petrobras_3w.py, description: Per-sensor metadata for a generated instance., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "aether.simulator.to_run@1", name: aether.simulator.to_run, version: 1, code: pipelines/synthetic/aether_fault_001.py, description: One simulator run on fictional assets., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
+  - {id: "aether.simulator.to_series@1", name: aether.simulator.to_series, version: 1, code: pipelines/synthetic/aether_fault_001.py, description: Per-sensor metadata for a simulated series. Values stay in Parquet., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "aether.simulator.to_event@1", name: aether.simulator.to_event, version: 1, code: packages/scenario_engine/events.py, description: Known fault onset declared by the restriction schedule., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "aether.integration_rule.to_event@1", name: aether.integration_rule.to_event, version: 1, code: packages/scenario_engine/events.py, description: Minimal rule proving sensor readings reach the event contract. Not a detector., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
+  - {id: "3w.benchmark_event_adapter.real@1", name: 3w.benchmark_event_adapter.real, version: 1, code: pipelines/normalize/petrobras_3w_events.py, description: Real 3W instance as a benchmark event. The onset is computed from source labels., inputs: [OBSERVED], output: DERIVED, alters: true}
+  - {id: "3w.benchmark_event_adapter.generated@1", name: 3w.benchmark_event_adapter.generated, version: 1, code: pipelines/normalize/petrobras_3w_events.py, description: Simulated or hand-drawn 3W instance as a benchmark event., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
+
+# Enforced by the domain boundary trigger. A missing row also means refused.
+domain_boundaries:
+  - {source: petrobras_3w, target_domain: FICTIONAL_ONSHORE, allowed: false, rationale: "3W is an independent offshore benchmark. It is never mapped onto AETHER assets (ADR 0014)."}
+  - {source: nm_ocd, target_domain: FICTIONAL_ONSHORE, allowed: false, rationale: "Real New Mexico wells are not AETHER assets."}
+
+# Sensors on the fictional model. Declared by design, so they're labeled synthetic.
+aether_tags_from: config/scenarios/aether_fault_001.yaml

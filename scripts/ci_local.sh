@@ -27,7 +27,7 @@ run uv run ruff format --check .
 run uv run mypy
 run uv run pytest tests/unit tests/integration/test_acquisition.py -q
 run uv run pytest tests/contract -q
-run uv run pytest tests/integration/test_database.py -m "db and not acquired" -o addopts=--strict-markers -q
+run uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py -m "db and not acquired" -o addopts=--strict-markers -q
 run uv run pytest tests/provenance -m "db and not acquired" -o addopts=--strict-markers -q
 uv export --frozen --no-hashes --no-emit-project --format requirements-txt > requirements.txt 2>/dev/null
 run uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt

@@ -24,8 +24,8 @@ requirements:
 conclusions:
   - No 3W variable or event class is directly compatible with an AETHER onshore gas well.
   - 3W stays a separately identified offshore benchmark for detection methods.
-  - The database rejects a scenario mapping for any event class assessed INCOMPATIBLE or INSUFFICIENT_EVIDENCE.
-  - AETHER telemetry for AETHER-FAULT-001 should come from a future physics-constrained synthetic capability labeled SYNTHETIC (ADR 0010).
+  - The database refuses every mapping of a 3W event onto an AETHER asset, whatever its classification (ADR 0014). Classifications record the physical reasoning and authorize nothing.
+  - AETHER-FAULT-001 uses synthetic telemetry from a documented physical model (ADR 0012).
 
 variables:
   # Time base

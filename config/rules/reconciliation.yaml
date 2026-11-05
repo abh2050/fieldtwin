@@ -1,0 +1,16 @@
+# Reconciliation algorithm versions and parameters. A change needs a new version.
+algorithms:
+  identity: identity-authoritative@1
+  semantic: semantic-class-bound@1
+  geospatial: geospatial-proximity@1
+  scenario: scenario-declared@1
+
+identity:
+  # Only these identifier types can establish identity, per source.
+  authoritative_identifier_types:
+    nm_ocd: [API_NUMBER]
+    petrobras_3w: [ANONYMIZED_WELL_ID]
+
+geospatial:
+  # A screening radius for review candidates. It is not a statement about shared equipment.
+  well_proximity_radius_m: 100.0

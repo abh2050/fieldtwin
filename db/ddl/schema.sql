@@ -188,6 +188,78 @@ CREATE TYPE public.verification_status AS ENUM (
 
 
 --
+-- Name: enforce_benchmark_event_origin(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_benchmark_event_origin() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  origin instance_origin;
+BEGIN
+  IF NEW.domain = 'OFFSHORE_BENCHMARK' THEN
+    SELECT real_or_simulated_source INTO origin FROM telemetry_events WHERE event_id = NEW.telemetry_event_id;
+    IF (origin = 'REAL') <> (NEW.provenance_class = 'DERIVED') THEN
+      RAISE EXCEPTION 'benchmark event from a % instance cannot be %', origin, NEW.provenance_class
+        USING ERRCODE = 'check_violation';
+    END IF;
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_domain_boundary(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_domain_boundary() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  event_system text;
+  asset_domain text;
+  allowed boolean;
+BEGIN
+  SELECT source_system_id INTO event_system FROM telemetry_events WHERE event_id = NEW.telemetry_event_id;
+  SELECT c.domain INTO asset_domain FROM assets a
+    JOIN equipment_classes c ON c.equipment_class_id = a.equipment_class_id
+    WHERE a.asset_id = NEW.target_asset_id;
+  SELECT b.is_allowed INTO allowed FROM domain_boundaries b
+    WHERE b.source_system_id = event_system AND b.target_domain = asset_domain;
+  IF allowed IS NOT TRUE THEN
+    RAISE EXCEPTION 'domain boundary: % cannot be mapped onto %', event_system, asset_domain
+      USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_equipment_relationship(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_equipment_relationship() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  source_type text;
+  target_type text;
+BEGIN
+  SELECT asset_type INTO source_type FROM assets WHERE asset_id = NEW.source_asset_id;
+  SELECT asset_type INTO target_type FROM assets WHERE asset_id = NEW.target_asset_id;
+  IF NOT EXISTS (
+    SELECT 1 FROM equipment_relationship_rules r
+    WHERE r.source_asset_type = source_type AND r.relationship_type = NEW.relationship_type
+      AND r.target_asset_type = target_type
+  ) THEN
+    RAISE EXCEPTION 'invalid equipment relationship: % % %', source_type, NEW.relationship_type, target_type
+      USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
 -- Name: enforce_observation_link(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -580,6 +652,26 @@ ALTER SEQUENCE public.data_quality_exceptions_exception_id_seq OWNED BY public.d
 
 
 --
+-- Name: domain_boundaries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.domain_boundaries (
+    source_system_id text NOT NULL,
+    target_domain text NOT NULL,
+    is_allowed boolean NOT NULL,
+    rationale text NOT NULL,
+    CONSTRAINT domain_boundaries_target_domain_check CHECK ((target_domain = ANY (ARRAY['REAL_ONSHORE'::text, 'REAL_OFFSHORE'::text, 'FICTIONAL_ONSHORE'::text])))
+);
+
+
+--
+-- Name: TABLE domain_boundaries; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.domain_boundaries IS 'Whether a source may be mapped onto a target domain. A missing row means refused.';
+
+
+--
 -- Name: domain_compatibility_assessments; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -666,6 +758,25 @@ CREATE TABLE public.equipment_measurement_capabilities (
 --
 
 COMMENT ON TABLE public.equipment_measurement_capabilities IS 'Which measurements a class can provide. SOURCE_REPORTED means the source publishes it; the others are AETHER design assumptions.';
+
+
+--
+-- Name: equipment_relationship_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.equipment_relationship_rules (
+    source_asset_type text NOT NULL,
+    relationship_type text NOT NULL,
+    target_asset_type text NOT NULL,
+    rationale text NOT NULL
+);
+
+
+--
+-- Name: TABLE equipment_relationship_rules; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.equipment_relationship_rules IS 'The fictional facility''s allowed flow connections. Anything not listed is refused.';
 
 
 --
@@ -806,11 +917,13 @@ CREATE TABLE public.observations (
     scenario_id text,
     batch_id text,
     transformation_id text NOT NULL,
+    scenario_run_id text,
     CONSTRAINT observations_null_count_check CHECK ((null_count >= 0)),
     CONSTRAINT observations_observation_type_check CHECK ((observation_type = ANY (ARRAY['TELEMETRY_SERIES'::text, 'POINT_VALUE'::text, 'REMOTE_SENSING'::text, 'IMAGE'::text]))),
     CONSTRAINT observations_value_count_check CHECK ((value_count >= 0)),
     CONSTRAINT observed_has_batch CHECK (((provenance_class <> 'OBSERVED'::public.provenance_class) OR (batch_id IS NOT NULL))),
-    CONSTRAINT replay_keeps_origin CHECK ((((provenance_class = 'REPLAYED'::public.provenance_class) = (replayed_from_observation_id IS NOT NULL)) AND ((provenance_class <> 'REPLAYED'::public.provenance_class) OR (scenario_id IS NOT NULL))))
+    CONSTRAINT replay_keeps_origin CHECK ((((provenance_class = 'REPLAYED'::public.provenance_class) = (replayed_from_observation_id IS NOT NULL)) AND ((provenance_class <> 'REPLAYED'::public.provenance_class) OR (scenario_id IS NOT NULL)))),
+    CONSTRAINT simulated_series_is_synthetic CHECK (((scenario_run_id IS NULL) OR ((provenance_class = 'SYNTHETIC'::public.provenance_class) AND (scenario_id IS NOT NULL))))
 );
 
 
@@ -952,6 +1065,127 @@ COMMENT ON TABLE public.production_unit_rules IS 'Verified meaning of each produ
 
 
 --
+-- Name: reconciliation_decisions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.reconciliation_decisions (
+    decision_id bigint NOT NULL,
+    module text NOT NULL,
+    subject_type text NOT NULL,
+    subject_id text NOT NULL,
+    object_type text,
+    object_id text,
+    relationship_type text NOT NULL,
+    method text NOT NULL,
+    evidence jsonb NOT NULL,
+    confidence double precision,
+    uncertainty jsonb,
+    verification_status public.verification_status NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    algorithm_version text NOT NULL,
+    decided_at timestamp with time zone DEFAULT now() NOT NULL,
+    batch_id text,
+    supersedes_decision_id bigint,
+    review_id bigint,
+    CONSTRAINT decision_has_evidence CHECK (((jsonb_typeof(evidence) = 'object'::text) AND (evidence <> '{}'::jsonb))),
+    CONSTRAINT experimental_is_never_verified CHECK (((relationship_type <> 'EXPERIMENTAL_ASSIGNMENT'::text) OR ((provenance_class = ANY (ARRAY['REPLAYED'::public.provenance_class, 'SYNTHETIC'::public.provenance_class])) AND (verification_status <> 'VERIFIED'::public.verification_status) AND (object_type = 'ASSET'::text)))),
+    CONSTRAINT identity_never_involves_fictional CHECK (((relationship_type <> 'SAME_AS'::text) OR ((subject_type <> 'ASSET'::text) AND (object_type IS DISTINCT FROM 'ASSET'::text)))),
+    CONSTRAINT inferred_is_never_verified CHECK (((provenance_class <> 'INFERRED'::public.provenance_class) OR (verification_status <> 'VERIFIED'::public.verification_status))),
+    CONSTRAINT object_type_and_id_together CHECK (((object_type IS NULL) = (object_id IS NULL))),
+    CONSTRAINT proximity_is_only_a_candidate CHECK (((relationship_type <> ALL (ARRAY['PROXIMITY_CANDIDATE'::text, 'EMISSION_NEAR'::text])) OR ((provenance_class = 'INFERRED'::public.provenance_class) AND (verification_status <> 'VERIFIED'::public.verification_status) AND ((method = 'GEOSPATIAL_PROXIMITY'::text) OR ((method = 'HUMAN_REVIEW'::text) AND (verification_status = 'REJECTED'::public.verification_status)))))),
+    CONSTRAINT real_never_relates_to_fictional CHECK (((NOT ((subject_type = 'SOURCE_ASSET'::text) AND (object_type = 'ASSET'::text))) AND (NOT ((subject_type = 'ASSET'::text) AND (object_type = 'SOURCE_ASSET'::text))))),
+    CONSTRAINT reconciliation_decisions_algorithm_version_check CHECK ((algorithm_version ~ '@[0-9]+$'::text)),
+    CONSTRAINT reconciliation_decisions_confidence_check CHECK (((confidence >= (0)::double precision) AND (confidence <= (1)::double precision))),
+    CONSTRAINT reconciliation_decisions_module_check CHECK ((module = ANY (ARRAY['IDENTITY'::text, 'SEMANTIC'::text, 'GEOSPATIAL'::text, 'SCENARIO'::text]))),
+    CONSTRAINT reconciliation_decisions_object_type_check CHECK ((object_type = ANY (ARRAY['SOURCE_ASSET'::text, 'ASSET'::text, 'SOURCE_RECORD'::text, 'SOURCE_SYSTEM'::text, 'MEASUREMENT_DEFINITION'::text]))),
+    CONSTRAINT reconciliation_decisions_relationship_type_check CHECK ((relationship_type = ANY (ARRAY['SAME_AS'::text, 'COMPLETION_OF'::text, 'NO_CROSSWALK'::text, 'SAME_MEASUREMENT'::text, 'PROXIMITY_CANDIDATE'::text, 'EMISSION_NEAR'::text, 'EXPERIMENTAL_ASSIGNMENT'::text]))),
+    CONSTRAINT reconciliation_decisions_subject_type_check CHECK ((subject_type = ANY (ARRAY['SOURCE_ASSET'::text, 'ASSET'::text, 'SOURCE_RECORD'::text, 'SOURCE_SYSTEM'::text, 'SENSOR_TAG'::text, 'OBSERVATION'::text, 'SCENARIO_RUN'::text]))),
+    CONSTRAINT review_decisions_are_linked CHECK ((((method = 'HUMAN_REVIEW'::text) = (review_id IS NOT NULL)) AND ((method <> 'HUMAN_REVIEW'::text) OR (supersedes_decision_id IS NOT NULL)))),
+    CONSTRAINT reviewed_identity_cites_identifier CHECK (((NOT ((relationship_type = 'SAME_AS'::text) AND (method = 'HUMAN_REVIEW'::text) AND (verification_status = 'VERIFIED'::public.verification_status))) OR (evidence ? 'authoritative_identifier'::text))),
+    CONSTRAINT verified_identity_needs_identifier CHECK (((NOT ((relationship_type = ANY (ARRAY['SAME_AS'::text, 'COMPLETION_OF'::text])) AND (verification_status = 'VERIFIED'::public.verification_status))) OR (method = ANY (ARRAY['AUTHORITATIVE_IDENTIFIER'::text, 'HUMAN_REVIEW'::text])))),
+    CONSTRAINT verified_measurement_needs_declared_basis CHECK (((NOT ((relationship_type = 'SAME_MEASUREMENT'::text) AND (verification_status = 'VERIFIED'::public.verification_status))) OR (method = ANY (ARRAY['PUBLISHED_DEFINITION_SAME_CLASS'::text, 'DECLARED_SYNTHETIC_DESIGN'::text])))),
+    CONSTRAINT weak_methods_cannot_assert_identity CHECK ((NOT ((relationship_type = 'SAME_AS'::text) AND (method = ANY (ARRAY['NAME_SIMILARITY'::text, 'GEOSPATIAL_PROXIMITY'::text, 'UNIT_SIMILARITY'::text])) AND (verification_status <> 'REJECTED'::public.verification_status))))
+);
+
+
+--
+-- Name: TABLE reconciliation_decisions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.reconciliation_decisions IS 'Every reconciliation outcome with its identifiers, method, evidence, status, algorithm version, and time. Unknown stays UNRESOLVED.';
+
+
+--
+-- Name: COLUMN reconciliation_decisions.confidence; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.reconciliation_decisions.confidence IS 'Only where justified. Distance is not a probability, so proximity candidates leave this NULL.';
+
+
+--
+-- Name: reconciliation_decisions_decision_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.reconciliation_decisions_decision_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reconciliation_decisions_decision_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.reconciliation_decisions_decision_id_seq OWNED BY public.reconciliation_decisions.decision_id;
+
+
+--
+-- Name: reconciliation_reviews; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.reconciliation_reviews (
+    review_id bigint NOT NULL,
+    decision_id bigint NOT NULL,
+    reviewer text NOT NULL,
+    action text NOT NULL,
+    rationale text NOT NULL,
+    evidence jsonb DEFAULT '{}'::jsonb NOT NULL,
+    reviewed_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT reconciliation_reviews_action_check CHECK ((action = ANY (ARRAY['APPROVE'::text, 'REJECT'::text, 'REQUEST_EVIDENCE'::text]))),
+    CONSTRAINT reconciliation_reviews_rationale_check CHECK ((length(rationale) >= 10)),
+    CONSTRAINT reconciliation_reviews_reviewer_check CHECK ((reviewer <> ''::text))
+);
+
+
+--
+-- Name: TABLE reconciliation_reviews; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.reconciliation_reviews IS 'Human review of a decision. No automatic process writes here.';
+
+
+--
+-- Name: reconciliation_reviews_review_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.reconciliation_reviews_review_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reconciliation_reviews_review_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.reconciliation_reviews_review_id_seq OWNED BY public.reconciliation_reviews.review_id;
+
+
+--
 -- Name: scenario_mappings; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -994,6 +1228,47 @@ CREATE SEQUENCE public.scenario_mappings_mapping_id_seq
 --
 
 ALTER SEQUENCE public.scenario_mappings_mapping_id_seq OWNED BY public.scenario_mappings.mapping_id;
+
+
+--
+-- Name: scenario_runs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scenario_runs (
+    scenario_run_id text NOT NULL,
+    scenario_id text NOT NULL,
+    case_name text NOT NULL,
+    target_asset_id text NOT NULL,
+    affected_asset_id text NOT NULL,
+    simulator_name text NOT NULL,
+    simulator_version integer NOT NULL,
+    config_sha256 text NOT NULL,
+    output_sha256 text NOT NULL,
+    output_uri text NOT NULL,
+    random_seed bigint NOT NULL,
+    sample_count integer NOT NULL,
+    sampling_interval_s integer NOT NULL,
+    fault_onset_offset_s integer,
+    parameters jsonb NOT NULL,
+    invariants jsonb NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    transformation_id text NOT NULL,
+    CONSTRAINT fault_case_has_known_onset CHECK (((case_name = 'fault'::text) = (fault_onset_offset_s IS NOT NULL))),
+    CONSTRAINT scenario_runs_case_name_check CHECK ((case_name = ANY (ARRAY['nominal'::text, 'fault'::text]))),
+    CONSTRAINT scenario_runs_config_sha256_check CHECK ((config_sha256 ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT scenario_runs_output_sha256_check CHECK ((output_sha256 ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT scenario_runs_provenance_class_check CHECK ((provenance_class = 'SYNTHETIC'::public.provenance_class)),
+    CONSTRAINT scenario_runs_sample_count_check CHECK ((sample_count > 0)),
+    CONSTRAINT scenario_runs_sampling_interval_s_check CHECK ((sampling_interval_s > 0)),
+    CONSTRAINT scenario_runs_simulator_version_check CHECK ((simulator_version > 0))
+);
+
+
+--
+-- Name: TABLE scenario_runs; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.scenario_runs IS 'One simulator run on fictional assets, with its parameters, seed, and output checksum. Always SYNTHETIC, and immutable.';
 
 
 --
@@ -1099,6 +1374,43 @@ CREATE TABLE public.sensor_tags (
 --
 
 COMMENT ON TABLE public.sensor_tags IS 'Native tags as published by the source, with their physical class and original unit.';
+
+
+--
+-- Name: shared_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.shared_events (
+    event_id text NOT NULL,
+    schema_version integer NOT NULL,
+    domain text NOT NULL,
+    event_kind text NOT NULL,
+    event_class text NOT NULL,
+    source_system_id text NOT NULL,
+    telemetry_event_id text,
+    scenario_id text,
+    scenario_run_id text,
+    target_asset_id text,
+    affected_asset_id text,
+    onset_offset_s integer,
+    evidence jsonb NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    transformation_id text NOT NULL,
+    CONSTRAINT aether_events_are_synthetic_and_scoped CHECK (((domain <> 'AETHER_SYNTHETIC'::text) OR ((provenance_class = 'SYNTHETIC'::public.provenance_class) AND (source_system_id = 'aether_synthetic'::text) AND (scenario_id IS NOT NULL) AND (scenario_run_id IS NOT NULL) AND (target_asset_id IS NOT NULL) AND (telemetry_event_id IS NULL) AND (event_kind <> 'SOURCE_LABEL'::text)))),
+    CONSTRAINT benchmark_events_stay_independent CHECK (((domain <> 'OFFSHORE_BENCHMARK'::text) OR ((provenance_class = ANY (ARRAY['DERIVED'::public.provenance_class, 'SYNTHETIC'::public.provenance_class])) AND (source_system_id = 'petrobras_3w'::text) AND (telemetry_event_id IS NOT NULL) AND (event_kind = 'SOURCE_LABEL'::text) AND (scenario_id IS NULL) AND (scenario_run_id IS NULL) AND (target_asset_id IS NULL) AND (affected_asset_id IS NULL)))),
+    CONSTRAINT shared_events_domain_check CHECK ((domain = ANY (ARRAY['AETHER_SYNTHETIC'::text, 'OFFSHORE_BENCHMARK'::text]))),
+    CONSTRAINT shared_events_event_kind_check CHECK ((event_kind = ANY (ARRAY['SOURCE_LABEL'::text, 'KNOWN_SYNTHETIC_ONSET'::text, 'INTEGRATION_PROOF_RULE'::text]))),
+    CONSTRAINT shared_events_evidence_check CHECK ((evidence <> '{}'::jsonb)),
+    CONSTRAINT shared_events_onset_offset_s_check CHECK ((onset_offset_s >= 0)),
+    CONSTRAINT shared_events_schema_version_check CHECK ((schema_version > 0))
+);
+
+
+--
+-- Name: TABLE shared_events; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.shared_events IS 'One event contract for both domains, which stay separate. It carries no detection accuracy.';
 
 
 --
@@ -1427,6 +1739,42 @@ CREATE TABLE public.units (
 
 
 --
+-- Name: v_current_reconciliation_decisions; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_current_reconciliation_decisions AS
+ SELECT decision_id,
+    module,
+    subject_type,
+    subject_id,
+    object_type,
+    object_id,
+    relationship_type,
+    method,
+    evidence,
+    confidence,
+    uncertainty,
+    verification_status,
+    provenance_class,
+    algorithm_version,
+    decided_at,
+    batch_id,
+    supersedes_decision_id,
+    review_id
+   FROM public.reconciliation_decisions d
+  WHERE (NOT (EXISTS ( SELECT 1
+           FROM public.reconciliation_decisions later
+          WHERE (later.supersedes_decision_id = d.decision_id))));
+
+
+--
+-- Name: VIEW v_current_reconciliation_decisions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.v_current_reconciliation_decisions IS 'Decisions not yet superseded by a reviewed decision.';
+
+
+--
 -- Name: v_open_quality_exceptions; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -1499,6 +1847,32 @@ CREATE VIEW public.v_production_wide AS
 --
 
 COMMENT ON VIEW public.v_production_wide IS 'Oil, gas, and water per completion and month. A missing product stays NULL, never zero.';
+
+
+--
+-- Name: v_reconciliation_review_queue; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_reconciliation_review_queue AS
+ SELECT decision_id,
+    module,
+    relationship_type,
+    subject_id,
+    object_id,
+    method,
+    verification_status,
+    decided_at
+   FROM public.v_current_reconciliation_decisions d
+  WHERE ((verification_status = ANY (ARRAY['UNVERIFIED'::public.verification_status, 'UNRESOLVED'::public.verification_status])) AND (relationship_type <> 'EXPERIMENTAL_ASSIGNMENT'::text) AND (NOT (EXISTS ( SELECT 1
+           FROM public.reconciliation_reviews r
+          WHERE (r.decision_id = d.decision_id)))));
+
+
+--
+-- Name: VIEW v_reconciliation_review_queue; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.v_reconciliation_review_queue IS 'Open decisions awaiting human review. Nothing leaves this queue automatically.';
 
 
 --
@@ -1687,6 +2061,20 @@ ALTER TABLE ONLY public.production_records ALTER COLUMN record_id SET DEFAULT ne
 
 
 --
+-- Name: reconciliation_decisions decision_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_decisions ALTER COLUMN decision_id SET DEFAULT nextval('public.reconciliation_decisions_decision_id_seq'::regclass);
+
+
+--
+-- Name: reconciliation_reviews review_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_reviews ALTER COLUMN review_id SET DEFAULT nextval('public.reconciliation_reviews_review_id_seq'::regclass);
+
+
+--
 -- Name: scenario_mappings mapping_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1809,6 +2197,14 @@ ALTER TABLE ONLY public.data_quality_exceptions
 
 
 --
+-- Name: domain_boundaries domain_boundaries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_boundaries
+    ADD CONSTRAINT domain_boundaries_pkey PRIMARY KEY (source_system_id, target_domain);
+
+
+--
 -- Name: domain_compatibility_assessments domain_compatibility_assessme_source_system_id_subject_type_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1846,6 +2242,14 @@ ALTER TABLE ONLY public.equipment_classes
 
 ALTER TABLE ONLY public.equipment_measurement_capabilities
     ADD CONSTRAINT equipment_measurement_capabilities_pkey PRIMARY KEY (equipment_class_id, measurement_definition_id);
+
+
+--
+-- Name: equipment_relationship_rules equipment_relationship_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.equipment_relationship_rules
+    ADD CONSTRAINT equipment_relationship_rules_pkey PRIMARY KEY (source_asset_type, relationship_type, target_asset_type);
 
 
 --
@@ -1969,6 +2373,22 @@ ALTER TABLE ONLY public.production_unit_rules
 
 
 --
+-- Name: reconciliation_decisions reconciliation_decisions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_decisions
+    ADD CONSTRAINT reconciliation_decisions_pkey PRIMARY KEY (decision_id);
+
+
+--
+-- Name: reconciliation_reviews reconciliation_reviews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_reviews
+    ADD CONSTRAINT reconciliation_reviews_pkey PRIMARY KEY (review_id);
+
+
+--
 -- Name: asset_relationships relationship_no_overlap; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1990,6 +2410,22 @@ ALTER TABLE ONLY public.scenario_mappings
 
 ALTER TABLE ONLY public.scenario_mappings
     ADD CONSTRAINT scenario_mappings_scenario_id_target_asset_id_telemetry_eve_key UNIQUE (scenario_id, target_asset_id, telemetry_event_id);
+
+
+--
+-- Name: scenario_runs scenario_runs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_runs_pkey PRIMARY KEY (scenario_run_id);
+
+
+--
+-- Name: scenario_runs scenario_runs_scenario_id_case_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_runs_scenario_id_case_name_key UNIQUE (scenario_id, case_name);
 
 
 --
@@ -2038,6 +2474,14 @@ ALTER TABLE ONLY public.sensor_tags
 
 ALTER TABLE ONLY public.sensor_tags
     ADD CONSTRAINT sensor_tags_tag_id_equipment_class_id_pressure_reference_ty_key UNIQUE (tag_id, equipment_class_id, pressure_reference_type, unit_id);
+
+
+--
+-- Name: shared_events shared_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_pkey PRIMARY KEY (event_id);
 
 
 --
@@ -2301,6 +2745,27 @@ CREATE INDEX quality_exceptions_asset_idx ON public.data_quality_exceptions USIN
 
 
 --
+-- Name: reconciliation_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX reconciliation_status_idx ON public.reconciliation_decisions USING btree (module, verification_status);
+
+
+--
+-- Name: reconciliation_subject_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX reconciliation_subject_idx ON public.reconciliation_decisions USING btree (subject_type, subject_id);
+
+
+--
+-- Name: shared_events_domain_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX shared_events_domain_idx ON public.shared_events USING btree (domain, event_class);
+
+
+--
 -- Name: source_assets_geometry_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2329,6 +2794,13 @@ CREATE TRIGGER approval_events_append_only BEFORE DELETE OR UPDATE ON public.app
 
 
 --
+-- Name: asset_relationships asset_relationship_rule_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER asset_relationship_rule_guard BEFORE INSERT OR UPDATE ON public.asset_relationships FOR EACH ROW EXECUTE FUNCTION public.enforce_equipment_relationship();
+
+
+--
 -- Name: audit_events audit_events_append_only; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -2343,6 +2815,20 @@ CREATE TRIGGER observation_link_guard BEFORE INSERT OR UPDATE ON public.asset_ob
 
 
 --
+-- Name: reconciliation_decisions reconciliation_decisions_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER reconciliation_decisions_append_only BEFORE DELETE OR UPDATE ON public.reconciliation_decisions FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: reconciliation_reviews reconciliation_reviews_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER reconciliation_reviews_append_only BEFORE DELETE OR UPDATE ON public.reconciliation_reviews FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
 -- Name: scenario_mappings scenario_mapping_guard; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -2354,6 +2840,34 @@ CREATE TRIGGER scenario_mapping_guard BEFORE INSERT ON public.scenario_mappings 
 --
 
 CREATE TRIGGER scenario_mapping_immutable BEFORE DELETE OR UPDATE ON public.scenario_mappings FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: scenario_mappings scenario_mapping_zz_boundary; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER scenario_mapping_zz_boundary BEFORE INSERT ON public.scenario_mappings FOR EACH ROW EXECUTE FUNCTION public.enforce_domain_boundary();
+
+
+--
+-- Name: scenario_runs scenario_runs_immutable; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER scenario_runs_immutable BEFORE DELETE OR UPDATE ON public.scenario_runs FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: shared_events shared_event_origin_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER shared_event_origin_guard BEFORE INSERT OR UPDATE ON public.shared_events FOR EACH ROW EXECUTE FUNCTION public.enforce_benchmark_event_origin();
+
+
+--
+-- Name: shared_events shared_events_immutable; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER shared_events_immutable BEFORE DELETE OR UPDATE ON public.shared_events FOR EACH ROW EXECUTE FUNCTION public.reject_change();
 
 
 --
@@ -2493,6 +3007,22 @@ ALTER TABLE ONLY public.data_quality_exceptions
 
 
 --
+-- Name: reconciliation_decisions decision_review_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_decisions
+    ADD CONSTRAINT decision_review_fk FOREIGN KEY (review_id) REFERENCES public.reconciliation_reviews(review_id);
+
+
+--
+-- Name: domain_boundaries domain_boundaries_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.domain_boundaries
+    ADD CONSTRAINT domain_boundaries_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
 -- Name: domain_compatibility_assessments domain_compatibility_assessments_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2629,6 +3159,14 @@ ALTER TABLE ONLY public.observations
 
 
 --
+-- Name: observations observations_scenario_run_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observations_scenario_run_id_fkey FOREIGN KEY (scenario_run_id) REFERENCES public.scenario_runs(scenario_run_id);
+
+
+--
 -- Name: observations observations_sensor_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2725,6 +3263,30 @@ ALTER TABLE ONLY public.production_unit_rules
 
 
 --
+-- Name: reconciliation_decisions reconciliation_decisions_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_decisions
+    ADD CONSTRAINT reconciliation_decisions_batch_id_fkey FOREIGN KEY (batch_id) REFERENCES public.ingestion_batches(batch_id);
+
+
+--
+-- Name: reconciliation_decisions reconciliation_decisions_supersedes_decision_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_decisions
+    ADD CONSTRAINT reconciliation_decisions_supersedes_decision_id_fkey FOREIGN KEY (supersedes_decision_id) REFERENCES public.reconciliation_decisions(decision_id);
+
+
+--
+-- Name: reconciliation_reviews reconciliation_reviews_decision_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.reconciliation_reviews
+    ADD CONSTRAINT reconciliation_reviews_decision_id_fkey FOREIGN KEY (decision_id) REFERENCES public.reconciliation_decisions(decision_id);
+
+
+--
 -- Name: scenario_mappings scenario_mappings_compatibility_assessment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2754,6 +3316,38 @@ ALTER TABLE ONLY public.scenario_mappings
 
 ALTER TABLE ONLY public.scenario_mappings
     ADD CONSTRAINT scenario_mappings_telemetry_event_id_original_source_insta_fkey FOREIGN KEY (telemetry_event_id, original_source_instance_id) REFERENCES public.telemetry_events(event_id, source_instance_id);
+
+
+--
+-- Name: scenario_runs scenario_runs_affected_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_runs_affected_asset_id_fkey FOREIGN KEY (affected_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: scenario_runs scenario_runs_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_runs_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: scenario_runs scenario_runs_target_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_runs_target_asset_id_fkey FOREIGN KEY (target_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: scenario_runs scenario_runs_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_runs_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
 
 
 --
@@ -2794,6 +3388,62 @@ ALTER TABLE ONLY public.sensor_tags
 
 ALTER TABLE ONLY public.sensor_tags
     ADD CONSTRAINT sensor_tags_unit_id_physical_quantity_fkey FOREIGN KEY (unit_id, physical_quantity) REFERENCES public.units(unit_id, physical_quantity);
+
+
+--
+-- Name: shared_events shared_events_affected_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_affected_asset_id_fkey FOREIGN KEY (affected_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: shared_events shared_events_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: shared_events shared_events_scenario_run_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_scenario_run_id_fkey FOREIGN KEY (scenario_run_id) REFERENCES public.scenario_runs(scenario_run_id);
+
+
+--
+-- Name: shared_events shared_events_source_system_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_source_system_id_fkey FOREIGN KEY (source_system_id) REFERENCES public.source_systems(source_system_id);
+
+
+--
+-- Name: shared_events shared_events_target_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_target_asset_id_fkey FOREIGN KEY (target_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: shared_events shared_events_telemetry_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_telemetry_event_id_fkey FOREIGN KEY (telemetry_event_id) REFERENCES public.telemetry_events(event_id);
+
+
+--
+-- Name: shared_events shared_events_transformation_id_provenance_class_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shared_events
+    ADD CONSTRAINT shared_events_transformation_id_provenance_class_fkey FOREIGN KEY (transformation_id, provenance_class) REFERENCES public.transformations(transformation_id, output_provenance);
 
 
 --

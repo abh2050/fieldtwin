@@ -1,3 +1,3 @@
 # pipelines/synthetic
 
-Seeded synthetic record generation. Filled in Gate 4.
+Runs AETHER-FAULT-001, writes outputs to the gitignored `data/gold/`, and generates the scenario report. All output is `SYNTHETIC`.

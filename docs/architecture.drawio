@@ -4,14 +4,14 @@
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="note" value="Green is implemented as of Gate 2. Dashed is planned. AETHER Field is fictional; cross-source associations are simulated." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1020" height="30" as="geometry"/></mxCell>
+        <mxCell id="note" value="Green is implemented as of Gate 3. Dashed is planned. AETHER Field is fictional; cross-source associations are simulated." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1020" height="30" as="geometry"/></mxCell>
         <mxCell id="ocd" value="NM OCD&#10;ArcGIS + FTP&#10;(implemented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="30" y="70" width="150" height="70" as="geometry"/></mxCell>
         <mxCell id="w3" value="Petrobras 3W&#10;pinned commit&#10;(implemented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="30" y="160" width="150" height="70" as="geometry"/></mxCell>
         <mxCell id="cm" value="Carbon Mapper, NAIP&#10;(deferred to Gate 6)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="30" y="250" width="150" height="70" as="geometry"/></mxCell>
-        <mxCell id="syn" value="AETHER hierarchy implemented&#10;synthetic telemetry planned" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="30" y="340" width="150" height="70" as="geometry"/></mxCell>
+        <mxCell id="syn" value="AETHER hierarchy and synthetic telemetry prototype&#10;(implemented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="30" y="340" width="150" height="70" as="geometry"/></mxCell>
         <mxCell id="raw" value="Raw + Bronze&#10;immutable files, manifests, quarantine&#10;(implemented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="240" y="110" width="170" height="90" as="geometry"/></mxCell>
         <mxCell id="silver" value="Canonical model&#10;PostgreSQL and PostGIS&#10;(implemented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="240" y="240" width="170" height="70" as="geometry"/></mxCell>
-        <mxCell id="recon" value="Reconciliation&#10;identity, geospatial, semantic, scenario&#10;(Gate 3)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="470" y="240" width="180" height="70" as="geometry"/></mxCell>
+        <mxCell id="recon" value="Reconciliation engine&#10;decisions, review queue&#10;(implemented)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="470" y="240" width="180" height="70" as="geometry"/></mxCell>
         <mxCell id="gold" value="Gold datasets&#10;declared observed, derived, or experimental" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="470" y="350" width="180" height="70" as="geometry"/></mxCell>
         <mxCell id="ml" value="Anomaly detection on 3W as a separate offshore benchmark&#10;(Gate 5)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="710" y="240" width="180" height="70" as="geometry"/></mxCell>
         <mxCell id="insp" value="Inspection evidence&#10;(Gate 6)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="710" y="350" width="180" height="60" as="geometry"/></mxCell>
@@ -21,9 +21,9 @@
         <mxCell id="e1" edge="1" source="ocd" target="raw" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="e2" edge="1" source="w3" target="raw" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="e3" style="dashed=1;" edge="1" source="cm" target="raw" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e4" style="dashed=1;" edge="1" source="syn" target="silver" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e5" style="dashed=1;" edge="1" source="raw" target="silver" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e6" style="dashed=1;" edge="1" source="silver" target="recon" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" edge="1" source="syn" target="silver" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" edge="1" source="raw" target="silver" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" edge="1" source="silver" target="recon" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="e7" style="dashed=1;" edge="1" source="recon" target="gold" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="e8" style="dashed=1;" edge="1" source="recon" target="ml" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="e9" style="dashed=1;" edge="1" source="gold" target="insp" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
@@ -39,7 +39,7 @@
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="note" value="Proposed only. Nothing is deployed. Regional resources in us-east-2. Deployment requires explicit approval (Gate 9)." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1020" height="30" as="geometry"/></mxCell>
+        <mxCell id="note" value="Proposed only. Nothing is deployed. Regional resources in one configured region. Deployment requires explicit approval (Gate 9)." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1020" height="30" as="geometry"/></mxCell>
         <mxCell id="user" value="Authenticated user" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="30" y="150" width="120" height="60" as="geometry"/></mxCell>
         <mxCell id="cf" value="CloudFront&#10;HTTPS, Origin Access Control" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="210" y="150" width="150" height="60" as="geometry"/></mxCell>
         <mxCell id="cog" value="Cognito&#10;Viewer, Operator, Supervisor, Admin" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="210" y="60" width="150" height="60" as="geometry"/></mxCell>
@@ -64,12 +64,12 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="boundaries" name="Canonical boundaries (Gate 2)">
+  <diagram id="boundaries" name="Canonical boundaries (Gate 3)">
     <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1100" pageHeight="620" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
-        <mxCell id="note" value="Enforced by database keys, checks, and triggers. Implemented in Gate 2. Black arrows are the only allowed path. Red arrows are refused." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1020" height="30" as="geometry"/></mxCell>
+        <mxCell id="note" value="Enforced by database keys, checks, and triggers. Implemented in Gates 2 and 3. Black arrows are allowed. Red arrows are refused." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1020" height="30" as="geometry"/></mxCell>
         <mxCell id="real" value="Real sources" style="swimlane;startSize=26;fillColor=#d5e8d4;strokeColor=#82b366;html=1;" vertex="1" parent="1"><mxGeometry x="30" y="60" width="440" height="340" as="geometry"/></mxCell>
         <mxCell id="pr" value="production_records&#10;verified unit rule required" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="real"><mxGeometry x="20" y="50" width="190" height="70" as="geometry"/></mxCell>
         <mxCell id="dq" value="data_quality_exceptions&#10;source_reconciliation_evidence" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="real"><mxGeometry x="20" y="150" width="190" height="170" as="geometry"/></mxCell>
@@ -82,11 +82,48 @@
         <mxCell id="md" value="measurement_definitions&#10;AETHER well class" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="fic"><mxGeometry x="20" y="150" width="170" height="70" as="geometry"/></mxCell>
         <mxCell id="sm" value="scenario_mappings&#10;REPLAYED or SYNTHETIC, immutable" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="fic"><mxGeometry x="20" y="250" width="370" height="70" as="geometry"/></mxCell>
         <mxCell id="tr" value="transformations&#10;a row's provenance class must match its process" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="30" y="430" width="400" height="70" as="geometry"/></mxCell>
-        <mxCell id="ca" value="domain_compatibility_assessments&#10;0 direct, 2 conditional event classes" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="470" y="430" width="260" height="70" as="geometry"/></mxCell>
+        <mxCell id="ca" value="domain_compatibility_assessments, domain_boundaries&#10;default is refusal" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="470" y="430" width="260" height="70" as="geometry"/></mxCell>
         <mxCell id="x1" value="refused: real identifier&#10;to fictional asset" style="endArrow=block;html=1;strokeColor=#b85450;fontColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="sa" target="as" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
         <mxCell id="x2" value="refused: offshore tag&#10;to onshore definition" style="endArrow=block;html=1;strokeColor=#b85450;fontColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="st" target="md" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e1" value="only if an assessment allows" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" source="te" target="ca" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
-        <mxCell id="e2" style="endArrow=block;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" edge="1" source="ca" target="sm" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e1" value="refused onto AETHER: domain boundary" style="endArrow=block;html=1;strokeColor=#b85450;fontColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" source="te" target="ca" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="no 3W row reaches this" style="endArrow=block;html=1;strokeColor=#b85450;fontColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" edge="1" source="ca" target="sm" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="scenario" name="AETHER-FAULT-001 and data flow (Gate 3)">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1100" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="note" value="Two separate domains. Yellow is synthetic, on fictional assets. Green is source data. Nothing connects them except the shared event shape." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="30" y="10" width="1040" height="30" as="geometry"/></mxCell>
+        <mxCell id="cfg" value="Scenario configuration&#10;parameters, schedule, seed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="30" y="60" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="sim" value="Physical model&#10;Well A-03 in series with segment GS-A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="250" y="60" width="180" height="70" as="geometry"/></mxCell>
+        <mxCell id="inv" value="12 physical invariants&#10;a failure refuses the run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="480" y="60" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="sens" value="Sensor readings&#10;pressure, differential, flow, noise" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="700" y="60" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="run" value="scenario_runs, series, EXPERIMENTAL_SCENARIO_LINK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="480" y="170" width="390" height="50" as="geometry"/></mxCell>
+        <mxCell id="ev" value="shared_events&#10;one shape, two separate domains" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="480" y="270" width="390" height="70" as="geometry"/></mxCell>
+        <mxCell id="pri" value="PrioritizationInput&#10;no score, for Gate 7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="920" y="170" width="150" height="70" as="geometry"/></mxCell>
+        <mxCell id="det" value="Gate 5 detection&#10;planned" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1"><mxGeometry x="920" y="270" width="150" height="70" as="geometry"/></mxCell>
+        <mxCell id="w3" value="Petrobras 3W&#10;offshore instances" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="30" y="380" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="ad" value="Benchmark event adapter&#10;source identity kept" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="250" y="380" width="180" height="70" as="geometry"/></mxCell>
+        <mxCell id="ocd" value="NM OCD&#10;wells, production" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="30" y="490" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="can" value="Canonical records&#10;source_assets, production_records" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="250" y="490" width="180" height="70" as="geometry"/></mxCell>
+        <mxCell id="rec" value="Reconciliation engine&#10;identity, semantic, geospatial" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="480" y="490" width="180" height="70" as="geometry"/></mxCell>
+        <mxCell id="dec" value="reconciliation_decisions&#10;append-only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="700" y="490" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="rev" value="Human review&#10;nothing verified automatically" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="920" y="490" width="150" height="70" as="geometry"/></mxCell>
+        <mxCell id="a1" edge="1" source="cfg" target="sim" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a2" edge="1" source="sim" target="inv" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a3" edge="1" source="inv" target="sens" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a4" edge="1" source="sens" target="run" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a5" edge="1" source="run" target="ev" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a6" style="endArrow=block;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="ev" target="det" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a7" edge="1" source="run" target="pri" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="b1" edge="1" source="w3" target="ad" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="b2" style="endArrow=block;html=1;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="ad" target="ev" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c1" edge="1" source="ocd" target="can" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c2" edge="1" source="can" target="rec" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c3" edge="1" source="rec" target="dec" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="c4" edge="1" source="dec" target="rev" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
       </root>
     </mxGraphModel>
   </diagram>

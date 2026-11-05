@@ -29,12 +29,14 @@ def test_all_canonical_validation_checks_pass(real):
     assert [c.name for c in run_checks(real) if c.status == FAIL] == []
 
 
-def test_data_driven_rule_quarantines_exactly_the_known_bad_coordinate(real):
+def test_data_driven_rule_quarantines_exactly_one_coordinate(real):
     rows = real.execute(
-        "SELECT external_identifier, reported_latitude, geometry FROM source_assets WHERE spatial_status='QUARANTINED'"
+        "SELECT source_asset_id, reported_latitude, geometry FROM source_assets WHERE spatial_status='QUARANTINED'"
     ).fetchall()
-    assert rows == [("30-015-53569", 33.3074054, None)]
-    found = asset_exceptions(real, "nm_ocd:well:30-015-53569")
+    assert len(rows) == 1
+    asset, latitude, geometry = rows[0]
+    assert latitude is not None and geometry is None  # The reported value is kept locally.
+    found = asset_exceptions(real, asset)
     assert found[0]["evidence"]["same_value_in_arcgis_and_ftp"] is True
     assert found[0]["evidence"]["inside_county_box"] is False
     assert found[0]["evidence"]["distance_from_peer_median_km"] > 100
@@ -104,7 +106,14 @@ def test_3w_instance_ids_repeat_across_classes_without_collision(real):
 
 
 def test_observations_describe_every_sensor_in_every_instance(real):
-    assert value(real, "SELECT count(*) FROM observations") == 498 * 27
+    assert (
+        value(real, "SELECT count(*) FROM observations WHERE source_system_id = 'petrobras_3w'")
+        == 498 * 27
+    )
+    assert (
+        value(real, "SELECT count(*) FROM observations WHERE source_system_id = 'aether_synthetic'")
+        == 2 * 4
+    )
     assert (
         value(
             real,
@@ -117,3 +126,62 @@ def test_observations_describe_every_sensor_in_every_instance(real):
 def test_compatibility_report_matches_the_contract():
     committed = (REPO_ROOT / "reports/reconciliation/semantic_compatibility.md").read_text()
     assert committed == render_compatibility_report()
+
+
+def test_all_real_wells_are_verified_by_identifier(real):
+    row = real.execute(
+        """SELECT count(*) FROM reconciliation_decisions WHERE relationship_type = 'SAME_AS'
+           AND verification_status = 'VERIFIED' AND method = 'AUTHORITATIVE_IDENTIFIER'"""
+    ).fetchone()
+    assert row[0] == value(
+        real,
+        "SELECT count(*) FROM source_assets WHERE source_system_id='nm_ocd' AND asset_type='WELL'",
+    )
+
+
+def test_wells_at_identical_coordinates_keep_separate_identities(real):
+    """Real pairs at zero distance exist. They stay candidates and stay distinct wells."""
+    pairs = real.execute(
+        """SELECT subject_id, object_id, verification_status FROM reconciliation_decisions
+           WHERE relationship_type = 'PROXIMITY_CANDIDATE' AND (evidence->>'distance_m')::float = 0"""
+    ).fetchall()
+    assert pairs
+    for subject, other, status in pairs:
+        assert subject != other and status == "UNVERIFIED"
+        same = real.execute(
+            """SELECT count(*) FROM reconciliation_decisions WHERE relationship_type = 'SAME_AS'
+               AND verification_status = 'VERIFIED' AND subject_id = %s AND object_id = %s""",
+            (subject, other),
+        ).fetchone()[0]
+        assert same == 0
+
+
+def test_provenance_audit_is_clean_on_real_data(real):
+    from packages.reconciliation.provenance import audit_provenance
+
+    assert [f.name for f in audit_provenance(real) if f.violations] == []
+
+
+def test_3w_events_preserve_every_instance_without_aether_scope(real):
+    assert (
+        value(real, "SELECT count(*) FROM shared_events WHERE domain='OFFSHORE_BENCHMARK'") == 498
+    )
+    assert (
+        value(
+            real,
+            "SELECT count(*) FROM shared_events WHERE domain='OFFSHORE_BENCHMARK' AND (target_asset_id IS NOT NULL OR scenario_id IS NOT NULL)",
+        )
+        == 0
+    )
+
+
+def test_unlabelled_benchmark_instances_are_all_flagged(real):
+    expected = value(
+        real,
+        "SELECT count(*) FROM shared_events WHERE domain='OFFSHORE_BENCHMARK' AND onset_offset_s IS NULL AND event_class <> 'NORMAL'",
+    )
+    assert expected > 0
+    assert expected == value(
+        real,
+        "SELECT count(*) FROM data_quality_exceptions WHERE exception_type='BENCHMARK_INSTANCE_WITHOUT_EVENT_LABEL'",
+    )

@@ -30,12 +30,12 @@ Asset registry, data acquisition, canonical modeling, provenance-aware reconcili
 
 ## Success
 
-A technical reviewer can run or inspect the product and distinguish measured outcomes from modeled assumptions. `instructions.md` section 23 lists the full delivery criteria.
+A technical reviewer can run or inspect the product and distinguish measured outcomes from modeled assumptions. Section 23 of the [specification](../specification.md) lists the full delivery criteria.
 
 ## Constraints
 
 | Constraint | Value |
 |---|---|
-| Cloud | AWS `us-east-2`, profile `awsnew`, environment `dev` |
+| Cloud | AWS, with profile and region set through configuration, environment `dev` |
 | Budget target | At most $150 per month for experimental infrastructure. This is a target, not a measured bill. |
 | Deployment | First deployment private and authenticated, and only after explicit approval |

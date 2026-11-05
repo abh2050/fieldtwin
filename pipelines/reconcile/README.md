@@ -1,3 +1,3 @@
 # pipelines/reconcile
 
-Reconciliation jobs. Filled in Gate 3.
+Runs the reconciliation engine on canonical data and generates its reports.

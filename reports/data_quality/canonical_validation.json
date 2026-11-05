@@ -1,5 +1,5 @@
 {
-  "validated_at": "2026-11-05T21:55:54Z",
+  "validated_at": "2026-11-05T22:48:21Z",
   "passed": true,
   "failed": [],
   "checks": [
@@ -97,13 +97,13 @@
       "name": "scenario_mappings_present",
       "status": "PASS",
       "measured": 0,
-      "rule": "Gate 2 creates no experimental mappings"
+      "rule": "No source telemetry is mapped into a scenario"
     },
     {
-      "name": "experimental_links_present",
+      "name": "real_observations_linked_to_fictional_assets",
       "status": "PASS",
       "measured": 0,
-      "rule": "Gate 2 creates no asset-observation links"
+      "rule": "Only synthetic observations can be linked to AETHER assets"
     },
     {
       "name": "non_synthetic_fictional_assets",

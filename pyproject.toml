@@ -6,6 +6,7 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
   "duckdb>=1.1",
   "httpx>=0.27",
+  "numpy>=2.5.4",
   "openpyxl>=3.1",
   "pandas>=2.2",
   "pandera>=0.20",
@@ -18,6 +19,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "hypothesis>=6.170.14",
     "mypy>=1.11",
     "pytest>=8",
     "ruff>=0.6",
@@ -46,6 +48,15 @@ select = ["E", "F", "I", "B", "UP"]
 
 [tool.ruff.lint.per-file-ignores]
 "pipelines/normalize/*.py" = ["E501"]
+"pipelines/reconcile/*.py" = ["E501"]
+"pipelines/synthetic/*.py" = ["E501"]
+"packages/reconciliation/*.py" = ["E501"]
+"packages/domain/reconciliation.py" = ["E501"]
+"tests/unit/test_physics.py" = ["E501"]
+"tests/unit/test_public_repo.py" = ["E501"]
+"tests/unit/test_scaffold.py" = ["E501"]
+"tests/unit/test_reconciliation.py" = ["E501"]
+"tests/integration/test_reconciliation_db.py" = ["E501"]
 "packages/domain/models.py" = ["E501"]
 "scripts/*.py" = ["E501"]
 "tests/integration/test_database.py" = ["E501"]

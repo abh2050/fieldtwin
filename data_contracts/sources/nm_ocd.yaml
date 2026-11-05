@@ -15,7 +15,7 @@ datasets:
       - OCD describes well locations as approximate.
       - Not all wells are active. Selection includes New, Cancelled, and Never Drilled records.
       - Status "New" does not mean non-producing. Many New wells have production rows, so do not infer production from status.
-      - Coordinates can be wrong. 30-015-53569 lies 1 degree north of its PLSS township neighbors, in both OCD systems. Values are kept as reported.
+      - Coordinates can be wrong. At least one well in the selection lies far from its PLSS township neighbors, with the same value in both OCD systems. Values are kept as reported, and details stay in the local database.
       - ArcGIS `projection` and FTP `datum` can disagree for identical coordinates. Treat the datum of those wells as unresolved.
       - Dates are epoch milliseconds. 253402239600000 means 9999-12-31, OCD's "none" value.
 

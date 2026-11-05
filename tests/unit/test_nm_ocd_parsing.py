@@ -64,7 +64,7 @@ def test_missing_member_is_malformed(tmp_path):
 
 
 def test_api_number_is_built_from_ocd_parts():
-    assert api_from_parts(production_row()) == "30-015-40001"
+    assert api_from_parts(production_row()) == "30-015-90001"
     assert api_from_parts(production_row(api_well_idn=None)) is None
 
 
@@ -128,7 +128,7 @@ def test_invalid_well_coordinates_are_quarantined(tmp_path, attributes, reason):
 
 def test_malformed_api_is_quarantined(tmp_path):
     quarantine = Quarantine(tmp_path / "q.jsonl")
-    assert validate_wells([well_feature(api="42-015-40001")], NM, quarantine) == []
+    assert validate_wells([well_feature(api="42-015-90001")], NM, quarantine) == []
     assert quarantine.reasons == {"wells:INVALID_API": 1}
 
 

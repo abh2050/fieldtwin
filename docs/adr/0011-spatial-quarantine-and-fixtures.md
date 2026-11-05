@@ -23,7 +23,7 @@ OCD publishes no license or redistribution terms. Its data is public, but that d
 - CI uses hand-written OCD-shaped rows in `data/fixtures/ci_workspace/`, with made-up API numbers and names.
 - 3W fixtures are real, truncated records, redistributed under CC BY 4.0 with attribution.
 - `data_contracts/sources/generated/` holds types and fill rates for OCD, with no record values.
-- Reports do cite one API number and its reported coordinate as a data-quality finding, and aggregate volumes. That is a limited factual reference. Review it if the policy for this data becomes stricter.
+- Reports describe quality exceptions in general terms and publish only aggregate volumes. Individual wells stay in the local database.
 
 ## Consequences
 

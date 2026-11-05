@@ -18,4 +18,4 @@ The specification described one `assets` table with an `is_fictional` flag. A fl
 
 - Foreign keys enforce the separation, with nothing for a query to forget.
 - A future real facility would need a deliberate change to `assets`, which is appropriate.
-- This departs from the specification's single table, which section 16 of the specification permits with a recorded decision.
+- This departs from the specification's single table, which section 16 of the [specification](../specification.md) permits with a recorded decision.

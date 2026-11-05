@@ -76,7 +76,7 @@ The grain is well completion, month, and product. The production date comes from
 
 | Exception | Count | Disposition | Decision |
 |---|---:|---|---|
-| Coordinate inconsistent with PLSS township | 1 | Quarantined from spatial analytics, open | Well `30-015-53569` is 112.1 km from the median of its 334 township peers, with the same value in both OCD channels. The reported value is kept and no correction is assumed. Its production records stay valid. |
+| Coordinate inconsistent with PLSS township | 1 | Quarantined from spatial analytics, open | One well is more than 100 km from the median of its township peers, with the same value in both OCD channels. The reported value is kept and no correction is assumed. Its production records stay valid. |
 | Datum labels conflict (ArcGIS NAD27, FTP NAD83) | 30 | Flagged, open | Not guessed. No analytic geometry. |
 | Datum label missing in ArcGIS | 5 | Flagged, open | Handled the same way as a conflict, even though FTP says NAD83. |
 | 3W pressure reference unknown | 10 tags | Flagged, open | Stays `UNKNOWN`. |
@@ -135,7 +135,7 @@ An apparent clipping in the first phone screenshot came from Chrome's headless m
 2. **PostGIS runs under amd64 emulation here,** because the image has no usable arm64 build. CI uses amd64 natively.
 3. **Real-data checks are local only.** CI proves parsing and loading on realistic shapes, because real OCD rows aren't committed.
 4. **Compatibility is engineering judgment.** No field engineer or hydraulic calculation validated it, and AETHER's equipment is a chosen design.
-5. **OCD redistribution terms are unresolved.** New Mexico's public records law wasn't analyzed. Reports cite one API number and its coordinate, plus aggregate volumes.
+5. **OCD redistribution terms are unresolved.** New Mexico's public records law wasn't analyzed. Reports cite aggregate volumes.
 6. **The units rule copy runs through 8/23/2022.** Later amendments weren't checked. Operator compliance can't be verified from this data.
 7. **Database controls guard against mistakes,** not a superuser who disables them. The DynamoDB path will need its own enforcement.
 8. **Operational tables are structure only.** Inspection, prediction, work-order, and approval workflows arrive in later gates. Repository interfaces and DynamoDB adapters aren't built.
@@ -144,7 +144,7 @@ An apparent clipping in the first phone screenshot came from Chrome's headless m
 ## Decisions needed
 
 1. **AETHER-FAULT-001.** Section 22 of the specification still describes replaying a 3W event. It needs revising around synthetic telemetry before Gates 3 to 5 rely on it (ADR 0010).
-2. **Public repository.** This repository is public, so the cited API number, its coordinate, and aggregate volumes are published despite OCD's unstated terms. Decide whether to keep them.
+2. **Public repository.** Gate 3 replaced the individual well reference with a general description. Aggregate volumes remain published.
 
 ## Next actions
 

@@ -1,3 +1,3 @@
 # packages/reconciliation
 
-Identity, geospatial, semantic and scenario reconciliation. Filled in Gate 3.
+Identity, semantic, geospatial, provenance, scenario, and review modules. See ADR 0013.

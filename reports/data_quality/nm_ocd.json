@@ -55,15 +55,7 @@
     }
   ],
   "validation_scope": "ArcGIS and FTP are both OCD systems and carry identical values. Agreement shows consistent delivery from one source of record, not independent confirmation.",
-  "coordinate_outliers": [
-    {
-      "id": "30-015-53569",
-      "ulstr": "H-14-23S-28E",
-      "latitude": "33.3074054",
-      "longitude": "-104.050137",
-      "status": "New"
-    }
-  ],
+  "coordinate_outlier_count": 1,
   "coordinate_datum_counts": {
     "NAD83": 646,
     "NAD27": 30,

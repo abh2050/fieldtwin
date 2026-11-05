@@ -256,15 +256,68 @@ def seed_facility(conn: psycopg.Connection, root: Path) -> None:
                 "provenance_class": "SYNTHETIC",
             }
         )
-    if not conn.execute("SELECT 1 FROM asset_relationships LIMIT 1").fetchone():
-        with conn.cursor() as cursor:
-            cursor.executemany(
-                """INSERT INTO asset_relationships
-                   (source_asset_id, target_asset_id, relationship_type, evidence_type, provenance_class)
-                   VALUES (%(source_asset_id)s, %(target_asset_id)s, %(relationship_type)s,
-                           %(evidence_type)s, %(provenance_class)s)""",
-                relationships,
+    for connection in config.get("flow_connections", []):
+        relationships.append(
+            {
+                "source_asset_id": connection["source"],
+                "target_asset_id": connection["target"],
+                "relationship_type": "FEEDS",
+                "evidence_type": "FACILITY_CONFIG",
+                "provenance_class": "SYNTHETIC",
+            }
+        )
+    with conn.cursor() as cursor:
+        cursor.executemany(
+            """INSERT INTO asset_relationships
+               (source_asset_id, target_asset_id, relationship_type, evidence_type, provenance_class)
+               SELECT %(source_asset_id)s, %(target_asset_id)s, %(relationship_type)s,
+                      %(evidence_type)s, %(provenance_class)s
+               WHERE NOT EXISTS (
+                 SELECT 1 FROM asset_relationships
+                 WHERE source_asset_id = %(source_asset_id)s AND target_asset_id = %(target_asset_id)s
+                   AND relationship_type = %(relationship_type)s
+               )""",
+            relationships,
+        )
+
+
+def build_aether_semantics() -> tuple[list[SensorTag], list[SensorTagMapping]]:
+    """Sensors on the fictional model. Their meaning is declared by design, not measured."""
+    config = yaml.safe_load((REPO_ROOT / "config/scenarios/aether_fault_001.yaml").read_text())
+    tags, mappings = [], []
+    for sensor in config["sensors"]:
+        tag = f"aether_synthetic:{sensor['tag']}"
+        tags.append(
+            SensorTag(
+                tag_id=tag,
+                source_system_id="aether_synthetic",
+                native_tag_name=sensor["tag"],
+                equipment_position=sensor["measurement_definition_id"],
+                equipment_class_id=sensor["equipment_class_id"],
+                physical_quantity=sensor["quantity"],
+                unit_id=sensor["unit"],
+                pressure_reference_type=sensor["reference"],
+                sampling_frequency=f"{config['sampling']['interval_s']} s",
+                mapping_status="VERIFIED",
+                source_description=f"Synthetic sensor on the fictional simulator: {sensor['measurement_definition_id']}.",
             )
+        )
+        mappings.append(
+            SensorTagMapping(
+                tag_id=tag,
+                measurement_definition_id=sensor["measurement_definition_id"],
+                equipment_class_id=sensor["equipment_class_id"],
+                reference_type=sensor["reference"],
+                source_system_id="aether_synthetic",
+                original_unit_id=sensor["unit"],
+                canonical_unit_id=sensor["unit"],
+                conversion_method="IDENTITY",
+                data_quality_state="SEMANTICS_COMPLETE",
+                mapping_status="VERIFIED",
+                rationale="Defined by the simulator's declared design. Nothing was measured.",
+            )
+        )
+    return tags, mappings
 
 
 def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
@@ -338,17 +391,20 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
     )
 
     tags, definitions, mappings = build_semantics()
+    aether_rows = [("AETHER_ONSHORE_GAS_WELL", m) for m in reference["aether_measurements"]] + [
+        ("AETHER_GATHERING", m) for m in reference["aether_gathering_measurements"]
+    ]
     aether = [
         MeasurementDefinition(
             measurement_definition_id=m["id"],
-            equipment_class_id="AETHER_ONSHORE_GAS_WELL",
+            equipment_class_id=equipment,
             physical_quantity=m["quantity"],
             equipment_location=m["location"],
             reference_type=m["reference"],
             canonical_unit_id=m["unit"],
             description=f"Fictional design assumption: {m['location']}.",
         )
-        for m in reference["aether_measurements"]
+        for equipment, m in aether_rows
     ]
     counts["measurement_definitions"] = _insert(
         conn,
@@ -366,12 +422,12 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
         for d in definitions
     ] + [
         {
-            "equipment_class_id": "AETHER_ONSHORE_GAS_WELL",
+            "equipment_class_id": equipment,
             "measurement_definition_id": m["id"],
             "capability": m["capability"],
             "basis": "Fictional design assumption in config/facility/aether_field.yaml",
         }
-        for m in reference["aether_measurements"]
+        for equipment, m in aether_rows
     ]
     counts["equipment_measurement_capabilities"] = _insert(
         conn,
@@ -379,21 +435,22 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
         capabilities,
         "equipment_class_id, measurement_definition_id",
     )
+    aether_tags, aether_mappings = build_aether_semantics()
     counts["sensor_tags"] = _insert(
-        conn, "sensor_tags", [t.model_dump(mode="json") for t in tags], "tag_id"
+        conn, "sensor_tags", [t.model_dump(mode="json") for t in tags + aether_tags], "tag_id"
     )
-    if not conn.execute("SELECT 1 FROM sensor_tag_mappings LIMIT 1").fetchone():
-        with conn.cursor() as cursor:
-            cursor.executemany(
-                """INSERT INTO sensor_tag_mappings (tag_id, measurement_definition_id, equipment_class_id,
-                     reference_type, source_system_id, original_unit_id, canonical_unit_id, conversion_method,
-                     data_quality_state, mapping_status, rationale)
-                   VALUES (%(tag_id)s, %(measurement_definition_id)s, %(equipment_class_id)s, %(reference_type)s,
-                     %(source_system_id)s, %(original_unit_id)s, %(canonical_unit_id)s, %(conversion_method)s,
-                     %(data_quality_state)s, %(mapping_status)s, %(rationale)s)""",
-                [m.model_dump(mode="json") for m in mappings],
-            )
-    counts["sensor_tag_mappings"] = len(mappings)
+    with conn.cursor() as cursor:
+        cursor.executemany(
+            """INSERT INTO sensor_tag_mappings (tag_id, measurement_definition_id, equipment_class_id,
+                 reference_type, source_system_id, original_unit_id, canonical_unit_id, conversion_method,
+                 data_quality_state, mapping_status, rationale)
+               SELECT %(tag_id)s, %(measurement_definition_id)s, %(equipment_class_id)s, %(reference_type)s,
+                 %(source_system_id)s, %(original_unit_id)s, %(canonical_unit_id)s, %(conversion_method)s,
+                 %(data_quality_state)s, %(mapping_status)s, %(rationale)s
+               WHERE NOT EXISTS (SELECT 1 FROM sensor_tag_mappings WHERE tag_id = %(tag_id)s)""",
+            [m.model_dump(mode="json") for m in mappings + aether_mappings],
+        )
+    counts["sensor_tag_mappings"] = len(mappings) + len(aether_mappings)
 
     counts["production_unit_rules"] = _insert(
         conn,
@@ -452,6 +509,20 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
         assessments.append(row)
     counts["domain_compatibility_assessments"] = _insert(
         conn, "domain_compatibility_assessments", assessments, "assessment_id"
+    )
+    counts["domain_boundaries"] = _insert(
+        conn,
+        "domain_boundaries",
+        [
+            {
+                "source_system_id": b["source"],
+                "target_domain": b["target_domain"],
+                "is_allowed": b["allowed"],
+                "rationale": b["rationale"],
+            }
+            for b in reference["domain_boundaries"]
+        ],
+        "source_system_id, target_domain",
     )
     seed_facility(conn, root)
     counts["assets"] = scalar(conn, "SELECT count(*) FROM assets")

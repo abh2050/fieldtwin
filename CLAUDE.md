@@ -1,6 +1,6 @@
 # FieldTwin agent guide
 
-`instructions.md` is the full specification. `AGENTS.md` holds the rules every agent follows, so read it first.
+`docs/specification.md` is the full specification. `AGENTS.md` holds the rules every agent follows, so read it first.
 
 ## Commands
 
@@ -15,7 +15,8 @@ make db-reset db-migrate db-seed db-load  # local PostGIS on port 55432
 make test-db                              # database tests on CI fixtures
 make typecheck
 bash scripts/ci_local.sh                  # every CI command in a clean copy
-bash scripts/gate2_evidence.sh            # rebuild from nothing and record evidence
+bash scripts/gate3_evidence.sh            # rebuild from nothing and record evidence
+make scenario reconcile gate3-reports     # simulator, reconciliation, and generated reports
 ```
 
 ## Cost

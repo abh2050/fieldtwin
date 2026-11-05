@@ -2,7 +2,7 @@
 
 Generated from the PostgreSQL catalog by `make schema-docs`. A test fails if this file differs from a freshly migrated database.
 
-34 tables and 6 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
+40 tables and 8 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
 
 AETHER Field is fictional. Real source entities live in `source_assets` and fictional ones in `assets`, and no foreign key lets one stand in for the other.
 
@@ -169,6 +169,20 @@ Every known defect, with the original value, evidence, and decision. Exceptions 
 Check constraints: `data_quality_exceptions_disposition_check`, `data_quality_exceptions_severity_check`, `data_quality_exceptions_status_check`.
 Keys: 1 primary key, 3 foreign key, 1 unique.
 
+### `domain_boundaries`
+
+Whether a source may be mapped onto a target domain. A missing row means refused.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `source_system_id` | text | no |  |
+| `target_domain` | text | no |  |
+| `is_allowed` | boolean | no |  |
+| `rationale` | text | no |  |
+
+Check constraints: `domain_boundaries_target_domain_check`.
+Keys: 1 primary key, 1 foreign key, 0 unique.
+
 ### `domain_compatibility_assessments`
 
 Engineering judgment, versioned. Not field validation. Generated from data_contracts/semantic_mappings/3w_aether_compatibility.yaml.
@@ -232,6 +246,19 @@ Which measurements a class can provide. SOURCE_REPORTED means the source publish
 
 Check constraints: `equipment_measurement_capabilities_capability_check`.
 Keys: 1 primary key, 2 foreign key, 0 unique.
+
+### `equipment_relationship_rules`
+
+The fictional facility's allowed flow connections. Anything not listed is refused.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `source_asset_type` | text | no |  |
+| `relationship_type` | text | no |  |
+| `target_asset_type` | text | no |  |
+| `rationale` | text | no |  |
+
+Keys: 1 primary key, 0 foreign key, 0 unique.
 
 ### `facilities`
 
@@ -331,9 +358,10 @@ Queryable metadata. High-volume sensor values stay in Parquet; one TELEMETRY_SER
 | `scenario_id` | text | yes |  |
 | `batch_id` | text | yes |  |
 | `transformation_id` | text | no |  |
+| `scenario_run_id` | text | yes |  |
 
-Check constraints: `observations_null_count_check`, `observations_observation_type_check`, `observations_value_count_check`, `observed_has_batch`, `replay_keeps_origin`.
-Keys: 1 primary key, 8 foreign key, 1 unique.
+Check constraints: `observations_null_count_check`, `observations_observation_type_check`, `observations_value_count_check`, `observed_has_batch`, `replay_keeps_origin`, `simulated_series_is_synthetic`.
+Keys: 1 primary key, 9 foreign key, 1 unique.
 
 ### `production_records`
 
@@ -383,6 +411,51 @@ Verified meaning of each product kind. A production row must match a rule, so am
 Check constraints: `unit_rule_has_evidence`.
 Keys: 1 primary key, 2 foreign key, 1 unique.
 
+### `reconciliation_decisions`
+
+Every reconciliation outcome with its identifiers, method, evidence, status, algorithm version, and time. Unknown stays UNRESOLVED.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `decision_id` | bigint | no |  |
+| `module` | text | no |  |
+| `subject_type` | text | no |  |
+| `subject_id` | text | no |  |
+| `object_type` | text | yes |  |
+| `object_id` | text | yes |  |
+| `relationship_type` | text | no |  |
+| `method` | text | no |  |
+| `evidence` | jsonb | no |  |
+| `confidence` | double precision | yes | Only where justified. Distance is not a probability, so proximity candidates leave this NULL. |
+| `uncertainty` | jsonb | yes |  |
+| `verification_status` | verification_status | no |  |
+| `provenance_class` | provenance_class | no |  |
+| `algorithm_version` | text | no |  |
+| `decided_at` | timestamp with time zone | no |  |
+| `batch_id` | text | yes |  |
+| `supersedes_decision_id` | bigint | yes |  |
+| `review_id` | bigint | yes |  |
+
+Check constraints: `decision_has_evidence`, `experimental_is_never_verified`, `identity_never_involves_fictional`, `inferred_is_never_verified`, `object_type_and_id_together`, `proximity_is_only_a_candidate`, `real_never_relates_to_fictional`, `reconciliation_decisions_algorithm_version_check`, `reconciliation_decisions_confidence_check`, `reconciliation_decisions_module_check`, `reconciliation_decisions_object_type_check`, `reconciliation_decisions_relationship_type_check`, `reconciliation_decisions_subject_type_check`, `review_decisions_are_linked`, `reviewed_identity_cites_identifier`, `verified_identity_needs_identifier`, `verified_measurement_needs_declared_basis`, `weak_methods_cannot_assert_identity`.
+Keys: 1 primary key, 3 foreign key, 0 unique.
+
+### `reconciliation_reviews`
+
+Human review of a decision. No automatic process writes here.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `review_id` | bigint | no |  |
+| `decision_id` | bigint | no |  |
+| `reviewer` | text | no |  |
+| `action` | text | no |  |
+| `rationale` | text | no |  |
+| `evidence` | jsonb | no |  |
+| `reviewed_at` | timestamp with time zone | no |  |
+
+Check constraints: `reconciliation_reviews_action_check`, `reconciliation_reviews_rationale_check`, `reconciliation_reviews_reviewer_check`.
+Keys: 1 primary key, 1 foreign key, 0 unique.
+
 ### `scenario_mappings`
 
 Explicit, immutable experimental association. Never OBSERVED, and a new version means a new row.
@@ -401,6 +474,34 @@ Explicit, immutable experimental association. Never OBSERVED, and a new version 
 | `replay_start_time` | timestamp with time zone | yes |  |
 
 Check constraints: `scenario_mappings_mapping_provenance_check`.
+Keys: 1 primary key, 4 foreign key, 1 unique.
+
+### `scenario_runs`
+
+One simulator run on fictional assets, with its parameters, seed, and output checksum. Always SYNTHETIC, and immutable.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `scenario_run_id` | text | no |  |
+| `scenario_id` | text | no |  |
+| `case_name` | text | no |  |
+| `target_asset_id` | text | no |  |
+| `affected_asset_id` | text | no |  |
+| `simulator_name` | text | no |  |
+| `simulator_version` | integer | no |  |
+| `config_sha256` | text | no |  |
+| `output_sha256` | text | no |  |
+| `output_uri` | text | no |  |
+| `random_seed` | bigint | no |  |
+| `sample_count` | integer | no |  |
+| `sampling_interval_s` | integer | no |  |
+| `fault_onset_offset_s` | integer | yes |  |
+| `parameters` | jsonb | no |  |
+| `invariants` | jsonb | no |  |
+| `provenance_class` | provenance_class | no |  |
+| `transformation_id` | text | no |  |
+
+Check constraints: `fault_case_has_known_onset`, `scenario_runs_case_name_check`, `scenario_runs_config_sha256_check`, `scenario_runs_output_sha256_check`, `scenario_runs_provenance_class_check`, `scenario_runs_sample_count_check`, `scenario_runs_sampling_interval_s_check`, `scenario_runs_simulator_version_check`.
 Keys: 1 primary key, 4 foreign key, 1 unique.
 
 ### `scenarios`
@@ -464,6 +565,31 @@ Native tags as published by the source, with their physical class and original u
 
 Check constraints: `tag_reference_fits_quantity`.
 Keys: 1 primary key, 3 foreign key, 2 unique.
+
+### `shared_events`
+
+One event contract for both domains, which stay separate. It carries no detection accuracy.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `event_id` | text | no |  |
+| `schema_version` | integer | no |  |
+| `domain` | text | no |  |
+| `event_kind` | text | no |  |
+| `event_class` | text | no |  |
+| `source_system_id` | text | no |  |
+| `telemetry_event_id` | text | yes |  |
+| `scenario_id` | text | yes |  |
+| `scenario_run_id` | text | yes |  |
+| `target_asset_id` | text | yes |  |
+| `affected_asset_id` | text | yes |  |
+| `onset_offset_s` | integer | yes |  |
+| `evidence` | jsonb | no |  |
+| `provenance_class` | provenance_class | no |  |
+| `transformation_id` | text | no |  |
+
+Check constraints: `aether_events_are_synthetic_and_scoped`, `benchmark_events_stay_independent`, `shared_events_domain_check`, `shared_events_event_kind_check`, `shared_events_evidence_check`, `shared_events_onset_offset_s_check`, `shared_events_schema_version_check`.
+Keys: 1 primary key, 7 foreign key, 0 unique.
 
 ### `source_asset_history`
 
@@ -684,15 +810,24 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 |---|---|
 | `approval_events` | `approval_events_append_only` |
 | `asset_observation_links` | `observation_link_guard` |
+| `asset_relationships` | `asset_relationship_rule_guard` |
 | `audit_events` | `audit_events_append_only` |
+| `reconciliation_decisions` | `reconciliation_decisions_append_only` |
+| `reconciliation_reviews` | `reconciliation_reviews_append_only` |
 | `scenario_mappings` | `scenario_mapping_guard` |
 | `scenario_mappings` | `scenario_mapping_immutable` |
+| `scenario_mappings` | `scenario_mapping_zz_boundary` |
+| `scenario_runs` | `scenario_runs_immutable` |
+| `shared_events` | `shared_event_origin_guard` |
+| `shared_events` | `shared_events_immutable` |
 
 ## Views
 
+- `v_current_reconciliation_decisions`: Decisions not yet superseded by a reviewed decision.
 - `v_open_quality_exceptions`
 - `v_production_lineage`
 - `v_production_wide`: Oil, gas, and water per completion and month. A missing product stays NULL, never zero.
+- `v_reconciliation_review_queue`: Open decisions awaiting human review. Nothing leaves this queue automatically.
 - `v_spatially_usable_source_assets`: The only spatial population for analytics. Excludes quarantined coordinates and unresolved datums.
 - `v_tag_semantics`: The nine required semantic attributes for each sensor measurement.
 - `v_telemetry_lineage`

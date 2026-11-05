@@ -1,3 +1,3 @@
 # config/scenarios
 
-Versioned scenario definitions. Filled in Gate 4.
+Machine-readable scenario definitions. Every value is a synthetic design assumption.
