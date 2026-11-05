@@ -4,6 +4,8 @@
 
 Date: 2026-11-05. Branch: `gate-3`. Full output of the final local rebuild: [`gate_3_execution_log.txt`](gate_3_execution_log.txt).
 
+**Added before merging:** [merge verification](gate_3_merge_verification.md) found that the domain boundary could be bypassed by the only database role, and that the provenance chain wasn't enforced. Both are fixed by [ADR 0015](../../docs/adr/0015-application-role-and-provenance-chain.md). Results below predate that fix and are superseded by the pull request's CI run.
+
 ## Acceptance tests
 
 | # | Test | Result | Evidence |

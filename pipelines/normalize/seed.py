@@ -300,6 +300,7 @@ def build_aether_semantics() -> tuple[list[SensorTag], list[SensorTagMapping]]:
                 sampling_frequency=f"{config['sampling']['interval_s']} s",
                 mapping_status="VERIFIED",
                 source_description=f"Synthetic sensor on the fictional simulator: {sensor['measurement_definition_id']}.",
+                fictional_asset_id=sensor["asset_id"],
             )
         )
         mappings.append(
@@ -390,6 +391,8 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
         "transformation_id",
     )
 
+    # Sensors reference the assets they are installed on, so assets come first.
+    seed_facility(conn, root)
     tags, definitions, mappings = build_semantics()
     aether_rows = [("AETHER_ONSHORE_GAS_WELL", m) for m in reference["aether_measurements"]] + [
         ("AETHER_GATHERING", m) for m in reference["aether_gathering_measurements"]
@@ -524,7 +527,6 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
         ],
         "source_system_id, target_domain",
     )
-    seed_facility(conn, root)
     counts["assets"] = scalar(conn, "SELECT count(*) FROM assets")
     counts["asset_relationships"] = scalar(conn, "SELECT count(*) FROM asset_relationships")
     return counts

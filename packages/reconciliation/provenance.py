@@ -78,6 +78,10 @@ _AUDIT = {
            WHERE l.source_asset_id IS NOT NULL AND o.source_system_id = 'aether_synthetic'""",
         "Synthetic observations are never linked to real assets",
     ),
+    "synthetic_observation_chain_incomplete": (
+        "SELECT count(*) FROM v_synthetic_provenance_chain WHERE NOT chain_complete",
+        "Every synthetic observation has a complete simulation provenance chain",
+    ),
     "verified_identity_by_weak_method": (
         """SELECT count(*) FROM reconciliation_decisions WHERE verification_status = 'VERIFIED'
            AND relationship_type IN ('SAME_AS', 'COMPLETION_OF')

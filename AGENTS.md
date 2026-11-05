@@ -16,6 +16,8 @@ AETHER Field does not exist. Its operational relationships are fictional, while 
 10. Don't commit real OCD rows or name individual OCD wells in published files. OCD states no redistribution terms (ADR 0011).
 11. Record reconciliation outcomes as decisions. Never turn an inferred association into a verified one automatically (ADR 0013).
 
+12. An application connects as `fieldtwin_app`, never as the owner or a superuser (ADR 0015).
+
 ## Claims
 
 1. Do not report a gate, test, or benchmark as passed without executed evidence.

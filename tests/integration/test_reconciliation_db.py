@@ -129,7 +129,7 @@ def test_reconciliation_is_repeatable_without_new_rows(engine):
 
 def test_provenance_audit_is_clean(engine):
     findings = audit_provenance(engine)
-    assert len(findings) >= 12
+    assert len(findings) >= 13
     assert [f.name for f in findings if f.violations] == []
 
 

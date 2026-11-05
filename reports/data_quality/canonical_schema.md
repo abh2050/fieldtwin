@@ -2,7 +2,7 @@
 
 Generated from the PostgreSQL catalog by `make schema-docs`. A test fails if this file differs from a freshly migrated database.
 
-40 tables and 8 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
+40 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
 
 AETHER Field is fictional. Real source entities live in `source_assets` and fictional ones in `assets`, and no foreign key lets one stand in for the other.
 
@@ -360,8 +360,8 @@ Queryable metadata. High-volume sensor values stay in Parquet; one TELEMETRY_SER
 | `transformation_id` | text | no |  |
 | `scenario_run_id` | text | yes |  |
 
-Check constraints: `observations_null_count_check`, `observations_observation_type_check`, `observations_value_count_check`, `observed_has_batch`, `replay_keeps_origin`, `simulated_series_is_synthetic`.
-Keys: 1 primary key, 9 foreign key, 1 unique.
+Check constraints: `observations_null_count_check`, `observations_observation_type_check`, `observations_value_count_check`, `observed_has_batch`, `replay_keeps_origin`, `simulated_series_is_synthetic`, `synthetic_source_requires_run`, `synthetic_source_requires_sensor`.
+Keys: 1 primary key, 10 foreign key, 1 unique.
 
 ### `production_records`
 
@@ -502,7 +502,7 @@ One simulator run on fictional assets, with its parameters, seed, and output che
 | `transformation_id` | text | no |  |
 
 Check constraints: `fault_case_has_known_onset`, `scenario_runs_case_name_check`, `scenario_runs_config_sha256_check`, `scenario_runs_output_sha256_check`, `scenario_runs_provenance_class_check`, `scenario_runs_sample_count_check`, `scenario_runs_sampling_interval_s_check`, `scenario_runs_simulator_version_check`.
-Keys: 1 primary key, 4 foreign key, 1 unique.
+Keys: 1 primary key, 4 foreign key, 2 unique.
 
 ### `scenarios`
 
@@ -562,9 +562,10 @@ Native tags as published by the source, with their physical class and original u
 | `sampling_frequency` | text | yes |  |
 | `mapping_status` | verification_status | no |  |
 | `source_description` | text | no |  |
+| `fictional_asset_id` | text | yes | The fictional asset a synthetic sensor is installed on. Always NULL for source tags. |
 
-Check constraints: `tag_reference_fits_quantity`.
-Keys: 1 primary key, 3 foreign key, 2 unique.
+Check constraints: `synthetic_sensor_has_fictional_asset`, `tag_reference_fits_quantity`.
+Keys: 1 primary key, 4 foreign key, 2 unique.
 
 ### `shared_events`
 
@@ -809,9 +810,11 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 | Table | Trigger |
 |---|---|
 | `approval_events` | `approval_events_append_only` |
+| `asset_observation_links` | `fictional_link_chain_guard` |
 | `asset_observation_links` | `observation_link_guard` |
 | `asset_relationships` | `asset_relationship_rule_guard` |
 | `audit_events` | `audit_events_append_only` |
+| `observations` | `observation_sensor_source_guard` |
 | `reconciliation_decisions` | `reconciliation_decisions_append_only` |
 | `reconciliation_reviews` | `reconciliation_reviews_append_only` |
 | `scenario_mappings` | `scenario_mapping_guard` |
@@ -829,5 +832,6 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 - `v_production_wide`: Oil, gas, and water per completion and month. A missing product stays NULL, never zero.
 - `v_reconciliation_review_queue`: Open decisions awaiting human review. Nothing leaves this queue automatically.
 - `v_spatially_usable_source_assets`: The only spatial population for analytics. Excludes quarantined coordinates and unresolved datums.
+- `v_synthetic_provenance_chain`: Each synthetic observation with its asset, sensor, scenario, run, simulator version, and parameter set.
 - `v_tag_semantics`: The nine required semantic attributes for each sensor measurement.
 - `v_telemetry_lineage`

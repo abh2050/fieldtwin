@@ -90,6 +90,7 @@ Every sensor keeps the meaning of its own equipment class. All 56 attempts to ma
 | All simulated observations are SYNTHETIC | 0 |
 | Simulator runs produce only synthetic-source observations | 0 |
 | Synthetic observations are never linked to real assets | 0 |
+| Every synthetic observation has a complete simulation provenance chain | 0 |
 | Verified identity rests only on identifiers or human review | 0 |
 | Inferred relationships are never verified | 0 |
 | Geospatial proximity never establishes identity | 0 |
