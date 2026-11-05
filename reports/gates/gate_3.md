@@ -111,6 +111,7 @@ Acceptance test 9 requires earlier tests to keep passing, so every edit is liste
 | A reviewer couldn't reject a proximity candidate, because the constraint and the review code disagreed | Allowed a reviewed rejection, while approval stays impossible |
 | Repeatability test expected "already run" where the fixture legitimately yields 0 candidates | Corrected the test |
 | Evidence log held local paths while tests were scanning it | The log is now scrubbed as it's written |
+| First hosted CI run failed `unit`: the scenario report printed a residual near 1e-16, whose last digits differ between ARM and x86. The local clean copy couldn't catch it, since it runs on one CPU. | The report now states a bound for values below 1e-12. The test wasn't loosened, and the simulator hashes matched on both CPUs. |
 | The scan test caught this on the first evidence run, with 5 failed steps including lint and types | Fixed each, then rebuilt from nothing |
 
 ## Limitations

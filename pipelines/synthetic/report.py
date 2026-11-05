@@ -16,6 +16,15 @@ def _psi(pascals: float) -> str:
     return f"{pascals * PA_TO_PSI:,.0f}"
 
 
+def _stable(measured: str) -> str:
+    """Residuals near machine precision differ between CPUs, so the report states a bound."""
+    try:
+        value = abs(float(measured))
+    except ValueError:
+        return measured
+    return "below 1e-12" if value < 1e-12 else measured
+
+
 def render(config: ScenarioConfig) -> str:
     results = execute(config)
     nominal = results["nominal"][0]
@@ -109,8 +118,8 @@ def render(config: ScenarioConfig) -> str:
     ]
     for left, right in zip(results["nominal"][1], results["fault"][1], strict=True):
         lines.append(
-            f"| `{left.name}` | {'PASS' if left.passed else 'FAIL'} | {left.measured} "
-            f"| {'PASS' if right.passed else 'FAIL'} | {right.measured} |"
+            f"| `{left.name}` | {'PASS' if left.passed else 'FAIL'} | {_stable(left.measured)} "
+            f"| {'PASS' if right.passed else 'FAIL'} | {_stable(right.measured)} |"
         )
     events = results["fault"][2]
     lines += [

@@ -54,11 +54,11 @@ Flow falls 9.4% and the differential rises 65.0% by full severity. The response 
 
 | Invariant | Nominal | Measured | Fault | Measured |
 |---|---|---|---|---|
-| `mass_conservation` | PASS | 1.643e-15 | PASS | 1.990e-15 |
+| `mass_conservation` | PASS | below 1e-12 | PASS | below 1e-12 |
 | `pressure_ordering` | PASS | p_shut_in > p_wellhead > p_downstream | PASS | p_shut_in > p_wellhead > p_downstream |
-| `inflow_equation_residual` | PASS | 2.279e-16 | PASS | 8.484e-16 |
-| `segment_equation_residual` | PASS | 1.195e-15 | PASS | 2.048e-15 |
-| `differential_definition` | PASS | 0.000e+00 | PASS | 0.000e+00 |
+| `inflow_equation_residual` | PASS | below 1e-12 | PASS | below 1e-12 |
+| `segment_equation_residual` | PASS | below 1e-12 | PASS | below 1e-12 |
+| `differential_definition` | PASS | below 1e-12 | PASS | below 1e-12 |
 | `positive_flow` | PASS | 6.758e-01 | PASS | 6.124e-01 |
 | `flow_regime_valid` | PASS | max Mach 0.017, min Re 7.644e+05 | PASS | max Mach 0.077, min Re 7.644e+05 |
 | `severity_bounds_and_monotonic` | PASS | max 0.000 | PASS | max 0.550 |

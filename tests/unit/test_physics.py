@@ -375,3 +375,12 @@ def test_gauge_absolute_round_trip_needs_ambient():
 def test_incorrect_pressure_conversions_are_refused(source, target, ambient):
     with pytest.raises(SemanticError):
         convert_pressure(1.0e6, source, target, ambient_pa_abs=ambient)
+
+
+def test_report_values_do_not_depend_on_machine_precision_noise():
+    from pipelines.synthetic.report import _stable
+
+    assert _stable("8.484e-16") == _stable("8.999e-16") == "below 1e-12"
+    assert _stable("0.000e+00") == "below 1e-12"
+    assert _stable("4.638e+00") == "4.638e+00"
+    assert _stable("max Mach 0.077, min Re 7.644e+05") == "max Mach 0.077, min Re 7.644e+05"
