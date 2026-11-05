@@ -1,6 +1,6 @@
 # Gate 2 report: canonical data model and semantic contracts
 
-**Status: PASSED LOCALLY, conditional on the first hosted CI run.** Nine of the ten acceptance criteria are met with executed evidence. Criterion 8 is met except that the GitHub Actions workflow has never run on GitHub, because this repository has no commits or remote yet.
+**Status: PASSED.** All ten acceptance criteria are met with executed evidence, including a successful [GitHub Actions run](https://github.com/abh2050/fieldtwin/actions/runs/42120270921) on the first commit (`602bcb7`).
 
 Date: 2026-11-05. Full output of the final rebuild: [`gate_2_execution_log.txt`](gate_2_execution_log.txt).
 
@@ -15,7 +15,7 @@ Date: 2026-11-05. Full output of the final rebuild: [`gate_2_execution_log.txt`]
 | 5 | Invalid physical-semantic mappings rejected | **Met** | 51 database tests attempt violations, including `PT-P` to an onshore wellhead definition and `UNKNOWN` to `GAUGE` |
 | 6 | Real and fictional identities separate | **Met** | Separate tables and foreign keys ([ADR 0006](../../docs/adr/0006-separate-real-and-fictional-assets.md)), with tests that attempt to cross them |
 | 7 | Quality exceptions handled transparently | **Met** | 50 recorded exceptions with original values, evidence, and decisions (below) |
-| 8 | Integration tests and CI validation pass | **Partly met** | All integration tests pass, and every CI command passes in a clean copy. **The workflow hasn't run on GitHub.** |
+| 8 | Integration tests and CI validation pass | **Met** | All six jobs passed in [hosted run 42120270921](https://github.com/abh2050/fieldtwin/actions/runs/42120270921), and every CI command also passed in a local clean copy |
 | 9 | 3W/AETHER compatibility report complete | **Met** | [`semantic_compatibility.md`](../reconciliation/semantic_compatibility.md): 30 of 30 variables and 10 of 10 event classes classified with reasoning |
 | 10 | Documentation matches the implemented schema | **Met** | [`canonical_schema.md`](../data_quality/canonical_schema.md) is generated from the catalog, and a test fails if it differs |
 
@@ -38,7 +38,7 @@ Date: 2026-11-05. Full output of the final rebuild: [`gate_2_execution_log.txt`]
 
 The clean-copy run (`scripts/ci_local.sh`) copied only the tracked files, with no raw or bronze data, and ran each workflow command with 0 failures.
 
-The live endpoint tests from Gate 1 were not rerun, because Gate 2 acquired nothing new.
+The hosted run matched the local CI results. The live endpoint tests from Gate 1 were not rerun, because Gate 2 acquired nothing new.
 
 ## Canonical data
 
@@ -131,7 +131,7 @@ An apparent clipping in the first phone screenshot came from Chrome's headless m
 
 ## Limitations
 
-1. **Hosted CI hasn't run.** `actionlint` and the clean-copy run reduce the risk but don't replace a real run. `gitleaks` ran on the file tree only, while the workflow scans git history, which doesn't exist yet.
+1. **Hosted CI covers fixtures only.** It proves the workflow on committed data, and it doesn't run the 17 tests that need real acquired data.
 2. **PostGIS runs under amd64 emulation here,** because the image has no usable arm64 build. CI uses amd64 natively.
 3. **Real-data checks are local only.** CI proves parsing and loading on realistic shapes, because real OCD rows aren't committed.
 4. **Compatibility is engineering judgment.** No field engineer or hydraulic calculation validated it, and AETHER's equipment is a chosen design.
@@ -143,9 +143,8 @@ An apparent clipping in the first phone screenshot came from Chrome's headless m
 
 ## Decisions needed
 
-1. **Commit and first CI run.** Once you approve a commit and a remote, the first hosted run settles criterion 8.
-2. **AETHER-FAULT-001.** Section 22 of the specification still describes replaying a 3W event. It needs revising around synthetic telemetry before Gates 3 to 5 rely on it (ADR 0010).
-3. **Public release.** Decide whether the cited API number and aggregate volumes are acceptable given OCD's unstated terms.
+1. **AETHER-FAULT-001.** Section 22 of the specification still describes replaying a 3W event. It needs revising around synthetic telemetry before Gates 3 to 5 rely on it (ADR 0010).
+2. **Public repository.** This repository is public, so the cited API number, its coordinate, and aggregate volumes are published despite OCD's unstated terms. Decide whether to keep them.
 
 ## Next actions
 
