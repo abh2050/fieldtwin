@@ -30,9 +30,9 @@ Target: at most $150 per month for experimental infrastructure.
 5. Get explicit approval.
 6. Verify `make aws-destroy` removes only this project's resources, and keep manifests and reproducibility documents.
 
-## Open risk: `us-east-1` restriction
+## Region configuration
 
-The organization restricts `us-east-1` and `us-west-2`. Some CloudFront-related features live in `us-east-1`, including certificates for custom domains. The plan is therefore to use the default `cloudfront.net` domain, and Gate 9 must confirm CloudFront itself is allowed by the organization's policies.
+The AWS profile and region come from configuration. Before deploying, confirm that every service is available and permitted in the chosen account and region. Some CloudFront features, including certificates for custom domains, have to be created in a specific region, so the plan uses the default `cloudfront.net` domain unless a custom domain is needed and permitted.
 
 ## Security controls
 

@@ -191,6 +191,7 @@ class SensorTag(Canonical):
     sampling_frequency: str | None = None
     mapping_status: str
     source_description: str
+    fictional_asset_id: str | None = None
 
     @model_validator(mode="after")
     def reference_fits_quantity(self) -> Self:

@@ -24,6 +24,9 @@ equipment_assumptions:
     - production_master_valve
     - production_wing_valve
     - production_shutdown_valve
+    - wellhead_pressure_transmitter
+    - well_flow_meter
+    - segment_pressure_transmitters
   does_not_have:
     - gas_lift
     - downhole_safety_valve
@@ -59,6 +62,12 @@ assets:
     asset_id: FIELD-OPS
     asset_name: Field Operations
     functions: [inspection_missions, maintenance_resources, work_orders]
+
+# Flow connections so far. Gate 4 completes these for all 12 wells.
+flow_connections:
+  - {source: A-03, target: GS-A}
+  - {source: GS-A, target: GS-TRUNK}
+  - {source: GS-TRUNK, target: COMP-STATION}
 
 constraints:
   well_pads: 2

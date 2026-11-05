@@ -22,4 +22,4 @@ Provenance must be a property of records and transformations, not merely a front
 
 - The tests in `tests/provenance/test_database_invariants.py` attempt each violation against a real database.
 - Triggers carry logic that the cloud path must reimplement, since DynamoDB can't express it (ADR 0002).
-- A superuser could still disable these controls. They protect against mistakes, not a malicious administrator.
+- A superuser could still disable these controls. ADR 0015 adds the least-privilege role an application must use.

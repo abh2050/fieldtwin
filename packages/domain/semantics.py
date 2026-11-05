@@ -47,6 +47,30 @@ def check_pressure_reference(source: ReferenceType, target: ReferenceType) -> No
         raise SemanticError(f"{source} pressure is not {target} pressure")
 
 
+def convert_pressure(
+    value,
+    source: ReferenceType,
+    target: ReferenceType,
+    ambient_pa_abs: float | None = None,
+):
+    """Change the pressure reference frame, in pascals. This needs ambient pressure, stated."""
+    if source is target and source is not ReferenceType.UNKNOWN:
+        return value
+    allowed = {ReferenceType.ABSOLUTE, ReferenceType.GAUGE}
+    if source not in allowed or target not in allowed:
+        raise SemanticError(f"{source} pressure cannot be converted to {target} pressure")
+    if ambient_pa_abs is None or ambient_pa_abs <= 0:
+        raise SemanticError("converting between absolute and gauge needs a stated ambient pressure")
+    if source is ReferenceType.ABSOLUTE:
+        return value - ambient_pa_abs
+    return value + ambient_pa_abs
+
+
+def check_unit_defined(unit_id: str | None, known_units: set[str]) -> None:
+    if not unit_id or unit_id not in known_units:
+        raise SemanticError(f"unit {unit_id!r} has no definition")
+
+
 def check_tag_mapping(
     tag_equipment_class: str,
     definition_equipment_class: str,

@@ -157,12 +157,16 @@ def run_checks(conn: psycopg.Connection) -> list[Check]:
         _zero(
             "scenario_mappings_present",
             _value(conn, "SELECT count(*) FROM scenario_mappings"),
-            "Gate 2 creates no experimental mappings",
+            "No source telemetry is mapped into a scenario",
         ),
         _zero(
-            "experimental_links_present",
-            _value(conn, "SELECT count(*) FROM asset_observation_links"),
-            "Gate 2 creates no asset-observation links",
+            "real_observations_linked_to_fictional_assets",
+            _value(
+                conn,
+                """SELECT count(*) FROM asset_observation_links l JOIN observations o USING (observation_id)
+                   WHERE l.asset_id IS NOT NULL AND o.source_system_id <> 'aether_synthetic'""",
+            ),
+            "Only synthetic observations can be linked to AETHER assets",
         ),
         _zero(
             "non_synthetic_fictional_assets",

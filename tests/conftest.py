@@ -124,7 +124,7 @@ def production_row(**overrides) -> dict[str, str | None]:
     row = {
         "api_st_cde": "30",
         "api_cnty_cde": "15",
-        "api_well_idn": "40001",
+        "api_well_idn": "90001",
         "pool_idn": "97442",
         "prodn_mth": "6",
         "prodn_yr": "2026",
@@ -147,7 +147,7 @@ def history_row(**overrides) -> dict[str, str | None]:
     row.update(
         api_st_cde="30",
         api_cnty_cde="15",
-        api_well_idn="40001",
+        api_well_idn="90001",
         eff_dte="2020-01-01T00:00:00",
         rec_termn_dte="9999-12-31T00:00:00",
         latitude="3.2200000e+001",
@@ -156,7 +156,7 @@ def history_row(**overrides) -> dict[str, str | None]:
     return {**row, **overrides}
 
 
-def well_feature(api: str = "30-015-40001", **overrides) -> dict:
+def well_feature(api: str = "30-015-90001", **overrides) -> dict:
     attributes = {
         "OBJECTID": 1,
         "id": api,

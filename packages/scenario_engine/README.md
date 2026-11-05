@@ -1,3 +1,3 @@
 # packages/scenario_engine
 
-Scenario mapping and replay configuration. Filled in Gate 4.
+Configuration, physics, sensors, invariants, and events for synthetic scenarios. Specification: `docs/product/synthetic_telemetry_spec.md`.

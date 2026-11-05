@@ -1,6 +1,6 @@
 # ADR 0010: Keep 3W as a separate benchmark, and plan synthetic AETHER telemetry
 
-**Status:** Accepted. The boundary is implemented. The synthetic capability is planned and not built.
+**Status:** Accepted, and implemented by ADRs 0012 and 0014. Gate 3 tightened decision 2: no 3W event is mapped onto AETHER, even with an allowing assessment.
 
 ## Context
 

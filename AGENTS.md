@@ -12,8 +12,11 @@ AETHER Field does not exist. Its operational relationships are fictional, while 
 6. Do not merge wells by name similarity. OCD identity uses the API number.
 7. Raw data is immutable. Fix problems in later layers and send invalid records to quarantine with a reason.
 8. Keep real and fictional assets in their own tables. Add a new sensor mapping only within one equipment class.
-9. 3W is a separate offshore benchmark. Don't apply it to AETHER without an assessment that allows it (ADR 0010).
-10. Don't commit real OCD rows. OCD states no redistribution terms (ADR 0011).
+9. 3W is a separate offshore benchmark. Never map it onto AETHER assets (ADR 0014). AETHER telemetry is synthetic, and the simulator is not calibrated to any real well (ADR 0012).
+10. Don't commit real OCD rows or name individual OCD wells in published files. OCD states no redistribution terms (ADR 0011).
+11. Record reconciliation outcomes as decisions. Never turn an inferred association into a verified one automatically (ADR 0013).
+
+12. An application connects as `fieldtwin_app`, never as the owner or a superuser (ADR 0015).
 
 ## Claims
 
@@ -24,9 +27,9 @@ AETHER Field does not exist. Its operational relationships are fictional, while 
 ## Safety and cost
 
 1. Nothing here may connect to or operate physical equipment. Recommendations stay advisory.
-2. Do not create billable AWS resources without explicit approval. Stay within `us-east-2` (profile `awsnew`) and do not hardcode account IDs or credentials.
+2. Do not create billable AWS resources without explicit approval. Read the AWS profile and region from configuration, and do not hardcode account IDs or credentials.
 3. Bedrock, if ever enabled, only explains. It holds no decision or approval authority.
 
 ## Scope
 
-Work proceeds gate by gate as defined in `instructions.md` section 18. Add a dependency in the gate that needs it. Record significant decisions as ADRs in `docs/adr/`.
+Work proceeds gate by gate as defined in section 18 of `docs/specification.md`. Add a dependency in the gate that needs it. Record significant decisions as ADRs in `docs/adr/`.

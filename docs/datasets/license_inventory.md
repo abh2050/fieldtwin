@@ -10,7 +10,7 @@ Last checked 2026-11-05. This is an engineering record, not legal advice.
 | USDA NAIP | **Deferred, not yet inspected** | Unknown | Gate 6. Must check terms first. |
 | AETHER synthetic records | Gate 4 | Project-generated | Must be labeled `SYNTHETIC`. |
 
-**Deferral reason:** `instructions.md` section 25 limits this stage to the OCD and 3W adapters, and Gate 1 allows optional sources to be deferred with a documented reason.
+**Deferral reason:** the first acquisition stage covered only the OCD and 3W adapters, and Gate 1 allows optional sources to be deferred with a documented reason.
 
 ## Fixtures
 

@@ -294,6 +294,11 @@ def test_variable_assessment_cannot_authorize_an_event_mapping(db):
 def conditional_case(db):
     """An event class with a conditional assessment, attached to a real instance for testing."""
     scenario(db)
+    # These tests exercise the assessment layer, so they lift the newer boundary inside this
+    # always-rolled-back transaction. tests/provenance/test_reconciliation_invariants.py covers it.
+    db.execute(
+        "UPDATE domain_boundaries SET is_allowed = true WHERE source_system_id = 'petrobras_3w'"
+    )
     db.execute(
         "UPDATE telemetry_events SET source_event_label=6, source_event_class='QUICK_RESTRICTION_IN_PCK' WHERE event_id=%s",
         (REAL_EVENT,),

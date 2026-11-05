@@ -1,4 +1,4 @@
-.PHONY: gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
+.PHONY: scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
 
 bootstrap:
 	bash scripts/bootstrap.sh
@@ -32,6 +32,23 @@ db-seed:
 
 db-load:
 	uv run python -m pipelines.normalize.load
+
+# AETHER-FAULT-001: synthetic telemetry, invariants, events, and lineage.
+scenario:
+	uv run python -m pipelines.synthetic.aether_fault_001
+
+benchmark-events:
+	uv run python -m pipelines.normalize.petrobras_3w_events
+
+reconcile:
+	uv run python -m pipelines.reconcile.run
+
+gate3-reports:
+	uv run python -m pipelines.reconcile.reports
+	uv run python -m pipelines.synthetic.report
+
+gate3:
+	bash scripts/gate3_evidence.sh
 
 gate2-reports:
 	uv run python -m pipelines.normalize.reports

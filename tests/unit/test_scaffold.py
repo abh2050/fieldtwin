@@ -19,6 +19,10 @@ def test_required_paths_exist():
         "data_contracts/sources/generated/petrobras_3w.schema.json",
         "reports/data_quality/canonical_schema.md", "reports/data_quality/production_units.md",
         "reports/reconciliation/semantic_compatibility.md", "reports/gates/gate_2.md",
+        "reports/reconciliation/entity_resolution.md", "reports/reconciliation/semantic_validation.md",
+        "reports/reconciliation/geospatial_associations.md", "reports/scenarios/aether_fault_001.md",
+        "reports/gates/gate_3.md", "docs/specification.md", "docs/product/synthetic_telemetry_spec.md",
+        "config/scenarios/aether_fault_001.yaml",
         ".github/workflows/ci.yml",
     ]  # fmt: skip
     missing = [path for path in required if not (REPO_ROOT / path).exists()]

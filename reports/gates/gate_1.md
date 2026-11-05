@@ -60,7 +60,7 @@ Checksums and per-class counts are in the [acquisition summary](../ingestion/acq
 
 | Finding | Handling |
 |---|---|
-| Well `30-015-53569` is listed about 1 degree north of its PLSS township neighbors, in both OCD systems. It has no production rows in the window. | Kept as reported and named in the quality report. It must be excluded or resolved before Gate 3 geospatial work. |
+| One well is listed about 1 degree north of its PLSS township neighbors, in both OCD systems. It has no production rows in the window. | Kept as reported and named in the quality report. It must be excluded or resolved before Gate 3 geospatial work. |
 | 35 wells have conflicting datum labels for identical coordinates: 30 are NAD27 in ArcGIS and NAD83 in FTP, and 5 are blank in ArcGIS. | Kept as reported. The datum of these wells is unresolved. |
 | 4 closed well-history rows have coordinates of 0, 0. | Quarantined with a reason. |
 

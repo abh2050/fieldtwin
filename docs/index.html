@@ -35,7 +35,7 @@
 
 <main>
 <h2>Overview</h2>
-<p>FieldTwin is meant to carry data from an asset registry through acquisition, reconciliation, fault detection, and inspection evidence to human-approved maintenance. The data foundation and a canonical PostgreSQL schema exist so far. There is no ML model, application UI, or cloud deployment yet.</p>
+<p>FieldTwin is meant to carry data from an asset registry through acquisition, reconciliation, fault detection, and inspection evidence to human-approved maintenance. The data foundation, a canonical PostgreSQL schema, a reconciliation engine, and a synthetic scenario prototype exist so far. There is no trained ML model, application UI, or cloud deployment yet.</p>
 
 <h2>Business problem</h2>
 <p>Field data lives in separate systems with different identifiers, units, and reporting grains. A careless join can produce a confident answer that is physically wrong. FieldTwin keeps track of where each value came from and what it can support.</p>
@@ -47,7 +47,8 @@
     <tr><td>0</td><td>Project foundation</td><td>Passed (see <code>reports/gates/gate_0.md</code>)</td></tr>
     <tr><td>1</td><td>Source acquisition</td><td>Passed with documented limits (see <code>reports/gates/gate_1.md</code>)</td></tr>
     <tr><td>2</td><td>Canonical data model and semantic contracts</td><td>Passed (see <code>reports/gates/gate_2.md</code>)</td></tr>
-    <tr><td>3-10</td><td>Reconciliation through portfolio demonstration</td><td>Not started</td></tr>
+    <tr><td>3</td><td>Reconciliation and experimental scenario contracts</td><td>All acceptance tests met on a branch, awaiting review (see <code>reports/gates/gate_3.md</code>)</td></tr>
+    <tr><td>4-10</td><td>Facility model through portfolio demonstration</td><td>Not started</td></tr>
   </tbody>
 </table></div>
 
@@ -74,20 +75,24 @@
   </tbody>
 </table></div>
 
+<h2>Reconciliation and AETHER-FAULT-001</h2>
+<p>Identity rests only on authoritative identifiers, and proximity yields unverified candidates that never become identity. AETHER-FAULT-001 is a progressive gathering-line restriction on fictional Well A-03, using synthetic telemetry from a simplified physical model that isn't calibrated to any real well. Petrobras 3W stays an independent offshore benchmark and is not mapped onto AETHER assets.</p>
+
 <h2>Test results</h2>
-<p>Executed on 2026-11-05: 129 offline tests, 35 PostgreSQL integration tests, 51 provenance tests, and 17 tests on real data passed. All 21 canonical validation checks passed. Data quality checks: OCD 16 pass, 3 warn, 0 fail; 3W 7 pass, 0 warn, 0 fail. All six CI jobs passed on GitHub Actions, using committed fixtures.</p>
+<p>See <code>reports/gates/gate_3.md</code> for executed results. CI runs on committed fixtures only.</p>
 
 <h2>Known limitations</h2>
 <ul>
   <li>The two OCD systems appear to share one database, so their agreement isn't independent confirmation.</li>
   <li>No inspection data was found in the OCD extract, and none was generated in its place.</li>
   <li>3W comes from offshore oil wells, so it stays a separate benchmark and isn't applied to AETHER Field.</li>
+  <li>The synthetic model is simplified and uncalibrated. Results on it say nothing about real wells.</li>
   <li>The compatibility assessment is engineering judgment, not field validation.</li>
   <li>OCD's <code>eff_dte</code> meaning is unresolved, and a missing oil or water row isn't assumed to be zero.</li>
 </ul>
 
 <h2>Sections not yet available</h2>
-<p>These have no results, because the work has not been done: digital twin simulation, physics-constrained synthetic telemetry, anomaly detection and model evaluation, decision engine, AWS infrastructure, actual deployment cost, and demo walkthrough.</p>
+<p>These have no results, because the work has not been done: the full 12-well simulation, anomaly detection and model evaluation, decision engine, AWS infrastructure, actual deployment cost, and demo walkthrough.</p>
 </main>
 </body>
 </html>

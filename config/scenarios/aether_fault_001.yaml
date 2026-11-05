@@ -1,0 +1,139 @@
+# AETHER-FAULT-001: Progressive Gathering-Line Restriction. Every value here is SYNTHETIC.
+# These are design assumptions for a fictional well. Nothing is calibrated to a real well.
+# Specification: docs/product/synthetic_telemetry_spec.md
+scenario:
+  scenario_id: AETHER-FAULT-001
+  name: Progressive Gathering-Line Restriction
+  version: 1
+  target_well: A-03
+  restricted_segment: GS-A
+  provenance_class: SYNTHETIC
+  disclosure: >-
+    Synthetic telemetry from a simplified physical model of a fictional well. It is not calibrated
+    to, measured at, or representative of any real well.
+
+simulator:
+  name: aether-steady-gas-network
+  version: 1
+  time_model: quasi_steady
+  seed: 30010
+
+# All internal pressures are absolute pascals, unless a sensor states otherwise.
+gas:
+  molar_mass_kg_per_mol: 0.0180
+  compressibility_factor: 0.92
+  temperature_k: 300.0
+  dynamic_viscosity_pa_s: 1.1e-5
+  heat_capacity_ratio: 1.27
+standard_conditions:
+  pressure_pa_abs: 101325.0
+  temperature_k: 288.15
+ambient:
+  pressure_pa_abs: 90000.0
+
+well:
+  asset_id: A-03
+  # q = C * (p_shut_in^2 - p_wellhead^2)^n, a back-pressure deliverability curve at the wellhead.
+  shut_in_wellhead_pressure_pa_abs: 3.0e6
+  deliverability_coefficient: 5.3e-11
+  deliverability_exponent: 0.8
+
+gathering_segment:
+  asset_id: GS-A
+  length_m: 2500.0
+  internal_diameter_m: 0.0779
+  darcy_friction_factor: 0.015
+  restricted_length_m: 50.0
+  downstream_boundary_pressure_pa_abs: 2.0e6
+
+sampling:
+  interval_s: 60
+  duration_s: 604800
+
+# Severity is the fractional loss of hydraulic diameter over the restricted length.
+restriction:
+  onset_offset_s: 172800
+  full_severity_offset_s: 518400
+  max_severity: 0.55
+  severity_limit: 0.70
+
+operating_limits:
+  max_mach_number: 0.30
+  min_reynolds_number: 4000.0
+  # Nominal envelope, checked for the zero-severity case. Absolute pressures.
+  nominal_flow_sm3_per_s: {min: 0.3, max: 1.2}
+  nominal_wellhead_pressure_pa_abs: {min: 2.0e6, max: 3.0e6}
+
+sensors:
+  - tag: A-03.PT-WH
+    column: pt_wh_pa_g
+    asset_id: A-03
+    equipment_class_id: AETHER_ONSHORE_GAS_WELL
+    measurement_definition_id: aether_well.tubing_head_pressure
+    truth_column: truth_wellhead_pressure_pa_abs
+    quantity: pressure
+    reference: GAUGE
+    unit: Pa
+    display_unit: psi
+    noise_std: 2000.0
+  - tag: GS-A.PT-DS
+    column: pt_ds_pa_g
+    asset_id: GS-A
+    equipment_class_id: AETHER_GATHERING
+    measurement_definition_id: aether_gathering.segment_downstream_pressure
+    truth_column: truth_downstream_pressure_pa_abs
+    quantity: pressure
+    reference: GAUGE
+    unit: Pa
+    display_unit: psi
+    noise_std: 2000.0
+  - tag: GS-A.DPT
+    column: dpt_pa
+    asset_id: GS-A
+    equipment_class_id: AETHER_GATHERING
+    measurement_definition_id: aether_gathering.segment_differential_pressure
+    truth_column: truth_differential_pressure_pa
+    quantity: pressure
+    reference: DIFFERENTIAL
+    unit: Pa
+    display_unit: psi
+    noise_std: 500.0
+  - tag: A-03.FT
+    column: ft_sm3_per_s
+    asset_id: A-03
+    equipment_class_id: AETHER_ONSHORE_GAS_WELL
+    measurement_definition_id: aether_well.gas_flow_rate
+    truth_column: truth_gas_flow_sm3_per_s
+    quantity: standard_volume_flow
+    reference: NOT_APPLICABLE
+    unit: sm3_per_s
+    display_unit: ksm3_per_d
+    noise_std: 0.0015
+
+# Named checks in packages/scenario_engine/invariants.py. All must hold for a run to be accepted.
+expected_invariants:
+  - mass_conservation
+  - pressure_ordering
+  - inflow_equation_residual
+  - segment_equation_residual
+  - differential_definition
+  - positive_flow
+  - flow_regime_valid
+  - severity_bounds_and_monotonic
+  - severity_response_monotonic
+  - noise_within_bounds
+  - gauge_reference_consistent
+  - nominal_envelope
+
+# Minimal integration proof only. This is not the Gate 5 detector and has no evaluated accuracy.
+integration_proof_rule:
+  sensor_column: dpt_pa
+  baseline_duration_s: 86400
+  sigma_multiplier: 6.0
+  consecutive_samples: 15
+
+cases:
+  nominal:
+    restriction_enabled: false
+  fault:
+    restriction_enabled: true

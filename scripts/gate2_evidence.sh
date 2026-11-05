@@ -13,7 +13,7 @@ step() {
   local name="$1"
   shift
   { echo; echo "=== $name"; echo "\$ $*"; } | tee -a "$OUT"
-  "$@" 2>&1 | grep -v 'Pandas4Warning' | tee -a "$OUT"
+  "$@" 2>&1 | grep -v 'Pandas4Warning' | sed -E -e "s#$PWD/##g" -e 's#/(var/folders|private/tmp)/[^ :]*#<temp-dir>#g' | tee -a "$OUT"
   local code=${PIPESTATUS[0]}
   echo "exit=$code" | tee -a "$OUT"
   [ "$code" -eq 0 ] || FAILED=$((FAILED + 1))

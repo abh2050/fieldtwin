@@ -247,13 +247,13 @@ def test_every_sensor_has_the_nine_semantic_attributes(db):
         "original_unit, canonical_unit, conversion_method, source_system, data_quality_state"
     )
     rows = db.execute(f"SELECT {columns} FROM v_tag_semantics").fetchall()
-    assert len(rows) == 27
+    assert len(rows) == 27 + 4  # 3W tags plus the synthetic AETHER sensors from Gate 3.
     assert all(value is not None for row in rows for value in row)
 
 
 def test_all_3w_pressures_stay_unknown(db):
     pressure = db.execute(
-        "SELECT DISTINCT measurement_reference_type, data_quality_state FROM v_tag_semantics WHERE physical_quantity='pressure'"
+        "SELECT DISTINCT measurement_reference_type, data_quality_state FROM v_tag_semantics WHERE physical_quantity='pressure' AND source_system='petrobras_3w'"
     ).fetchall()
     assert pressure == [("UNKNOWN", "SEMANTICS_INCOMPLETE")]
     row = tag_semantics(db, "PT-P")

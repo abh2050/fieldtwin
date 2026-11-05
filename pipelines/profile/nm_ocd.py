@@ -133,8 +133,8 @@ def profile(root: Path) -> Path:
             "Any well outside the box must be excluded by the spatial quarantine rule",
         )
     )
-    columns = ["id", "ulstr", "latitude", "longitude", "status"]
-    coordinate_outliers = wells.loc[outside, columns].to_dict("records")
+    # Identifying details stay in the local database. This report is published.
+    coordinate_outlier_count = int(outside.sum())
 
     # Cross-system consistency: FTP well history against the ArcGIS registry, joined on API only.
     # Both are OCD systems, so agreement shows consistent delivery, not independent ground truth.
@@ -319,7 +319,7 @@ def profile(root: Path) -> Path:
             "ArcGIS and FTP are both OCD systems and carry identical values. Agreement shows "
             "consistent delivery from one source of record, not independent confirmation."
         ),
-        "coordinate_outliers": coordinate_outliers,
+        "coordinate_outlier_count": coordinate_outlier_count,
         "coordinate_datum_counts": non_nad83,
         "datum_label_pairs_arcgis_vs_ftp": datum_pairs.value_counts().to_dict(),
         "partial_recent_months": {str(k.date()): int(v) for k, v in partial_months.items()},
