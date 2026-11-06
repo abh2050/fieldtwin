@@ -1,7 +1,15 @@
 # Gate 5 evaluation rules. Committed before any model was fitted, and the holdout stays unread until
 # development is finished. A later change to this file has to be disclosed in reports/gates/gate_5.md.
-version: 1
+version: 2
 seed: 50005
+
+# Version 2, made after development results and before either holdout was read. Version 1 had two flaws,
+# both found by looking at development results:
+#  1. Taking the lowest threshold within budget could choose an alarm that never turns off, because one
+#     endless episode counts as one false alarm. Thresholds are now walked downward from the top, stopping
+#     at the first violation, and time in alarm has its own limit.
+#  2. A long event catches a false alarm by chance, which inflated event recall. Chance-level recall is now
+#     reported for each result, and selection uses recall above chance.
 
 methods:
   # In the order of complexity used to break ties. Earlier means simpler.
@@ -14,6 +22,7 @@ methods:
 alarm:
   # A false-alarm budget all methods share, so they are compared at one operating point.
   false_alarms_per_hour_budget: 0.05
+  max_fraction_of_normal_time_in_alarm: 0.05
   threshold_grid_points: 60
 
 support:
@@ -30,9 +39,9 @@ selection:
   # Development data: pooled development folds for 3W, in-regime test cases for AETHER. Added after the
   # first commit of this file and before any fit, because the first version didn't name AETHER's.
   # 1. Keep methods at or under the budget on development data, using the point estimate.
-  # 2. Find the highest event recall among them.
-  # 3. Methods whose recall interval includes that value are tied, and the simplest tied method wins.
-  rule: simplest_within_interval_of_best_event_recall
+  # 2. Find the highest event skill among them. Skill is event recall minus chance-level recall.
+  # 3. Methods whose skill interval includes that value are tied, and the simplest tied method wins.
+  rule: simplest_within_interval_of_best_event_skill
 
 three_w:
   # Only recorded instances are evaluated. Simulated and hand-drawn ones appear in one training
@@ -89,5 +98,11 @@ event_matching:
   operating_time: >
     Windows labeled normal multiplied by the stride, with each well and timestamp counted once, because
     3W instances can overlap in time.
+  chance_level: >
+    The recall expected from alarms unrelated to any event: 1 - exp(-rate * duration), averaged over
+    events, using the method's measured false-alarm rate and each event's duration. It is an
+    approximation that treats false alarms as a Poisson process.
+  time_in_alarm: >
+    Normal windows with an episode running, divided by all normal windows.
   sample_label: >
     A window takes the label of its last row. Positive means any event or transient label.

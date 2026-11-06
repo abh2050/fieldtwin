@@ -58,7 +58,9 @@ def _classify(error: BaseException) -> Outcome:
     return Outcome.CRASH
 
 
-def _child(target: str, kwargs: dict, connection: Connection, stack_path: str, timeout_s: float) -> None:
+def _child(
+    target: str, kwargs: dict, connection: Connection, stack_path: str, timeout_s: float
+) -> None:
     with open(stack_path, "w") as stack_file:
         # Fires just before the parent gives up, so the parent can read where the child was.
         faulthandler.dump_traceback_later(max(timeout_s * 0.9, 0.05), file=stack_file, exit=False)
@@ -67,7 +69,13 @@ def _child(target: str, kwargs: dict, connection: Connection, stack_path: str, t
             function = getattr(importlib.import_module(module), name)
             connection.send((Outcome.OK.value, function(**kwargs), None))
         except BaseException as error:  # noqa: BLE001
-            connection.send((_classify(error).value, None, f"{type(error).__name__}: {error}\n{traceback.format_exc()}"))
+            connection.send(
+                (
+                    _classify(error).value,
+                    None,
+                    f"{type(error).__name__}: {error}\n{traceback.format_exc()}",
+                )
+            )
         finally:
             faulthandler.cancel_dump_traceback_later()
             connection.close()
@@ -80,13 +88,17 @@ def log_event(stream: TextIO | None, **fields: Any) -> None:
         stream.flush()
 
 
-def run_with_timeout(target: str, kwargs: dict, *, timeout_s: float, label: str, log: TextIO | None = None) -> ExecutionReport:
+def run_with_timeout(
+    target: str, kwargs: dict, *, timeout_s: float, label: str, log: TextIO | None = None
+) -> ExecutionReport:
     """Run `module:function(**kwargs)` in a fresh process. The child is killed at the timeout."""
     context = mp.get_context("spawn")
     receive, send = context.Pipe(duplex=False)
     with tempfile.TemporaryDirectory() as folder:
         stack_path = str(Path(folder) / "stack.txt")
-        process = context.Process(target=_child, args=(target, kwargs, send, stack_path, timeout_s), daemon=True)
+        process = context.Process(
+            target=_child, args=(target, kwargs, send, stack_path, timeout_s), daemon=True
+        )
         started = time.monotonic()
         log_event(log, event="start", label=label, timeout_s=timeout_s)
         process.start()
@@ -108,13 +120,31 @@ def run_with_timeout(target: str, kwargs: dict, *, timeout_s: float, label: str,
         stack = Path(stack_path).read_text() if Path(stack_path).exists() else ""
         receive.close()
     if timed_out:
-        report = ExecutionReport(label, Outcome.EXECUTION_TIMEOUT, elapsed, timeout_s, None, f"killed after {timeout_s} s", stack or None)
+        report = ExecutionReport(
+            label,
+            Outcome.EXECUTION_TIMEOUT,
+            elapsed,
+            timeout_s,
+            None,
+            f"killed after {timeout_s} s",
+            stack or None,
+        )
     elif message is None:
-        report = ExecutionReport(label, Outcome.CRASH, elapsed, timeout_s, None, f"process exited with code {process.exitcode} and sent no result", stack or None)
+        report = ExecutionReport(
+            label,
+            Outcome.CRASH,
+            elapsed,
+            timeout_s,
+            None,
+            f"process exited with code {process.exitcode} and sent no result",
+            stack or None,
+        )
     else:
         outcome, result, detail = message
         report = ExecutionReport(label, Outcome(outcome), elapsed, timeout_s, result, detail, None)
-    log_event(log, event="finish", label=label, outcome=report.outcome.value, elapsed_s=round(elapsed, 3))
+    log_event(
+        log, event="finish", label=label, outcome=report.outcome.value, elapsed_s=round(elapsed, 3)
+    )
     return report
 
 
@@ -145,7 +175,13 @@ def forced_nonconvergence() -> dict:
     from .network_solver import NetworkModel, NetworkState, solve_network
 
     config, graph, _, _, _ = default_setup()
-    starved = config.model_copy(update={"solver": config.solver.model_copy(update={"max_iterations": 1, "relative_residual_tolerance": 1e-30})})
+    starved = config.model_copy(
+        update={
+            "solver": config.solver.model_copy(
+                update={"max_iterations": 1, "relative_residual_tolerance": 1e-30}
+            )
+        }
+    )
     solve_network(NetworkModel(starved, graph), NetworkState())
     return {}
 

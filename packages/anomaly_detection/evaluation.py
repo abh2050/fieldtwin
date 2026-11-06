@@ -51,7 +51,9 @@ class AlarmState:
         return False
 
 
-def episode_starts(scores: np.ndarray, times: np.ndarray, threshold: float, rule: AlarmRule) -> tuple[np.ndarray, np.ndarray]:
+def episode_starts(
+    scores: np.ndarray, times: np.ndarray, threshold: float, rule: AlarmRule
+) -> tuple[np.ndarray, np.ndarray]:
     """Indices that start an episode, and indices where an episode is still running."""
     above = np.flatnonzero(np.nan_to_num(scores, nan=-np.inf) >= threshold)
     starts: list[int] = []
@@ -85,7 +87,9 @@ class ClusterCounts:
     events: pd.DataFrame
 
 
-def score_windows(table: pd.DataFrame, scores: np.ndarray, threshold: float, rule: AlarmRule) -> ClusterCounts:
+def score_windows(
+    table: pd.DataFrame, scores: np.ndarray, threshold: float, rule: AlarmRule
+) -> ClusterCounts:
     """`table` holds seq, cluster, t, y. y is the class, 0 for normal, or UNSCORED."""
     rows = table.reset_index(drop=True)
     y = rows["y"].to_numpy()
@@ -105,6 +109,7 @@ def score_windows(table: pd.DataFrame, scores: np.ndarray, threshold: float, rul
     per_cluster = frame.groupby("cluster", sort=True).sum()
     per_cluster["normal_hours"] = (per_cluster["fp"] + per_cluster["tn"]) * rule.stride_s / 3600.0
     per_cluster["false_alarms"] = 0
+    per_cluster["alarm_normal_windows"] = 0
 
     seen: set[tuple[str, int]] = set()
     events = []
@@ -115,6 +120,9 @@ def score_windows(table: pd.DataFrame, scores: np.ndarray, threshold: float, rul
         cluster = rows["cluster"].iloc[index[0]]
         starts, running = episode_starts(scores[index], times[index], threshold, rule)
         labels = y[index]
+        per_cluster.loc[cluster, "alarm_normal_windows"] += int(
+            (running & scored[index] & (labels == 0)).sum()
+        )
         for start in starts:
             key = (cluster, int(times[index][start]))
             if labels[start] == 0 and key not in seen:
@@ -132,35 +140,78 @@ def score_windows(table: pd.DataFrame, scores: np.ndarray, threshold: float, rul
                     "event_class": int(labels[onset]),
                     "detected": bool(inside.size),
                     "active_at_onset": bool(running[onset]) and bool((starts < onset).any()),
-                    "delay_s": float(times[index][inside[0]] - times[index][onset]) if inside.size else np.nan,
+                    "delay_s": float(times[index][inside[0]] - times[index][onset])
+                    if inside.size
+                    else np.nan,
+                    "duration_h": float(times[index][scored_end] - times[index][onset]) / 3600.0,
                 }
             )
-    columns = ["seq", "cluster", "event_class", "detected", "active_at_onset", "delay_s"]
+    columns = [
+        "seq",
+        "cluster",
+        "event_class",
+        "detected",
+        "active_at_onset",
+        "delay_s",
+        "duration_h",
+    ]
     return ClusterCounts(per_cluster, pd.DataFrame(events, columns=columns))
 
 
-def _ratios(tp: float, fp: float, fn: float, tn: float, false_alarms: float, hours: float, events: float, detected: float) -> dict[str, float]:
+def _ratios(
+    tp: float,
+    fp: float,
+    fn: float,
+    tn: float,
+    false_alarms: float,
+    hours: float,
+    events: float,
+    detected: float,
+    alarm_windows: float = 0.0,
+    chance_sum: float = 0.0,
+) -> dict[str, float]:
     def safe(a: float, b: float) -> float:
         return a / b if b > 0 else float("nan")
 
     precision, recall = safe(tp, tp + fp), safe(tp, tp + fn)
+    event_recall, chance = safe(detected, events), safe(chance_sum, events)
     return {
         "precision": precision,
         "recall": recall,
-        "f1": safe(2 * precision * recall, precision + recall) if precision == precision and recall == recall else float("nan"),
+        "f1": safe(2 * precision * recall, precision + recall)
+        if precision == precision and recall == recall
+        else float("nan"),
         "false_positive_rate": safe(fp, fp + tn),
         "false_alarms_per_hour": safe(false_alarms, hours),
-        "event_recall": safe(detected, events),
+        "time_in_alarm": safe(alarm_windows, fp + tn),
+        "event_recall": event_recall,
+        "chance_event_recall": chance,
+        "event_skill": event_recall - chance,
     }
+
+
+def _chance_sum(durations_h: np.ndarray, rate_per_hour: float) -> float:
+    """Expected detections from alarms unrelated to any event. See `chance_level` in the configuration."""
+    if rate_per_hour != rate_per_hour:
+        return 0.0
+    return float((1.0 - np.exp(-rate_per_hour * durations_h)).sum())
 
 
 def summarize(counts: ClusterCounts) -> dict:
     """Point estimates and raw counts."""
     table, events = counts.table, counts.events
-    totals = table[["tp", "fp", "fn", "tn", "false_alarms", "normal_hours"]].sum()
+    totals = table[
+        ["tp", "fp", "fn", "tn", "false_alarms", "normal_hours", "alarm_normal_windows"]
+    ].sum()
+    rate = (
+        totals["false_alarms"] / totals["normal_hours"]
+        if totals["normal_hours"] > 0
+        else float("nan")
+    )
     result = _ratios(
         totals["tp"], totals["fp"], totals["fn"], totals["tn"], totals["false_alarms"], totals["normal_hours"],
         len(events), float(events["detected"].sum()) if len(events) else 0.0,
+        totals["alarm_normal_windows"], _chance_sum(events["duration_h"].to_numpy(dtype=float), rate),
     )  # fmt: skip
     result.update(
         {
@@ -177,22 +228,36 @@ def summarize(counts: ClusterCounts) -> dict:
     return result
 
 
-def bootstrap_intervals(counts: ClusterCounts, *, resamples: int, confidence: float, seed: int) -> dict[str, list[float]]:
+def bootstrap_intervals(
+    counts: ClusterCounts, *, resamples: int, confidence: float, seed: int
+) -> dict[str, list[float]]:
     """Percentile intervals from resampling clusters with replacement."""
     table, events = counts.table, counts.events
     clusters = table.index.to_numpy()
     if clusters.size == 0:
         return {}
-    per_event = events.groupby("cluster")["detected"].agg(["size", "sum"]).reindex(clusters, fill_value=0)
-    values = table[["tp", "fp", "fn", "tn", "false_alarms", "normal_hours"]].to_numpy(dtype=float)
+    per_event = (
+        events.groupby("cluster")["detected"].agg(["size", "sum"]).reindex(clusters, fill_value=0)
+    )
+    values = table[
+        ["tp", "fp", "fn", "tn", "false_alarms", "normal_hours", "alarm_normal_windows"]
+    ].to_numpy(dtype=float)
     event_values = per_event.to_numpy(dtype=float)
+    position = {cluster: i for i, cluster in enumerate(clusters)}
+    event_cluster = events["cluster"].map(position).to_numpy(dtype=int)
+    durations = events["duration_h"].to_numpy(dtype=float)
     rng = np.random.default_rng(seed)
     draws = rng.integers(0, clusters.size, size=(resamples, clusters.size))
     collected: dict[str, list[float]] = {}
     for draw in draws:
-        tp, fp, fn, tn, alarms, hours = values[draw].sum(axis=0)
+        tp, fp, fn, tn, alarms, hours, alarm_windows = values[draw].sum(axis=0)
         size, detected = event_values[draw].sum(axis=0)
-        for key, value in _ratios(tp, fp, fn, tn, alarms, hours, size, detected).items():
+        weights = np.bincount(draw, minlength=clusters.size)[event_cluster]
+        rate = alarms / hours if hours > 0 else float("nan")
+        chance = float((weights * (1.0 - np.exp(-rate * durations))).sum()) if rate == rate else 0.0
+        for key, value in _ratios(
+            tp, fp, fn, tn, alarms, hours, size, detected, alarm_windows, chance
+        ).items():
             collected.setdefault(key, []).append(value)
     tail = (1.0 - confidence) / 2.0
     output = {}
@@ -215,61 +280,115 @@ def average_precision(table: pd.DataFrame, scores: np.ndarray) -> float | None:
     return float(average_precision_score(y, np.where(np.isfinite(filled), filled, floor)))
 
 
-def calibrate_threshold(table: pd.DataFrame, scores: np.ndarray, rule: AlarmRule, *, budget: float, grid_points: int) -> dict:
-    """The lowest threshold meeting the false-alarm budget on validation data."""
+def calibrate_threshold(
+    table: pd.DataFrame,
+    scores: np.ndarray,
+    rule: AlarmRule,
+    *,
+    budget: float,
+    grid_points: int,
+    max_time_in_alarm: float = 0.05,
+) -> dict:
+    """Walk down from a threshold nothing reaches, and stop at the first violation.
+
+    Taking the lowest passing threshold isn't safe. An alarm that never turns off is one episode, so very
+    low thresholds can look cheap in false alarms per hour while being useless.
+    """
     finite = scores[np.isfinite(scores)]
     if finite.size == 0:
         raise ValueError("no finite validation scores")
     tail = 1.0 - np.logspace(-5, np.log10(0.5), grid_points)
-    candidates = np.unique(np.quantile(finite, tail))
-    above_all = float(finite.max()) + max(abs(float(finite.max())) * 1e-6, 1e-9)
+    candidates = np.unique(np.quantile(finite, tail))[::-1]
+    chosen = float(finite.max()) + max(abs(float(finite.max())) * 1e-6, 1e-9)
+    achieved = summarize(score_windows(table, scores, chosen, rule))
+    stopped_by = "reached the end of the grid"
     for threshold in candidates:
         result = summarize(score_windows(table, scores, float(threshold), rule))
-        if result["false_alarms_per_hour"] == result["false_alarms_per_hour"] and result["false_alarms_per_hour"] <= budget:
-            return {"threshold": float(threshold), "validation_false_alarms_per_hour": result["false_alarms_per_hour"], "budget_met": True}
-    result = summarize(score_windows(table, scores, above_all, rule))
-    return {"threshold": above_all, "validation_false_alarms_per_hour": result["false_alarms_per_hour"], "budget_met": False}
+        rate, in_alarm = result["false_alarms_per_hour"], result["time_in_alarm"]
+        if rate == rate and rate > budget:
+            stopped_by = "false-alarm budget"
+            break
+        if in_alarm == in_alarm and in_alarm > max_time_in_alarm:
+            stopped_by = "time-in-alarm limit"
+            break
+        chosen, achieved = float(threshold), result
+    return {
+        "threshold": chosen,
+        "validation_false_alarms_per_hour": achieved["false_alarms_per_hour"],
+        "validation_time_in_alarm": achieved["time_in_alarm"],
+        "validation_event_recall": achieved["event_recall"],
+        "stopped_by": stopped_by,
+        "budget_met": True,
+    }
 
 
 def supported(summary: dict, support: dict) -> bool:
-    return summary["events"] >= support["min_events"] and summary["event_clusters"] >= support["min_clusters"]
+    return (
+        summary["events"] >= support["min_events"]
+        and summary["event_clusters"] >= support["min_clusters"]
+    )
 
 
-def by_class(counts: ClusterCounts, support: dict, *, resamples: int, confidence: float, seed: int) -> list[dict]:
+def by_class(
+    counts: ClusterCounts, support: dict, *, resamples: int, confidence: float, seed: int
+) -> list[dict]:
     """Event recall per class, with recall withheld where support is too thin."""
     rows = []
     for label, group in counts.events.groupby("event_class"):
         count, clusters = len(group), group["cluster"].nunique()
-        row = {"event_class": int(label), "events": count, "clusters": clusters, "detected": int(group["detected"].sum())}
+        row = {
+            "event_class": int(label),
+            "events": count,
+            "clusters": clusters,
+            "detected": int(group["detected"].sum()),
+        }
         if count >= support["min_events"] and clusters >= support["min_clusters"]:
             row["event_recall"] = float(group["detected"].mean())
             if clusters >= support["min_clusters_for_interval"]:
                 rng = np.random.default_rng(seed + int(label))
-                per = group.groupby("cluster")["detected"].agg(["size", "sum"]).to_numpy(dtype=float)
+                per = (
+                    group.groupby("cluster")["detected"].agg(["size", "sum"]).to_numpy(dtype=float)
+                )
                 draws = rng.integers(0, len(per), size=(resamples, len(per)))
                 sampled = per[draws].sum(axis=1)
                 ratio = sampled[:, 1] / sampled[:, 0]
                 tail = (1.0 - confidence) / 2.0
-                row["event_recall_interval"] = [float(np.quantile(ratio, tail)), float(np.quantile(ratio, 1 - tail))]
+                row["event_recall_interval"] = [
+                    float(np.quantile(ratio, tail)),
+                    float(np.quantile(ratio, 1 - tail)),
+                ]
         else:
             row["event_recall"] = None
-            row["withheld_reason"] = f"Fewer than {support['min_events']} events or {support['min_clusters']} clusters."
+            row["withheld_reason"] = (
+                f"Fewer than {support['min_events']} events or {support['min_clusters']} clusters."
+            )
         rows.append(row)
     return rows
 
 
 def select_preferred(rows: list[dict], *, order: list[str], budget: float) -> dict:
-    """The declared rule: within budget, best recall, then the simplest method statistically tied."""
-    eligible = [r for r in rows if r["false_alarms_per_hour"] == r["false_alarms_per_hour"] and r["false_alarms_per_hour"] <= budget]
+    """The declared rule: within budget, best skill, then the simplest method statistically tied."""
+    eligible = [
+        r
+        for r in rows
+        if r["false_alarms_per_hour"] == r["false_alarms_per_hour"]
+        and r["false_alarms_per_hour"] <= budget
+    ]
     if not eligible:
         return {"preferred": None, "reason": "No method met the false-alarm budget.", "tied": []}
-    best = max(eligible, key=lambda r: r["event_recall"])
-    tied = [r["method"] for r in eligible if r["interval"].get("event_recall", [0, 0])[0] <= best["event_recall"] <= r["interval"].get("event_recall", [0, 0])[1]]
+    best = max(eligible, key=lambda r: r["event_skill"])
+    tied = [
+        r["method"]
+        for r in eligible
+        if r["interval"].get("event_skill", [0, 0])[0]
+        <= best["event_skill"]
+        <= r["interval"].get("event_skill", [0, 0])[1]
+    ]
     if best["method"] not in tied:
         tied.append(best["method"])
     preferred = min(tied, key=order.index)
     return {
         "preferred": preferred,
-        "reason": f"{best['method']} had the best event recall within budget ({best['event_recall']:.3f}). {len(tied)} method(s) have intervals including it, and {preferred} is the simplest of them.",
+        "reason": f"{best['method']} had the best event skill within budget ({best['event_skill']:.3f}). {len(tied)} method(s) have skill intervals including it, and {preferred} is the simplest of them.",
         "tied": tied,
     }

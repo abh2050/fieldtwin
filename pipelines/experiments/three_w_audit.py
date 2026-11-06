@@ -70,10 +70,14 @@ def plausibility_counts() -> dict:
         path = root / item.source_path
         sensors = sensors_of(path)
         frame = pq.read_table(path, columns=list(sensors)).to_pandas(ignore_metadata=True)
-        _, removed = apply_plausibility(frame.apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float), sensors)
+        _, removed = apply_plausibility(
+            frame.apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float), sensors
+        )
         for sensor, count in removed.items():
             bucket = totals.setdefault(sensor, {})
-            bucket[item.real_or_simulated_source] = bucket.get(item.real_or_simulated_source, 0) + count
+            bucket[item.real_or_simulated_source] = (
+                bucket.get(item.real_or_simulated_source, 0) + count
+            )
             affected.setdefault(sensor, set()).add(item.source_instance_id)
     return {s: {"readings": totals[s], "instances": len(affected[s])} for s in sorted(totals)}
 

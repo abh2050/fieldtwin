@@ -24,7 +24,10 @@ from .detectors import Detector
 from .evaluation import AlarmRule, AlarmState
 from .features import FeatureSpec, window_stats
 
-_INPUT_PROVENANCE = {InputDomain.OFFSHORE_BENCHMARK: "OBSERVED", InputDomain.AETHER_SYNTHETIC: "SYNTHETIC"}
+_INPUT_PROVENANCE = {
+    InputDomain.OFFSHORE_BENCHMARK: "OBSERVED",
+    InputDomain.AETHER_SYNTHETIC: "SYNTHETIC",
+}
 _TOP_EVIDENCE = 3
 
 
@@ -122,7 +125,9 @@ class StreamingEngine:
                 predictions.append(made)
         return predictions
 
-    def _sample(self, asset: str, domain: InputDomain, moment: datetime, rows: list[SensorObservation]) -> Prediction | None:
+    def _sample(
+        self, asset: str, domain: InputDomain, moment: datetime, rows: list[SensorObservation]
+    ) -> Prediction | None:
         spec = self.bundle.spec
         state = self._state(asset)
         epoch = int(moment.timestamp())
@@ -143,7 +148,9 @@ class StreamingEngine:
             return None
         return self._window(asset, domain, moment, epoch, state)
 
-    def _window(self, asset: str, domain: InputDomain, moment: datetime, epoch: int, state: _AssetState) -> Prediction:
+    def _window(
+        self, asset: str, domain: InputDomain, moment: datetime, epoch: int, state: _AssetState
+    ) -> Prediction:
         bundle = self.bundle
         spec = bundle.spec
         window = np.stack(state.samples)[None, :, :]
@@ -173,7 +180,9 @@ class StreamingEngine:
         if started and state.episode_event_time is not None:
             event_time = datetime.fromtimestamp(state.episode_event_time, tz=moment.tzinfo or UTC)
         return Prediction(
-            prediction_id=hashlib.sha256(f"{bundle.model_id}|{bundle.model_version}|{asset}|{epoch}".encode()).hexdigest()[:32],
+            prediction_id=hashlib.sha256(
+                f"{bundle.model_id}|{bundle.model_version}|{asset}|{epoch}".encode()
+            ).hexdigest()[:32],
             asset_id=asset,
             event_timestamp=event_time,
             detection_timestamp=moment if started else None,

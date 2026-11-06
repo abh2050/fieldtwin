@@ -19,7 +19,13 @@ PARAMETERS: dict[str, dict] = {
     "rolling_deviation": {"statistic": "max sensor z against a preceding causal baseline"},
     "logistic_regression": {"C": 1.0, "class_weight": "balanced", "max_iter": 500},
     "isolation_forest": {"n_estimators": 200, "max_samples": 4096},
-    "hist_gradient_boosting": {"max_iter": 150, "learning_rate": 0.1, "max_leaf_nodes": 31, "l2_regularization": 1.0, "class_weight": "balanced"},
+    "hist_gradient_boosting": {
+        "max_iter": 150,
+        "learning_rate": 0.1,
+        "max_leaf_nodes": 31,
+        "l2_regularization": 1.0,
+        "class_weight": "balanced",
+    },
 }
 
 
@@ -80,8 +86,16 @@ class RollingDeviation:
 
     def fit(self, features: np.ndarray, y: np.ndarray, seq: np.ndarray) -> Self:
         normal = features[y == 0].astype(float)
-        noise = np.nanmedian(normal[:, self.std_columns], axis=0) if len(normal) else np.zeros(len(self.std_columns))
-        level = np.abs(np.nanmedian(normal[:, self.mean_columns], axis=0)) if len(normal) else np.zeros(len(self.mean_columns))
+        noise = (
+            np.nanmedian(normal[:, self.std_columns], axis=0)
+            if len(normal)
+            else np.zeros(len(self.std_columns))
+        )
+        level = (
+            np.abs(np.nanmedian(normal[:, self.mean_columns], axis=0))
+            if len(normal)
+            else np.zeros(len(self.mean_columns))
+        )
         # A floor for flat sensors, so a tiny change can't produce an unbounded score.
         self.floor = np.maximum(np.nan_to_num(noise), 1e-3 * np.nan_to_num(level)) + 1e-9
         return self
@@ -91,7 +105,9 @@ class RollingDeviation:
         rolling = frame.rolling(self.baseline, min_periods=max(self.baseline // 2, 2))
         center = rolling.mean().shift(self.gap).to_numpy()
         spread = rolling.std(ddof=0).shift(self.gap).to_numpy()
-        return _max_ignoring_nan(np.abs(means - center) / np.maximum(np.nan_to_num(spread), self.floor))
+        return _max_ignoring_nan(
+            np.abs(means - center) / np.maximum(np.nan_to_num(spread), self.floor)
+        )
 
     def score(self, features: np.ndarray, seq: np.ndarray) -> np.ndarray:
         means = features[:, self.mean_columns].astype(float)
@@ -156,6 +172,17 @@ class GradientBoosting(_Classifier):
             random_state=seed,
         )
 
+    def fit(self, features: np.ndarray, y: np.ndarray, seq: np.ndarray) -> Self:
+        # A sensor with no reading anywhere in training gives this model nothing to bin.
+        self.keep = ~np.isnan(features).all(axis=0)
+        return super().fit(features[:, self.keep], y, seq)
+
+    def score(self, features: np.ndarray, seq: np.ndarray) -> np.ndarray:
+        return super().score(features[:, self.keep], seq)
+
+    def predict_class(self, features: np.ndarray) -> np.ndarray:
+        return super().predict_class(features[:, self.keep])
+
 
 class Isolation:
     """Fitted on training windows labeled normal. Event labels are never used."""
@@ -181,7 +208,9 @@ class Isolation:
         return None
 
 
-def make_detector(name: str, names: list[str], *, seed: int, baseline_windows: int, gap_windows: int) -> Detector:
+def make_detector(
+    name: str, names: list[str], *, seed: int, baseline_windows: int, gap_windows: int
+) -> Detector:
     if name == "static_threshold":
         return StaticThreshold(names)
     if name == "rolling_deviation":

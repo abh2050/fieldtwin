@@ -41,7 +41,9 @@ def plausible_limits(sensor: str) -> tuple[float, float] | None:
     return None
 
 
-def apply_plausibility(values: np.ndarray, sensors: tuple[str, ...]) -> tuple[np.ndarray, dict[str, int]]:
+def apply_plausibility(
+    values: np.ndarray, sensors: tuple[str, ...]
+) -> tuple[np.ndarray, dict[str, int]]:
     """Set impossible readings to missing, using no label. Returns the count removed per sensor."""
     output = values.copy()
     removed = {}
@@ -57,9 +59,16 @@ def apply_plausibility(values: np.ndarray, sensors: tuple[str, ...]) -> tuple[np
     return output, removed
 
 
-def read_instance(path: Path, sensors: tuple[str, ...]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def read_instance(
+    path: Path, sensors: tuple[str, ...]
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     frame = pq.read_table(path).to_pandas(ignore_metadata=True)
-    times = (pd.to_datetime(frame["timestamp"]) - pd.Timestamp(0)).dt.total_seconds().to_numpy().astype(np.int64)
+    times = (
+        (pd.to_datetime(frame["timestamp"]) - pd.Timestamp(0))
+        .dt.total_seconds()
+        .to_numpy()
+        .astype(np.int64)
+    )
     values = frame[list(sensors)].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
     values, _ = apply_plausibility(values, sensors)
     labels = pd.to_numeric(frame["class"], errors="coerce").to_numpy(dtype=float)
@@ -95,7 +104,10 @@ def build_windows() -> None:
     paths = {f.stem: f for f in root.glob("dataset/*/*.parquet")}
     first = paths[audits["source_instance_id"].iloc[0]]
     spec = spec_for(sensors_of(first))
-    parts = Parallel(n_jobs=8)(delayed(_one)(row, paths[row["source_instance_id"]], spec) for row in audits.to_dict("records"))
+    parts = Parallel(n_jobs=8)(
+        delayed(_one)(row, paths[row["source_instance_id"]], spec)
+        for row in audits.to_dict("records")
+    )
     pd.concat(parts, ignore_index=True).to_parquet(WINDOWS, index=False)
 
 
@@ -103,14 +115,29 @@ def load_track() -> tuple[Track, pd.DataFrame, FeatureSpec]:
     if not WINDOWS.exists():
         build_windows()
     frame = pd.read_parquet(WINDOWS)
-    meta_columns = ["seq", "well", "origin", "filed_class", "evaluability", "t", "raw_label", "source_y"]
+    meta_columns = [
+        "seq",
+        "well",
+        "origin",
+        "filed_class",
+        "evaluability",
+        "t",
+        "raw_label",
+        "source_y",
+    ]
     names = [c for c in frame.columns if c not in meta_columns]
     table = frame[meta_columns].copy()
     table["cluster"] = table["well"]
     # The primary rule: ambiguous instances are on neither side of any metric.
-    table["y"] = np.where(table["evaluability"] == "AMBIGUOUS_OR_INCONSISTENT", UNSCORED, table["source_y"]).astype(np.int16)
+    table["y"] = np.where(
+        table["evaluability"] == "AMBIGUOUS_OR_INCONSISTENT", UNSCORED, table["source_y"]
+    ).astype(np.int16)
     sensors = tuple(n.split("__")[0] for n in names[0::4])
-    return Track(frame[names].to_numpy(dtype=np.float32), names, table), frame[meta_columns], spec_for(sensors)
+    return (
+        Track(frame[names].to_numpy(dtype=np.float32), names, table),
+        frame[meta_columns],
+        spec_for(sensors),
+    )
 
 
 def dataset_sha256() -> str:
@@ -124,12 +151,14 @@ def dataset_sha256() -> str:
 def with_policy(table: pd.DataFrame, policy: str) -> pd.DataFrame:
     """Scoring variants for ambiguous instances, used only in sensitivity analysis. Nothing is relabeled."""
     output = table.copy()
-    ambiguous = output["evaluability"] == "AMBIGUOUS_OR_INCONSISTENT"
-    known = output["source_y"] != UNSCORED
+    ambiguous = (output["evaluability"] == "AMBIGUOUS_OR_INCONSISTENT").to_numpy()
+    known = (output["source_y"] != UNSCORED).to_numpy()
+    y = output["y"].to_numpy(dtype=np.int16, copy=True)
     if policy == "count_as_positive":
-        output.loc[ambiguous & known, "y"] = output.loc[ambiguous & known, "filed_class"]
+        y[ambiguous & known] = output["filed_class"].to_numpy(dtype=np.int16)[ambiguous & known]
     elif policy == "count_as_normal":
-        output.loc[ambiguous & known, "y"] = 0
+        y[ambiguous & known] = 0
     elif policy != "excluded":
         raise ValueError(policy)
+    output["y"] = y
     return output

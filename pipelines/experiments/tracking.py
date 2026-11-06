@@ -34,7 +34,16 @@ def source_manifests(source: str) -> dict[str, str]:
     return found
 
 
-def log_run(*, experiment: str, run_name: str, params: dict, metrics: dict, documents: dict, artifact: Path, artifact_sha256: str) -> str:
+def log_run(
+    *,
+    experiment: str,
+    run_name: str,
+    params: dict,
+    metrics: dict,
+    documents: dict,
+    artifact: Path,
+    artifact_sha256: str,
+) -> str:
     _experiment(experiment)
     with mlflow.start_run(run_name=run_name) as run:
         for key, value in params.items():

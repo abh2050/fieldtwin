@@ -12,7 +12,12 @@ from joblib import Parallel, delayed
 
 from packages.anomaly_detection.contracts import InputDomain
 from packages.anomaly_detection.detectors import make_detector, training_rows
-from packages.anomaly_detection.evaluation import UNSCORED, average_precision, score_windows, select_preferred
+from packages.anomaly_detection.evaluation import (
+    UNSCORED,
+    average_precision,
+    score_windows,
+    select_preferred,
+)
 from packages.anomaly_detection.features import FeatureSpec, build_features, columns_of
 from packages.anomaly_detection.inference import ModelBundle, save_bundle
 from packages.anomaly_detection.splits import build_well_folds, class_coverage, credible_classes
@@ -30,12 +35,16 @@ from pipelines.experiments.common import (
     read_result,
     report_counts,
     rule_from,
-    score_rows,
     scores_sha256,
     write_result,
 )
 from pipelines.experiments.three_w_audit import batch_root, evaluation_config
-from pipelines.experiments.three_w_data import dataset_sha256, load_track, read_instance, with_policy
+from pipelines.experiments.three_w_data import (
+    dataset_sha256,
+    load_track,
+    read_instance,
+    with_policy,
+)
 
 CLASSES = list(range(10))
 CLASS_NAMES = {
@@ -47,13 +56,19 @@ PERTURBATIONS = ("sensors_25pct_removed", "rows_20pct_missing", "ten_minute_outa
 
 def _folds(config: dict, instances: pd.DataFrame):
     split = config["three_w"]["splits"]
-    return build_well_folds(instances, holdout_folds=split["holdout_folds"], development_folds=split["development_folds"], validation_folds=split["validation_folds"], seed=config["seed"])
+    return build_well_folds(
+        instances,
+        holdout_folds=split["holdout_folds"],
+        development_folds=split["development_folds"],
+        validation_folds=split["validation_folds"],
+        seed=config["seed"],
+    )
 
 
 def _rows(table: pd.DataFrame, wells, *, real_only: bool = True) -> np.ndarray:
     mask = table["well"].isin(wells).to_numpy()
     if real_only:
-        mask &= (table["origin"] == "REAL").to_numpy()
+        mask = mask & (table["origin"] == "REAL").to_numpy()
     return np.flatnonzero(mask)
 
 
@@ -73,9 +88,12 @@ def development() -> None:
     methods = {}
     sensitivity: dict = {}
     for method in config["methods"]:
-        parts, ap, thresholds, fit_s, hashes, policy_parts = [], [], {}, 0.0, {}, {"count_as_positive": [], "count_as_normal": []}
+        parts, ap, thresholds, fit_s, hashes = [], [], {}, 0.0, {}
+        policy_parts: dict[str, list] = {"count_as_positive": [], "count_as_normal": []}
         for fold in folds:
-            train, validation, test = (_rows(table, w) for w in (fold.train_wells, fold.validation_wells, fold.test_wells))
+            train, validation, test = (
+                _rows(table, w) for w in (fold.train_wells, fold.validation_wells, fold.test_wells)
+            )
             fitted = fit_and_calibrate(method, track, train, validation, config, settings)
             counts, scores, precision = evaluate_rows(fitted, track, test, rule)
             parts.append(counts)
@@ -84,8 +102,20 @@ def development() -> None:
             fit_s += fitted.fit_seconds
             hashes[fold.name] = scores_sha256(scores)
             for policy, bucket in policy_parts.items():
-                bucket.append(score_windows(with_policy(table, policy).iloc[test], scores, fitted.threshold, rule))
-            print(method, fold.name, "thr", round(fitted.threshold, 4), "met", fitted.calibration["budget_met"], flush=True)
+                bucket.append(
+                    score_windows(
+                        with_policy(table, policy).iloc[test], scores, fitted.threshold, rule
+                    )
+                )
+            print(
+                method,
+                fold.name,
+                "thr",
+                round(fitted.threshold, 4),
+                "met",
+                fitted.calibration["budget_met"],
+                flush=True,
+            )
         result = report_counts(merge_counts(parts), config)
         result |= {
             "mean_fold_average_precision": float(np.mean([a for a in ap if a is not None])),
@@ -94,11 +124,34 @@ def development() -> None:
             "scores_sha256": hashes,
         }
         methods[method] = result
-        sensitivity[method] = {p: report_counts(merge_counts(b), config)["summary"] for p, b in policy_parts.items()}
+        sensitivity[method] = {
+            p: report_counts(merge_counts(b), config)["summary"] for p, b in policy_parts.items()
+        }
         s = result["summary"]
-        print(method, "recall", s["event_recall"], "FA/h", round(s["false_alarms_per_hour"], 4), "P", s["precision"], "R", s["recall"], flush=True)
-    rows = [{"method": m, "event_recall": r["summary"]["event_recall"] or 0.0, "false_alarms_per_hour": r["summary"]["false_alarms_per_hour"], "interval": r["interval"]} for m, r in methods.items()]
-    selection = select_preferred(rows, order=config["methods"], budget=config["alarm"]["false_alarms_per_hour_budget"])
+        print(
+            method,
+            "recall",
+            s["event_recall"],
+            "FA/h",
+            round(s["false_alarms_per_hour"], 4),
+            "P",
+            s["precision"],
+            "R",
+            s["recall"],
+            flush=True,
+        )
+    rows = [
+        {
+            "method": m,
+            "event_skill": r["summary"]["event_skill"] or 0.0,
+            "false_alarms_per_hour": r["summary"]["false_alarms_per_hour"],
+            "interval": r["interval"],
+        }
+        for m, r in methods.items()
+    ]
+    selection = select_preferred(
+        rows, order=config["methods"], budget=config["alarm"]["false_alarms_per_hour_budget"]
+    )
     write_result(
         "3w_development",
         {
@@ -136,12 +189,28 @@ def _variants(config, track, folds, rule) -> dict:
                 generated = np.flatnonzero((table["origin"] != "REAL").to_numpy())
                 train = np.concatenate([train, generated])
             validation, test = _rows(table, fold.validation_wells), _rows(table, fold.test_wells)
-            fitted = fit_and_calibrate("hist_gradient_boosting", track, train, validation, config, settings, columns=columns)
+            fitted = fit_and_calibrate(
+                "hist_gradient_boosting",
+                track,
+                train,
+                validation,
+                config,
+                settings,
+                columns=columns,
+            )
             counts, _, precision = evaluate_rows(fitted, track, test, rule)
             parts.append(counts)
             ap.append(precision)
-        output[name] = report_counts(merge_counts(parts), config)["summary"] | {"mean_fold_average_precision": float(np.mean([a for a in ap if a is not None]))}
-        print("variant", name, output[name]["event_recall"], output[name]["false_alarms_per_hour"], flush=True)
+        output[name] = report_counts(merge_counts(parts), config)["summary"] | {
+            "mean_fold_average_precision": float(np.mean([a for a in ap if a is not None]))
+        }
+        print(
+            "variant",
+            name,
+            output[name]["event_recall"],
+            output[name]["false_alarms_per_hour"],
+            flush=True,
+        )
     return output
 
 
@@ -162,10 +231,24 @@ def _leakage_contrast(config, track, folds) -> dict:
     for name, mask in (("random_rows", random_row), ("random_instances", in_test)):
         train, test = rows[~mask], rows[mask]
         y = table["y"].to_numpy()
-        chosen = train[training_rows(y[train], cap_per_class=settings["max_train_windows_per_class"], seed=config["seed"])]
-        model = make_detector("hist_gradient_boosting", track.names, seed=config["seed"], baseline_windows=1, gap_windows=1)
+        chosen = train[
+            training_rows(
+                y[train], cap_per_class=settings["max_train_windows_per_class"], seed=config["seed"]
+            )
+        ]
+        model = make_detector(
+            "hist_gradient_boosting",
+            track.names,
+            seed=config["seed"],
+            baseline_windows=1,
+            gap_windows=1,
+        )
         model.fit(track.features[chosen], y[chosen], seqs[:0])
-        output[name] = {"average_precision": average_precision(table.iloc[test], model.score(track.features[test], seqs[:0]))}
+        output[name] = {
+            "average_precision": average_precision(
+                table.iloc[test], model.score(track.features[test], seqs[:0])
+            )
+        }
     return output
 
 
@@ -184,9 +267,15 @@ def _perturb(values: np.ndarray, kind: str, rng: np.random.Generator) -> np.ndar
     return output
 
 
-def _perturbed_instance(path, seq: str, spec: FeatureSpec, kind: str, seed: int) -> tuple[str, np.ndarray]:
+def _perturbed_instance(
+    path, seq: str, spec: FeatureSpec, kind: str, seed: int
+) -> tuple[str, np.ndarray]:
     values, times, _ = read_instance(path, spec.sensors)
-    rng = np.random.default_rng(np.random.SeedSequence([seed, int(hashlib.sha256(f"{seq}|{kind}".encode()).hexdigest()[:8], 16)]))
+    rng = np.random.default_rng(
+        np.random.SeedSequence(
+            [seed, int(hashlib.sha256(f"{seq}|{kind}".encode()).hexdigest()[:8], 16)]
+        )
+    )
     features, _ = build_features(_perturb(values, kind, rng), times, spec)
     return seq, features
 
@@ -199,16 +288,26 @@ def holdout() -> None:
     fold, _ = _folds(config, instances)
     rule = rule_from(settings)
     table = track.table
-    train, validation, test = (_rows(table, w) for w in (fold.train_wells, fold.validation_wells, fold.test_wells))
+    train, validation, test = (
+        _rows(table, w) for w in (fold.train_wells, fold.validation_wells, fold.test_wells)
+    )
     selection = read_result("3w_development")["selection"]
     paths = {f.stem: f for f in batch_root().glob("dataset/*/*.parquet")}
     test_seqs = list(pd.unique(table["seq"].to_numpy()[test]))
     perturbed: dict[str, np.ndarray] = {}
     for kind in PERTURBATIONS:
-        pieces = dict(Parallel(n_jobs=8)(delayed(_perturbed_instance)(paths[s], s, spec, kind, config["seed"]) for s in test_seqs))
+        pieces = dict(
+            Parallel(n_jobs=8)(
+                delayed(_perturbed_instance)(paths[s], s, spec, kind, config["seed"])
+                for s in test_seqs
+            )
+        )
         order = table["seq"].to_numpy()[test]
         perturbed[kind] = np.concatenate([pieces[s] for s in pd.unique(order)])
-    methods, robustness, sensitivity, artifacts = {}, {}, {}, {}
+    methods: dict = {}
+    robustness: dict = {}
+    sensitivity: dict = {}
+    artifacts: dict = {}
     MODELS.mkdir(parents=True, exist_ok=True)
     normal = train[table["y"].to_numpy()[train] == 0]
     means = track.features[normal][:, columns_of(track.names, "mean")].astype(float)
@@ -225,12 +324,20 @@ def holdout() -> None:
             "confusion": confusion(fitted, track, test, CLASSES),
             "scores_sha256": scores_sha256(scores),
         }
-        sensitivity[method] = {p: report_counts(score_windows(with_policy(table, p).iloc[test], scores, fitted.threshold, rule), config)["summary"] for p in ("count_as_positive", "count_as_normal")}
+        sensitivity[method] = {
+            p: report_counts(
+                score_windows(with_policy(table, p).iloc[test], scores, fitted.threshold, rule),
+                config,
+            )["summary"]
+            for p in ("count_as_positive", "count_as_normal")
+        }
         robustness[method] = {}
         seqs = table["seq"].to_numpy()[test]
         for kind, features in perturbed.items():
             altered = fitted.detector.score(features, seqs)
-            robustness[method][kind] = report_counts(score_windows(table.iloc[test], altered, fitted.threshold, rule), config)["summary"]
+            robustness[method][kind] = report_counts(
+                score_windows(table.iloc[test], altered, fitted.threshold, rule), config
+            )["summary"]
         path = MODELS / f"3w_{method}.joblib"
         bundle = ModelBundle(
             f"3w_{method}", "1", InputDomain.OFFSHORE_BENCHMARK, fitted.detector, spec, fitted.threshold, rule, CLASS_NAMES,
@@ -263,7 +370,11 @@ def holdout() -> None:
             "preferred_from_development": selection,
             "fold": fold.__dict__,
             "coverage": coverage,
-            "credible_classes": credible_classes(instances, min_events=config["support"]["min_events"], min_clusters=config["support"]["min_clusters"]).to_dict("records"),
+            "credible_classes": credible_classes(
+                instances,
+                min_events=config["support"]["min_events"],
+                min_clusters=config["support"]["min_clusters"],
+            ).to_dict("records"),
             "methods": methods,
             "ambiguous_sensitivity": sensitivity,
             "robustness": robustness,

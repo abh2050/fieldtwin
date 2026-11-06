@@ -40,7 +40,9 @@ def window_stats(windows: np.ndarray, sample_s: float) -> np.ndarray:
         time_mean = (time * present).sum(axis=1) / count
         time_centered = np.where(present, time - time_mean[:, None, :], 0.0)
         denominator = (time_centered**2).sum(axis=1)
-        slope = np.where(denominator > 0, (time_centered * centered).sum(axis=1) / denominator, np.nan)
+        slope = np.where(
+            denominator > 0, (time_centered * centered).sum(axis=1) / denominator, np.nan
+        )
     slope = np.where(count >= 2, slope, np.nan)
     missing = 1.0 - count / length
     output = np.empty((count_windows, sensors * len(STATS)), dtype=np.float32)
@@ -55,7 +57,9 @@ def end_indices(times_s: np.ndarray, spec: FeatureSpec) -> np.ndarray:
     return np.flatnonzero(aligned)
 
 
-def build_features(values: np.ndarray, times_s: np.ndarray, spec: FeatureSpec) -> tuple[np.ndarray, np.ndarray]:
+def build_features(
+    values: np.ndarray, times_s: np.ndarray, spec: FeatureSpec
+) -> tuple[np.ndarray, np.ndarray]:
     """Features for one continuous series of shape (samples, sensors), and the row ending each window."""
     ends = end_indices(times_s, spec)
     if ends.size == 0:

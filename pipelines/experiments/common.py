@@ -83,7 +83,9 @@ def fit_and_calibrate(
     )
     # A rolling baseline reads each series' own past, so it fits its noise floor from labeled rows
     # and needs no sequence structure from training.
-    rows = training_rows(y[train], cap_per_class=track_config["max_train_windows_per_class"], seed=config["seed"])
+    rows = training_rows(
+        y[train], cap_per_class=track_config["max_train_windows_per_class"], seed=config["seed"]
+    )
     chosen = train[rows]
     detector.fit(track.features[chosen][:, columns], y[chosen], seq[chosen])
     fit_seconds = time.perf_counter() - started
@@ -94,17 +96,31 @@ def fit_and_calibrate(
         rule_from(track_config),
         budget=config["alarm"]["false_alarms_per_hour_budget"],
         grid_points=config["alarm"]["threshold_grid_points"],
+        max_time_in_alarm=config["alarm"]["max_fraction_of_normal_time_in_alarm"],
     )
-    return Fitted(method, detector, calibration["threshold"], columns, names, calibration, fit_seconds, len(chosen))
+    return Fitted(
+        method,
+        detector,
+        calibration["threshold"],
+        columns,
+        names,
+        calibration,
+        fit_seconds,
+        len(chosen),
+    )
 
 
 def score_rows(fitted: Fitted, track: Track, rows: np.ndarray) -> np.ndarray:
-    return fitted.detector.score(track.features[rows][:, fitted.columns], track.table["seq"].to_numpy()[rows])
+    return fitted.detector.score(
+        track.features[rows][:, fitted.columns], track.table["seq"].to_numpy()[rows]
+    )
 
 
 def merge_counts(parts: list[ClusterCounts]) -> ClusterCounts:
     """Combine results from folds whose clusters don't overlap."""
-    return ClusterCounts(pd.concat([p.table for p in parts]), pd.concat([p.events for p in parts], ignore_index=True))
+    return ClusterCounts(
+        pd.concat([p.table for p in parts]), pd.concat([p.events for p in parts], ignore_index=True)
+    )
 
 
 def report_counts(counts: ClusterCounts, config: dict) -> dict:
@@ -112,25 +128,54 @@ def report_counts(counts: ClusterCounts, config: dict) -> dict:
     summary = summarize(counts)
     interval: dict = {}
     if summary["clusters"] >= support["min_clusters_for_interval"]:
-        interval = bootstrap_intervals(counts, resamples=uncertainty["bootstrap_resamples"], confidence=uncertainty["confidence"], seed=config["seed"])
+        interval = bootstrap_intervals(
+            counts,
+            resamples=uncertainty["bootstrap_resamples"],
+            confidence=uncertainty["confidence"],
+            seed=config["seed"],
+        )
     if summary["event_clusters"] < support["min_clusters_for_interval"]:
         interval.pop("event_recall", None)
-    classes = by_class(counts, support, resamples=uncertainty["bootstrap_resamples"], confidence=uncertainty["confidence"], seed=config["seed"])
-    if summary["events"] < support["min_events"] or summary["event_clusters"] < support["min_clusters"]:
+        interval.pop("event_skill", None)
+    classes = by_class(
+        counts,
+        support,
+        resamples=uncertainty["bootstrap_resamples"],
+        confidence=uncertainty["confidence"],
+        seed=config["seed"],
+    )
+    if (
+        summary["events"] < support["min_events"]
+        or summary["event_clusters"] < support["min_clusters"]
+    ):
         summary["event_recall"] = None
+        summary["event_skill"] = None
+        summary["chance_event_recall"] = None
         summary["event_recall_withheld"] = True
     return {"summary": summary, "interval": interval, "by_class": classes}
 
 
-def evaluate_rows(fitted: Fitted, track: Track, rows: np.ndarray, rule: AlarmRule, table: pd.DataFrame | None = None) -> tuple[ClusterCounts, np.ndarray, float | None]:
+def evaluate_rows(
+    fitted: Fitted,
+    track: Track,
+    rows: np.ndarray,
+    rule: AlarmRule,
+    table: pd.DataFrame | None = None,
+) -> tuple[ClusterCounts, np.ndarray, float | None]:
     frame = track.table.iloc[rows] if table is None else table.iloc[rows]
     scores = score_rows(fitted, track, rows)
-    return score_windows(frame, scores, fitted.threshold, rule), scores, average_precision(frame, scores)
+    return (
+        score_windows(frame, scores, fitted.threshold, rule),
+        scores,
+        average_precision(frame, scores),
+    )
 
 
 def scores_sha256(scores: np.ndarray) -> str:
     """Rounded, to compare runs on one machine while ignoring meaningless low-order bits."""
-    return hashlib.sha256(np.round(np.nan_to_num(scores, nan=-1e30, posinf=1e30), 6).tobytes()).hexdigest()
+    return hashlib.sha256(
+        np.round(np.nan_to_num(scores, nan=-1e30, posinf=1e30), 6).tobytes()
+    ).hexdigest()
 
 
 def confusion(fitted: Fitted, track: Track, rows: np.ndarray, class_ids: list[int]) -> dict | None:
@@ -161,12 +206,16 @@ def hardware() -> dict:
 
 
 def git_sha() -> str:
-    return subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True, check=True).stdout.strip()
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True, check=True
+    ).stdout.strip()
 
 
 def write_result(name: str, payload: dict) -> None:
     RESULTS.mkdir(parents=True, exist_ok=True)
-    (RESULTS / f"{name}.json").write_text(json.dumps(payload, indent=1, sort_keys=True, default=_plain) + "\n")
+    (RESULTS / f"{name}.json").write_text(
+        json.dumps(payload, indent=1, sort_keys=True, default=_plain) + "\n"
+    )
 
 
 def read_result(name: str) -> dict:
