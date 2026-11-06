@@ -4,13 +4,13 @@ FieldTwin is an industrial decision-support platform: asset registry, provenance
 
 > **AETHER Field is a fictional industrial production environment.** Public industrial datasets have been used for source-grounded experiments, while cross-source asset associations and operational scenarios are explicitly simulated.
 
-These datasets do not describe one facility. Petrobras 3W was not measured at a New Mexico well, and no public record here was measured at AETHER Field. AETHER telemetry is synthetic and comes from a simplified physical model that isn't calibrated to any real well. 3W stays a separate offshore benchmark.
+These datasets do not describe one facility. Petrobras 3W was not measured at a New Mexico well, and no public record here was measured at AETHER Field. AETHER telemetry is synthetic and comes from a simplified physical model that isn't calibrated to any real well or validated as an engineering simulator. 3W stays a separate offshore benchmark.
 
 ## Status
 
-Gates 0 to 3 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, and a synthetic scenario prototype. There is no trained ML model, application UI, or AWS deployment yet.
+Gates 0 to 4 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, and a coupled simulation of the whole fictional field. There is no trained ML model, application UI, or AWS deployment yet.
 
-Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
+Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [Gate 4](reports/gates/gate_4.md), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
 
 ## Quick start
 
@@ -29,6 +29,9 @@ make test-db     # database tests on committed fixtures
 
 # Reconciliation and the synthetic scenario
 make benchmark-events scenario reconcile gate3-reports
+
+# The whole fictional field
+make field field-reports
 ```
 
 `make acquire` reuses a completed batch. `make acquire REFRESH=1` checks upstream for a new version. A first run took about 11 minutes on the development machine, mostly scanning 48 million OCD production rows.

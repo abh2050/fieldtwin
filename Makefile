@@ -1,4 +1,4 @@
-.PHONY: scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
+.PHONY: field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
 
 bootstrap:
 	bash scripts/bootstrap.sh
@@ -46,6 +46,16 @@ reconcile:
 gate3-reports:
 	uv run python -m pipelines.reconcile.reports
 	uv run python -m pipelines.synthetic.report
+
+# The whole fictional field: six scenarios, checks, outputs, and lineage.
+field:
+	uv run python -m pipelines.synthetic.aether_field
+
+field-reports:
+	uv run python -m pipelines.synthetic.field_reports
+
+gate4:
+	bash scripts/gate4_evidence.sh
 
 gate3:
 	bash scripts/gate3_evidence.sh

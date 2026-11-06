@@ -1,0 +1,85 @@
+# Physical network of the fictional AETHER Field. Every value is a SYNTHETIC design assumption.
+# Nothing is calibrated to a real facility. Specification: docs/product/field_simulation_spec.md
+network:
+  name: aether-field-network
+  version: 1
+  provenance_class: SYNTHETIC
+  # Local coordinates in metres from a fictional origin. No real-world location is implied.
+  coordinate_system: fictional_local_metres
+
+gas:
+  molar_mass_kg_per_mol: 0.0180
+  compressibility_factor: 0.92
+  temperature_k: 300.0
+  dynamic_viscosity_pa_s: 1.1e-5
+  heat_capacity_ratio: 1.27
+standard_conditions:
+  pressure_pa_abs: 101325.0
+  temperature_k: 288.15
+ambient:
+  pressure_pa_abs: 90000.0
+
+pipes:
+  darcy_friction_factor: 0.015
+  restricted_length_m: 50.0
+
+# q = C (p_shut_in^2 - p_wellhead^2)^n. Per-well values are declared, not randomly drawn.
+well_defaults: {deliverability_exponent: 0.8, flowline_diameter_m: 0.0779}
+wells:
+  - {id: A-01, pad: PAD-A, flowline: FL-A-01, shut_in_pa_abs: 3.25e6, coefficient: 3.3e-11, flowline_m: 420, x: -300, y: 200}
+  - {id: A-02, pad: PAD-A, flowline: FL-A-02, shut_in_pa_abs: 3.05e6, coefficient: 3.6e-11, flowline_m: 380, x: -150, y: 300}
+  - {id: A-03, pad: PAD-A, flowline: FL-A-03, shut_in_pa_abs: 3.40e6, coefficient: 3.1e-11, flowline_m: 340, x: 0, y: 320}
+  - {id: A-04, pad: PAD-A, flowline: FL-A-04, shut_in_pa_abs: 3.15e6, coefficient: 3.5e-11, flowline_m: 360, x: 150, y: 300}
+  - {id: A-05, pad: PAD-A, flowline: FL-A-05, shut_in_pa_abs: 2.95e6, coefficient: 3.8e-11, flowline_m: 410, x: 300, y: 200}
+  - {id: A-06, pad: PAD-A, flowline: FL-A-06, shut_in_pa_abs: 3.30e6, coefficient: 3.2e-11, flowline_m: 450, x: 350, y: 50}
+  - {id: B-01, pad: PAD-B, flowline: FL-B-01, shut_in_pa_abs: 3.10e6, coefficient: 3.5e-11, flowline_m: 430, x: 3500, y: 200}
+  - {id: B-02, pad: PAD-B, flowline: FL-B-02, shut_in_pa_abs: 3.35e6, coefficient: 3.0e-11, flowline_m: 390, x: 3650, y: 300}
+  - {id: B-03, pad: PAD-B, flowline: FL-B-03, shut_in_pa_abs: 3.00e6, coefficient: 3.7e-11, flowline_m: 350, x: 3800, y: 320}
+  - {id: B-04, pad: PAD-B, flowline: FL-B-04, shut_in_pa_abs: 3.20e6, coefficient: 3.4e-11, flowline_m: 370, x: 3950, y: 300}
+  - {id: B-05, pad: PAD-B, flowline: FL-B-05, shut_in_pa_abs: 3.45e6, coefficient: 2.9e-11, flowline_m: 420, x: 4100, y: 200}
+  - {id: B-06, pad: PAD-B, flowline: FL-B-06, shut_in_pa_abs: 3.08e6, coefficient: 3.6e-11, flowline_m: 460, x: 4150, y: 50}
+
+junctions:
+  - {id: HDR-A, node_type: JUNCTION, pad: PAD-A, x: 0, y: 0}
+  - {id: HDR-B, node_type: JUNCTION, pad: PAD-B, x: 3800, y: 0}
+  - {id: MANIFOLD, node_type: MANIFOLD, x: 1800, y: 1500}
+  - {id: COMP-SUCTION, node_type: SUCTION_HEADER, x: 1800, y: 2900}
+  - {id: COMP-DISCHARGE, node_type: DISCHARGE_BOUNDARY, x: 1800, y: 3050}
+
+segments:
+  - {id: GS-A, from: HDR-A, to: MANIFOLD, length_m: 2500, diameter_m: 0.1541, isolation_valve: IV-A}
+  - {id: GS-B, from: HDR-B, to: MANIFOLD, length_m: 2700, diameter_m: 0.1541, isolation_valve: IV-B}
+  - {id: GS-TRUNK, from: MANIFOLD, to: COMP-SUCTION, length_m: 1500, diameter_m: 0.2027, isolation_valve: IV-STATION}
+
+# Simplified boundary, not a compressor map. While capacity exceeds arrivals, recycle holds suction
+# at the setpoint. Otherwise suction floats up, with standard flow proportional to suction pressure.
+compression:
+  suction_setpoint_pa_abs: 1.6e6
+  discharge_pa_abs: 6.0e6
+  reference_suction_pa_abs: 1.6e6
+  max_compression_ratio: 6.0
+  units:
+    - {id: C-01, capacity_sm3_per_s: 2.10}
+    - {id: C-02, capacity_sm3_per_s: 2.10}
+    - {id: C-03, capacity_sm3_per_s: 2.10}
+    - {id: C-04, capacity_sm3_per_s: 2.10}
+
+# Not part of the flow network. Access routes connect them to the assets they serve.
+sites:
+  - {id: MAINT-BASE, node_type: SITE, x: 1600, y: 2700, serves: [COMP-SUCTION, INSPECT-A, INSPECT-B]}
+  - {id: INSPECT-A, node_type: SITE, x: 0, y: -150, serves: [HDR-A]}
+  - {id: INSPECT-B, node_type: SITE, x: 3800, y: -150, serves: [HDR-B]}
+
+# Outside this envelope the simplified model isn't considered valid, and the run is refused.
+validity_envelope:
+  max_mach_number: 0.30
+  min_reynolds_number_when_flowing: 4000.0
+  max_pressure_pa_abs: 8.0e6
+  min_pressure_pa_abs: 3.0e5
+  severity_limit: 0.70
+
+solver:
+  max_iterations: 80
+  max_active_set_passes: 16
+  # Largest well-equation error, relative to the highest squared shut-in pressure.
+  relative_residual_tolerance: 1.0e-12

@@ -2,7 +2,7 @@
 
 Generated from the PostgreSQL catalog by `make schema-docs`. A test fails if this file differs from a freshly migrated database.
 
-40 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
+43 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
 
 AETHER Field is fictional. Real source entities live in `source_assets` and fictional ones in `assets`, and no foreign key lets one stand in for the other.
 
@@ -362,6 +362,56 @@ Queryable metadata. High-volume sensor values stay in Parquet; one TELEMETRY_SER
 
 Check constraints: `observations_null_count_check`, `observations_observation_type_check`, `observations_value_count_check`, `observed_has_batch`, `replay_keeps_origin`, `simulated_series_is_synthetic`, `synthetic_source_requires_run`, `synthetic_source_requires_sensor`.
 Keys: 1 primary key, 10 foreign key, 1 unique.
+
+### `physical_connection_rules`
+
+Allowed physical connections. Anything not listed is refused.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `edge_type` | text | no |  |
+| `from_node_type` | text | no |  |
+| `to_node_type` | text | no |  |
+
+Keys: 1 primary key, 0 foreign key, 0 unique.
+
+### `physical_edges`
+
+Directed connections. A closed valve or stopped machine is a run state, so this graph stays fixed.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `edge_id` | text | no |  |
+| `edge_type` | text | no |  |
+| `from_node_id` | text | no |  |
+| `to_node_id` | text | no |  |
+| `element_asset_id` | text | no |  |
+| `valve_asset_id` | text | yes |  |
+| `length_m` | double precision | yes |  |
+| `diameter_m` | double precision | yes |  |
+| `network_version` | integer | no |  |
+| `provenance_class` | provenance_class | no |  |
+
+Check constraints: `edge_not_self`, `physical_edges_diameter_m_check`, `physical_edges_edge_type_check`, `physical_edges_length_m_check`, `physical_edges_network_version_check`, `physical_edges_provenance_class_check`, `pipes_have_geometry`.
+Keys: 1 primary key, 4 foreign key, 0 unique.
+
+### `physical_nodes`
+
+Places where pressure is defined, or fictional sites. Local metres from a fictional origin, so no real location is implied.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `node_id` | text | no |  |
+| `facility_id` | text | no |  |
+| `node_type` | text | no |  |
+| `asset_id` | text | no |  |
+| `local_x_m` | double precision | yes |  |
+| `local_y_m` | double precision | yes |  |
+| `network_version` | integer | no |  |
+| `provenance_class` | provenance_class | no |  |
+
+Check constraints: `coordinates_together`, `physical_nodes_network_version_check`, `physical_nodes_node_type_check`, `physical_nodes_provenance_class_check`.
+Keys: 1 primary key, 2 foreign key, 0 unique.
 
 ### `production_records`
 
@@ -815,6 +865,7 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 | `asset_relationships` | `asset_relationship_rule_guard` |
 | `audit_events` | `audit_events_append_only` |
 | `observations` | `observation_sensor_source_guard` |
+| `physical_edges` | `physical_edge_rule_guard` |
 | `reconciliation_decisions` | `reconciliation_decisions_append_only` |
 | `reconciliation_reviews` | `reconciliation_reviews_append_only` |
 | `scenario_mappings` | `scenario_mapping_guard` |

@@ -112,7 +112,7 @@ def test_observations_describe_every_sensor_in_every_instance(real):
     )
     assert (
         value(real, "SELECT count(*) FROM observations WHERE source_system_id = 'aether_synthetic'")
-        == 2 * 4
+        == 2 * 4 + 6 * 39
     )
     assert (
         value(
@@ -185,3 +185,10 @@ def test_unlabelled_benchmark_instances_are_all_flagged(real):
         real,
         "SELECT count(*) FROM data_quality_exceptions WHERE exception_type='BENCHMARK_INSTANCE_WITHOUT_EVENT_LABEL'",
     )
+
+
+def test_every_synthetic_observation_on_real_database_has_a_complete_chain(real):
+    row = real.execute(
+        "SELECT count(*), count(*) FILTER (WHERE chain_complete) FROM v_synthetic_provenance_chain"
+    ).fetchone()
+    assert row == (242, 242)

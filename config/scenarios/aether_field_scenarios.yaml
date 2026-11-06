@@ -1,0 +1,72 @@
+# Scenario catalog for the fictional AETHER Field. Every result is SYNTHETIC.
+# Physical faults, sensor faults, communication faults, and planned operations stay separate.
+catalog_version: 1
+simulation:
+  seed: 40012
+  interval_s: 300
+  duration_s: 604800
+  # A simulated clock in the future, so these timestamps can't be mistaken for real operations.
+  simulated_epoch: "2040-01-01T00:00:00+00:00"
+
+scenarios:
+  - scenario_id: AETHER-NET-NORMAL
+    name: Normal production
+    version: 1
+    category: NORMAL
+    target_asset_id: GATHERING
+    affected_asset_id: GATHERING
+    description: All wells produce with every compressor available.
+
+  - scenario_id: AETHER-FAULT-001-NET
+    name: Progressive gathering-line restriction
+    version: 1
+    category: PHYSICAL_FAULT
+    target_asset_id: A-03
+    affected_asset_id: GS-A
+    description: A restriction develops in GS-A, on the path shared by all Pad A wells.
+    physical_faults:
+      - {kind: SEGMENT_RESTRICTION, asset_id: GS-A, onset_s: 172800, full_s: 518400, max_severity: 0.65}
+
+  - scenario_id: AETHER-NET-COMPRESSOR-DERATE
+    name: Compressor capacity reduction
+    version: 1
+    category: PHYSICAL_FAULT
+    target_asset_id: C-01
+    affected_asset_id: COMP-STATION
+    description: C-01 progressively loses capacity until the station can't take all arrivals at setpoint.
+    physical_faults:
+      - {kind: COMPRESSOR_DERATE, asset_id: C-01, onset_s: 172800, full_s: 345600, final_fraction: 0.30}
+
+  - scenario_id: AETHER-NET-SENSOR-DRIFT
+    name: Sensor bias and drift
+    version: 1
+    category: SENSOR_FAULT
+    target_asset_id: A-03
+    affected_asset_id: GS-B
+    description: Two instruments report wrongly while the physical process doesn't change.
+    sensor_faults:
+      - {kind: DRIFT, tag: A-03.PT-WH, onset_s: 172800, rate_per_day: 5000.0}
+      - {kind: BIAS, tag: GS-B.DPT-NET, onset_s: 259200, magnitude: 8000.0}
+
+  - scenario_id: AETHER-NET-COMM-DROPOUT
+    name: Communication dropout
+    version: 1
+    category: COMMUNICATION_FAULT
+    target_asset_id: HDR-B
+    affected_asset_id: PAD-B
+    description: Readings from Pad B and C-02 stop arriving for a time while the process continues.
+    communication_faults:
+      - {group: PAD-B, onset_s: 259200, end_s: 302400}
+      - {group: C-02, onset_s: 432000, end_s: 453600}
+
+  - scenario_id: AETHER-NET-PLANNED-SHUTDOWN
+    name: Planned equipment shutdown
+    version: 1
+    category: PLANNED_OPERATION
+    target_asset_id: GS-B
+    affected_asset_id: PAD-B
+    description: Pad B is isolated with C-04 stopped for maintenance, and later one well is shut in.
+    planned_operations:
+      - {kind: CLOSE_VALVE, asset_id: IV-B, start_s: 259200, end_s: 302400}
+      - {kind: STOP_COMPRESSOR, asset_id: C-04, start_s: 259200, end_s: 302400}
+      - {kind: SHUT_IN_WELL, asset_id: A-02, start_s: 432000, end_s: 475200}

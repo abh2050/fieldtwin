@@ -17,6 +17,8 @@ make typecheck
 bash scripts/ci_local.sh                  # every CI command in a clean copy
 bash scripts/gate3_evidence.sh            # rebuild from nothing and record evidence
 make scenario reconcile gate3-reports     # simulator, reconciliation, and generated reports
+make field field-reports                  # all six field scenarios and their reports
+bash scripts/gate4_evidence.sh            # the latest full rebuild, with evidence
 ```
 
 ## Cost

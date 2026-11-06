@@ -10,6 +10,7 @@ units:
   - {unit_id: MCF_15025PSIA_60F, physical_quantity: gas_volume, description: "1,000 cubic feet of gas at 15.025 psia and 60 degrees F"}
   - {unit_id: sm3_per_s, physical_quantity: standard_volume_flow, description: Standard cubic metres per second at 101325 Pa and 288.15 K}
   - {unit_id: ksm3_per_d, physical_quantity: standard_volume_flow, description: Thousand standard cubic metres per day. Display unit.}
+  - {unit_id: state_code, physical_quantity: discrete_state, description: "Compressor state: 0 stopped, 1 derated, 2 running"}
   - {unit_id: BBL_60F, physical_quantity: liquid_volume, description: 42 US gallons at 60 degrees F and sea-level atmospheric pressure}
 
 unit_conversions:
@@ -17,6 +18,7 @@ unit_conversions:
   - {from: Pa, to: psi, quantity: pressure, factor: 0.00014503773773, term: 0.0, method: LINEAR_PA_TO_PSI}
   - {from: sm3_per_s, to: sm3_per_s, quantity: standard_volume_flow, factor: 1.0, term: 0.0, method: IDENTITY}
   - {from: sm3_per_s, to: ksm3_per_d, quantity: standard_volume_flow, factor: 86.4, term: 0.0, method: LINEAR_SM3S_TO_KSM3D}
+  - {from: state_code, to: state_code, quantity: discrete_state, factor: 1.0, term: 0.0, method: IDENTITY}
   - {from: psi, to: Pa, quantity: pressure, factor: 6894.757293168, term: 0.0, method: LINEAR_PSI_TO_PA}
   - {from: degC, to: degC, quantity: temperature, factor: 1.0, term: 0.0, method: IDENTITY}
   - {from: degF, to: degC, quantity: temperature, factor: 0.5555555555555556, term: -17.77777777777778, method: LINEAR_DEGF_TO_DEGC}
@@ -47,6 +49,14 @@ aether_measurements:
 aether_gathering_measurements:
   - {id: aether_gathering.segment_downstream_pressure, quantity: pressure, unit: Pa, location: Downstream end of the gathering segment, reference: GAUGE, capability: EXPECTED}
   - {id: aether_gathering.segment_differential_pressure, quantity: pressure, unit: Pa, location: Across the gathering segment from wellhead to downstream end, reference: DIFFERENTIAL, capability: EXPECTED}
+  - {id: aether_gathering.header_pressure, quantity: pressure, unit: Pa, location: Pad gathering header, reference: GAUGE, capability: EXPECTED}
+  - {id: aether_gathering.manifold_pressure, quantity: pressure, unit: Pa, location: Shared gathering manifold, reference: GAUGE, capability: EXPECTED}
+  - {id: aether_gathering.network_segment_differential_pressure, quantity: pressure, unit: Pa, location: Across a gathering segment between its network junctions, reference: DIFFERENTIAL, capability: EXPECTED}
+
+aether_compression_measurements:
+  - {id: aether_compression.suction_pressure, quantity: pressure, unit: Pa, location: Compression station suction header, reference: GAUGE, capability: EXPECTED}
+  - {id: aether_compression.unit_flow, quantity: standard_volume_flow, unit: sm3_per_s, location: Compressor unit inlet, reference: NOT_APPLICABLE, capability: EXPECTED}
+  - {id: aether_compression.operating_state, quantity: discrete_state, unit: state_code, location: Compressor unit controller, reference: NOT_APPLICABLE, capability: EXPECTED}
 
 source_systems:
   - id: aether_synthetic
@@ -73,6 +83,10 @@ transformations:
   - {id: "aether.integration_rule.to_event@1", name: aether.integration_rule.to_event, version: 1, code: packages/scenario_engine/events.py, description: Minimal rule proving sensor readings reach the event contract. Not a detector., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
   - {id: "3w.benchmark_event_adapter.real@1", name: 3w.benchmark_event_adapter.real, version: 1, code: pipelines/normalize/petrobras_3w_events.py, description: Real 3W instance as a benchmark event. The onset is computed from source labels., inputs: [OBSERVED], output: DERIVED, alters: true}
   - {id: "3w.benchmark_event_adapter.generated@1", name: 3w.benchmark_event_adapter.generated, version: 1, code: pipelines/normalize/petrobras_3w_events.py, description: Simulated or hand-drawn 3W instance as a benchmark event., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
+
+  - {id: "aether.field_simulator.to_run@1", name: aether.field_simulator.to_run, version: 1, code: pipelines/synthetic/aether_field.py, description: One coupled simulation of the whole fictional field., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
+  - {id: "aether.field_simulator.to_series@1", name: aether.field_simulator.to_series, version: 1, code: pipelines/synthetic/aether_field.py, description: Per-sensor metadata for a field series. Values stay in Parquet., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "aether.field_simulator.to_event@1", name: aether.field_simulator.to_event, version: 1, code: packages/scenario_engine/field_events.py, description: Known event declared by the scenario configuration., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
 
 # Enforced by the domain boundary trigger. A missing row also means refused.
 domain_boundaries:

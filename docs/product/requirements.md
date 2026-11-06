@@ -1,6 +1,6 @@
 # Product requirements
 
-Status shows delivery as of Gate 3. "Planned" means no implementation exists yet.
+Status shows delivery as of Gate 4. "Planned" means no implementation exists yet.
 
 ## Personas
 
@@ -15,7 +15,7 @@ Status shows delivery as of Gate 3. "Planned" means no implementation exists yet
 
 | ID | Use case | Key requirement | Gate | Status |
 |---|---|---|---|---|
-| UC-01 | Asset overview | Show the fictional wells, pads, gathering, and compression assets | 4, 8 | Hierarchy defined; display planned |
+| UC-01 | Asset overview | Show the fictional wells, pads, gathering, and compression assets | 4, 8 | Asset network and simulation implemented; display planned |
 | UC-02 | Production context | Show production in its original reporting grain, never lease totals as well output | 2, 8 | Canonical records with verified units; display planned |
 | UC-03 | Fault detection | Detect anomalies against the known synthetic onset. Evaluate 3W separately on its own labels. | 5 | Synthetic scenario and benchmark events ready; detection planned |
 | UC-04 | Aerial inspection | Show georeferenced evidence, keeping proximity separate from attribution | 6 | Planned; sources deferred |
@@ -39,4 +39,4 @@ Status shows delivery as of Gate 3. "Planned" means no implementation exists yet
 | R-09 | Real and fictional assets have separate identities | Implemented and tested |
 | R-10 | Offshore measurements can't map to onshore equipment | Implemented and tested |
 | R-11 | Tentative associations stay separate from verified relationships | Implemented and tested |
-| R-12 | Scenario telemetry obeys declared physical invariants | Implemented and tested for the prototype |
+| R-12 | Scenario telemetry obeys declared physical invariants | Implemented and tested for all six field scenarios |
