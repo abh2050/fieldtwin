@@ -18,6 +18,8 @@ AETHER Field does not exist. Its operational relationships are fictional, while 
 
 12. An application connects as `fieldtwin_app`, never as the owner or a superuser (ADR 0015).
 
+Physical connectivity lives in `physical_nodes` and `physical_edges`, separate from evidence and identity. The field model is a simplified simulator, never a validated one (ADR 0016).
+
 ## Claims
 
 1. Do not report a gate, test, or benchmark as passed without executed evidence.

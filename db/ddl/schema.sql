@@ -260,6 +260,34 @@ END $$;
 
 
 --
+-- Name: enforce_fictional_link_chain(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_fictional_link_chain() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  sensor_asset text;
+  observation_scenario text;
+BEGIN
+  IF NEW.asset_id IS NOT NULL THEN
+    SELECT t.fictional_asset_id, o.scenario_id INTO sensor_asset, observation_scenario
+      FROM observations o LEFT JOIN sensor_tags t ON t.tag_id = o.sensor_tag_id
+      WHERE o.observation_id = NEW.observation_id;
+    IF sensor_asset IS DISTINCT FROM NEW.asset_id THEN
+      RAISE EXCEPTION 'link names asset %, but the sensor is on %', NEW.asset_id, sensor_asset
+        USING ERRCODE = 'check_violation';
+    END IF;
+    IF observation_scenario IS DISTINCT FROM NEW.scenario_id THEN
+      RAISE EXCEPTION 'link names scenario %, but the observation belongs to %', NEW.scenario_id, observation_scenario
+        USING ERRCODE = 'check_violation';
+    END IF;
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
 -- Name: enforce_observation_link(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -281,6 +309,51 @@ BEGIN
       RAISE EXCEPTION 'MEASURED_AT requires one source system: observation is %, asset is %', observation_system, asset_system
         USING ERRCODE = 'check_violation';
     END IF;
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_observation_sensor_source(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_observation_sensor_source() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  tag_system text;
+BEGIN
+  IF NEW.sensor_tag_id IS NOT NULL THEN
+    SELECT source_system_id INTO tag_system FROM sensor_tags WHERE tag_id = NEW.sensor_tag_id;
+    IF tag_system IS DISTINCT FROM NEW.source_system_id THEN
+      RAISE EXCEPTION 'observation from % cannot use a sensor from %', NEW.source_system_id, tag_system
+        USING ERRCODE = 'check_violation';
+    END IF;
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_physical_connection(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_physical_connection() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  from_type text;
+  to_type text;
+BEGIN
+  SELECT node_type INTO from_type FROM physical_nodes WHERE node_id = NEW.from_node_id;
+  SELECT node_type INTO to_type FROM physical_nodes WHERE node_id = NEW.to_node_id;
+  IF NOT EXISTS (
+    SELECT 1 FROM physical_connection_rules r
+    WHERE r.edge_type = NEW.edge_type AND r.from_node_type = from_type AND r.to_node_type = to_type
+  ) THEN
+    RAISE EXCEPTION 'invalid physical connection: % from % to %', NEW.edge_type, from_type, to_type
+      USING ERRCODE = 'check_violation';
   END IF;
   RETURN NEW;
 END $$;
@@ -923,7 +996,9 @@ CREATE TABLE public.observations (
     CONSTRAINT observations_value_count_check CHECK ((value_count >= 0)),
     CONSTRAINT observed_has_batch CHECK (((provenance_class <> 'OBSERVED'::public.provenance_class) OR (batch_id IS NOT NULL))),
     CONSTRAINT replay_keeps_origin CHECK ((((provenance_class = 'REPLAYED'::public.provenance_class) = (replayed_from_observation_id IS NOT NULL)) AND ((provenance_class <> 'REPLAYED'::public.provenance_class) OR (scenario_id IS NOT NULL)))),
-    CONSTRAINT simulated_series_is_synthetic CHECK (((scenario_run_id IS NULL) OR ((provenance_class = 'SYNTHETIC'::public.provenance_class) AND (scenario_id IS NOT NULL))))
+    CONSTRAINT simulated_series_is_synthetic CHECK (((scenario_run_id IS NULL) OR ((provenance_class = 'SYNTHETIC'::public.provenance_class) AND (scenario_id IS NOT NULL)))),
+    CONSTRAINT synthetic_source_requires_run CHECK (((source_system_id = 'aether_synthetic'::text) = (scenario_run_id IS NOT NULL))),
+    CONSTRAINT synthetic_source_requires_sensor CHECK (((source_system_id <> 'aether_synthetic'::text) OR (sensor_tag_id IS NOT NULL)))
 );
 
 
@@ -958,6 +1033,83 @@ CREATE SEQUENCE public.observations_observation_id_seq
 --
 
 ALTER SEQUENCE public.observations_observation_id_seq OWNED BY public.observations.observation_id;
+
+
+--
+-- Name: physical_connection_rules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.physical_connection_rules (
+    edge_type text NOT NULL,
+    from_node_type text NOT NULL,
+    to_node_type text NOT NULL
+);
+
+
+--
+-- Name: TABLE physical_connection_rules; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.physical_connection_rules IS 'Allowed physical connections. Anything not listed is refused.';
+
+
+--
+-- Name: physical_edges; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.physical_edges (
+    edge_id text NOT NULL,
+    edge_type text NOT NULL,
+    from_node_id text NOT NULL,
+    to_node_id text NOT NULL,
+    element_asset_id text NOT NULL,
+    valve_asset_id text,
+    length_m double precision,
+    diameter_m double precision,
+    network_version integer NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT edge_not_self CHECK ((from_node_id <> to_node_id)),
+    CONSTRAINT physical_edges_diameter_m_check CHECK ((diameter_m > (0)::double precision)),
+    CONSTRAINT physical_edges_edge_type_check CHECK ((edge_type = ANY (ARRAY['WELL_INFLOW'::text, 'FLOWLINE'::text, 'GATHERING_SEGMENT'::text, 'COMPRESSION'::text, 'ACCESS_ROUTE'::text]))),
+    CONSTRAINT physical_edges_length_m_check CHECK ((length_m > (0)::double precision)),
+    CONSTRAINT physical_edges_network_version_check CHECK ((network_version > 0)),
+    CONSTRAINT physical_edges_provenance_class_check CHECK ((provenance_class = 'SYNTHETIC'::public.provenance_class)),
+    CONSTRAINT pipes_have_geometry CHECK (((edge_type <> ALL (ARRAY['FLOWLINE'::text, 'GATHERING_SEGMENT'::text])) OR ((length_m IS NOT NULL) AND (diameter_m IS NOT NULL))))
+);
+
+
+--
+-- Name: TABLE physical_edges; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.physical_edges IS 'Directed connections. A closed valve or stopped machine is a run state, so this graph stays fixed.';
+
+
+--
+-- Name: physical_nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.physical_nodes (
+    node_id text NOT NULL,
+    facility_id text NOT NULL,
+    node_type text NOT NULL,
+    asset_id text NOT NULL,
+    local_x_m double precision,
+    local_y_m double precision,
+    network_version integer NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT coordinates_together CHECK (((local_x_m IS NULL) = (local_y_m IS NULL))),
+    CONSTRAINT physical_nodes_network_version_check CHECK ((network_version > 0)),
+    CONSTRAINT physical_nodes_node_type_check CHECK ((node_type = ANY (ARRAY['RESERVOIR_BOUNDARY'::text, 'WELLHEAD'::text, 'JUNCTION'::text, 'MANIFOLD'::text, 'SUCTION_HEADER'::text, 'DISCHARGE_BOUNDARY'::text, 'SITE'::text]))),
+    CONSTRAINT physical_nodes_provenance_class_check CHECK ((provenance_class = 'SYNTHETIC'::public.provenance_class))
+);
+
+
+--
+-- Name: TABLE physical_nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.physical_nodes IS 'Places where pressure is defined, or fictional sites. Local metres from a fictional origin, so no real location is implied.';
 
 
 --
@@ -1365,6 +1517,8 @@ CREATE TABLE public.sensor_tags (
     sampling_frequency text,
     mapping_status public.verification_status NOT NULL,
     source_description text NOT NULL,
+    fictional_asset_id text,
+    CONSTRAINT synthetic_sensor_has_fictional_asset CHECK (((source_system_id = 'aether_synthetic'::text) = (fictional_asset_id IS NOT NULL))),
     CONSTRAINT tag_reference_fits_quantity CHECK ((((physical_quantity = 'pressure'::text) AND (pressure_reference_type <> 'NOT_APPLICABLE'::public.reference_type)) OR ((physical_quantity <> 'pressure'::text) AND (pressure_reference_type = 'NOT_APPLICABLE'::public.reference_type))))
 );
 
@@ -1374,6 +1528,13 @@ CREATE TABLE public.sensor_tags (
 --
 
 COMMENT ON TABLE public.sensor_tags IS 'Native tags as published by the source, with their physical class and original unit.';
+
+
+--
+-- Name: COLUMN sensor_tags.fictional_asset_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sensor_tags.fictional_asset_id IS 'The fictional asset a synthetic sensor is installed on. Always NULL for source tags.';
 
 
 --
@@ -1898,6 +2059,47 @@ COMMENT ON VIEW public.v_spatially_usable_source_assets IS 'The only spatial pop
 
 
 --
+-- Name: v_synthetic_provenance_chain; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_synthetic_provenance_chain AS
+ SELECT o.observation_id,
+    o.source_record_id,
+    o.provenance_class,
+    o.sensor_tag_id,
+    t.fictional_asset_id AS asset_id,
+    a.is_fictional AS asset_is_fictional,
+    l.asset_id AS linked_asset_id,
+    l.relationship_type AS link_type,
+    o.scenario_id,
+    s.scenario_version,
+    o.scenario_run_id,
+    r.simulator_name,
+    r.simulator_version,
+    r.config_sha256 AS parameter_set_sha256,
+    r.random_seed,
+    r.output_sha256,
+    o.transformation_id,
+    tr.output_provenance,
+    (((o.provenance_class = 'SYNTHETIC'::public.provenance_class) AND (tr.output_provenance = 'SYNTHETIC'::public.provenance_class) AND a.is_fictional AND (l.asset_id = t.fictional_asset_id) AND (l.relationship_type = 'EXPERIMENTAL_SCENARIO_LINK'::text) AND (r.scenario_id = o.scenario_id) AND (r.simulator_version IS NOT NULL) AND (r.config_sha256 IS NOT NULL) AND (r.output_sha256 IS NOT NULL)) IS TRUE) AS chain_complete
+   FROM ((((((public.observations o
+     LEFT JOIN public.sensor_tags t ON ((t.tag_id = o.sensor_tag_id)))
+     LEFT JOIN public.assets a ON ((a.asset_id = t.fictional_asset_id)))
+     LEFT JOIN public.asset_observation_links l ON (((l.observation_id = o.observation_id) AND (l.asset_id IS NOT NULL))))
+     LEFT JOIN public.scenario_runs r ON ((r.scenario_run_id = o.scenario_run_id)))
+     LEFT JOIN public.scenarios s ON ((s.scenario_id = o.scenario_id)))
+     LEFT JOIN public.transformations tr ON ((tr.transformation_id = o.transformation_id)))
+  WHERE (o.source_system_id = 'aether_synthetic'::text);
+
+
+--
+-- Name: VIEW v_synthetic_provenance_chain; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON VIEW public.v_synthetic_provenance_chain IS 'Each synthetic observation with its asset, sensor, scenario, run, simulator version, and parameter set.';
+
+
+--
 -- Name: v_tag_semantics; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -2341,6 +2543,30 @@ ALTER TABLE ONLY public.observations
 
 
 --
+-- Name: physical_connection_rules physical_connection_rules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_connection_rules
+    ADD CONSTRAINT physical_connection_rules_pkey PRIMARY KEY (edge_type, from_node_type, to_node_type);
+
+
+--
+-- Name: physical_edges physical_edges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_edges
+    ADD CONSTRAINT physical_edges_pkey PRIMARY KEY (edge_id);
+
+
+--
+-- Name: physical_nodes physical_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_nodes
+    ADD CONSTRAINT physical_nodes_pkey PRIMARY KEY (node_id);
+
+
+--
 -- Name: production_records production_records_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2410,6 +2636,14 @@ ALTER TABLE ONLY public.scenario_mappings
 
 ALTER TABLE ONLY public.scenario_mappings
     ADD CONSTRAINT scenario_mappings_scenario_id_target_asset_id_telemetry_eve_key UNIQUE (scenario_id, target_asset_id, telemetry_event_id);
+
+
+--
+-- Name: scenario_runs scenario_run_scenario_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_runs
+    ADD CONSTRAINT scenario_run_scenario_unique UNIQUE (scenario_run_id, scenario_id);
 
 
 --
@@ -2724,6 +2958,20 @@ CREATE INDEX observations_tag_idx ON public.observations USING btree (sensor_tag
 
 
 --
+-- Name: physical_edges_from_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX physical_edges_from_idx ON public.physical_edges USING btree (from_node_id);
+
+
+--
+-- Name: physical_edges_to_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX physical_edges_to_idx ON public.physical_edges USING btree (to_node_id);
+
+
+--
 -- Name: production_batch_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2808,10 +3056,31 @@ CREATE TRIGGER audit_events_append_only BEFORE DELETE OR UPDATE ON public.audit_
 
 
 --
+-- Name: asset_observation_links fictional_link_chain_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER fictional_link_chain_guard BEFORE INSERT OR UPDATE ON public.asset_observation_links FOR EACH ROW EXECUTE FUNCTION public.enforce_fictional_link_chain();
+
+
+--
 -- Name: asset_observation_links observation_link_guard; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER observation_link_guard BEFORE INSERT OR UPDATE ON public.asset_observation_links FOR EACH ROW EXECUTE FUNCTION public.enforce_observation_link();
+
+
+--
+-- Name: observations observation_sensor_source_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER observation_sensor_source_guard BEFORE INSERT OR UPDATE ON public.observations FOR EACH ROW EXECUTE FUNCTION public.enforce_observation_sensor_source();
+
+
+--
+-- Name: physical_edges physical_edge_rule_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER physical_edge_rule_guard BEFORE INSERT OR UPDATE ON public.physical_edges FOR EACH ROW EXECUTE FUNCTION public.enforce_physical_connection();
 
 
 --
@@ -3135,6 +3404,14 @@ ALTER TABLE ONLY public.measurement_definitions
 
 
 --
+-- Name: observations observation_run_scenario_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.observations
+    ADD CONSTRAINT observation_run_scenario_fk FOREIGN KEY (scenario_run_id, scenario_id) REFERENCES public.scenario_runs(scenario_run_id, scenario_id);
+
+
+--
 -- Name: observations observation_scenario_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3204,6 +3481,54 @@ ALTER TABLE ONLY public.observations
 
 ALTER TABLE ONLY public.observations
     ADD CONSTRAINT observations_unit_id_fkey FOREIGN KEY (unit_id) REFERENCES public.units(unit_id);
+
+
+--
+-- Name: physical_edges physical_edges_element_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_edges
+    ADD CONSTRAINT physical_edges_element_asset_id_fkey FOREIGN KEY (element_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: physical_edges physical_edges_from_node_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_edges
+    ADD CONSTRAINT physical_edges_from_node_id_fkey FOREIGN KEY (from_node_id) REFERENCES public.physical_nodes(node_id);
+
+
+--
+-- Name: physical_edges physical_edges_to_node_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_edges
+    ADD CONSTRAINT physical_edges_to_node_id_fkey FOREIGN KEY (to_node_id) REFERENCES public.physical_nodes(node_id);
+
+
+--
+-- Name: physical_edges physical_edges_valve_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_edges
+    ADD CONSTRAINT physical_edges_valve_asset_id_fkey FOREIGN KEY (valve_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: physical_nodes physical_nodes_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_nodes
+    ADD CONSTRAINT physical_nodes_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: physical_nodes physical_nodes_facility_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.physical_nodes
+    ADD CONSTRAINT physical_nodes_facility_id_fkey FOREIGN KEY (facility_id) REFERENCES public.facilities(facility_id);
 
 
 --
@@ -3372,6 +3697,14 @@ ALTER TABLE ONLY public.sensor_tag_mappings
 
 ALTER TABLE ONLY public.sensor_tags
     ADD CONSTRAINT sensor_tags_equipment_class_id_fkey FOREIGN KEY (equipment_class_id) REFERENCES public.equipment_classes(equipment_class_id);
+
+
+--
+-- Name: sensor_tags sensor_tags_fictional_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sensor_tags
+    ADD CONSTRAINT sensor_tags_fictional_asset_id_fkey FOREIGN KEY (fictional_asset_id) REFERENCES public.assets(asset_id);
 
 
 --

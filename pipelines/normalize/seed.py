@@ -18,6 +18,8 @@ from packages.domain.models import (
     SensorTagMapping,
 )
 from packages.repositories.database import REPO_ROOT, connect, scalar
+from packages.scenario_engine.field_simulation import build_sensors
+from packages.scenario_engine.network_graph import build_graph, load_network
 
 W3_SOURCE = "petrobras_3w"
 FIXTURE_INI = REPO_ROOT / "data" / "fixtures" / "petrobras_3w" / "dataset.ini"
@@ -235,6 +237,26 @@ def seed_facility(conn: psycopg.Connection, root: Path) -> None:
                 "provenance_class": "SYNTHETIC",
             }
         )
+    for flowline in gathering["flowlines"]:
+        assets.append(
+            asset(flowline, gathering["asset_id"], "FLOWLINE", flowline, "AETHER_GATHERING")
+        )
+    for header in gathering["headers"]:
+        assets.append(asset(header, gathering["asset_id"], "JUNCTION", header, "AETHER_GATHERING"))
+    for manifold in gathering["manifolds"]:
+        assets.append(
+            asset(manifold, gathering["asset_id"], "MANIFOLD", manifold, "AETHER_GATHERING")
+        )
+    for interface in station["interfaces"]:
+        assets.append(
+            asset(
+                interface,
+                station["asset_id"],
+                "COMPRESSION_INTERFACE",
+                interface,
+                "AETHER_COMPRESSOR",
+            )
+        )
     operations = parts["field_operations"]
     assets.append(
         asset(
@@ -245,6 +267,22 @@ def seed_facility(conn: psycopg.Connection, root: Path) -> None:
             "AETHER_FIELD_OPERATIONS",
         )
     )
+    for site in operations["maintenance_locations"]:
+        assets.append(
+            asset(
+                site,
+                operations["asset_id"],
+                "MAINTENANCE_LOCATION",
+                site,
+                "AETHER_FIELD_OPERATIONS",
+            )
+        )
+    for site in operations["inspection_locations"]:
+        assets.append(
+            asset(
+                site, operations["asset_id"], "INSPECTION_LOCATION", site, "AETHER_FIELD_OPERATIONS"
+            )
+        )
     _insert(conn, "assets", assets, "asset_id")
     for pad in parts["well_pads"]:
         relationships.append(
@@ -281,6 +319,44 @@ def seed_facility(conn: psycopg.Connection, root: Path) -> None:
         )
 
 
+def seed_physical_network(conn: psycopg.Connection) -> dict[str, int]:
+    """Store the validated graph. The graph's own checks run first, and the database checks again."""
+    config = load_network()
+    graph = build_graph(config)
+    nodes = [
+        {
+            "node_id": n.node_id,
+            "facility_id": "AETHER-FIELD",
+            "node_type": n.node_type.value,
+            "asset_id": n.asset_id,
+            "local_x_m": n.x,
+            "local_y_m": n.y,
+            "network_version": config.network.version,
+            "provenance_class": "SYNTHETIC",
+        }
+        for n in graph.nodes.values()
+    ]
+    edges = [
+        {
+            "edge_id": e.edge_id,
+            "edge_type": e.edge_type.value,
+            "from_node_id": e.source,
+            "to_node_id": e.target,
+            "element_asset_id": e.element_asset_id,
+            "valve_asset_id": e.valve_asset_id,
+            "length_m": e.length_m,
+            "diameter_m": e.diameter_m,
+            "network_version": config.network.version,
+            "provenance_class": "SYNTHETIC",
+        }
+        for e in graph.edges.values()
+    ]
+    return {
+        "physical_nodes": _insert(conn, "physical_nodes", nodes, "node_id"),
+        "physical_edges": _insert(conn, "physical_edges", edges, "edge_id"),
+    }
+
+
 def build_aether_semantics() -> tuple[list[SensorTag], list[SensorTagMapping]]:
     """Sensors on the fictional model. Their meaning is declared by design, not measured."""
     config = yaml.safe_load((REPO_ROOT / "config/scenarios/aether_fault_001.yaml").read_text())
@@ -312,6 +388,44 @@ def build_aether_semantics() -> tuple[list[SensorTag], list[SensorTagMapping]]:
                 source_system_id="aether_synthetic",
                 original_unit_id=sensor["unit"],
                 canonical_unit_id=sensor["unit"],
+                conversion_method="IDENTITY",
+                data_quality_state="SEMANTICS_COMPLETE",
+                mapping_status="VERIFIED",
+                rationale="Defined by the simulator's declared design. Nothing was measured.",
+            )
+        )
+    # The field simulator adds sensors. Tags the Gate 3 prototype already declares aren't repeated.
+    declared = {t.native_tag_name for t in tags}
+    network = load_network()
+    for sensor in build_sensors(network, build_graph(network)):
+        if sensor.tag in declared:
+            continue
+        tag = f"aether_synthetic:{sensor.tag}"
+        tags.append(
+            SensorTag(
+                tag_id=tag,
+                source_system_id="aether_synthetic",
+                native_tag_name=sensor.tag,
+                equipment_position=sensor.measurement_definition_id,
+                equipment_class_id=sensor.equipment_class_id,
+                physical_quantity=sensor.quantity,
+                unit_id=sensor.unit,
+                pressure_reference_type=ReferenceType(sensor.reference),
+                sampling_frequency="300 s",
+                mapping_status="VERIFIED",
+                source_description=f"Synthetic sensor on the fictional field: {sensor.measurement_definition_id}.",
+                fictional_asset_id=sensor.asset_id,
+            )
+        )
+        mappings.append(
+            SensorTagMapping(
+                tag_id=tag,
+                measurement_definition_id=sensor.measurement_definition_id,
+                equipment_class_id=sensor.equipment_class_id,
+                reference_type=ReferenceType(sensor.reference),
+                source_system_id="aether_synthetic",
+                original_unit_id=sensor.unit,
+                canonical_unit_id=sensor.unit,
                 conversion_method="IDENTITY",
                 data_quality_state="SEMANTICS_COMPLETE",
                 mapping_status="VERIFIED",
@@ -393,10 +507,13 @@ def seed(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
 
     # Sensors reference the assets they are installed on, so assets come first.
     seed_facility(conn, root)
+    counts.update(seed_physical_network(conn))
     tags, definitions, mappings = build_semantics()
-    aether_rows = [("AETHER_ONSHORE_GAS_WELL", m) for m in reference["aether_measurements"]] + [
-        ("AETHER_GATHERING", m) for m in reference["aether_gathering_measurements"]
-    ]
+    aether_rows = (
+        [("AETHER_ONSHORE_GAS_WELL", m) for m in reference["aether_measurements"]]
+        + [("AETHER_GATHERING", m) for m in reference["aether_gathering_measurements"]]
+        + [("AETHER_COMPRESSOR", m) for m in reference["aether_compression_measurements"]]
+    )
     aether = [
         MeasurementDefinition(
             measurement_definition_id=m["id"],

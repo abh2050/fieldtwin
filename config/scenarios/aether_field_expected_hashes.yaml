@@ -1,0 +1,9 @@
+# Recorded output hashes for the field scenarios. Rounded well above solver and platform noise.
+# A change here means the simulation's results changed, so it needs a stated reason.
+hashes:
+  AETHER-FAULT-001-NET: 54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8
+  AETHER-NET-COMM-DROPOUT: 59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7
+  AETHER-NET-COMPRESSOR-DERATE: 718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab
+  AETHER-NET-NORMAL: 80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1
+  AETHER-NET-PLANNED-SHUTDOWN: 35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc
+  AETHER-NET-SENSOR-DRIFT: 4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6

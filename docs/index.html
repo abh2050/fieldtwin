@@ -35,7 +35,7 @@
 
 <main>
 <h2>Overview</h2>
-<p>FieldTwin is meant to carry data from an asset registry through acquisition, reconciliation, fault detection, and inspection evidence to human-approved maintenance. The data foundation, a canonical PostgreSQL schema, a reconciliation engine, and a synthetic scenario prototype exist so far. There is no trained ML model, application UI, or cloud deployment yet.</p>
+<p>FieldTwin is meant to carry data from an asset registry through acquisition, reconciliation, fault detection, and inspection evidence to human-approved maintenance. The data foundation, a canonical PostgreSQL schema, a reconciliation engine, and a coupled simulation of the whole fictional field exist so far. There is no trained ML model, application UI, or cloud deployment yet.</p>
 
 <h2>Business problem</h2>
 <p>Field data lives in separate systems with different identifiers, units, and reporting grains. A careless join can produce a confident answer that is physically wrong. FieldTwin keeps track of where each value came from and what it can support.</p>
@@ -47,8 +47,9 @@
     <tr><td>0</td><td>Project foundation</td><td>Passed (see <code>reports/gates/gate_0.md</code>)</td></tr>
     <tr><td>1</td><td>Source acquisition</td><td>Passed with documented limits (see <code>reports/gates/gate_1.md</code>)</td></tr>
     <tr><td>2</td><td>Canonical data model and semantic contracts</td><td>Passed (see <code>reports/gates/gate_2.md</code>)</td></tr>
-    <tr><td>3</td><td>Reconciliation and experimental scenario contracts</td><td>All acceptance tests met on a branch, awaiting review (see <code>reports/gates/gate_3.md</code>)</td></tr>
-    <tr><td>4-10</td><td>Facility model through portfolio demonstration</td><td>Not started</td></tr>
+    <tr><td>3</td><td>Reconciliation and experimental scenario contracts</td><td>Merged (see <code>reports/gates/gate_3.md</code>)</td></tr>
+    <tr><td>4</td><td>AETHER Field multi-asset simulation</td><td>On a branch, awaiting technical review (see <code>reports/gates/gate_4.md</code>)</td></tr>
+    <tr><td>5-10</td><td>Detection benchmark through portfolio demonstration</td><td>Not started</td></tr>
   </tbody>
 </table></div>
 
@@ -78,6 +79,9 @@
 <h2>Reconciliation and AETHER-FAULT-001</h2>
 <p>Identity rests only on authoritative identifiers, and proximity yields unverified candidates that never become identity. AETHER-FAULT-001 is a progressive gathering-line restriction on fictional Well A-03, using synthetic telemetry from a simplified physical model that isn't calibrated to any real well. Petrobras 3W stays an independent offshore benchmark and is not mapped onto AETHER assets.</p>
 
+<h2>Field simulation</h2>
+<p>A coupled steady-state model of 12 fictional wells, 2 pads, a shared manifold, and 4 compressors, with six scenarios. One well-flow solve per state means wells can't disagree about a shared pressure. All of it is synthetic. It is a simplified model, not a validated engineering simulator, and it isn't real operating data.</p>
+
 <h2>Test results</h2>
 <p>See <code>reports/gates/gate_3.md</code> for executed results. CI runs on committed fixtures only.</p>
 
@@ -92,7 +96,7 @@
 </ul>
 
 <h2>Sections not yet available</h2>
-<p>These have no results, because the work has not been done: the full 12-well simulation, anomaly detection and model evaluation, decision engine, AWS infrastructure, actual deployment cost, and demo walkthrough.</p>
+<p>These have no results, because the work has not been done: anomaly detection and model evaluation, decision engine, AWS infrastructure, actual deployment cost, and demo walkthrough.</p>
 </main>
 </body>
 </html>

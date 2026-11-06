@@ -16,4 +16,5 @@ The specification allows scaffold changes if they are recorded here.
 | Added `docs/specification.md`, with `instructions.md` as a short entry point | Keeps the full technical specification separate from contributor guidance (Gate 3) |
 | Added `reports/scenarios/`, and ADRs 0012 to 0014 | Gate 3 scenario results and decisions |
 | Added `reports/gates/gate_3_merge_verification.md` | Records the merge conditions, which initially failed |
+| Added `reports/simulation/` and ADR 0016 | Gate 4 evidence and decisions |
 | Placed quarantine files at `data/bronze/<source>/<batch>/quarantine.jsonl` | Keeps rejected records next to the data they were rejected from |

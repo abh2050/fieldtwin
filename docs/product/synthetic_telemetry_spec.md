@@ -112,7 +112,7 @@ The same configuration and seed give identical output. `canonical_sha256()` hash
 
 ## Extending to Gate 4
 
-The prototype is modular, so Gate 4 can extend it. Configuration, physics, sensors, invariants, and events are separate modules, and `solve()` takes arrays of severity. To reach 12 wells, Gate 4 needs a network solver in place of the single series path, because shared segments couple the wells. It should also replace the fixed downstream pressure with a compressor model.
+Gate 4 extends this to the whole field in the [field simulation specification](field_simulation_spec.md). This single-well prototype stays as a regression reference: the network reduced to one well and one segment must reproduce it.
 
 ## What this doesn't support
 

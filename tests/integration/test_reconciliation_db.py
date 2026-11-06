@@ -80,7 +80,7 @@ def test_native_tags_keep_their_own_equipment_class(engine):
            JOIN sensor_tags t ON t.tag_id = d.subject_id
            WHERE d.module = 'SEMANTIC' AND d.verification_status <> 'REJECTED'"""
     ).fetchall()
-    assert len(rows) == 31
+    assert len(rows) == 68
     assert all(row[1] == row[2] for row in rows)
 
 

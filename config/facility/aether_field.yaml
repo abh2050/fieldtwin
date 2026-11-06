@@ -51,22 +51,39 @@ assets:
   gathering_network:
     asset_id: GATHERING
     asset_name: Gathering Network
-    # Segment and valve counts are simplified assumptions, revisited in Gate 4.
     gathering_segments: [GS-A, GS-B, GS-TRUNK]
     isolation_valves: [IV-A, IV-B, IV-STATION]
+    flowlines: [FL-A-01, FL-A-02, FL-A-03, FL-A-04, FL-A-05, FL-A-06, FL-B-01, FL-B-02, FL-B-03, FL-B-04, FL-B-05, FL-B-06]
+    headers: [HDR-A, HDR-B]
+    manifolds: [MANIFOLD]
   compression_station:
     asset_id: COMP-STATION
     asset_name: Compression Station
     compressors: [C-01, C-02, C-03, C-04]
+    interfaces: [COMP-SUCTION, COMP-DISCHARGE]
   field_operations:
     asset_id: FIELD-OPS
     asset_name: Field Operations
     functions: [inspection_missions, maintenance_resources, work_orders]
+    maintenance_locations: [MAINT-BASE]
+    inspection_locations: [INSPECT-A, INSPECT-B]
 
-# Flow connections so far. Gate 4 completes these for all 12 wells.
+# Which equipment feeds which. The pressure network itself is in aether_network.yaml.
 flow_connections:
+  - {source: A-01, target: GS-A}
+  - {source: A-02, target: GS-A}
   - {source: A-03, target: GS-A}
+  - {source: A-04, target: GS-A}
+  - {source: A-05, target: GS-A}
+  - {source: A-06, target: GS-A}
+  - {source: B-01, target: GS-B}
+  - {source: B-02, target: GS-B}
+  - {source: B-03, target: GS-B}
+  - {source: B-04, target: GS-B}
+  - {source: B-05, target: GS-B}
+  - {source: B-06, target: GS-B}
   - {source: GS-A, target: GS-TRUNK}
+  - {source: GS-B, target: GS-TRUNK}
   - {source: GS-TRUNK, target: COMP-STATION}
 
 constraints:

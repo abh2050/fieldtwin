@@ -247,7 +247,7 @@ def test_every_sensor_has_the_nine_semantic_attributes(db):
         "original_unit, canonical_unit, conversion_method, source_system, data_quality_state"
     )
     rows = db.execute(f"SELECT {columns} FROM v_tag_semantics").fetchall()
-    assert len(rows) == 27 + 4  # 3W tags plus the synthetic AETHER sensors from Gate 3.
+    assert len(rows) == 27 + 4 + 37  # 3W tags, Gate 3 sensors, and the field sensors from Gate 4.
     assert all(value is not None for row in rows for value in row)
 
 
