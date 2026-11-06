@@ -59,8 +59,29 @@ def run_audit() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def plausibility_counts() -> dict:
+    """Readings per sensor outside the declared limits, by origin. Nothing is written to raw files."""
+    from pipelines.experiments.three_w_data import apply_plausibility, sensors_of
+
+    root = batch_root()
+    totals: dict[str, dict[str, int]] = {}
+    affected: dict[str, set[str]] = {}
+    for item in instance_table().itertuples():
+        path = root / item.source_path
+        sensors = sensors_of(path)
+        frame = pq.read_table(path, columns=list(sensors)).to_pandas(ignore_metadata=True)
+        _, removed = apply_plausibility(frame.apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float), sensors)
+        for sensor, count in removed.items():
+            bucket = totals.setdefault(sensor, {})
+            bucket[item.real_or_simulated_source] = bucket.get(item.real_or_simulated_source, 0) + count
+            affected.setdefault(sensor, set()).add(item.source_instance_id)
+    return {s: {"readings": totals[s], "instances": len(affected[s])} for s in sorted(totals)}
+
+
 def main() -> int:
     audits = run_audit()
+    (EXPERIMENTS / "3w_plausibility.json").parent.mkdir(parents=True, exist_ok=True)
+    (EXPERIMENTS / "3w_plausibility.json").write_text(json.dumps(plausibility_counts(), indent=1))
     EXPERIMENTS.mkdir(parents=True, exist_ok=True)
     audits.to_parquet(EXPERIMENTS / "3w_label_audit.parquet", index=False)
     config = evaluation_config()

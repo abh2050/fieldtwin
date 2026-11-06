@@ -27,6 +27,8 @@ uncertainty:
   confidence: 0.95
 
 selection:
+  # Development data: pooled development folds for 3W, in-regime test cases for AETHER. Added after the
+  # first commit of this file and before any fit, because the first version didn't name AETHER's.
   # 1. Keep methods at or under the budget on development data, using the point estimate.
   # 2. Find the highest event recall among them.
   # 3. Methods whose recall interval includes that value are tied, and the simplest tied method wins.
@@ -48,6 +50,13 @@ three_w:
     development_folds: 4
     validation_folds: 4  # Within each training set, one fold of wells sets the threshold.
   features_excluded: [class, state, timestamp]
+  # Readings outside these become missing in derived data, and raw files don't change. Added after the
+  # first commit of this file and before any fit, on finding impossible values such as 1.7e38 degrees C.
+  # The lower pressure limit is below -1 atm, which no absolute or gauge reference allows.
+  plausibility:
+    pressure_pa: [-150000.0, 200000000.0]
+    temperature_c: [-60.0, 300.0]
+    opening_percent: [-1.0, 101.0]
   # Every row inside the leading unlabeled part of a file is unscored, and it can only serve as input.
 
 aether:
