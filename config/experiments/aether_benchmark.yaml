@@ -1,0 +1,58 @@
+# AETHER synthetic benchmark design. Committed before any model was fitted. Every result is SYNTHETIC,
+# from an uncalibrated fictional model, and says nothing about real field detection performance.
+version: 1
+duration_s: 604800
+interval_s: 300
+
+# Case seeds never repeat across splits. Well parameters and noise are drawn from the case seed.
+seed_base: {train: 500000, validation: 600000, test: 700000, held_out: 800000}
+
+categories: [NORMAL, PLANNED, COMM, RESTRICTION, DERATE, SENSOR_BIAS, SENSOR_DRIFT, SENSOR_STUCK]
+cases_per_category: {train: 12, validation: 4, test: 4}
+
+# Ranges for training, validation, and in-regime test cases.
+regime:
+  well_multiplier: [0.90, 1.10]
+  noise_multiplier: [0.75, 1.25]
+  setpoint_pa_abs: [1500000.0, 1700000.0]
+  setpoint_step_fraction: 0.02
+  setpoint_hold_hours: [12, 36]
+  unit_capacity_sm3_per_s: [2.0, 2.3]
+  units_offline: 0
+  onset_days: [2.0, 4.0]
+  ramp_days: [1.0, 3.0]
+  severity: [0.30, 0.60]
+  derate_final_fraction: [0.30, 0.60]
+  restriction_assets: [GS-A, GS-B]
+  derate_assets: [C-01, C-02]
+  sensor_tags_pressure: [A-01.PT-WH, A-03.PT-WH, A-05.PT-WH, HDR-A.PT-NET, GS-A.DPT-NET]
+  sensor_tags_flow: [A-02.FT, A-04.FT, A-06.FT]
+  bias_pa: [8000, 30000]
+  bias_flow: [0.01, 0.05]
+  drift_pa_per_day: [3000, 10000]
+  drift_flow_per_day: [0.005, 0.02]
+  planned_per_case: [0, 2]
+  planned_hours: [6, 12]
+  dropout_hours: [6, 18]
+  dropout_groups: [PAD-A, PAD-B, C-01, C-02]
+
+# Each regime changes the named ranges only. No case from these is seen in fitting or threshold setting.
+held_out_regimes:
+  severity_high: {severity: [0.62, 0.70]}
+  severity_low: {severity: [0.10, 0.25]}
+  unseen_assets:
+    restriction_assets: [GS-TRUNK]
+    derate_assets: [C-03, C-04]
+    sensor_tags_pressure: [B-01.PT-WH, B-03.PT-WH, B-05.PT-WH, HDR-B.PT-NET, GS-B.DPT-NET]
+    sensor_tags_flow: [B-02.FT, B-04.FT, B-06.FT]
+  noise_high: {noise_multiplier: [2.0, 3.0]}
+  deliverability_outside: {well_multiplier_bands: [[0.75, 0.85], [1.15, 1.25]]}
+  onset_outside: {onset_day_bands: [[1.0, 1.4], [5.0, 5.8]], ramp_days: [0.5, 1.0]}
+  compressor_outside:
+    setpoint_bands: [[1300000.0, 1450000.0], [1750000.0, 1900000.0]]
+    units_offline: 1
+  fault_with_dropout: {overlay_dropout: true}
+held_out_categories: [NORMAL, PLANNED, RESTRICTION, DERATE, SENSOR_BIAS, SENSOR_DRIFT, SENSOR_STUCK]
+held_out_cases_per_category: 2
+
+classes: {NORMAL: 0, RESTRICTION: 1, DERATE: 2, SENSOR: 3}

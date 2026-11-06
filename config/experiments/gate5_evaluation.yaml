@@ -1,0 +1,84 @@
+# Gate 5 evaluation rules. Committed before any model was fitted, and the holdout stays unread until
+# development is finished. A later change to this file has to be disclosed in reports/gates/gate_5.md.
+version: 1
+seed: 50005
+
+methods:
+  # In the order of complexity used to break ties. Earlier means simpler.
+  - static_threshold
+  - rolling_deviation
+  - logistic_regression
+  - isolation_forest
+  - hist_gradient_boosting
+
+alarm:
+  # A false-alarm budget all methods share, so they are compared at one operating point.
+  false_alarms_per_hour_budget: 0.05
+  threshold_grid_points: 60
+
+support:
+  # Below these, precision and recall are not reported for a group.
+  min_events: 5
+  min_clusters: 3
+  min_clusters_for_interval: 5
+
+uncertainty:
+  bootstrap_resamples: 2000
+  confidence: 0.95
+
+selection:
+  # 1. Keep methods at or under the budget on development data, using the point estimate.
+  # 2. Find the highest event recall among them.
+  # 3. Methods whose recall interval includes that value are tied, and the simplest tied method wins.
+  rule: simplest_within_interval_of_best_event_recall
+
+three_w:
+  # Only recorded instances are evaluated. Simulated and hand-drawn ones appear in one training
+  # sensitivity test, and never in any evaluation set.
+  evaluate_origins: [REAL]
+  window_s: 300
+  stride_s: 60
+  rolling_baseline_windows: 60
+  rolling_gap_windows: 5
+  persistence_windows: 3
+  suppression_s: 1800
+  max_train_windows_per_class: 40000
+  splits:
+    holdout_folds: 5  # One fold of wells is the holdout.
+    development_folds: 4
+    validation_folds: 4  # Within each training set, one fold of wells sets the threshold.
+  features_excluded: [class, state, timestamp]
+  # Every row inside the leading unlabeled part of a file is unscored, and it can only serve as input.
+
+aether:
+  evaluate_origins: [SYNTHETIC]
+  window_samples: 12
+  stride_samples: 1
+  rolling_baseline_windows: 288
+  rolling_gap_windows: 12
+  persistence_windows: 3
+  suppression_s: 21600
+  max_train_windows_per_class: 40000
+
+event_matching:
+  # Applied identically to both tracks.
+  episode: >
+    An episode starts once the score is at or above the threshold for persistence_windows consecutive
+    windows. It ends after the score stays below the threshold for suppression_s. Alerts inside one
+    episode count once.
+  detection: >
+    An event is detected only if an episode starts inside the labeled event, between the first
+    event-labeled row and the last labeled row.
+  active_at_onset: >
+    An episode that started earlier and is still active at onset isn't a detection. These are counted
+    and reported separately.
+  false_alarm: >
+    An episode that starts on a row labeled normal is one false alarm, including when it continues into
+    a later event.
+  unscored: >
+    Episodes starting on unlabeled rows, or in an instance excluded from the metric, count as nothing.
+  operating_time: >
+    Windows labeled normal multiplied by the stride, with each well and timestamp counted once, because
+    3W instances can overlap in time.
+  sample_label: >
+    A window takes the label of its last row. Positive means any event or transient label.

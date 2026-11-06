@@ -4,8 +4,11 @@ version = "0.1.0"
 description = "Industrial decision-support platform demonstrated on AETHER Field, a fictional facility."
 requires-python = ">=3.12,<3.13"
 dependencies = [
+  "alembic>=1.20.1",
   "duckdb>=1.1",
   "httpx>=0.27",
+  "joblib>=1.4",
+  "mlflow-skinny>=2.16",
   "numpy>=2.5.4",
   "openpyxl>=3.1",
   "pandas>=2.2",
@@ -14,6 +17,8 @@ dependencies = [
   "pyarrow>=17",
   "pydantic>=2.8",
   "pyyaml>=6",
+  "scikit-learn>=1.5",
+  "sqlalchemy>=2.1.8",
   "tenacity>=9",
 ]
 
@@ -55,6 +60,14 @@ select = ["E", "F", "I", "B", "UP"]
 "packages/scenario_engine/field_*.py" = ["E501"]
 "packages/scenario_engine/network_*.py" = ["E501"]
 "packages/scenario_engine/propagation.py" = ["E501"]
+"packages/scenario_engine/benchmark_runs.py" = ["E501"]
+"packages/scenario_engine/execution.py" = ["E501"]
+"packages/anomaly_detection/*.py" = ["E501"]
+"pipelines/experiments/*.py" = ["E501"]
+"tests/unit/test_anomaly_*.py" = ["E501"]
+"tests/unit/test_benchmark_*.py" = ["E501"]
+"tests/unit/test_execution.py" = ["E501"]
+"tests/integration/test_experiments_real.py" = ["E501"]
 "packages/scenario_engine/reference_solver.py" = ["E501"]
 "tests/unit/test_field_*.py" = ["E501"]
 "tests/unit/test_network_*.py" = ["E501"]
