@@ -1,6 +1,6 @@
 # Gate 4 report: AETHER Field multi-asset simulation
 
-**Status: Hosted CI is pending. Not merged.**
+**Status: ALL 10 ACCEPTANCE TESTS MET, stopped for technical review.** The work is on branch `gate-4`, with a [successful CI run](https://github.com/abh2050/fieldtwin/actions/runs/42141073855). It isn't merged.
 
 Date: 2026-11-05 (log timestamps are UTC, 2026-11-06). Branch: `gate-4`. Full output of the final local rebuild: [`gate_4_execution_log.txt`](gate_4_execution_log.txt).
 
@@ -17,7 +17,7 @@ Date: 2026-11-05 (log timestamps are UTC, 2026-11-06). Branch: `gate-4`. Full ou
 | 5 | Telemetry is correctly attributed and versioned | **Met** | 242 of 242 synthetic observations have a complete chain to asset, sensor, scenario, run, simulator version, and parameter set. |
 | 6 | Cross-asset consequences are demonstrated | **Met** | 81 of 81 direction predictions made from topology match the coupled solve. |
 | 7 | Regression and new tests pass | **Met** | See [Test results](#test-results). |
-| 8 | CI passes on the feature branch | Pending | Local clean-copy run of every CI command passed. | |
+| 8 | CI passes on the feature branch | **Met** | [All 9 jobs passed](https://github.com/abh2050/fieldtwin/actions/runs/42141073855) on commit `202bc51`. | |
 | 9 | Reports contain executed numerical results | **Met** | Generated from runs. Tests fail if the catalog, telemetry, or propagation report differs from a fresh run. |
 | 10 | Limitations are disclosed | **Met** | See [Limitations](#limitations). |
 
@@ -121,7 +121,7 @@ Ruff, the format check, and mypy pass. Canonical validation shows 21 checks and 
 8. **Telemetry is idealized.** Noise is independent Gaussian. Dropouts are clean gaps, with no repeated values or late arrivals.
 9. **Some faults don't reach some sensors.** The restriction leaves suction at setpoint, so suction telemetry shows nothing. Whether any fault can be detected hasn't been evaluated, because that belongs to a later gate.
 10. **PostGIS runs emulated.** Local PostGIS uses a linux/amd64 image on Apple Silicon.
-11. **Reproducibility covers CI platforms only.** See the CI section for what ran. Other CPUs or library versions aren't covered, and hashes round values to stay above platform noise.
+11. **Reproducibility covers three platforms.** Those are Linux x86, Linux ARM, and macOS ARM, with locked dependencies. Other CPUs or library versions aren't covered, and hashes round values to stay above platform noise.
 12. **One unexplained local hang.** See item 5 above.
 
 ## Scope kept out
@@ -130,4 +130,10 @@ No anomaly-detection benchmark, drone image analysis, maintenance optimization, 
 
 ## CI
 
-Pending the first push of this branch.
+[Run 42141073855](https://github.com/abh2050/fieldtwin/actions/runs/42141073855), on commit `202bc51`, passed all 9 jobs: `lint-and-types`, `unit`, `contract`, `postgres-integration`, `provenance-invariants`, `dependency-and-credential-scan`, and `simulation-reproducibility` on `ubuntu-24.04`, `ubuntu-24.04-arm`, and `macos-15` (arm64).
+
+The three reproducibility jobs compare the six output hashes with the same recorded values, so the hashes match on Linux x86, Linux ARM, and macOS ARM.
+
+The [first run](https://github.com/abh2050/fieldtwin/actions/runs/42140895856) was cancelled. GitHub refused the `macos-14` runner before the job started, so that platform hadn't been tested. The matrix now uses `macos-15`. The other 8 jobs passed in that run.
+
+This section was added after that run, so the commit holding it has its own CI run, which is visible on the branch.
