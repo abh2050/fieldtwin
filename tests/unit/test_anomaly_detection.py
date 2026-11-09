@@ -432,7 +432,9 @@ def test_calibration_doesnt_choose_an_alarm_that_never_turns_off():
     y = np.zeros(3000, dtype=int)
     table = _table(y)
     flat = summarize(score_windows(table, scores, 0.1, RULE))
-    assert flat["false_alarms_per_hour"] < 0.05 and flat["time_in_alarm"] == 1.0
+    assert (
+        flat["false_alarms_per_hour"] < 0.05 and flat["time_in_alarm"] > 0.99
+    )  # Persistence leaves 2 windows out.
     result = calibrate_threshold(
         table, scores, RULE, budget=0.05, grid_points=40, max_time_in_alarm=0.05
     )
