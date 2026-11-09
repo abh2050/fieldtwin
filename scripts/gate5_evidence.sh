@@ -41,10 +41,10 @@ step "Field diagrams" env PYTHONPATH=. uv run python scripts/build_field_diagram
 step "Remove derived Gate 5 data" rm -rf data/gold/experiments
 step "3W label audit" uv run python -m pipelines.experiments.three_w_audit
 step "AETHER benchmark data, under the process guard" uv run python -m pipelines.experiments.aether_data
-step "3W development folds" uv run python -m pipelines.experiments.three_w_run --stage development
-step "AETHER in-regime test" uv run python -m pipelines.experiments.aether_run --stage in_regime
-step "3W holdout, rerun" uv run python -m pipelines.experiments.three_w_run --stage holdout
-step "AETHER held-out regimes, rerun" uv run python -m pipelines.experiments.aether_run --stage held_out
+step "3W development folds" uv run python -m pipelines.experiments.run_stage evidence-3w-development -- pipelines.experiments.three_w_run --stage development
+step "AETHER in-regime test" uv run python -m pipelines.experiments.run_stage evidence-aether-in-regime -- pipelines.experiments.aether_run --stage in_regime
+step "3W holdout, rerun" uv run python -m pipelines.experiments.run_stage evidence-3w-holdout -- pipelines.experiments.three_w_run --stage holdout
+step "AETHER held-out regimes, rerun" uv run python -m pipelines.experiments.run_stage evidence-aether-held-out -- pipelines.experiments.aether_run --stage held_out
 step "Results match the committed ones" uv run python -m pipelines.experiments.reproducibility
 step "Reliability stress" uv run python -m pipelines.experiments.reliability_stress --repeats 30 --workers 4
 step "Streaming latency and memory" uv run python -m pipelines.experiments.inference_perf

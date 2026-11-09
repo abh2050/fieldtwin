@@ -473,3 +473,51 @@ def test_classifier_scores_keep_resolution_when_normal_is_nearly_impossible():
     assert np.isfinite(scores).all()
     shifted = scores[y == 1]
     assert len(np.unique(shifted)) > len(shifted) // 2  # Not all tied, as 1 - P would be.
+
+
+def test_an_alarm_after_the_event_returns_to_normal_is_a_false_alarm_not_a_detection():
+    y = np.array([0] * 10 + [4] * 10 + [0] * 20)
+    late = np.zeros(40)
+    late[25:29] = 1.0  # Starts after the last event-labeled row.
+    result = score_windows(_table(y), late, 0.5, RULE)
+    summary = summarize(result)
+    assert not result.events["detected"].iloc[0]
+    assert summary["false_alarms"] == 1
+    assert result.events["duration_h"].iloc[0] == pytest.approx(9 * 60 / 3600)
+
+
+def test_calibration_can_choose_a_threshold_below_the_median():
+    # Two high windows, then a zero, repeating. Nothing persists for 3 windows, so any threshold above
+    # zero is within budget, including ones well below the median.
+    rng = np.random.default_rng(1)
+    scores = 0.9 + 0.1 * rng.random(3000)
+    scores[2::3] = 0.0
+    y = np.zeros(3000, dtype=int)
+    result = calibrate_threshold(
+        _table(y), scores, RULE, budget=0.05, grid_points=60, max_time_in_alarm=0.05
+    )
+    assert 0.0 < result["threshold"] < float(np.median(scores))
+
+
+def test_classifier_scores_stay_finite_when_normal_has_probability_zero():
+    features, y, spec = _toy()
+    features[y == 1, 0] += 1e6  # Far enough that predict_proba gives exactly 0 for normal.
+    seq = np.zeros(len(y), dtype=int)
+    for method in ("logistic_regression", "hist_gradient_boosting"):
+        detector = make_detector(
+            method, spec.names, seed=1, baseline_windows=20, gap_windows=5
+        ).fit(features, y, seq)
+        assert np.isfinite(detector.score(features, seq)).all(), method
+
+
+def test_logistic_regression_refuses_to_return_an_unconverged_fit():
+    from packages.anomaly_detection.detectors import FitDidNotConverge, Logistic
+
+    features, y, _ = _toy()
+    with pytest.raises(FitDidNotConverge):
+        Logistic(seed=1, max_iter=1).fit(features, y, np.zeros(len(y), dtype=int))
+    fitted = Logistic(seed=1).fit(features, y, np.zeros(len(y), dtype=int))
+    assert (
+        fitted.fit_report["converged"]
+        and fitted.fit_report["iterations"] < fitted.fit_report["max_iter"]
+    )

@@ -131,8 +131,9 @@ def score_windows(
         positive = np.flatnonzero(labels > 0)
         if positive.size:
             onset = int(positive[0])
-            scored_end = int(np.flatnonzero(labels != UNSCORED)[-1])
-            inside = starts[(starts >= onset) & (starts <= scored_end)]
+            # The event ends at its last event-labeled row. Normal rows after it are normal operation.
+            event_end = int(positive[-1])
+            inside = starts[(starts >= onset) & (starts <= event_end)]
             events.append(
                 {
                     "seq": seq,
@@ -143,7 +144,7 @@ def score_windows(
                     "delay_s": float(times[index][inside[0]] - times[index][onset])
                     if inside.size
                     else np.nan,
-                    "duration_h": float(times[index][scored_end] - times[index][onset]) / 3600.0,
+                    "duration_h": float(times[index][event_end] - times[index][onset]) / 3600.0,
                 }
             )
     columns = [
@@ -297,8 +298,11 @@ def calibrate_threshold(
     finite = scores[np.isfinite(scores)]
     if finite.size == 0:
         raise ValueError("no finite validation scores")
-    tail = 1.0 - np.logspace(-5, np.log10(0.5), grid_points)
-    candidates = np.unique(np.quantile(finite, tail))[::-1]
+    # The whole score range: dense in the upper tail, where useful thresholds usually sit, and even
+    # across the rest, so a threshold below the median can still be found.
+    tail = 1.0 - np.logspace(-5, 0, grid_points)
+    even = np.linspace(0.0, 1.0, grid_points)
+    candidates = np.unique(np.quantile(finite, np.concatenate([tail, even])))[::-1]
     chosen = float(finite.max()) + max(abs(float(finite.max())) * 1e-6, 1e-9)
     achieved = summarize(score_windows(table, scores, chosen, rule))
     stopped_by = "reached the end of the grid"

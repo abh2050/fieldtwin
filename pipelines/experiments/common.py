@@ -98,6 +98,7 @@ def fit_and_calibrate(
         grid_points=config["alarm"]["threshold_grid_points"],
         max_time_in_alarm=config["alarm"]["max_fraction_of_normal_time_in_alarm"],
     )
+    calibration["fit_report"] = getattr(detector, "fit_report", None)
     return Fitted(
         method,
         detector,

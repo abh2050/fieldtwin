@@ -1,8 +1,15 @@
 # Gate 5 evaluation rules. Committed before any model was fitted, and the holdout stays unread until
 # development is finished. A later change to this file has to be disclosed in reports/gates/gate_5.md.
-version: 2
+version: 3
 seed: 50005
 
+# Version 3, made after technical review and after both holdouts had been read, so the regenerated
+# holdout results are not from an unread holdout. Three defects were corrected:
+#  1. An event now ends at its last event-labeled row, as the matching rule states, and not at the last
+#     scored row. No event in the current data is followed by normal rows, so no result depended on this.
+#  2. The threshold search now covers the whole score range. Version 2 stopped at the median.
+#  3. Logistic regression must converge, and its convergence is recorded with every fit.
+#
 # Version 2, made after development results and before either holdout was read. Version 1 had two flaws,
 # both found by looking at development results:
 #  1. Taking the lowest threshold within budget could choose an alarm that never turns off, because one
@@ -23,6 +30,8 @@ alarm:
   # A false-alarm budget all methods share, so they are compared at one operating point.
   false_alarms_per_hour_budget: 0.05
   max_fraction_of_normal_time_in_alarm: 0.05
+  # Candidate thresholds: this many quantiles log-spaced toward the top of the validation scores, plus
+  # this many evenly spaced from the minimum to the maximum.
   threshold_grid_points: 60
 
 support:

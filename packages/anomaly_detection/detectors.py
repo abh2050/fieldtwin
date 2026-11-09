@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import Protocol, Self
 
 import numpy as np
 import pandas as pd
+from scipy.special import logsumexp
 from sklearn.ensemble import HistGradientBoostingClassifier, IsolationForest
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
@@ -17,7 +20,12 @@ from .features import columns_of
 PARAMETERS: dict[str, dict] = {
     "static_threshold": {"limit_quantiles": [0.005, 0.995]},
     "rolling_deviation": {"statistic": "max sensor z against a preceding causal baseline"},
-    "logistic_regression": {"C": 1.0, "class_weight": "balanced", "max_iter": 500},
+    "logistic_regression": {
+        "C": 1.0,
+        "class_weight": "balanced",
+        "max_iter": 5000,
+        "convergence": "required",
+    },
     "isolation_forest": {"n_estimators": 200, "max_samples": 4096},
     "hist_gradient_boosting": {
         "max_iter": 150,
@@ -121,6 +129,15 @@ class RollingDeviation:
         return None
 
 
+class FitDidNotConverge(RuntimeError):
+    """An iterative fit stopped at its limit. Its result isn't the model the method describes."""
+
+
+# All six fits in Gate 5 converge within 640 iterations. The limit leaves wide room, and reaching it
+# is an error, not a silent result.
+MAX_ITERATIONS = 5000
+
+
 class _Classifier:
     history_windows = 1
     model: object
@@ -143,8 +160,16 @@ class _Classifier:
         return -self._log_normal_probability(features)
 
     def _log_normal_probability(self, features: np.ndarray) -> np.ndarray:
-        probability = self._normal_probability(features)
-        return np.log(np.maximum(probability, np.finfo(float).tiny))
+        """log P(normal) from the raw decision values, so it stays finite however small P is.
+
+        Taking the log of `predict_proba` doesn't work: probabilities below about 1e-308 become exactly
+        0, and their log is minus infinity, which ties those windows again.
+        """
+        decision = self.model.decision_function(features)  # type: ignore[attr-defined]
+        raw: np.ndarray = np.asarray(decision, dtype=float)
+        if raw.ndim == 1:  # Two classes: the value is the log-odds of the second class.
+            raw = np.column_stack([np.zeros_like(raw), raw])
+        return raw[:, self.normal_index] - logsumexp(raw, axis=1)
 
     def predict_class(self, features: np.ndarray) -> np.ndarray:
         return self.model.predict(features)  # type: ignore[attr-defined]
@@ -155,17 +180,34 @@ class Logistic(_Classifier):
 
     name = "logistic_regression"
 
-    def _log_normal_probability(self, features: np.ndarray) -> np.ndarray:
-        # Computed in log space, so it stays finite and ordered far beyond 1e-16.
-        return self.model.predict_log_proba(features)[:, self.normal_index]  # type: ignore[attr-defined]
-
-    def __init__(self, seed: int):
+    def __init__(self, seed: int, max_iter: int = MAX_ITERATIONS):
         self.model = make_pipeline(
             SimpleImputer(strategy="median"),
             StandardScaler(),
-            LogisticRegression(C=1.0, class_weight="balanced", max_iter=500, random_state=seed),
+            LogisticRegression(
+                C=1.0, class_weight="balanced", max_iter=max_iter, random_state=seed
+            ),
         )
         self.seed = seed
+        self.max_iter = max_iter
+
+    def fit(self, features: np.ndarray, y: np.ndarray, seq: np.ndarray) -> Self:
+        """Fit, and refuse a result that stopped at the iteration limit instead of converging."""
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", ConvergenceWarning)
+            super().fit(features, y, seq)
+        iterations = int(np.max(self.model[-1].n_iter_))  # type: ignore[index]
+        warned = any(issubclass(w.category, ConvergenceWarning) for w in caught)
+        self.fit_report = {
+            "iterations": iterations,
+            "max_iter": self.max_iter,
+            "converged": not warned and iterations < self.max_iter,
+        }
+        if not self.fit_report["converged"]:
+            raise FitDidNotConverge(
+                f"logistic regression stopped at {iterations} of {self.max_iter} iterations"
+            )
+        return self
 
 
 class GradientBoosting(_Classifier):

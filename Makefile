@@ -55,12 +55,12 @@ gate5-data:
 	uv run python -m pipelines.experiments.aether_data
 
 gate5-development:
-	uv run python -m pipelines.experiments.three_w_run --stage development
-	uv run python -m pipelines.experiments.aether_run --stage in_regime
+	uv run python -m pipelines.experiments.run_stage 3w-development -- pipelines.experiments.three_w_run --stage development
+	uv run python -m pipelines.experiments.run_stage aether-in-regime -- pipelines.experiments.aether_run --stage in_regime
 
 gate5-holdout:
-	uv run python -m pipelines.experiments.three_w_run --stage holdout
-	uv run python -m pipelines.experiments.aether_run --stage held_out
+	uv run python -m pipelines.experiments.run_stage 3w-holdout -- pipelines.experiments.three_w_run --stage holdout
+	uv run python -m pipelines.experiments.run_stage aether-held-out -- pipelines.experiments.aether_run --stage held_out
 
 gate5-performance:
 	uv run python -m pipelines.experiments.inference_perf
