@@ -38,7 +38,7 @@
    "validation": 32
   }
  },
- "git_sha": "ba35bf1ae37dc5d25608cad7ccbc645a130271ab",
+ "git_sha": "55ea77d44d92795ae01f23b40a3303ff35cf20b3",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -53,7 +53,7 @@
     "false_alarms": {
      "during_dropout": 0,
      "during_planned_work": 0,
-     "other_normal_operation": 42
+     "other_normal_operation": 0
     },
     "hours": {
      "during_dropout": 55.916666666666664,
@@ -64,15 +64,15 @@
    "average_precision": 0.7645536372304976,
    "by_category": {
     "DERATE": {
-     "detected": 1,
-     "events": 4
-    },
-    "RESTRICTION": {
      "detected": 4,
      "events": 4
     },
-    "SENSOR_BIAS": {
+    "RESTRICTION": {
      "detected": 2,
+     "events": 4
+    },
+    "SENSOR_BIAS": {
+     "detected": 0,
      "events": 4
     },
     "SENSOR_DRIFT": {
@@ -80,14 +80,14 @@
      "events": 4
     },
     "SENSOR_STUCK": {
-     "detected": 4,
+     "detected": 1,
      "events": 4
     }
    },
    "by_class": [
     {
      "clusters": 4,
-     "detected": 4,
+     "detected": 2,
      "event_class": 1,
      "event_recall": null,
      "events": 4,
@@ -95,7 +95,7 @@
     },
     {
      "clusters": 4,
-     "detected": 1,
+     "detected": 4,
      "event_class": 2,
      "event_recall": null,
      "events": 4,
@@ -103,20 +103,23 @@
     },
     {
      "clusters": 12,
-     "detected": 8,
+     "detected": 3,
      "event_class": 3,
-     "event_recall": 0.6666666666666666,
+     "event_recall": 0.25,
      "event_recall_interval": [
-      0.4166666666666667,
-      0.9166666666666666
+      0.0,
+      0.5
      ],
      "events": 12
     }
    ],
    "calibration": {
     "budget_met": true,
-    "threshold": 0.02364920739797216,
-    "validation_false_alarms_per_hour": 0.015820698747528016
+    "stopped_by": "time-in-alarm limit",
+    "threshold": 0.8206506223283573,
+    "validation_event_recall": 0.5,
+    "validation_false_alarms_per_hour": 0.002050831319124002,
+    "validation_time_in_alarm": 0.04880490246343905
    },
    "confusion": {
     "classes": [
@@ -154,80 +157,95 @@
    },
    "delays": {
     "DERATE": {
-     "detected": 1,
+     "detected": 4,
      "median_hours": 0.25,
      "q25_hours": 0.25,
      "q75_hours": 0.25
     },
     "RESTRICTION": {
-     "detected": 4,
-     "median_hours": 24.333333333333332,
-     "q25_hours": 23.770833333333332,
-     "q75_hours": 27.895833333333332
+     "detected": 2,
+     "median_hours": 32.541666666666664,
+     "q25_hours": 31.854166666666668,
+     "q75_hours": 33.229166666666664
     },
     "SENSOR": {
-     "detected": 8,
-     "median_hours": 18.208333333333332,
-     "q25_hours": 0.9791666666666666,
-     "q75_hours": 41.39583333333333
+     "detected": 3,
+     "median_hours": 11.25,
+     "q25_hours": 6.125,
+     "q75_hours": 26.416666666666668
     }
    },
-   "fit_seconds": 32.356689875014126,
+   "fit_seconds": 25.98281708394643,
    "interval": {
+    "chance_event_recall": [
+     0.0,
+     0.0
+    ],
     "event_recall": [
-     0.42105263157894735,
-     0.8636363636363636
+     0.2222222222222222,
+     0.6666666666666666
+    ],
+    "event_skill": [
+     0.2222222222222222,
+     0.6666666666666666
     ],
     "f1": [
-     0.4654750787142132,
-     0.7200148903524438
+     0.26031594461799423,
+     0.6976044615945133
     ],
     "false_alarms_per_hour": [
-     0.009225467160012529,
-     0.014973035781001525
+     0.0,
+     0.0
     ],
     "false_positive_rate": [
-     0.18584917754331304,
-     0.4256167372269814
+     0.0,
+     0.00021012806836480047
     ],
     "precision": [
-     0.39617074143273473,
-     0.7000435080354857
+     0.9981867633726201,
+     1.0
     ],
     "recall": [
-     0.5158631189188922,
-     0.8403154894301912
+     0.14964696521829465,
+     0.5357564349177464
+    ],
+    "time_in_alarm": [
+     0.0,
+     0.0
     ]
    },
    "scores_sha256": "3021dae6fa4a60dd3db20fced4deca0ac5c4f08db2b95b72bc92647d7eee6b1a",
    "summary": {
-    "active_at_onset_not_counted": 11,
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.0,
     "clusters": 32,
     "event_clusters": 20,
-    "event_recall": 0.65,
+    "event_recall": 0.45,
+    "event_skill": 0.45,
     "events": 20,
-    "events_detected": 13,
-    "f1": 0.6131067487059283,
-    "false_alarms": 42,
-    "false_alarms_per_hour": 0.012233306633656156,
-    "false_positive_rate": 0.3043763198135877,
-    "fn": 7267,
-    "fp": 12540,
+    "events_detected": 9,
+    "f1": 0.5054666146036705,
+    "false_alarms": 0,
+    "false_alarms_per_hour": 0.0,
+    "false_positive_rate": 9.708973518774727e-05,
+    "fn": 15194,
+    "fp": 4,
     "normal_hours": 3433.25,
-    "precision": 0.5558546433378196,
-    "recall": 0.6835068159052307,
-    "tn": 28659,
-    "tp": 15694
+    "precision": 0.999485265731566,
+    "recall": 0.3382692391446366,
+    "time_in_alarm": 0.0,
+    "tn": 41195,
+    "tp": 7767
    },
-   "threshold": 0.02364920739797216,
+   "threshold": 0.8206506223283573,
    "training_rows": 108599
   },
   "isolation_forest": {
    "alarm_context": {
     "false_alarms": {
-     "during_dropout": 0,
-     "during_planned_work": 1,
-     "other_normal_operation": 49
+     "during_dropout": 2,
+     "during_planned_work": 5,
+     "other_normal_operation": 23
     },
     "hours": {
      "during_dropout": 55.916666666666664,
@@ -238,30 +256,30 @@
    "average_precision": 0.4873027163630407,
    "by_category": {
     "DERATE": {
-     "detected": 0,
+     "detected": 3,
      "events": 4
     },
     "RESTRICTION": {
-     "detected": 2,
+     "detected": 1,
      "events": 4
     },
     "SENSOR_BIAS": {
-     "detected": 2,
+     "detected": 3,
      "events": 4
     },
     "SENSOR_DRIFT": {
-     "detected": 1,
+     "detected": 2,
      "events": 4
     },
     "SENSOR_STUCK": {
-     "detected": 1,
+     "detected": 2,
      "events": 4
     }
    },
    "by_class": [
     {
      "clusters": 4,
-     "detected": 2,
+     "detected": 1,
      "event_class": 1,
      "event_recall": null,
      "events": 4,
@@ -269,7 +287,7 @@
     },
     {
      "clusters": 4,
-     "detected": 0,
+     "detected": 3,
      "event_class": 2,
      "event_recall": null,
      "events": 4,
@@ -277,92 +295,116 @@
     },
     {
      "clusters": 12,
-     "detected": 4,
+     "detected": 7,
      "event_class": 3,
-     "event_recall": 0.3333333333333333,
+     "event_recall": 0.5833333333333334,
      "event_recall_interval": [
-      0.08333333333333333,
-      0.5833333333333334
+      0.3333333333333333,
+      0.8333333333333334
      ],
      "events": 12
     }
    ],
    "calibration": {
     "budget_met": true,
-    "threshold": 0.33883852178663987,
-    "validation_false_alarms_per_hour": 0.01962938548304402
+    "stopped_by": "time-in-alarm limit",
+    "threshold": 0.5692736461786303,
+    "validation_event_recall": 0.4,
+    "validation_false_alarms_per_hour": 0.007031421665568007,
+    "validation_time_in_alarm": 0.04726677897409605
    },
    "confusion": null,
    "delays": {
+    "DERATE": {
+     "detected": 3,
+     "median_hours": 90.75,
+     "q25_hours": 82.75,
+     "q75_hours": 95.79166666666666
+    },
     "RESTRICTION": {
-     "detected": 2,
-     "median_hours": 15.875,
-     "q25_hours": 8.770833333333332,
-     "q75_hours": 22.979166666666664
+     "detected": 1,
+     "median_hours": 52.75,
+     "q25_hours": 52.75,
+     "q75_hours": 52.75
     },
     "SENSOR": {
-     "detected": 4,
-     "median_hours": 16.25,
-     "q25_hours": 0.16666666666666666,
-     "q75_hours": 39.520833333333336
+     "detected": 7,
+     "median_hours": 39.75,
+     "q25_hours": 21.666666666666664,
+     "q75_hours": 45.25
     }
    },
-   "fit_seconds": 0.6236767910304479,
+   "fit_seconds": 0.6678452090127394,
    "interval": {
+    "chance_event_recall": [
+     0.43738954867198115,
+     0.6591971551972988
+    ],
     "event_recall": [
-     0.1111111111111111,
-     0.5217391304347826
+     0.3181818181818182,
+     0.7727272727272727
+    ],
+    "event_skill": [
+     -0.25086506927837027,
+     0.21108485773924865
     ],
     "f1": [
-     0.3991181187258322,
-     0.6135305003189234
+     0.005260854070497635,
+     0.015899970034294088
     ],
     "false_alarms_per_hour": [
-     0.010981348249959885,
-     0.01859128702901316
+     0.006023983065444622,
+     0.011363006664825604
     ],
     "false_positive_rate": [
-     0.46516158664192986,
-     0.6978459425418084
+     0.003955406046230826,
+     0.018012474891088093
     ],
     "precision": [
-     0.29116108768971155,
-     0.5105040258449132
+     0.0944167900973339,
+     0.4951546167247385
     ],
     "recall": [
-     0.5485107380567932,
-     0.8606430248724963
+     0.0026742100561001876,
+     0.00815076918560635
+    ],
+    "time_in_alarm": [
+     0.044120943690667686,
+     0.08184912999487054
     ]
    },
    "scores_sha256": "044c66de7a60c47b20f55cc9e324c6d904c50f1bab38c52796769469181ea060",
    "summary": {
-    "active_at_onset_not_counted": 16,
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.5636917695016799,
     "clusters": 32,
     "event_clusters": 20,
-    "event_recall": 0.3,
+    "event_recall": 0.55,
+    "event_skill": -0.013691769501679829,
     "events": 20,
-    "events_detected": 6,
-    "f1": 0.5200820966214083,
-    "false_alarms": 50,
-    "false_alarms_per_hour": 0.014563460278162091,
-    "false_positive_rate": 0.5803053472171654,
-    "fn": 6490,
-    "fp": 23908,
+    "events_detected": 11,
+    "f1": 0.010224077702990542,
+    "false_alarms": 30,
+    "false_alarms_per_hour": 0.008738076166897256,
+    "false_positive_rate": 0.009539066482196169,
+    "fn": 22841,
+    "fp": 393,
     "normal_hours": 3433.25,
-    "precision": 0.40791005225488497,
-    "recall": 0.7173468054527242,
-    "tn": 17291,
-    "tp": 16471
+    "precision": 0.23391812865497075,
+    "recall": 0.00522625321196812,
+    "time_in_alarm": 0.06320541760722348,
+    "tn": 40806,
+    "tp": 120
    },
-   "threshold": 0.33883852178663987,
+   "threshold": 0.5692736461786303,
    "training_rows": 108599
   },
   "logistic_regression": {
    "alarm_context": {
     "false_alarms": {
      "during_dropout": 0,
-     "during_planned_work": 1,
-     "other_normal_operation": 76
+     "during_planned_work": 3,
+     "other_normal_operation": 1
     },
     "hours": {
      "during_dropout": 55.916666666666664,
@@ -373,30 +415,30 @@
    "average_precision": 0.876001019758388,
    "by_category": {
     "DERATE": {
-     "detected": 2,
+     "detected": 4,
      "events": 4
     },
     "RESTRICTION": {
-     "detected": 2,
+     "detected": 4,
      "events": 4
     },
     "SENSOR_BIAS": {
-     "detected": 2,
+     "detected": 4,
      "events": 4
     },
     "SENSOR_DRIFT": {
-     "detected": 0,
+     "detected": 4,
      "events": 4
     },
     "SENSOR_STUCK": {
-     "detected": 0,
+     "detected": 3,
      "events": 4
     }
    },
    "by_class": [
     {
      "clusters": 4,
-     "detected": 2,
+     "detected": 4,
      "event_class": 1,
      "event_recall": null,
      "events": 4,
@@ -404,7 +446,7 @@
     },
     {
      "clusters": 4,
-     "detected": 2,
+     "detected": 4,
      "event_class": 2,
      "event_recall": null,
      "events": 4,
@@ -412,20 +454,23 @@
     },
     {
      "clusters": 12,
-     "detected": 2,
+     "detected": 11,
      "event_class": 3,
-     "event_recall": 0.16666666666666666,
+     "event_recall": 0.9166666666666666,
      "event_recall_interval": [
-      0.0,
-      0.4166666666666667
+      0.75,
+      1.0
      ],
      "events": 12
     }
    ],
    "calibration": {
     "budget_met": true,
-    "threshold": 0.4901489019393921,
-    "validation_false_alarms_per_hour": 0.02021533728850802
+    "stopped_by": "time-in-alarm limit",
+    "threshold": 0.9819150649903315,
+    "validation_event_recall": 0.8,
+    "validation_false_alarms_per_hour": 0.0005859518054640005,
+    "validation_time_in_alarm": 0.009204326277497009
    },
    "confusion": {
     "classes": [
@@ -463,80 +508,95 @@
    },
    "delays": {
     "DERATE": {
-     "detected": 2,
+     "detected": 4,
      "median_hours": 0.25,
      "q25_hours": 0.25,
      "q75_hours": 0.25
     },
     "RESTRICTION": {
-     "detected": 2,
-     "median_hours": 9.25,
-     "q25_hours": 8.666666666666668,
-     "q75_hours": 9.833333333333332
+     "detected": 4,
+     "median_hours": 12.791666666666668,
+     "q25_hours": 8.104166666666668,
+     "q75_hours": 17.5
     },
     "SENSOR": {
-     "detected": 2,
-     "median_hours": 0.5833333333333334,
-     "q25_hours": 0.375,
-     "q75_hours": 0.7916666666666666
+     "detected": 11,
+     "median_hours": 34.75,
+     "q25_hours": 1.0833333333333333,
+     "q75_hours": 41.208333333333336
     }
    },
-   "fit_seconds": 8.339176958950702,
+   "fit_seconds": 7.9349034579936415,
    "interval": {
+    "chance_event_recall": [
+     0.02612112187502816,
+     0.19624114083163313
+    ],
     "event_recall": [
-     0.1111111111111111,
-     0.5
+     0.8421052631578947,
+     1.0
+    ],
+    "event_skill": [
+     0.7020119023712817,
+     0.9692211790859081
     ],
     "f1": [
-     0.6116606840379172,
-     0.8266944847625839
+     0.5730431752277164,
+     0.8575420459654107
     ],
     "false_alarms_per_hour": [
-     0.016855613862005764,
-     0.028169939619519663
+     0.0002804654089778093,
+     0.0022851960472979912
     ],
     "false_positive_rate": [
-     0.17751713243822362,
-     0.3825687945468292
+     0.0002371082288366591,
+     0.017216440519108922
     ],
     "precision": [
-     0.4923349608356623,
-     0.7637571527335607
+     0.9324200749105522,
+     0.999351142934881
     ],
     "recall": [
-     0.7444647504057306,
-     0.9579021248444125
+     0.4067973293249193,
+     0.7607248695255323
+    ],
+    "time_in_alarm": [
+     0.0018178297544143864,
+     0.029734079062318473
     ]
    },
    "scores_sha256": "4481e7b256df8c1c4eb9e33529f4233ddf9b36926a587ed4f7d6bfaefd85ce77",
    "summary": {
-    "active_at_onset_not_counted": 14,
+    "active_at_onset_not_counted": 1,
+    "chance_event_recall": 0.10529600085649626,
     "clusters": 32,
     "event_clusters": 20,
-    "event_recall": 0.3,
+    "event_recall": 0.95,
+    "event_skill": 0.8447039991435037,
     "events": 20,
-    "events_detected": 6,
-    "f1": 0.7343454555467847,
-    "false_alarms": 77,
-    "false_alarms_per_hour": 0.02242772882836962,
-    "false_positive_rate": 0.2793999854365397,
-    "fn": 2960,
-    "fp": 11511,
+    "events_detected": 19,
+    "f1": 0.7374495407872992,
+    "false_alarms": 4,
+    "false_alarms_per_hour": 0.0011650768222529672,
+    "false_positive_rate": 0.008252627490958519,
+    "fn": 9351,
+    "fp": 340,
     "normal_hours": 3433.25,
-    "precision": 0.6347105864432597,
-    "recall": 0.8710857541047864,
-    "tn": 29688,
-    "tp": 20001
+    "precision": 0.9756272401433692,
+    "recall": 0.5927442184573842,
+    "time_in_alarm": 0.01480618461613146,
+    "tn": 40859,
+    "tp": 13610
    },
-   "threshold": 0.4901489019393921,
+   "threshold": 0.9819150649903315,
    "training_rows": 108599
   },
   "rolling_deviation": {
    "alarm_context": {
     "false_alarms": {
-     "during_dropout": 2,
-     "during_planned_work": 0,
-     "other_normal_operation": 91
+     "during_dropout": 0,
+     "during_planned_work": 4,
+     "other_normal_operation": 24
     },
     "hours": {
      "during_dropout": 55.916666666666664,
@@ -551,7 +611,7 @@
      "events": 4
     },
     "RESTRICTION": {
-     "detected": 4,
+     "detected": 2,
      "events": 4
     },
     "SENSOR_BIAS": {
@@ -559,18 +619,18 @@
      "events": 4
     },
     "SENSOR_DRIFT": {
-     "detected": 3,
+     "detected": 2,
      "events": 4
     },
     "SENSOR_STUCK": {
-     "detected": 4,
+     "detected": 3,
      "events": 4
     }
    },
    "by_class": [
     {
      "clusters": 4,
-     "detected": 4,
+     "detected": 2,
      "event_class": 1,
      "event_recall": null,
      "events": 4,
@@ -586,11 +646,11 @@
     },
     {
      "clusters": 12,
-     "detected": 11,
+     "detected": 9,
      "event_class": 3,
-     "event_recall": 0.9166666666666666,
+     "event_recall": 0.75,
      "event_recall_interval": [
-      0.75,
+      0.5,
       1.0
      ],
      "events": 12
@@ -598,86 +658,104 @@
    ],
    "calibration": {
     "budget_met": true,
-    "threshold": 1.4316468383826444,
-    "validation_false_alarms_per_hour": 0.028711638467736028
+    "stopped_by": "time-in-alarm limit",
+    "threshold": 16.36527425849802,
+    "validation_event_recall": 0.55,
+    "validation_false_alarms_per_hour": 0.005859518054640006,
+    "validation_time_in_alarm": 0.03984472277155204
    },
    "confusion": null,
    "delays": {
     "DERATE": {
      "detected": 4,
-     "median_hours": 64.79166666666667,
-     "q25_hours": 53.77083333333333,
-     "q75_hours": 76.77083333333334
+     "median_hours": 0.25,
+     "q25_hours": 0.25,
+     "q75_hours": 0.25
     },
     "RESTRICTION": {
-     "detected": 4,
-     "median_hours": 32.916666666666664,
-     "q25_hours": 10.604166666666666,
-     "q75_hours": 56.416666666666664
+     "detected": 2,
+     "median_hours": 70.41666666666666,
+     "q25_hours": 69.375,
+     "q75_hours": 71.45833333333333
     },
     "SENSOR": {
-     "detected": 11,
-     "median_hours": 20.75,
-     "q25_hours": 4.375,
-     "q75_hours": 27.041666666666664
+     "detected": 9,
+     "median_hours": 40.166666666666664,
+     "q25_hours": 11.25,
+     "q75_hours": 75.58333333333333
     }
    },
-   "fit_seconds": 0.052974208956584334,
+   "fit_seconds": 0.050717915990389884,
    "interval": {
+    "chance_event_recall": [
+     0.42601354524788615,
+     0.6292637332591211
+    ],
     "event_recall": [
-     0.8333333333333334,
-     1.0
+     0.5384615384615384,
+     0.9411764705882353
+    ],
+    "event_skill": [
+     -0.015242347006003045,
+     0.4184873947895535
     ],
     "f1": [
-     0.4329017024866909,
-     0.6221672403386085
+     0.013867067769112413,
+     0.02801922281223482
     ],
     "false_alarms_per_hour": [
-     0.024739234804289488,
-     0.02926894310745729
+     0.005852839249946785,
+     0.010533425119612756
     ],
     "false_positive_rate": [
-     0.33761989784472546,
-     0.40846269793073936
+     0.005521507392207359,
+     0.010702594116675807
     ],
     "precision": [
-     0.344157720439134,
-     0.5935778075457964
+     0.25498093220338985,
+     0.5856918148312925
     ],
     "recall": [
-     0.5464541825294754,
-     0.6986351852572231
+     0.007130196653640407,
+     0.014428247334454452
+    ],
+    "time_in_alarm": [
+     0.04037047215199741,
+     0.07270917192505852
     ]
    },
    "scores_sha256": "3adf1a198d45d57e80d9b9f90b89ae88fc6df110105e0a2c4fd2a900e4ed9d34",
    "summary": {
-    "active_at_onset_not_counted": 15,
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.5390538248881656,
     "clusters": 32,
     "event_clusters": 20,
-    "event_recall": 0.95,
+    "event_recall": 0.75,
+    "event_skill": 0.21094617511183444,
     "events": 20,
-    "events_detected": 19,
-    "f1": 0.5422351562795268,
-    "false_alarms": 93,
-    "false_alarms_per_hour": 0.02708803611738149,
-    "false_positive_rate": 0.37889269157018374,
-    "fn": 8614,
-    "fp": 15610,
+    "events_detected": 15,
+    "f1": 0.02056249468943835,
+    "false_alarms": 28,
+    "false_alarms_per_hour": 0.008155537755770772,
+    "false_positive_rate": 0.008131265321973835,
+    "fn": 22719,
+    "fp": 335,
     "normal_hours": 3433.25,
-    "precision": 0.47891978502520277,
-    "recall": 0.6248421236008884,
-    "tn": 25589,
-    "tp": 14347
+    "precision": 0.4194107452339688,
+    "recall": 0.010539610644135708,
+    "time_in_alarm": 0.05640913614408117,
+    "tn": 40864,
+    "tp": 242
    },
-   "threshold": 1.4316468383826444,
+   "threshold": 16.36527425849802,
    "training_rows": 108599
   },
   "static_threshold": {
    "alarm_context": {
     "false_alarms": {
-     "during_dropout": 1,
-     "during_planned_work": 1,
-     "other_normal_operation": 29
+     "during_dropout": 0,
+     "during_planned_work": 5,
+     "other_normal_operation": 4
     },
     "hours": {
      "during_dropout": 55.916666666666664,
@@ -688,15 +766,15 @@
    "average_precision": 0.6041723515794857,
    "by_category": {
     "DERATE": {
-     "detected": 2,
+     "detected": 4,
      "events": 4
     },
     "RESTRICTION": {
-     "detected": 2,
+     "detected": 4,
      "events": 4
     },
     "SENSOR_BIAS": {
-     "detected": 3,
+     "detected": 0,
      "events": 4
     },
     "SENSOR_DRIFT": {
@@ -711,7 +789,7 @@
    "by_class": [
     {
      "clusters": 4,
-     "detected": 2,
+     "detected": 4,
      "event_class": 1,
      "event_recall": null,
      "events": 4,
@@ -719,7 +797,7 @@
     },
     {
      "clusters": 4,
-     "detected": 2,
+     "detected": 4,
      "event_class": 2,
      "event_recall": null,
      "events": 4,
@@ -727,98 +805,116 @@
     },
     {
      "clusters": 12,
-     "detected": 6,
+     "detected": 3,
      "event_class": 3,
-     "event_recall": 0.5,
+     "event_recall": 0.25,
      "event_recall_interval": [
-      0.25,
-      0.75
+      0.0,
+      0.5
      ],
      "events": 12
     }
    ],
    "calibration": {
     "budget_met": true,
-    "threshold": 0.9101781261517008,
-    "validation_false_alarms_per_hour": 0.009375228887424009
+    "stopped_by": "time-in-alarm limit",
+    "threshold": 1.2017438169009838,
+    "validation_event_recall": 0.3,
+    "validation_false_alarms_per_hour": 0.002050831319124002,
+    "validation_time_in_alarm": 0.03830659928220904
    },
    "confusion": null,
    "delays": {
     "DERATE": {
-     "detected": 2,
-     "median_hours": 3.9583333333333335,
-     "q25_hours": 2.0625,
-     "q75_hours": 5.854166666666667
+     "detected": 4,
+     "median_hours": 19.708333333333336,
+     "q25_hours": 12.729166666666666,
+     "q75_hours": 26.145833333333336
     },
     "RESTRICTION": {
-     "detected": 2,
-     "median_hours": 36.125,
-     "q25_hours": 34.6875,
-     "q75_hours": 37.5625
+     "detected": 4,
+     "median_hours": 38.916666666666664,
+     "q25_hours": 33.70833333333333,
+     "q75_hours": 43.416666666666664
     },
     "SENSOR": {
-     "detected": 6,
-     "median_hours": 4.416666666666667,
-     "q25_hours": 3.145833333333333,
-     "q75_hours": 11.75
+     "detected": 3,
+     "median_hours": 18.5,
+     "q25_hours": 15.666666666666668,
+     "q75_hours": 36.58333333333333
     }
    },
-   "fit_seconds": 0.089223834045697,
+   "fit_seconds": 0.06311874999664724,
    "interval": {
+    "chance_event_recall": [
+     0.08008350168256652,
+     0.367283576851789
+    ],
     "event_recall": [
-     0.2857142857142857,
-     0.7142857142857143
+     0.3157072368421054,
+     0.761974789915966
+    ],
+    "event_skill": [
+     0.06155971526371979,
+     0.578172369370148
     ],
     "f1": [
-     0.4526174409971733,
-     0.6618594904007737
+     0.26972810985636325,
+     0.6109939687216891
     ],
     "false_alarms_per_hour": [
-     0.006336241004792693,
-     0.012137520396451483
+     0.0008880742730858302,
+     0.0047709484364288155
     ],
     "false_positive_rate": [
-     0.3471185046771075,
-     0.6781294112050184
+     0.009325271248289772,
+     0.08199658888624636
     ],
     "precision": [
-     0.3269914729948894,
-     0.5761269463190379
+     0.5910052770963272,
+     0.9587843419737923
     ],
     "recall": [
-     0.6362940053432495,
-     0.8739545304689347
+     0.16854668075609672,
+     0.47359163800547427
+    ],
+    "time_in_alarm": [
+     0.015149044450258678,
+     0.10662910076873518
     ]
    },
    "scores_sha256": "a7fe642caa88d2ba5a7cd91417bfd98ee3af15c68ef4f238be1c074edb632610",
    "summary": {
-    "active_at_onset_not_counted": 10,
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.22123582711051504,
     "clusters": 32,
     "event_clusters": 20,
-    "event_recall": 0.5,
+    "event_recall": 0.55,
+    "event_skill": 0.328764172889485,
     "events": 20,
-    "events_detected": 10,
-    "f1": 0.5701301652221897,
-    "false_alarms": 31,
-    "false_alarms_per_hour": 0.009029345372460496,
-    "false_positive_rate": 0.5118813563436005,
-    "fn": 5397,
-    "fp": 21089,
+    "events_detected": 11,
+    "f1": 0.4528729125389188,
+    "false_alarms": 9,
+    "false_alarms_per_hour": 0.0026214228500691765,
+    "false_positive_rate": 0.03970970169178863,
+    "fn": 15761,
+    "fp": 1636,
     "normal_hours": 3433.25,
-    "precision": 0.45440198690916617,
-    "recall": 0.7649492617917338,
-    "tn": 20110,
-    "tp": 17564
+    "precision": 0.8148483476686283,
+    "recall": 0.3135751927180872,
+    "time_in_alarm": 0.0543217068375446,
+    "tn": 39563,
+    "tp": 7200
    },
-   "threshold": 0.9101781261517008,
+   "threshold": 1.2017438169009838,
    "training_rows": 108599
   }
  },
  "selection": {
-  "preferred": "rolling_deviation",
-  "reason": "rolling_deviation had the best event recall within budget (0.950). 1 method(s) have intervals including it, and rolling_deviation is the simplest of them.",
+  "preferred": "logistic_regression",
+  "reason": "logistic_regression had the best event skill within budget (0.845). 1 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
   "tied": [
-   "rolling_deviation"
+   "logistic_regression"
   ]
  },
  "track": "SYNTHETIC experiment: uncalibrated fictional AETHER model"

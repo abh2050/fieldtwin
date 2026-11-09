@@ -136,7 +136,15 @@ class _Classifier:
         return self
 
     def score(self, features: np.ndarray, seq: np.ndarray) -> np.ndarray:
-        return 1.0 - self._normal_probability(features)
+        """-log P(normal). Same order as 1 - P(normal), without losing resolution when P is tiny.
+
+        1 - P(normal) rounds to exactly 1.0 once P falls below about 1e-16, which ties many windows.
+        """
+        return -self._log_normal_probability(features)
+
+    def _log_normal_probability(self, features: np.ndarray) -> np.ndarray:
+        probability = self._normal_probability(features)
+        return np.log(np.maximum(probability, np.finfo(float).tiny))
 
     def predict_class(self, features: np.ndarray) -> np.ndarray:
         return self.model.predict(features)  # type: ignore[attr-defined]
@@ -146,6 +154,10 @@ class Logistic(_Classifier):
     """Interpretable linear classifier. Imputation and scaling are fitted inside `fit` only."""
 
     name = "logistic_regression"
+
+    def _log_normal_probability(self, features: np.ndarray) -> np.ndarray:
+        # Computed in log space, so it stays finite and ordered far beyond 1e-16.
+        return self.model.predict_log_proba(features)[:, self.normal_index]  # type: ignore[attr-defined]
 
     def __init__(self, seed: int):
         self.model = make_pipeline(

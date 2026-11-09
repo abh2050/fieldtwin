@@ -460,3 +460,16 @@ def test_chance_level_rises_with_event_duration():
     assert summary["event_skill"] == pytest.approx(
         summary["event_recall"] - summary["chance_event_recall"]
     )
+
+
+def test_classifier_scores_keep_resolution_when_normal_is_nearly_impossible():
+    features, y, spec = _toy()
+    features[y == 1, 0] += 1000.0  # Far beyond anything normal, so P(normal) underflows.
+    seq = np.zeros(len(y), dtype=int)
+    detector = make_detector(
+        "logistic_regression", spec.names, seed=1, baseline_windows=20, gap_windows=5
+    ).fit(features, y, seq)
+    scores = detector.score(features, seq)
+    assert np.isfinite(scores).all()
+    shifted = scores[y == 1]
+    assert len(np.unique(shifted)) > len(shifted) // 2  # Not all tied, as 1 - P would be.
