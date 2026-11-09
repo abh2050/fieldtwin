@@ -27,10 +27,13 @@ def _experiment(name: str) -> None:
 
 def source_manifests(source: str) -> dict[str, str]:
     """Checksums of the acquisition manifests behind a dataset."""
-    root = Path(__file__).resolve().parents[2]
+    root = Path(__file__).resolve().parents[2] / "data" / "manifests"
     found = {}
-    for path in sorted(glob.glob(str(root / "data" / "manifests" / f"*{source}*"))):
-        found[Path(path).name] = hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    for match in sorted(glob.glob(str(root / f"*{source}*"))):
+        base = Path(match)
+        files = sorted(f for f in base.rglob("*") if f.is_file()) if base.is_dir() else [base]
+        for path in files:
+            found[str(path.relative_to(root))] = hashlib.sha256(path.read_bytes()).hexdigest()
     return found
 
 

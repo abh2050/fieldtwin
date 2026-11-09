@@ -1,0 +1,7080 @@
+{
+ "artifacts": {
+  "hist_gradient_boosting": {
+   "bytes": 1039826,
+   "path": "aether_hist_gradient_boosting.joblib",
+   "sha256": "9037a4b1969a1edcd12c026ee91c3a5366963d7610c95840ff8b17fb79101e63"
+  },
+  "isolation_forest": {
+   "bytes": 1501984,
+   "path": "aether_isolation_forest.joblib",
+   "sha256": "f278f51f05199648a9cfe598249e01d83abe2b07fb0af0cfb4ab9973eaa962b3"
+  },
+  "logistic_regression": {
+   "bytes": 7731,
+   "path": "aether_logistic_regression.joblib",
+   "sha256": "96895d2193d893b800b4430169512c80f622aed1b92f15e78612f42e81aab80b"
+  },
+  "rolling_deviation": {
+   "bytes": 2107,
+   "path": "aether_rolling_deviation.joblib",
+   "sha256": "161b88bf75d34a5ea72f4d541093a20742a2e0b03dff3858bc4b49f5d0b5cbfd"
+  },
+  "static_threshold": {
+   "bytes": 2125,
+   "path": "aether_static_threshold.joblib",
+   "sha256": "05a0316ab43ec40c553d1b680fe3f900c83132dd86af8462b6f57d8869f785c8"
+  }
+ },
+ "gate4_anchors": {
+  "AETHER-FAULT-001-NET": {
+   "category": "PHYSICAL_FAULT",
+   "methods": {
+    "hist_gradient_boosting": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 38.333333333333336,
+     "detected": true
+    },
+    "isolation_forest": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": false
+    },
+    "logistic_regression": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 21.416666666666668,
+     "detected": true
+    },
+    "rolling_deviation": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": false
+    },
+    "static_threshold": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 63.583333333333336,
+     "detected": true
+    }
+   },
+   "onset_s": 172800
+  },
+  "AETHER-NET-COMM-DROPOUT": {
+   "category": "COMMUNICATION_FAULT",
+   "methods": {
+    "hist_gradient_boosting": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "isolation_forest": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "logistic_regression": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "rolling_deviation": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "static_threshold": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    }
+   },
+   "onset_s": null
+  },
+  "AETHER-NET-COMPRESSOR-DERATE": {
+   "category": "PHYSICAL_FAULT",
+   "methods": {
+    "hist_gradient_boosting": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 0.25,
+     "detected": true
+    },
+    "isolation_forest": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": false
+    },
+    "logistic_regression": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 0.25,
+     "detected": true
+    },
+    "rolling_deviation": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 0.25,
+     "detected": true
+    },
+    "static_threshold": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 15.5,
+     "detected": true
+    }
+   },
+   "onset_s": 172800
+  },
+  "AETHER-NET-NORMAL": {
+   "category": "NORMAL",
+   "methods": {
+    "hist_gradient_boosting": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "isolation_forest": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "logistic_regression": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "rolling_deviation": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "static_threshold": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    }
+   },
+   "onset_s": null
+  },
+  "AETHER-NET-PLANNED-SHUTDOWN": {
+   "category": "PLANNED_OPERATION",
+   "methods": {
+    "hist_gradient_boosting": {
+     "alarms_before_onset_or_without_fault": 2,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "isolation_forest": {
+     "alarms_before_onset_or_without_fault": 4,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "logistic_regression": {
+     "alarms_before_onset_or_without_fault": 1,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "rolling_deviation": {
+     "alarms_before_onset_or_without_fault": 2,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    },
+    "static_threshold": {
+     "alarms_before_onset_or_without_fault": 2,
+     "delay_hours_simulation_time": null,
+     "detected": null
+    }
+   },
+   "onset_s": null
+  },
+  "AETHER-NET-SENSOR-DRIFT": {
+   "category": "SENSOR_FAULT",
+   "methods": {
+    "hist_gradient_boosting": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": false
+    },
+    "isolation_forest": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": false
+    },
+    "logistic_regression": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 24.25,
+     "detected": true
+    },
+    "rolling_deviation": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": 25.0,
+     "detected": true
+    },
+    "static_threshold": {
+     "alarms_before_onset_or_without_fault": 0,
+     "delay_hours_simulation_time": null,
+     "detected": false
+    }
+   },
+   "onset_s": 172800
+  }
+ },
+ "git_sha": "09930a48e171b709ee8ef58e521ed8fe8908633b",
+ "hardware": {
+  "logical_cpus": 11,
+  "machine": "arm64",
+  "memory_gb": 18.0,
+  "platform": "macOS-27.0",
+  "processor": "arm",
+  "python": "3.12.13"
+ },
+ "pooled": {
+  "hist_gradient_boosting": {
+   "alarm_context": {
+    "false_alarms": {
+     "during_dropout": 0,
+     "during_planned_work": 0,
+     "other_normal_operation": 8
+    },
+    "hours": {
+     "during_dropout": 44.083333333333336,
+     "during_planned_work": 184.33333333333334,
+     "other_normal_operation": 10781.416666666666
+    }
+   },
+   "average_precision": 0.6798025303143675,
+   "by_category": {
+    "DERATE": {
+     "detected": 14,
+     "events": 16
+    },
+    "RESTRICTION": {
+     "detected": 9,
+     "events": 16
+    },
+    "SENSOR_BIAS": {
+     "detected": 2,
+     "events": 16
+    },
+    "SENSOR_DRIFT": {
+     "detected": 2,
+     "events": 16
+    },
+    "SENSOR_STUCK": {
+     "detected": 4,
+     "events": 16
+    }
+   },
+   "by_class": [
+    {
+     "clusters": 16,
+     "detected": 9,
+     "event_class": 1,
+     "event_recall": 0.5625,
+     "event_recall_interval": [
+      0.3125,
+      0.8125
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 16,
+     "detected": 14,
+     "event_class": 2,
+     "event_recall": 0.875,
+     "event_recall_interval": [
+      0.6875,
+      1.0
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 48,
+     "detected": 8,
+     "event_class": 3,
+     "event_recall": 0.16666666666666666,
+     "event_recall_interval": [
+      0.0625,
+      0.2708333333333333
+     ],
+     "events": 48
+    }
+   ],
+   "delays": {
+    "DERATE": {
+     "detected": 14,
+     "median_hours": 0.25,
+     "q25_hours": 0.25,
+     "q75_hours": 0.25
+    },
+    "RESTRICTION": {
+     "detected": 9,
+     "median_hours": 25.083333333333332,
+     "q25_hours": 21.5,
+     "q75_hours": 28.25
+    },
+    "SENSOR": {
+     "detected": 8,
+     "median_hours": 1.0,
+     "q25_hours": 0.9375,
+     "q75_hours": 17.4375
+    }
+   },
+   "interval": {
+    "chance_event_recall": [
+     0.008527695722895611,
+     0.1341098416196166
+    ],
+    "event_recall": [
+     0.27710843373493976,
+     0.5
+    ],
+    "event_skill": [
+     0.20567112099193963,
+     0.4353754651151384
+    ],
+    "f1": [
+     0.33561750620998604,
+     0.5697669763042055
+    ],
+    "false_alarms_per_hour": [
+     8.823968091625348e-05,
+     0.0015278524176769843
+    ],
+    "false_positive_rate": [
+     0.00019436344533022836,
+     0.002878111393350875
+    ],
+    "precision": [
+     0.9857396034983327,
+     0.9991458128156605
+    ],
+    "recall": [
+     0.20186145419497561,
+     0.39891804017050203
+    ],
+    "time_in_alarm": [
+     0.0017500870048390272,
+     0.019990599759668153
+    ]
+   },
+   "scores_sha256": "a45d0b910a2a0b4f74efc0ab9d100b618c171fef3827c43384b20885d1ac4837",
+   "summary": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.06739685822321136,
+    "clusters": 112,
+    "event_clusters": 80,
+    "event_recall": 0.3875,
+    "event_skill": 0.32010314177678867,
+    "events": 80,
+    "events_detected": 31,
+    "f1": 0.46214001676946964,
+    "false_alarms": 8,
+    "false_alarms_per_hour": 0.0007266231701963397,
+    "false_positive_rate": 0.0013699874354743487,
+    "fn": 64608,
+    "fp": 181,
+    "normal_hours": 11009.833333333332,
+    "precision": 0.9935391754417277,
+    "recall": 0.3010969040046732,
+    "time_in_alarm": 0.009733722884088466,
+    "tn": 131937,
+    "tp": 27834
+   }
+  },
+  "isolation_forest": {
+   "alarm_context": {
+    "false_alarms": {
+     "during_dropout": 0,
+     "during_planned_work": 21,
+     "other_normal_operation": 72
+    },
+    "hours": {
+     "during_dropout": 44.083333333333336,
+     "during_planned_work": 184.33333333333334,
+     "other_normal_operation": 10781.416666666666
+    }
+   },
+   "average_precision": 0.45424836863949514,
+   "by_category": {
+    "DERATE": {
+     "detected": 9,
+     "events": 16
+    },
+    "RESTRICTION": {
+     "detected": 8,
+     "events": 16
+    },
+    "SENSOR_BIAS": {
+     "detected": 10,
+     "events": 16
+    },
+    "SENSOR_DRIFT": {
+     "detected": 9,
+     "events": 16
+    },
+    "SENSOR_STUCK": {
+     "detected": 6,
+     "events": 16
+    }
+   },
+   "by_class": [
+    {
+     "clusters": 16,
+     "detected": 8,
+     "event_class": 1,
+     "event_recall": 0.5,
+     "event_recall_interval": [
+      0.25,
+      0.75
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 16,
+     "detected": 9,
+     "event_class": 2,
+     "event_recall": 0.5625,
+     "event_recall_interval": [
+      0.3125,
+      0.8125
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 48,
+     "detected": 25,
+     "event_class": 3,
+     "event_recall": 0.5208333333333334,
+     "event_recall_interval": [
+      0.375,
+      0.6458333333333334
+     ],
+     "events": 48
+    }
+   ],
+   "delays": {
+    "DERATE": {
+     "detected": 9,
+     "median_hours": 25.25,
+     "q25_hours": 11.166666666666666,
+     "q75_hours": 68.83333333333333
+    },
+    "RESTRICTION": {
+     "detected": 8,
+     "median_hours": 32.20833333333333,
+     "q25_hours": 23.4375,
+     "q75_hours": 62.041666666666664
+    },
+    "SENSOR": {
+     "detected": 25,
+     "median_hours": 39.416666666666664,
+     "q25_hours": 24.166666666666668,
+     "q75_hours": 65.16666666666667
+    }
+   },
+   "interval": {
+    "chance_event_recall": [
+     0.4674873866831111,
+     0.6167445003484723
+    ],
+    "event_recall": [
+     0.4155844155844156,
+     0.6296423135464231
+    ],
+    "event_skill": [
+     -0.15242896078658347,
+     0.11445007160740915
+    ],
+    "f1": [
+     0.007145487524331934,
+     0.013385465750166298
+    ],
+    "false_alarms_per_hour": [
+     0.00669116051018884,
+     0.01009571725240962
+    ],
+    "false_positive_rate": [
+     0.004976176650805183,
+     0.008307178055180378
+    ],
+    "precision": [
+     0.2375509693799046,
+     0.47200733162830344
+    ],
+    "recall": [
+     0.00361773021474472,
+     0.006810852049543577
+    ],
+    "time_in_alarm": [
+     0.047414465258482176,
+     0.07198266117718889
+    ]
+   },
+   "scores_sha256": "b684dd4424522718073cf402ce915cbcbc29b248f979322c30d04171b0c6e702",
+   "summary": {
+    "active_at_onset_not_counted": 1,
+    "chance_event_recall": 0.5479354043648285,
+    "clusters": 112,
+    "event_clusters": 80,
+    "event_recall": 0.525,
+    "event_skill": -0.022935404364828438,
+    "events": 80,
+    "events_detected": 42,
+    "f1": 0.009979741976756584,
+    "false_alarms": 93,
+    "false_alarms_per_hour": 0.00844699435353245,
+    "false_positive_rate": 0.006660712393466447,
+    "fn": 91974,
+    "fp": 880,
+    "normal_hours": 11009.833333333332,
+    "precision": 0.34718100890207715,
+    "recall": 0.005062633867722464,
+    "time_in_alarm": 0.06002210145476014,
+    "tn": 131238,
+    "tp": 468
+   }
+  },
+  "logistic_regression": {
+   "alarm_context": {
+    "false_alarms": {
+     "during_dropout": 0,
+     "during_planned_work": 10,
+     "other_normal_operation": 48
+    },
+    "hours": {
+     "during_dropout": 44.083333333333336,
+     "during_planned_work": 184.33333333333334,
+     "other_normal_operation": 10781.416666666666
+    }
+   },
+   "average_precision": 0.6672974927794507,
+   "by_category": {
+    "DERATE": {
+     "detected": 14,
+     "events": 16
+    },
+    "RESTRICTION": {
+     "detected": 11,
+     "events": 16
+    },
+    "SENSOR_BIAS": {
+     "detected": 11,
+     "events": 16
+    },
+    "SENSOR_DRIFT": {
+     "detected": 8,
+     "events": 16
+    },
+    "SENSOR_STUCK": {
+     "detected": 5,
+     "events": 16
+    }
+   },
+   "by_class": [
+    {
+     "clusters": 16,
+     "detected": 11,
+     "event_class": 1,
+     "event_recall": 0.6875,
+     "event_recall_interval": [
+      0.4375,
+      0.875
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 16,
+     "detected": 14,
+     "event_class": 2,
+     "event_recall": 0.875,
+     "event_recall_interval": [
+      0.6875,
+      1.0
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 48,
+     "detected": 24,
+     "event_class": 3,
+     "event_recall": 0.5,
+     "event_recall_interval": [
+      0.3541666666666667,
+      0.6458333333333334
+     ],
+     "events": 48
+    }
+   ],
+   "delays": {
+    "DERATE": {
+     "detected": 14,
+     "median_hours": 0.25,
+     "q25_hours": 0.25,
+     "q75_hours": 0.3125
+    },
+    "RESTRICTION": {
+     "detected": 11,
+     "median_hours": 10.083333333333334,
+     "q25_hours": 5.708333333333333,
+     "q75_hours": 16.375
+    },
+    "SENSOR": {
+     "detected": 24,
+     "median_hours": 6.875,
+     "q25_hours": 1.0625,
+     "q75_hours": 32.541666666666664
+    }
+   },
+   "interval": {
+    "chance_event_recall": [
+     0.286449554286062,
+     0.5016533427384434
+    ],
+    "event_recall": [
+     0.5,
+     0.718329640765944
+    ],
+    "event_skill": [
+     0.05691827067750625,
+     0.38075778235792734
+    ],
+    "f1": [
+     0.5709852127568266,
+     0.7173729911516427
+    ],
+    "false_alarms_per_hour": [
+     0.003523541402349979,
+     0.007331269060134271
+    ],
+    "false_positive_rate": [
+     0.10317016435300046,
+     0.24458219022999897
+    ],
+    "precision": [
+     0.6148684303695842,
+     0.8008431003375254
+    ],
+    "recall": [
+     0.5036463903991533,
+     0.6929492520784386
+    ],
+    "time_in_alarm": [
+     0.14041709026692492,
+     0.2872725990446424
+    ]
+   },
+   "scores_sha256": "c155f66aacffbdbd511e2fded3d9911710f37783cbc742c474eb737d5fa86058",
+   "summary": {
+    "active_at_onset_not_counted": 17,
+    "chance_event_recall": 0.3932689328368188,
+    "clusters": 112,
+    "event_clusters": 80,
+    "event_recall": 0.6125,
+    "event_skill": 0.21923106716318125,
+    "events": 80,
+    "events_detected": 49,
+    "f1": 0.6515895003756574,
+    "false_alarms": 58,
+    "false_alarms_per_hour": 0.0052680179839234625,
+    "false_positive_rate": 0.16970435519762636,
+    "fn": 36937,
+    "fp": 22421,
+    "normal_hours": 11009.833333333332,
+    "precision": 0.7122783153247954,
+    "recall": 0.6004305402306311,
+    "time_in_alarm": 0.21073585733965092,
+    "tn": 109697,
+    "tp": 55505
+   }
+  },
+  "rolling_deviation": {
+   "alarm_context": {
+    "false_alarms": {
+     "during_dropout": 0,
+     "during_planned_work": 19,
+     "other_normal_operation": 54
+    },
+    "hours": {
+     "during_dropout": 44.083333333333336,
+     "during_planned_work": 184.33333333333334,
+     "other_normal_operation": 10781.416666666666
+    }
+   },
+   "average_precision": 0.515311819203943,
+   "by_category": {
+    "DERATE": {
+     "detected": 16,
+     "events": 16
+    },
+    "RESTRICTION": {
+     "detected": 8,
+     "events": 16
+    },
+    "SENSOR_BIAS": {
+     "detected": 11,
+     "events": 16
+    },
+    "SENSOR_DRIFT": {
+     "detected": 10,
+     "events": 16
+    },
+    "SENSOR_STUCK": {
+     "detected": 10,
+     "events": 16
+    }
+   },
+   "by_class": [
+    {
+     "clusters": 16,
+     "detected": 8,
+     "event_class": 1,
+     "event_recall": 0.5,
+     "event_recall_interval": [
+      0.25,
+      0.75
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 16,
+     "detected": 16,
+     "event_class": 2,
+     "event_recall": 1.0,
+     "event_recall_interval": [
+      1.0,
+      1.0
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 48,
+     "detected": 31,
+     "event_class": 3,
+     "event_recall": 0.6458333333333334,
+     "event_recall_interval": [
+      0.5,
+      0.7708333333333334
+     ],
+     "events": 48
+    }
+   ],
+   "delays": {
+    "DERATE": {
+     "detected": 16,
+     "median_hours": 0.25,
+     "q25_hours": 0.25,
+     "q75_hours": 0.25
+    },
+    "RESTRICTION": {
+     "detected": 8,
+     "median_hours": 62.0,
+     "q25_hours": 39.895833333333336,
+     "q75_hours": 77.14583333333334
+    },
+    "SENSOR": {
+     "detected": 31,
+     "median_hours": 28.75,
+     "q25_hours": 4.916666666666667,
+     "q75_hours": 65.16666666666667
+    }
+   },
+   "interval": {
+    "chance_event_recall": [
+     0.39049173423192435,
+     0.5301300086107374
+    ],
+    "event_recall": [
+     0.5820721971537661,
+     0.7848101265822784
+    ],
+    "event_skill": [
+     0.10431819914128494,
+     0.3458598016799871
+    ],
+    "f1": [
+     0.016687792541629557,
+     0.0251977219717032
+    ],
+    "false_alarms_per_hour": [
+     0.005241429590409636,
+     0.007973461104274061
+    ],
+    "false_positive_rate": [
+     0.005787486617407286,
+     0.009136219681954544
+    ],
+    "precision": [
+     0.3945608381183005,
+     0.6048246933018635
+    ],
+    "recall": [
+     0.008499984269310782,
+     0.012900605401786865
+    ],
+    "time_in_alarm": [
+     0.036369447899694346,
+     0.056387753957024354
+    ]
+   },
+   "scores_sha256": "a08132906d71f85e9865c74b5dc1d2e12b65c91b2640fd0d6fc8fbb3a36efdab",
+   "summary": {
+    "active_at_onset_not_counted": 2,
+    "chance_event_recall": 0.46552812543528876,
+    "clusters": 112,
+    "event_clusters": 80,
+    "event_recall": 0.6875,
+    "event_skill": 0.22197187456471124,
+    "events": 80,
+    "events_detected": 55,
+    "f1": 0.02109432084123135,
+    "false_alarms": 73,
+    "false_alarms_per_hour": 0.0066304364280415995,
+    "false_positive_rate": 0.007531146399430812,
+    "fn": 91446,
+    "fp": 995,
+    "normal_hours": 11009.833333333332,
+    "precision": 0.5002511300853842,
+    "recall": 0.01077432335951191,
+    "time_in_alarm": 0.04654929684070301,
+    "tn": 131123,
+    "tp": 996
+   }
+  },
+  "static_threshold": {
+   "alarm_context": {
+    "false_alarms": {
+     "during_dropout": 0,
+     "during_planned_work": 16,
+     "other_normal_operation": 31
+    },
+    "hours": {
+     "during_dropout": 44.083333333333336,
+     "during_planned_work": 184.33333333333334,
+     "other_normal_operation": 10781.416666666666
+    }
+   },
+   "average_precision": 0.48894670488095493,
+   "by_category": {
+    "DERATE": {
+     "detected": 12,
+     "events": 16
+    },
+    "RESTRICTION": {
+     "detected": 8,
+     "events": 16
+    },
+    "SENSOR_BIAS": {
+     "detected": 3,
+     "events": 16
+    },
+    "SENSOR_DRIFT": {
+     "detected": 1,
+     "events": 16
+    },
+    "SENSOR_STUCK": {
+     "detected": 1,
+     "events": 16
+    }
+   },
+   "by_class": [
+    {
+     "clusters": 16,
+     "detected": 8,
+     "event_class": 1,
+     "event_recall": 0.5,
+     "event_recall_interval": [
+      0.25,
+      0.75
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 16,
+     "detected": 12,
+     "event_class": 2,
+     "event_recall": 0.75,
+     "event_recall_interval": [
+      0.5,
+      0.9375
+     ],
+     "events": 16
+    },
+    {
+     "clusters": 48,
+     "detected": 5,
+     "event_class": 3,
+     "event_recall": 0.10416666666666667,
+     "event_recall_interval": [
+      0.020833333333333332,
+      0.1875
+     ],
+     "events": 48
+    }
+   ],
+   "delays": {
+    "DERATE": {
+     "detected": 12,
+     "median_hours": 12.625,
+     "q25_hours": 9.520833333333334,
+     "q75_hours": 15.854166666666666
+    },
+    "RESTRICTION": {
+     "detected": 8,
+     "median_hours": 26.791666666666664,
+     "q25_hours": 20.875,
+     "q75_hours": 38.85416666666667
+    },
+    "SENSOR": {
+     "detected": 5,
+     "median_hours": 46.916666666666664,
+     "q25_hours": 2.1666666666666665,
+     "q75_hours": 73.41666666666667
+    }
+   },
+   "interval": {
+    "chance_event_recall": [
+     0.2674051191961386,
+     0.39685667320337253
+    ],
+    "event_recall": [
+     0.2068611242324044,
+     0.4177215189873418
+    ],
+    "event_skill": [
+     -0.1433537550070888,
+     0.10519569576601015
+    ],
+    "f1": [
+     0.428413249790613,
+     0.5848085840762532
+    ],
+    "false_alarms_per_hour": [
+     0.0033016525851871656,
+     0.005259832503622289
+    ],
+    "false_positive_rate": [
+     0.18653325024162953,
+     0.3626064193534929
+    ],
+    "precision": [
+     0.4548090779713368,
+     0.6451184402068041
+    ],
+    "recall": [
+     0.3765384505593853,
+     0.5806533102033054
+    ],
+    "time_in_alarm": [
+     0.19693705123408203,
+     0.37141667943292006
+    ]
+   },
+   "scores_sha256": "f5e3ef31f8c116beb5bea8d2c4482599e14217b66b00348472bc2d018a5ac0df",
+   "summary": {
+    "active_at_onset_not_counted": 21,
+    "chance_event_recall": 0.33371088793846504,
+    "clusters": 112,
+    "event_clusters": 80,
+    "event_recall": 0.3125,
+    "event_skill": -0.02121088793846504,
+    "events": 80,
+    "events_detected": 25,
+    "f1": 0.512359108477793,
+    "false_alarms": 47,
+    "false_alarms_per_hour": 0.004268911124903496,
+    "false_positive_rate": 0.2733238468641669,
+    "fn": 48167,
+    "fp": 36111,
+    "normal_hours": 11009.833333333332,
+    "precision": 0.5507799865648247,
+    "recall": 0.4789489625927609,
+    "time_in_alarm": 0.28320894957537956,
+    "tn": 96007,
+    "tp": 44275
+   }
+  }
+ },
+ "preferred_from_in_regime": {
+  "preferred": "logistic_regression",
+  "reason": "logistic_regression had the best event skill within budget (0.597). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
+  "tied": [
+   "logistic_regression",
+   "hist_gradient_boosting"
+  ]
+ },
+ "regimes": {
+  "compressor_outside": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 29.083333333333332,
+      "other_normal_operation": 1335.9166666666667
+     }
+    },
+    "average_precision": 0.7932867499520619,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 43.875,
+      "q25_hours": 35.6875,
+      "q75_hours": 52.0625
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 94.66666666666667,
+      "q25_hours": 94.66666666666667,
+      "q75_hours": 94.66666666666667
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_recall": [
+      0.2,
+      0.8
+     ],
+     "event_skill": [
+      0.2,
+      0.8
+     ],
+     "f1": [
+      0.1736421185556383,
+      0.7372568170787083
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.0
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.0
+     ],
+     "precision": [
+      1.0,
+      1.0
+     ],
+     "recall": [
+      0.09353634575200796,
+      0.5838304265689448
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0
+     ]
+    },
+    "scores_sha256": "5b87b2793fcbf841780dfd2e433cc6d51756da8455a1249679c8f6902315abf4",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.0,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.5,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.4860454574888298,
+     "false_alarms": 0,
+     "false_alarms_per_hour": 0.0,
+     "false_positive_rate": 0.0,
+     "fn": 7937,
+     "fp": 0,
+     "normal_hours": 1365.0000000000002,
+     "precision": 1.0,
+     "recall": 0.32104362703165096,
+     "time_in_alarm": 0.0,
+     "tn": 16380,
+     "tp": 3753
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 2
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 29.083333333333332,
+      "other_normal_operation": 1335.9166666666667
+     }
+    },
+    "average_precision": 0.5510333582338915,
+    "by_category": {
+     "DERATE": {
+      "detected": 0,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 59.666666666666664,
+      "q25_hours": 59.666666666666664,
+      "q75_hours": 59.666666666666664
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 33.166666666666664,
+      "q25_hours": 33.166666666666664,
+      "q75_hours": 33.166666666666664
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.5432811266912286
+     ],
+     "event_recall": [
+      0.0,
+      0.5
+     ],
+     "event_skill": [
+      -0.4350970232666882,
+      0.31244293918225297
+     ],
+     "f1": [
+      0.0017309785843182197,
+      0.013750898630216007
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.007934900851066856
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.010825962925044608
+     ],
+     "precision": [
+      0.0,
+      1.0
+     ],
+     "recall": [
+      0.0,
+      0.0068850451734432045
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.06924381094738541
+     ]
+    },
+    "scores_sha256": "58f9a124102f3830af343a3a37a36286e3ff3701b617c9c6f8f7fb44be3d14bc",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.29914430769553685,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.2,
+     "event_skill": -0.09914430769553684,
+     "events": 10,
+     "events_detected": 2,
+     "f1": 0.005594168503136125,
+     "false_alarms": 5,
+     "false_alarms_per_hour": 0.0036630036630036626,
+     "false_positive_rate": 0.004578754578754579,
+     "fn": 11657,
+     "fp": 75,
+     "normal_hours": 1365.0000000000002,
+     "precision": 0.3055555555555556,
+     "recall": 0.0028229255774165954,
+     "time_in_alarm": 0.03015873015873016,
+     "tn": 16305,
+     "tp": 33
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 16
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 29.083333333333332,
+      "other_normal_operation": 1335.9166666666667
+     }
+    },
+    "average_precision": 0.8198297628793347,
+    "by_category": {
+     "DERATE": {
+      "detected": 0,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {},
+    "interval": {
+     "chance_event_recall": [
+      0.5977363867979346,
+      0.7609566143762417
+     ],
+     "event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_skill": [
+      -0.7609566143762418,
+      -0.5977363867979346
+     ],
+     "f1": [
+      0.43668865926070755,
+      0.7117204913518866
+     ],
+     "false_alarms_per_hour": [
+      0.009654853770382789,
+      0.014073192029021384
+     ],
+     "false_positive_rate": [
+      0.9643322427039532,
+      1.0
+     ],
+     "precision": [
+      0.27933573218059715,
+      0.5524581403633771
+     ],
+     "recall": [
+      1.0,
+      1.0
+     ],
+     "time_in_alarm": [
+      0.9808161678850872,
+      0.998180825797385
+     ]
+    },
+    "scores_sha256": "cf42fad3f0b8598b2a124f654792b6b506b87d500304a80bc4fd3db52f1030e1",
+    "summary": {
+     "active_at_onset_not_counted": 10,
+     "chance_event_recall": 0.6769921196021029,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.0,
+     "event_skill": -0.6769921196021029,
+     "events": 10,
+     "events_detected": 0,
+     "f1": 0.5921235912371787,
+     "false_alarms": 16,
+     "false_alarms_per_hour": 0.01172161172161172,
+     "false_positive_rate": 0.9832112332112332,
+     "fn": 0,
+     "fp": 16105,
+     "normal_hours": 1365.0000000000002,
+     "precision": 0.4205792408706602,
+     "recall": 1.0,
+     "time_in_alarm": 0.9900488400488401,
+     "tn": 275,
+     "tp": 11690
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 29.083333333333332,
+      "other_normal_operation": 1335.9166666666667
+     }
+    },
+    "average_precision": 0.7117408582063401,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 60.166666666666664,
+      "q25_hours": 60.166666666666664,
+      "q75_hours": 60.166666666666664
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 33.25,
+      "q25_hours": 33.25,
+      "q75_hours": 33.25
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.3899639958491349
+     ],
+     "event_recall": [
+      0.1111111111111111,
+      0.7
+     ],
+     "event_skill": [
+      -0.152745796317238,
+      0.5642824725357529
+     ],
+     "f1": [
+      0.004786269751895519,
+      0.030834469140228887
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.005011510521257414
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.009208818862664359
+     ],
+     "precision": [
+      0.17409631115912957,
+      1.0
+     ],
+     "recall": [
+      0.002036397152071693,
+      0.015770578559323196
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.04615472186718006
+     ]
+    },
+    "scores_sha256": "001e65de97fad9c3d17a2c206097331b505bc70cb3ce15668640767baa31ef49",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.19227174291897062,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.4,
+     "event_skill": 0.2077282570810294,
+     "events": 10,
+     "events_detected": 4,
+     "f1": 0.016871941960519655,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0021978021978021974,
+     "false_positive_rate": 0.003907203907203907,
+     "fn": 11590,
+     "fp": 64,
+     "normal_hours": 1365.0000000000002,
+     "precision": 0.6097560975609756,
+     "recall": 0.00855431993156544,
+     "time_in_alarm": 0.019352869352869354,
+     "tn": 16316,
+     "tp": 100
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 14
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 29.083333333333332,
+      "other_normal_operation": 1335.9166666666667
+     }
+    },
+    "average_precision": 0.42312927696335056,
+    "by_category": {
+     "DERATE": {
+      "detected": 0,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {},
+    "interval": {
+     "chance_event_recall": [
+      0.5364126574237984,
+      0.7332723877633309
+     ],
+     "event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_skill": [
+      -0.7332723877633309,
+      -0.5364126574237984
+     ],
+     "f1": [
+      0.43003350568208226,
+      0.710782653242093
+     ],
+     "false_alarms_per_hour": [
+      0.008242860232846734,
+      0.013339475830223768
+     ],
+     "false_positive_rate": [
+      1.0,
+      1.0
+     ],
+     "precision": [
+      0.2739125400783755,
+      0.5513288208051299
+     ],
+     "recall": [
+      1.0,
+      1.0
+     ],
+     "time_in_alarm": [
+      0.997776754028296,
+      0.9986261899611922
+     ]
+    },
+    "scores_sha256": "b607754d9fcb8e64d58abe01e74ecd3516c5313cea1cdd603e1f1054635f8244",
+    "summary": {
+     "active_at_onset_not_counted": 10,
+     "chance_event_recall": 0.6284122433039476,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.0,
+     "event_skill": -0.6284122433039476,
+     "events": 10,
+     "events_detected": 0,
+     "f1": 0.5880281690140845,
+     "false_alarms": 14,
+     "false_alarms_per_hour": 0.010256410256410255,
+     "false_positive_rate": 1.0,
+     "fn": 0,
+     "fp": 16380,
+     "normal_hours": 1365.0000000000002,
+     "precision": 0.4164588528678304,
+     "recall": 1.0,
+     "time_in_alarm": 0.9982905982905983,
+     "tn": 0,
+     "tp": 11690
+    }
+   }
+  },
+  "deliverability_outside": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.416666666666666,
+      "other_normal_operation": 1453.25
+     }
+    },
+    "average_precision": 0.6001800882838858,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 56.333333333333336,
+      "q25_hours": 56.333333333333336,
+      "q75_hours": 56.333333333333336
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_recall": [
+      0.0,
+      0.6
+     ],
+     "event_skill": [
+      0.0,
+      0.6
+     ],
+     "f1": [
+      0.0681543426518315,
+      0.6812892636583384
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.0
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.00027318295149591213
+     ],
+     "precision": [
+      0.0,
+      1.0
+     ],
+     "recall": [
+      0.0,
+      0.5112339187052016
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0
+     ]
+    },
+    "scores_sha256": "ef5ed3f2256ee5e89a2952ccdcdef3cd0454ec48610549c428b457e12cc57b96",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.0,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.3,
+     "event_skill": 0.3,
+     "events": 10,
+     "events_detected": 3,
+     "f1": 0.37718890438555713,
+     "false_alarms": 0,
+     "false_alarms_per_hour": 0.0,
+     "false_positive_rate": 0.00011363636363636364,
+     "fn": 8036,
+     "fp": 2,
+     "normal_hours": 1466.6666666666665,
+     "precision": 0.9991789819376026,
+     "recall": 0.23247373447946515,
+     "time_in_alarm": 0.0,
+     "tn": 17598,
+     "tp": 2434
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 14
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.416666666666666,
+      "other_normal_operation": 1453.25
+     }
+    },
+    "average_precision": 0.44519728459742497,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 36.125,
+      "q25_hours": 18.604166666666668,
+      "q75_hours": 53.645833333333336
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 23.666666666666668,
+      "q25_hours": 23.666666666666668,
+      "q75_hours": 23.666666666666668
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 30.375,
+      "q25_hours": 20.5625,
+      "q75_hours": 44.229166666666664
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.3815906408435397,
+      0.7740422290070168
+     ],
+     "event_recall": [
+      0.4,
+      1.0
+     ],
+     "event_skill": [
+      -0.21908072746907817,
+      0.40602674985523907
+     ],
+     "f1": [
+      0.007598650493013485,
+      0.02297181980689042
+     ],
+     "false_alarms_per_hour": [
+      0.005640199691224862,
+      0.01661402760782055
+     ],
+     "false_positive_rate": [
+      0.0034788898723338763,
+      0.012664046073295911
+     ],
+     "precision": [
+      0.14593902958076188,
+      0.6503141399955651
+     ],
+     "recall": [
+      0.0038668363899921517,
+      0.01183291780347327
+     ],
+     "time_in_alarm": [
+      0.0381080153684943,
+      0.11406085019297613
+     ]
+    },
+    "scores_sha256": "e66db9d501280e1f0f837be9b342e5cc893f830515dc203c53c4ef44fd447f90",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.6094579537760143,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.7,
+     "event_skill": 0.09054204622398565,
+     "events": 10,
+     "events_detected": 7,
+     "f1": 0.014782934131736526,
+     "false_alarms": 16,
+     "false_alarms_per_hour": 0.01090909090909091,
+     "false_positive_rate": 0.007897727272727273,
+     "fn": 10391,
+     "fp": 139,
+     "normal_hours": 1466.6666666666665,
+     "precision": 0.3623853211009174,
+     "recall": 0.007545367717287488,
+     "time_in_alarm": 0.07505681818181818,
+     "tn": 17461,
+     "tp": 79
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 12
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.416666666666666,
+      "other_normal_operation": 1453.25
+     }
+    },
+    "average_precision": 0.6029208326676934,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 5.708333333333333,
+      "q25_hours": 2.9791666666666665,
+      "q75_hours": 8.4375
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 43.583333333333336,
+      "q25_hours": 43.583333333333336,
+      "q75_hours": 43.583333333333336
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 23.416666666666668,
+      "q25_hours": 23.416666666666668,
+      "q75_hours": 23.416666666666668
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.27339114313316293,
+      0.7735209850646391
+     ],
+     "event_recall": [
+      0.1111111111111111,
+      0.7
+     ],
+     "event_skill": [
+      -0.5359877662653934,
+      0.2867653167604788
+     ],
+     "f1": [
+      0.4901687477346025,
+      0.7689513132910055
+     ],
+     "false_alarms_per_hour": [
+      0.003670697262526989,
+      0.016958562559935397
+     ],
+     "false_positive_rate": [
+      0.06718340963483906,
+      0.4292855420900208
+     ],
+     "precision": [
+      0.5401779610844595,
+      0.7939565579432158
+     ],
+     "recall": [
+      0.3922727372517754,
+      0.8895632826993453
+     ],
+     "time_in_alarm": [
+      0.1226165740353552,
+      0.4957092374528454
+     ]
+    },
+    "scores_sha256": "1b9a7e1e1f7b8300aac3a805a2f60e21af22304d679a00d1b910f861c3fc214a",
+    "summary": {
+     "active_at_onset_not_counted": 5,
+     "chance_event_recall": 0.5612570439752868,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.4,
+     "event_skill": -0.16125704397528673,
+     "events": 10,
+     "events_detected": 4,
+     "f1": 0.660751809479337,
+     "false_alarms": 14,
+     "false_alarms_per_hour": 0.009545454545454546,
+     "false_positive_rate": 0.21988636363636363,
+     "fn": 3395,
+     "fp": 3870,
+     "normal_hours": 1466.6666666666665,
+     "precision": 0.6464138876199178,
+     "recall": 0.6757402101241643,
+     "time_in_alarm": 0.29125,
+     "tn": 13730,
+     "tp": 7075
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 8
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.416666666666666,
+      "other_normal_operation": 1453.25
+     }
+    },
+    "average_precision": 0.49920325852503467,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 2,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 5,
+      "event_class": 3,
+      "event_recall": 0.8333333333333334,
+      "event_recall_interval": [
+       0.5,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 80.08333333333333,
+      "q25_hours": 80.08333333333333,
+      "q75_hours": 80.08333333333333
+     },
+     "SENSOR": {
+      "detected": 5,
+      "median_hours": 23.583333333333332,
+      "q25_hours": 13.5,
+      "q75_hours": 64.41666666666667
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.22630195682291102,
+      0.623806481300567
+     ],
+     "event_recall": [
+      0.5454545454545454,
+      1.0
+     ],
+     "event_skill": [
+      0.0372640406127908,
+      0.6633623815672085
+     ],
+     "f1": [
+      0.01683781663129763,
+      0.04031620937137119
+     ],
+     "false_alarms_per_hour": [
+      0.0030749725703128374,
+      0.011045071452133785
+     ],
+     "false_positive_rate": [
+      0.0027817950491185617,
+      0.010999505966947794
+     ],
+     "precision": [
+      0.3117908787541714,
+      0.8058915441176471
+     ],
+     "recall": [
+      0.008555685420748084,
+      0.020831754410675973
+     ],
+     "time_in_alarm": [
+      0.020710845947444,
+      0.07561286922529666
+     ]
+    },
+    "scores_sha256": "999d053070528b217a2a1f1721706837970c21c945171daa4d1e502348484386",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.4457355247316831,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.35426447526831695,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.02848896750768085,
+     "false_alarms": 10,
+     "false_alarms_per_hour": 0.006818181818181819,
+     "false_positive_rate": 0.006704545454545454,
+     "fn": 10317,
+     "fp": 118,
+     "normal_hours": 1466.6666666666665,
+     "precision": 0.5645756457564576,
+     "recall": 0.014613180515759312,
+     "time_in_alarm": 0.04647727272727273,
+     "tn": 17482,
+     "tp": 153
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 14
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.416666666666666,
+      "other_normal_operation": 1453.25
+     }
+    },
+    "average_precision": 0.41972139997635594,
+    "by_category": {
+     "DERATE": {
+      "detected": 0,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {},
+    "interval": {
+     "chance_event_recall": [
+      0.47669750798005645,
+      0.6574066523777486
+     ],
+     "event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_skill": [
+      -0.6574066523777486,
+      -0.47669750798005645
+     ],
+     "f1": [
+      0.387355051007079,
+      0.6582562707331406
+     ],
+     "false_alarms_per_hour": [
+      0.007877108005245728,
+      0.011749135000029156
+     ],
+     "false_positive_rate": [
+      1.0,
+      1.0
+     ],
+     "precision": [
+      0.2401986106163164,
+      0.49059761311008193
+     ],
+     "recall": [
+      1.0,
+      1.0
+     ],
+     "time_in_alarm": [
+      0.9980418108333284,
+      0.9986871486657923
+     ]
+    },
+    "scores_sha256": "8e6a54803cd6db480450ee014851630a7644c3eb3ed0d385310ada2efbb8a1ab",
+    "summary": {
+     "active_at_onset_not_counted": 10,
+     "chance_event_recall": 0.5612570439752868,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.0,
+     "event_skill": -0.5612570439752868,
+     "events": 10,
+     "events_detected": 0,
+     "f1": 0.5433316035288012,
+     "false_alarms": 14,
+     "false_alarms_per_hour": 0.009545454545454546,
+     "false_positive_rate": 1.0,
+     "fn": 0,
+     "fp": 17600,
+     "normal_hours": 1466.6666666666665,
+     "precision": 0.37299608122550765,
+     "recall": 1.0,
+     "time_in_alarm": 0.9984090909090909,
+     "tn": 0,
+     "tp": 10470
+    }
+   }
+  },
+  "fault_with_dropout": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 4
+     },
+     "hours": {
+      "during_dropout": 44.083333333333336,
+      "during_planned_work": 25.5,
+      "other_normal_operation": 1282.3333333333333
+     }
+    },
+    "average_precision": 0.7190276377368072,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 3,
+      "event_class": 3,
+      "event_recall": 0.5,
+      "event_recall_interval": [
+       0.16666666666666666,
+       0.8333333333333334
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "SENSOR": {
+      "detected": 3,
+      "median_hours": 1.0,
+      "q25_hours": 0.8333333333333333,
+      "q75_hours": 33.875
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.47937938221904614
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.800454545454543
+     ],
+     "event_skill": [
+      -0.08878607219768282,
+      0.6166233754461261
+     ],
+     "f1": [
+      0.1732850157933279,
+      0.7908647818230259
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.006808375798149427
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.014975850906244603
+     ],
+     "precision": [
+      0.9108409321175278,
+      1.0
+     ],
+     "recall": [
+      0.09320842028550037,
+      0.6603883068925059
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.08904035314374098
+     ]
+    },
+    "scores_sha256": "a841d60aa6de94037513f5afb6a2272d464aec90e87726c7d04ea5be133db4df",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.2526276920762892,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.2473723079237108,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.5291761661223735,
+     "false_alarms": 4,
+     "false_alarms_per_hour": 0.0029587622511249457,
+     "false_positive_rate": 0.005424397460395735,
+     "fn": 7553,
+     "fp": 88,
+     "normal_hours": 1351.9166666666667,
+     "precision": 0.9799178457325423,
+     "recall": 0.3624546298641006,
+     "time_in_alarm": 0.0384639092646243,
+     "tn": 16135,
+     "tp": 4294
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 7
+     },
+     "hours": {
+      "during_dropout": 44.083333333333336,
+      "during_planned_work": 25.5,
+      "other_normal_operation": 1282.3333333333333
+     }
+    },
+    "average_precision": 0.48345039634720766,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 16.333333333333332,
+      "q25_hours": 11.875,
+      "q75_hours": 20.791666666666668
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 75.66666666666667,
+      "q25_hours": 75.66666666666667,
+      "q75_hours": 75.66666666666667
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 60.125,
+      "q25_hours": 39.25,
+      "q75_hours": 82.33333333333333
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.20163299925279152,
+      0.6879260334926288
+     ],
+     "event_recall": [
+      0.38437500000000047,
+      1.0
+     ],
+     "event_skill": [
+      -0.20120257653626983,
+      0.5617571271729429
+     ],
+     "f1": [
+      0.004825108655569114,
+      0.0189671622885811
+     ],
+     "false_alarms_per_hour": [
+      0.002327916901577418,
+      0.011781834528517493
+     ],
+     "false_positive_rate": [
+      0.001587280602351993,
+      0.010724077321958977
+     ],
+     "precision": [
+      0.14881998277347117,
+      0.7971177332681972
+     ],
+     "recall": [
+      0.0024359478065891084,
+      0.009655982628033376
+     ],
+     "time_in_alarm": [
+      0.015256774256987389,
+      0.0859415682059685
+     ]
+    },
+    "scores_sha256": "685bff00de4304a802c29ed3dc2aac097ed604c0d753c20622160283c62023aa",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.5159085647827095,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.7,
+     "event_skill": 0.18409143521729043,
+     "events": 10,
+     "events_detected": 7,
+     "f1": 0.010989010989010988,
+     "false_alarms": 10,
+     "false_alarms_per_hour": 0.007396905627812365,
+     "false_positive_rate": 0.006102447142945201,
+     "fn": 11781,
+     "fp": 99,
+     "normal_hours": 1351.9166666666667,
+     "precision": 0.4,
+     "recall": 0.005571030640668524,
+     "time_in_alarm": 0.052209825556308945,
+     "tn": 16124,
+     "tp": 66
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 3
+     },
+     "hours": {
+      "during_dropout": 44.083333333333336,
+      "during_planned_work": 25.5,
+      "other_normal_operation": 1282.3333333333333
+     }
+    },
+    "average_precision": 0.7560423725866279,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 11.666666666666666,
+      "q25_hours": 9.0,
+      "q75_hours": 14.333333333333332
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 7.166666666666667,
+      "q25_hours": 2.5,
+      "q75_hours": 14.229166666666668
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.39702846199461056
+     ],
+     "event_recall": [
+      0.5,
+      1.0
+     ],
+     "event_skill": [
+      0.24846728322545517,
+      0.9230769230769231
+     ],
+     "f1": [
+      0.4132576920938741,
+      0.8498720908108809
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.00509932301093812
+     ],
+     "false_positive_rate": [
+      0.0004582235280093251,
+      0.2231573389729644
+     ],
+     "precision": [
+      0.5263249223985023,
+      0.9991423723194244
+     ],
+     "recall": [
+      0.2968676581959111,
+      0.7871669417874233
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.36625166658100244
+     ]
+    },
+    "scores_sha256": "e26b7b06c89d004977c04225e2e4fc39a131d501c2816f975281480b652e3652",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.1962915380944826,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.6037084619055174,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.6660537337828175,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0022190716883437093,
+     "false_positive_rate": 0.07464710596067312,
+     "fn": 5327,
+     "fp": 1211,
+     "normal_hours": 1351.9166666666667,
+     "precision": 0.8433579097141379,
+     "recall": 0.5503502996539208,
+     "time_in_alarm": 0.1255624730321149,
+     "tn": 15012,
+     "tp": 6520
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 6
+     },
+     "hours": {
+      "during_dropout": 44.083333333333336,
+      "during_planned_work": 25.5,
+      "other_normal_operation": 1282.3333333333333
+     }
+    },
+    "average_precision": 0.5339126880700823,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 3,
+      "event_class": 3,
+      "event_recall": 0.5,
+      "event_recall_interval": [
+       0.16666666666666666,
+       0.8333333333333334
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 58.125,
+      "q25_hours": 49.10416666666667,
+      "q75_hours": 67.14583333333334
+     },
+     "SENSOR": {
+      "detected": 3,
+      "median_hours": 52.25,
+      "q25_hours": 38.583333333333336,
+      "q75_hours": 76.83333333333334
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.25146736004102194,
+      0.5945111105189835
+     ],
+     "event_recall": [
+      0.4,
+      1.0
+     ],
+     "event_skill": [
+      -0.10071814851426818,
+      0.5273089044354201
+     ],
+     "f1": [
+      0.009494408084291688,
+      0.043294303489859576
+     ],
+     "false_alarms_per_hour": [
+      0.0029122287752708837,
+      0.009199363574724999
+     ],
+     "false_positive_rate": [
+      0.002909071051388387,
+      0.011147446126838368
+     ],
+     "precision": [
+      0.22978057262331464,
+      0.8419654381184569
+     ],
+     "recall": [
+      0.0048311046690646215,
+      0.022414919095391894
+     ],
+     "time_in_alarm": [
+      0.019447424069762086,
+      0.06286015750568648
+     ]
+    },
+    "scores_sha256": "cb37d2391721068806d441bba33246e47ae3d6d521b79f4afc0c0933e7da06c4",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.4796783664151795,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.7,
+     "event_skill": 0.22032163358482043,
+     "events": 10,
+     "events_detected": 7,
+     "f1": 0.0244305051172004,
+     "false_alarms": 9,
+     "false_alarms_per_hour": 0.006657215065031128,
+     "false_positive_rate": 0.0074585465080441345,
+     "fn": 11699,
+     "fp": 121,
+     "normal_hours": 1351.9166666666667,
+     "precision": 0.550185873605948,
+     "recall": 0.012492614163923357,
+     "time_in_alarm": 0.04493620168896012,
+     "tn": 16102,
+     "tp": 148
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 44.083333333333336,
+      "during_planned_work": 25.5,
+      "other_normal_operation": 1282.3333333333333
+     }
+    },
+    "average_precision": 0.5959816503383262,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 16.25,
+      "q25_hours": 12.791666666666668,
+      "q75_hours": 19.708333333333336
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 24.25,
+      "q25_hours": 24.25,
+      "q75_hours": 24.25
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 73.75,
+      "q25_hours": 73.75,
+      "q75_hours": 73.75
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.39214266634947054
+     ],
+     "event_recall": [
+      0.1,
+      0.7
+     ],
+     "event_skill": [
+      -0.1563960013813267,
+      0.5827685500792581
+     ],
+     "f1": [
+      0.13534826948172005,
+      0.6522516288955104
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.005037946053847688
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.048636420577046834
+     ],
+     "precision": [
+      0.5513441498483049,
+      1.0
+     ],
+     "recall": [
+      0.06211360314815561,
+      0.4958999481402298
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.07799786376949126
+     ]
+    },
+    "scores_sha256": "84317b7fdeccfeb896ad5d78c8a0311070cec6510656c9815631f1975b93ae22",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.1962915380944826,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.4,
+     "event_skill": 0.20370846190551742,
+     "events": 10,
+     "events_detected": 4,
+     "f1": 0.4150354425440594,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0022190716883437093,
+     "false_positive_rate": 0.02089625839856993,
+     "fn": 8656,
+     "fp": 339,
+     "normal_hours": 1351.9166666666667,
+     "precision": 0.9039660056657224,
+     "recall": 0.26935089052080696,
+     "time_in_alarm": 0.03384084324724157,
+     "tn": 15884,
+     "tp": 3191
+    }
+   }
+  },
+  "noise_high": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 1
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.0,
+      "other_normal_operation": 1348.1666666666667
+     }
+    },
+    "average_precision": 0.723431822715193,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 26.666666666666664,
+      "q25_hours": 25.875,
+      "q75_hours": 27.458333333333332
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 1.0,
+      "q25_hours": 1.0,
+      "q75_hours": 1.0
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.2269260335472235
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.8
+     ],
+     "event_skill": [
+      0.13197677147430603,
+      0.734150425148773
+     ],
+     "f1": [
+      0.154229578702153,
+      0.7898611365683786
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.002645614619298829
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.010802926362136886
+     ],
+     "precision": [
+      0.9674202127659575,
+      1.0
+     ],
+     "recall": [
+      0.08367359748115165,
+      0.6600707922601826
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.052471356616093444
+     ]
+    },
+    "scores_sha256": "0c26334d796760e1a522c338239aa1b2eeb79a00b7571394ca679d7580344b59",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.06921742534286947,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.43078257465713055,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.5233679989976193,
+     "false_alarms": 1,
+     "false_alarms_per_hour": 0.0007346638912697442,
+     "false_positive_rate": 0.002999877556018122,
+     "fn": 7559,
+     "fp": 49,
+     "normal_hours": 1361.1666666666665,
+     "precision": 0.9884051112162802,
+     "recall": 0.3559134287661895,
+     "time_in_alarm": 0.014570833843516592,
+     "tn": 16285,
+     "tp": 4177
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 10
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.0,
+      "other_normal_operation": 1348.1666666666667
+     }
+    },
+    "average_precision": 0.5145416145271215,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 3,
+      "event_class": 3,
+      "event_recall": 0.5,
+      "event_recall_interval": [
+       0.16666666666666666,
+       0.8333333333333334
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 53.708333333333336,
+      "q25_hours": 34.1875,
+      "q75_hours": 73.22916666666667
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 30.833333333333332,
+      "q25_hours": 26.791666666666664,
+      "q75_hours": 34.875
+     },
+     "SENSOR": {
+      "detected": 3,
+      "median_hours": 38.333333333333336,
+      "q25_hours": 25.625,
+      "q75_hours": 51.75
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.3290303194765539,
+      0.7117498688259718
+     ],
+     "event_recall": [
+      0.4,
+      1.0
+     ],
+     "event_skill": [
+      -0.24263191821324237,
+      0.5214092026192932
+     ],
+     "f1": [
+      0.006721462196919554,
+      0.014621703495757246
+     ],
+     "false_alarms_per_hour": [
+      0.004129259743619196,
+      0.012558633574336864
+     ],
+     "false_positive_rate": [
+      0.0031576200843376877,
+      0.009996943761834458
+     ],
+     "precision": [
+      0.15576791725618386,
+      0.6851235307543074
+     ],
+     "recall": [
+      0.0034161270409640526,
+      0.007428783451529491
+     ],
+     "time_in_alarm": [
+      0.032613597619564214,
+      0.09347204668148876
+     ]
+    },
+    "scores_sha256": "b044115fc3f8184185974112497d791be4f21faaab2cd99a88df1d1ee6ffa7de",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.5738041173849935,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.7,
+     "event_skill": 0.12619588261500647,
+     "events": 10,
+     "events_detected": 7,
+     "f1": 0.01074456476118526,
+     "false_alarms": 12,
+     "false_alarms_per_hour": 0.00881596669523693,
+     "false_positive_rate": 0.006918084976123423,
+     "fn": 11672,
+     "fp": 113,
+     "normal_hours": 1361.1666666666665,
+     "precision": 0.3615819209039548,
+     "recall": 0.0054533060668029995,
+     "time_in_alarm": 0.0656299742867638,
+     "tn": 16221,
+     "tp": 64
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 1,
+      "other_normal_operation": 1
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.0,
+      "other_normal_operation": 1348.1666666666667
+     }
+    },
+    "average_precision": 0.7633484972168364,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.29166666666666663,
+      "q25_hours": 0.2708333333333333,
+      "q75_hours": 0.3125
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 17.958333333333332,
+      "q25_hours": 16.395833333333332,
+      "q75_hours": 19.520833333333332
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 6.0,
+      "q25_hours": 1.375,
+      "q75_hours": 15.875
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.2886833608673313
+     ],
+     "event_recall": [
+      0.5384615384615384,
+      1.0
+     ],
+     "event_skill": [
+      0.3745251381106476,
+      0.9229628058260496
+     ],
+     "f1": [
+      0.3574683053469305,
+      0.8272876437195037
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.003569118212431716
+     ],
+     "false_positive_rate": [
+      0.00011870723853640833,
+      0.015914052047408873
+     ],
+     "precision": [
+      0.9229178641681578,
+      0.999695776659344
+     ],
+     "recall": [
+      0.2194600238663485,
+      0.7163345779294339
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.03507196358443108
+     ]
+    },
+    "scores_sha256": "19abbf661b93f40fc4cd65d743c3c4fbb6843e946340b31010ab9dd80f6ddc33",
+    "summary": {
+     "active_at_onset_not_counted": 1,
+     "chance_event_recall": 0.13354080615005925,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.6664591938499408,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.6299513551077136,
+     "false_alarms": 2,
+     "false_alarms_per_hour": 0.0014693277825394884,
+     "false_positive_rate": 0.005693645157340517,
+     "fn": 6297,
+     "fp": 93,
+     "normal_hours": 1361.1666666666665,
+     "precision": 0.9831887201735358,
+     "recall": 0.46344580777096117,
+     "time_in_alarm": 0.013958613934125138,
+     "tn": 16241,
+     "tp": 5439
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 1,
+      "other_normal_operation": 7
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.0,
+      "other_normal_operation": 1348.1666666666667
+     }
+    },
+    "average_precision": 0.48466490550827834,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 5,
+      "event_class": 3,
+      "event_recall": 0.8333333333333334,
+      "event_recall_interval": [
+       0.5,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 39.333333333333336,
+      "q25_hours": 39.333333333333336,
+      "q75_hours": 39.333333333333336
+     },
+     "SENSOR": {
+      "detected": 5,
+      "median_hours": 38.75,
+      "q25_hours": 28.75,
+      "q75_hours": 95.0
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.26023014607633327,
+      0.5758435763044019
+     ],
+     "event_recall": [
+      0.5454545454545454,
+      1.0
+     ],
+     "event_skill": [
+      0.09369897169382084,
+      0.6458970292457932
+     ],
+     "f1": [
+      0.011261461799469076,
+      0.026706507053350523
+     ],
+     "false_alarms_per_hour": [
+      0.0031535605011551848,
+      0.008532677215094812
+     ],
+     "false_positive_rate": [
+      0.0034183855839329067,
+      0.009113521443286096
+     ],
+     "precision": [
+      0.2563616071428572,
+      0.7781953082129137
+     ],
+     "recall": [
+      0.005746856212668539,
+      0.013666279582306281
+     ],
+     "time_in_alarm": [
+      0.022577796472114917,
+      0.059844254641578984
+     ]
+    },
+    "scores_sha256": "1cf3d729781a0317ac1674f9b031cd8e879294a68731bbf9e70139c74c0971f4",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.434753622645221,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.36524637735477905,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.019232377289070988,
+     "false_alarms": 8,
+     "false_alarms_per_hour": 0.0058773111301579535,
+     "false_positive_rate": 0.006611975021427697,
+     "fn": 11621,
+     "fp": 108,
+     "normal_hours": 1361.1666666666665,
+     "precision": 0.515695067264574,
+     "recall": 0.009798909338786639,
+     "time_in_alarm": 0.04218195175707114,
+     "tn": 16226,
+     "tp": 115
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 2
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 13.0,
+      "other_normal_operation": 1348.1666666666667
+     }
+    },
+    "average_precision": 0.6510743503139247,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 16.75,
+      "q25_hours": 15.791666666666668,
+      "q75_hours": 17.708333333333336
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 40.875,
+      "q25_hours": 40.27083333333333,
+      "q75_hours": 41.47916666666667
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 2.1666666666666665,
+      "q25_hours": 2.1666666666666665,
+      "q75_hours": 2.1666666666666665
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.4928358741685327
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.8181818181818182
+     ],
+     "event_skill": [
+      -0.07552231174078167,
+      0.5884509764118344
+     ],
+     "f1": [
+      0.12057776009573315,
+      0.6594914821984201
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.006683993892214286
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.025656772508967068
+     ],
+     "precision": [
+      0.6749614929151354,
+      1.0
+     ],
+     "recall": [
+      0.06442020543204408,
+      0.5030825960083591
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.06677471968707248
+     ]
+    },
+    "scores_sha256": "5b9105a499070885aae48cf33480095808ffbb23d3d982de48d52af978d6c8a4",
+    "summary": {
+     "active_at_onset_not_counted": 1,
+     "chance_event_recall": 0.2488905697124551,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.2511094302875449,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.422365988909427,
+     "false_alarms": 4,
+     "false_alarms_per_hour": 0.0029386555650789768,
+     "false_positive_rate": 0.013040284070037957,
+     "fn": 8537,
+     "fp": 213,
+     "normal_hours": 1361.1666666666665,
+     "precision": 0.9375732708089097,
+     "recall": 0.27258009543285616,
+     "time_in_alarm": 0.0321415452430513,
+     "tn": 16121,
+     "tp": 3199
+    }
+   }
+  },
+  "onset_outside": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 3
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 28.083333333333332,
+      "other_normal_operation": 1352.25
+     }
+    },
+    "average_precision": 0.7284841721828896,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 15.166666666666668,
+      "q25_hours": 12.0,
+      "q75_hours": 18.333333333333332
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 1.0,
+      "q25_hours": 1.0,
+      "q75_hours": 1.0
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.45590084960342864
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.8
+     ],
+     "event_skill": [
+      0.009239768536169897,
+      0.7
+     ],
+     "f1": [
+      0.026357117781522825,
+      0.8123914119015555
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.0070746142800308855
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.00766416547003346
+     ],
+     "precision": [
+      0.7914438502673797,
+      1.0
+     ],
+     "recall": [
+      0.01310556912309127,
+      0.6867503195292963
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0833232348536971
+     ]
+    },
+    "scores_sha256": "0cbde42221954ef435993952f434df4d60c4fd4de9ab3cbaf4c7c184c40e5542",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.1827918657051172,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.3172081342948828,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.49918752031199215,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0021733880705143687,
+     "false_positive_rate": 0.0023545037430572325,
+     "fn": 7666,
+     "fp": 39,
+     "normal_hours": 1380.3333333333333,
+     "precision": 0.9899458623356535,
+     "recall": 0.3337389188249609,
+     "time_in_alarm": 0.02559768171939145,
+     "tn": 16525,
+     "tp": 3840
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 14
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 28.083333333333332,
+      "other_normal_operation": 1352.25
+     }
+    },
+    "average_precision": 0.6129988917926497,
+    "by_category": {
+     "DERATE": {
+      "detected": 0,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 3,
+      "event_class": 3,
+      "event_recall": 0.5,
+      "event_recall_interval": [
+       0.16666666666666666,
+       0.8333333333333334
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "SENSOR": {
+      "detected": 3,
+      "median_hours": 40.75,
+      "q25_hours": 37.91666666666667,
+      "q75_hours": 69.25
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.4145829969753555,
+      0.810550338931374
+     ],
+     "event_recall": [
+      0.0,
+      0.6
+     ],
+     "event_skill": [
+      -0.600663697202849,
+      -0.027557423688525724
+     ],
+     "f1": [
+      0.0009256826024852432,
+      0.01033409656057828
+     ],
+     "false_alarms_per_hour": [
+      0.0071108501101354435,
+      0.01706414059254668
+     ],
+     "false_positive_rate": [
+      0.0035594116890842343,
+      0.01214625913605054
+     ],
+     "precision": [
+      0.019683109464258147,
+      0.5179989341859844
+     ],
+     "recall": [
+      0.00035047092824581466,
+      0.005273079611048829
+     ],
+     "time_in_alarm": [
+      0.043765411008385144,
+      0.10865477275270802
+     ]
+    },
+    "scores_sha256": "354c07a25290c420a9597362d7b1a285eb4201833eb090d3e5ca3808f1237abb",
+    "summary": {
+     "active_at_onset_not_counted": 1,
+     "chance_event_recall": 0.6227986439031594,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.3,
+     "event_skill": -0.32279864390315943,
+     "events": 10,
+     "events_detected": 3,
+     "f1": 0.005486498071153022,
+     "false_alarms": 17,
+     "false_alarms_per_hour": 0.012315865732914755,
+     "false_positive_rate": 0.007667230137647911,
+     "fn": 11474,
+     "fp": 127,
+     "normal_hours": 1380.3333333333333,
+     "precision": 0.20125786163522014,
+     "recall": 0.0027811576568746743,
+     "time_in_alarm": 0.07787973919343154,
+     "tn": 16437,
+     "tp": 32
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 1
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 28.083333333333332,
+      "other_normal_operation": 1352.25
+     }
+    },
+    "average_precision": 0.7950275103199864,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 2,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 5,
+      "event_class": 3,
+      "event_recall": 0.8333333333333334,
+      "event_recall_interval": [
+       0.5,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 4.375,
+      "q25_hours": 4.020833333333333,
+      "q75_hours": 4.729166666666666
+     },
+     "SENSOR": {
+      "detected": 5,
+      "median_hours": 1.6666666666666667,
+      "q25_hours": 0.75,
+      "q75_hours": 43.166666666666664
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.41577239739036415
+     ],
+     "event_recall": [
+      0.6666666666666666,
+      1.0
+     ],
+     "event_skill": [
+      0.43193421119072123,
+      1.0
+     ],
+     "f1": [
+      0.5609415120129105,
+      0.9499779648960931
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.005142503597173835
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.04641339949702761
+     ],
+     "precision": [
+      0.8598535820158936,
+      1.0
+     ],
+     "recall": [
+      0.40574866444972413,
+      0.9340006661508063
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.07493546963944617
+     ]
+    },
+    "scores_sha256": "b435ac845d6adf87a25a9b2cec3fce99ae9edb788381becf1d9bc36a1954a2e7",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.1827918657051172,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.9,
+     "event_skill": 0.7172081342948828,
+     "events": 10,
+     "events_detected": 9,
+     "f1": 0.8125946109597335,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0021733880705143687,
+     "false_positive_rate": 0.01569669162038155,
+     "fn": 3454,
+     "fp": 260,
+     "normal_hours": 1380.3333333333333,
+     "precision": 0.9687199230028873,
+     "recall": 0.6998087954110899,
+     "time_in_alarm": 0.02819367302583917,
+     "tn": 16304,
+     "tp": 8052
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 11
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 28.083333333333332,
+      "other_normal_operation": 1352.25
+     }
+    },
+    "average_precision": 0.45758794978691275,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 3,
+      "event_class": 3,
+      "event_recall": 0.5,
+      "event_recall_interval": [
+       0.16666666666666666,
+       0.8333333333333334
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 63.833333333333336,
+      "q25_hours": 63.833333333333336,
+      "q75_hours": 63.833333333333336
+     },
+     "SENSOR": {
+      "detected": 3,
+      "median_hours": 0.75,
+      "q25_hours": 0.6666666666666667,
+      "q75_hours": 33.333333333333336
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.31520428529813455,
+      0.7591637651787488
+     ],
+     "event_recall": [
+      0.3,
+      0.8888888888888888
+     ],
+     "event_skill": [
+      -0.21928235778523625,
+      0.3385272956368626
+     ],
+     "f1": [
+      0.012359766333260372,
+      0.03785040773024663
+     ],
+     "false_alarms_per_hour": [
+      0.0049158894918251905,
+      0.014236419229191777
+     ],
+     "false_positive_rate": [
+      0.005025470775577567,
+      0.015820783844010134
+     ],
+     "precision": [
+      0.19618757824454028,
+      0.7633766858359086
+     ],
+     "recall": [
+      0.006328541744385244,
+      0.019590585829138252
+     ],
+     "time_in_alarm": [
+      0.031776191926544656,
+      0.10226077600104272
+     ]
+    },
+    "scores_sha256": "84092c77f899b47a4e66488f82864c4edd6008820ca2fd28633be3b1d568be6a",
+    "summary": {
+     "active_at_onset_not_counted": 1,
+     "chance_event_recall": 0.5422759867078276,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.6,
+     "event_skill": 0.05772401329217236,
+     "events": 10,
+     "events_detected": 6,
+     "f1": 0.025868627948262744,
+     "false_alarms": 13,
+     "false_alarms_per_hour": 0.00941801497222893,
+     "false_positive_rate": 0.01026322144409563,
+     "fn": 11353,
+     "fp": 170,
+     "normal_hours": 1380.3333333333333,
+     "precision": 0.47368421052631576,
+     "recall": 0.013297410046932035,
+     "time_in_alarm": 0.06671093938662159,
+     "tn": 16394,
+     "tp": 153
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 28.083333333333332,
+      "other_normal_operation": 1352.25
+     }
+    },
+    "average_precision": 0.6966406459267663,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 6.833333333333334,
+      "q25_hours": 5.458333333333333,
+      "q75_hours": 8.208333333333334
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 18.75,
+      "q25_hours": 18.75,
+      "q75_hours": 18.75
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.41338011135006164
+     ],
+     "event_recall": [
+      0.0,
+      0.6
+     ],
+     "event_skill": [
+      -0.18662951267838435,
+      0.45454545454545453
+     ],
+     "f1": [
+      0.03334918352857651,
+      0.7497519644298876
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.005041311479188664
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.05208012880052948
+     ],
+     "precision": [
+      0.0,
+      1.0
+     ],
+     "recall": [
+      0.0,
+      0.6155336903837324
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0813961749244003
+     ]
+    },
+    "scores_sha256": "84acce51191dfffa6f77a92f69b68d903038eb89c91037f2ee698ae85820fb8f",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.1827918657051172,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.3,
+     "event_skill": 0.11720813429488278,
+     "events": 10,
+     "events_detected": 3,
+     "f1": 0.443002294329728,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0021733880705143687,
+     "false_positive_rate": 0.022337599613619898,
+     "fn": 8127,
+     "fp": 370,
+     "normal_hours": 1380.3333333333333,
+     "precision": 0.9013070152040544,
+     "recall": 0.2936728663306101,
+     "time_in_alarm": 0.035015696691620385,
+     "tn": 16194,
+     "tp": 3379
+    }
+   }
+  },
+  "severity_high": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.166666666666668,
+      "other_normal_operation": 1336.6666666666667
+     }
+    },
+    "average_precision": 0.8081180003624404,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 19.958333333333336,
+      "q25_hours": 18.8125,
+      "q75_hours": 21.104166666666668
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 1.0,
+      "q25_hours": 1.0,
+      "q75_hours": 1.0
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_recall": [
+      0.2,
+      0.8
+     ],
+     "event_skill": [
+      0.2,
+      0.8
+     ],
+     "f1": [
+      0.32650822364826826,
+      0.840491309856829
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.0
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.00021183084071849754
+     ],
+     "precision": [
+      0.9990383921300067,
+      1.0
+     ],
+     "recall": [
+      0.18879222911768323,
+      0.7248659623350033
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0
+     ]
+    },
+    "scores_sha256": "3a0efd45caa26d51384efd4f8114f28579737d364d659a78938519695759abd3",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.0,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.5,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.6365591397849463,
+     "false_alarms": 0,
+     "false_alarms_per_hour": 0.0,
+     "false_positive_rate": 6.119202056051891e-05,
+     "fn": 6252,
+     "fp": 1,
+     "normal_hours": 1361.8333333333333,
+     "precision": 0.9998174182946868,
+     "recall": 0.4669167803547067,
+     "time_in_alarm": 0.0,
+     "tn": 16341,
+     "tp": 5476
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 8
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.166666666666668,
+      "other_normal_operation": 1336.6666666666667
+     }
+    },
+    "average_precision": 0.5103612090351763,
+    "by_category": {
+     "DERATE": {
+      "detected": 1,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 2,
+      "event_class": 3,
+      "event_recall": 0.3333333333333333,
+      "event_recall_interval": [
+       0.0,
+       0.6666666666666666
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 1,
+      "median_hours": 68.83333333333333,
+      "q25_hours": 68.83333333333333,
+      "q75_hours": 68.83333333333333
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 19.416666666666668,
+      "q25_hours": 16.375,
+      "q75_hours": 22.458333333333332
+     },
+     "SENSOR": {
+      "detected": 2,
+      "median_hours": 13.833333333333334,
+      "q25_hours": 8.666666666666668,
+      "q75_hours": 19.0
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.2601056303043689,
+      0.6797039123008304
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.8
+     ],
+     "event_skill": [
+      -0.42654469935758726,
+      0.43996827639200703
+     ],
+     "f1": [
+      0.002175735358419585,
+      0.036045128772140625
+     ],
+     "false_alarms_per_hour": [
+      0.003047211547210938,
+      0.011776253851420742
+     ],
+     "false_positive_rate": [
+      0.0017880635637296995,
+      0.013904489146223529
+     ],
+     "precision": [
+      0.06534186950642329,
+      0.8492790073775985
+     ],
+     "recall": [
+      0.0010242282007931081,
+      0.018617350636763036
+     ],
+     "time_in_alarm": [
+      0.023142858499697595,
+      0.093280775267441
+     ]
+    },
+    "scores_sha256": "b10e16e9e842d9ecec920f45fa80b46959440637b4968835ea6b67f60b4ad8c4",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.5104261284693997,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": -0.01042612846939972,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.018057181073399094,
+     "false_alarms": 10,
+     "false_alarms_per_hour": 0.00734304246726227,
+     "false_positive_rate": 0.007710194590625383,
+     "fn": 11620,
+     "fp": 126,
+     "normal_hours": 1361.8333333333333,
+     "precision": 0.46153846153846156,
+     "recall": 0.009208731241473396,
+     "time_in_alarm": 0.05874433973809815,
+     "tn": 16216,
+     "tp": 108
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 1,
+      "other_normal_operation": 9
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.166666666666668,
+      "other_normal_operation": 1336.6666666666667
+     }
+    },
+    "average_precision": 0.7170241769167085,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 6.541666666666667,
+      "q25_hours": 4.770833333333334,
+      "q75_hours": 8.3125
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 23.458333333333332,
+      "q25_hours": 9.833333333333334,
+      "q75_hours": 37.875
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.8026125833432729
+     ],
+     "event_recall": [
+      0.5,
+      1.0
+     ],
+     "event_skill": [
+      -0.0903197937024548,
+      0.8296122655709076
+     ],
+     "f1": [
+      0.48653468872661965,
+      0.8808620567488342
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.01653784789377987
+     ],
+     "false_positive_rate": [
+      0.0001281875656745502,
+      0.02920141267763442
+     ],
+     "precision": [
+      0.8873284964583389,
+      0.9997823814197861
+     ],
+     "recall": [
+      0.3339829828228068,
+      0.8041871124286702
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.19358466422623835
+     ]
+    },
+    "scores_sha256": "64b1f8c33aae78d0f2b00d7197b3e3b8d115580350605ef8db955c550affc4d5",
+    "summary": {
+     "active_at_onset_not_counted": 1,
+     "chance_event_recall": 0.5104261284693997,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.2895738715306003,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.727427597955707,
+     "false_alarms": 10,
+     "false_alarms_per_hour": 0.00734304246726227,
+     "false_positive_rate": 0.013707012605556235,
+     "fn": 4896,
+     "fp": 224,
+     "normal_hours": 1361.8333333333333,
+     "precision": 0.9682539682539683,
+     "recall": 0.582537517053206,
+     "time_in_alarm": 0.08462856443519765,
+     "tn": 16118,
+     "tp": 6832
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 11
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.166666666666668,
+      "other_normal_operation": 1336.6666666666667
+     }
+    },
+    "average_precision": 0.5330540640285182,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 54.208333333333336,
+      "q25_hours": 33.97916666666667,
+      "q75_hours": 74.4375
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 29.583333333333332,
+      "q25_hours": 19.354166666666668,
+      "q75_hours": 48.20833333333333
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.3687591745144334,
+      0.7323948391330974
+     ],
+     "event_recall": [
+      0.5452797202797205,
+      1.0
+     ],
+     "event_skill": [
+      -0.14050319693500635,
+      0.5525681097453361
+     ],
+     "f1": [
+      0.010353973175156352,
+      0.02641682507952938
+     ],
+     "false_alarms_per_hour": [
+      0.004681148903146,
+      0.013560997559554571
+     ],
+     "false_positive_rate": [
+      0.005206155992950458,
+      0.016557210744162748
+     ],
+     "precision": [
+      0.16553247615709576,
+      0.6737145860654881
+     ],
+     "recall": [
+      0.005321257814320761,
+      0.013581754363336128
+     ],
+     "time_in_alarm": [
+      0.032578993234419026,
+      0.09258617200666193
+     ]
+    },
+    "scores_sha256": "a9042d371823c21d8483bd25afb88502d30c5d9840d2312e29ffd13749c7cb71",
+    "summary": {
+     "active_at_onset_not_counted": 1,
+     "chance_event_recall": 0.6044150481064644,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.19558495189353564,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.018463073852295408,
+     "false_alarms": 13,
+     "false_alarms_per_hour": 0.00954595520744095,
+     "false_positive_rate": 0.011320523803695998,
+     "fn": 11617,
+     "fp": 185,
+     "normal_hours": 1361.8333333333333,
+     "precision": 0.375,
+     "recall": 0.009464529331514324,
+     "time_in_alarm": 0.06584261412311834,
+     "tn": 16157,
+     "tp": 111
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 2,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.166666666666668,
+      "other_normal_operation": 1336.6666666666667
+     }
+    },
+    "average_precision": 0.5763883828214418,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 13.541666666666666,
+      "q25_hours": 12.854166666666666,
+      "q75_hours": 14.229166666666666
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 24.666666666666664,
+      "q25_hours": 22.333333333333332,
+      "q75_hours": 27.0
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.2619847456253844
+     ],
+     "event_recall": [
+      0.1111111111111111,
+      0.7
+     ],
+     "event_skill": [
+      -0.06410442261730177,
+      0.5991050896878733
+     ],
+     "f1": [
+      0.17376522072003278,
+      0.7289395274854501
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.003086419075952327
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.04333396800366096
+     ],
+     "precision": [
+      0.6427894380366149,
+      1.0
+     ],
+     "recall": [
+      0.08938488953659096,
+      0.5878454426749363
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.06097742462494039
+     ]
+    },
+    "scores_sha256": "29d7af43bb53adef741e81f2ddf3d4377637081f96459ff8afef9c1c62666997",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.13350254621058194,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.4,
+     "event_skill": 0.2664974537894181,
+     "events": 10,
+     "events_detected": 4,
+     "f1": 0.49709973180315603,
+     "false_alarms": 2,
+     "false_alarms_per_hour": 0.001468608493452454,
+     "false_positive_rate": 0.01958144657936605,
+     "fn": 7743,
+     "fp": 320,
+     "normal_hours": 1361.8333333333333,
+     "precision": 0.9256678281068524,
+     "recall": 0.33978512960436563,
+     "time_in_alarm": 0.028148329457838697,
+     "tn": 16022,
+     "tp": 3985
+    }
+   }
+  },
+  "severity_low": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 24.166666666666668,
+      "other_normal_operation": 1347.3333333333333
+     }
+    },
+    "average_precision": 0.6305979082804501,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 0.75,
+      "q25_hours": 0.75,
+      "q75_hours": 0.75
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_recall": [
+      0.0,
+      0.625
+     ],
+     "event_skill": [
+      0.0,
+      0.625
+     ],
+     "f1": [
+      0.1915911304650074,
+      0.7720042638071499
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.0
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.00035515290461908316
+     ],
+     "precision": [
+      0.9991158267020336,
+      1.0
+     ],
+     "recall": [
+      0.0,
+      0.6259463224058803
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0
+     ]
+    },
+    "scores_sha256": "019ca7121119185702be38cd6287335789b269b8a81baf3a8c6e6240d7f1348a",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.0,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.3,
+     "event_skill": 0.3,
+     "events": 10,
+     "events_detected": 3,
+     "f1": 0.4989013829649735,
+     "false_alarms": 0,
+     "false_alarms_per_hour": 0.0,
+     "false_positive_rate": 0.00012152144853566654,
+     "fn": 7752,
+     "fp": 2,
+     "normal_hours": 1371.5,
+     "precision": 0.9994821336095288,
+     "recall": 0.3324147433689287,
+     "time_in_alarm": 0.0,
+     "tn": 16456,
+     "tp": 3860
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 8
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 24.166666666666668,
+      "other_normal_operation": 1347.3333333333333
+     }
+    },
+    "average_precision": 0.44774624931831114,
+    "by_category": {
+     "DERATE": {
+      "detected": 1,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 2,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 3,
+      "event_class": 3,
+      "event_recall": 0.5,
+      "event_recall_interval": [
+       0.16666666666666666,
+       0.8333333333333334
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 1,
+      "median_hours": 11.166666666666666,
+      "q25_hours": 11.166666666666666,
+      "q75_hours": 11.166666666666666
+     },
+     "RESTRICTION": {
+      "detected": 1,
+      "median_hours": 69.16666666666667,
+      "q25_hours": 69.16666666666667,
+      "q75_hours": 69.16666666666667
+     },
+     "SENSOR": {
+      "detected": 3,
+      "median_hours": 47.833333333333336,
+      "q25_hours": 27.875,
+      "q75_hours": 60.08333333333333
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.20579495166176012,
+      0.7165403407808854
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.8
+     ],
+     "event_skill": [
+      -0.4608044314209944,
+      0.4231367760968789
+     ],
+     "f1": [
+      0.002055714726526391,
+      0.011054983238124184
+     ],
+     "false_alarms_per_hour": [
+      0.002495096540701791,
+      0.01286004173088482
+     ],
+     "false_positive_rate": [
+      0.001010244499392931,
+      0.01056396209037579
+     ],
+     "precision": [
+      0.06706300813008133,
+      0.7626403985507239
+     ],
+     "recall": [
+      0.0010202199011970785,
+      0.005626682727861727
+     ],
+     "time_in_alarm": [
+      0.01686046492515546,
+      0.09289214493480955
+     ]
+    },
+    "scores_sha256": "dc12e42392f915ddc7d2de9ad79baf6669a4ecbc83dded365d3586055b568ee1",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.5353467176034264,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": -0.03534671760342645,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.006131834440470107,
+     "false_alarms": 11,
+     "false_alarms_per_hour": 0.008020415603353991,
+     "false_positive_rate": 0.0057115080811763275,
+     "fn": 11576,
+     "fp": 94,
+     "normal_hours": 1371.5,
+     "precision": 0.27692307692307694,
+     "recall": 0.003100241129865656,
+     "time_in_alarm": 0.05644671284481711,
+     "tn": 16364,
+     "tp": 36
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 1
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 24.166666666666668,
+      "other_normal_operation": 1347.3333333333333
+     }
+    },
+    "average_precision": 0.770184551948625,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 2,
+      "event_class": 3,
+      "event_recall": 0.3333333333333333,
+      "event_recall_interval": [
+       0.0,
+       0.6666666666666666
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 12.375,
+      "q25_hours": 10.6875,
+      "q75_hours": 14.0625
+     },
+     "SENSOR": {
+      "detected": 2,
+      "median_hours": 1.5833333333333335,
+      "q25_hours": 1.5,
+      "q75_hours": 1.6666666666666667
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.45345299435586334
+     ],
+     "event_recall": [
+      0.2857142857142857,
+      0.8888888888888888
+     ],
+     "event_skill": [
+      0.0167777282336484,
+      0.6923375568507218
+     ],
+     "f1": [
+      0.4251509282045566,
+      0.8884719427489187
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.005966675563151244
+     ],
+     "false_positive_rate": [
+      0.0004170818671476912,
+      0.046638229337795
+     ],
+     "precision": [
+      0.8069712009748587,
+      0.998890742985403
+     ],
+     "recall": [
+      0.2804342109801865,
+      0.8241519012398687
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.07892636390160765
+     ]
+    },
+    "scores_sha256": "a9e2f191e131f6cb8916d48dacc4fe808fde784c09dae357a4c5bca9b7e6225f",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.24481569218672602,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.6,
+     "event_skill": 0.3551843078132739,
+     "events": 10,
+     "events_detected": 6,
+     "f1": 0.7154523963034602,
+     "false_alarms": 4,
+     "false_alarms_per_hour": 0.002916514764855997,
+     "false_positive_rate": 0.020780167699598978,
+     "fn": 4954,
+     "fp": 342,
+     "normal_hours": 1371.5,
+     "precision": 0.9511428571428572,
+     "recall": 0.5733723734068206,
+     "time_in_alarm": 0.03682099890630696,
+     "tn": 16116,
+     "tp": 6658
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 4
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 24.166666666666668,
+      "other_normal_operation": 1347.3333333333333
+     }
+    },
+    "average_precision": 0.4872060791393375,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 2,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 23.958333333333336,
+      "q25_hours": 1.0416666666666665,
+      "q75_hours": 47.16666666666667
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.15226884016729736,
+      0.5637895896459592
+     ],
+     "event_recall": [
+      0.2727272727272727,
+      0.8888888888888888
+     ],
+     "event_skill": [
+      -0.203064921730137,
+      0.6213768967094362
+     ],
+     "f1": [
+      0.006771479118800997,
+      0.02880388518671896
+     ],
+     "false_alarms_per_hour": [
+      0.0017640577025175223,
+      0.008339783991278082
+     ],
+     "false_positive_rate": [
+      0.0018908059900549546,
+      0.01028888993751499
+     ],
+     "precision": [
+      0.18933760683760686,
+      0.8391457636566332
+     ],
+     "recall": [
+      0.0032929590651538877,
+      0.01472657498718296
+     ],
+     "time_in_alarm": [
+      0.012138162522025901,
+      0.05869058736834376
+     ]
+    },
+    "scores_sha256": "03fd070a4f0fb3aaa42d569578ad785b314f5f7334dbaa42732e77aabb783462",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.3872692879107129,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.6,
+     "event_skill": 0.21273071208928707,
+     "events": 10,
+     "events_detected": 6,
+     "f1": 0.017604739737621666,
+     "false_alarms": 7,
+     "false_alarms_per_hour": 0.005103900838497995,
+     "false_positive_rate": 0.006015311702515494,
+     "fn": 11508,
+     "fp": 99,
+     "normal_hours": 1371.5,
+     "precision": 0.5123152709359606,
+     "recall": 0.008956252152945229,
+     "time_in_alarm": 0.03572730586948596,
+     "tn": 16359,
+     "tp": 104
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 1
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 24.166666666666668,
+      "other_normal_operation": 1347.3333333333333
+     }
+    },
+    "average_precision": 0.6571120165908625,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 2,
+      "event_class": 3,
+      "event_recall": 0.3333333333333333,
+      "event_recall_interval": [
+       0.0,
+       0.6666666666666666
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 11.583333333333334,
+      "q25_hours": 10.833333333333334,
+      "q75_hours": 12.333333333333334
+     },
+     "SENSOR": {
+      "detected": 2,
+      "median_hours": 24.0,
+      "q25_hours": 12.541666666666666,
+      "q75_hours": 35.45833333333333
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.43446166953934345
+     ],
+     "event_recall": [
+      0.1,
+      0.7272727272727273
+     ],
+     "event_skill": [
+      -0.14610548469652035,
+      0.5004768099653694
+     ],
+     "f1": [
+      0.16283067065026102,
+      0.765099065593182
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.00598015341531718
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.07052901785690512
+     ],
+     "precision": [
+      0.471875,
+      1.0
+     ],
+     "recall": [
+      0.060216043188833404,
+      0.6447987255056071
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.10293585478546415
+     ]
+    },
+    "scores_sha256": "40500b888e8070f4cf267c18a118b7281d5d10621d8cef638052787d1358bdb7",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.24481569218672602,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.4,
+     "event_skill": 0.155184307813274,
+     "events": 10,
+     "events_detected": 4,
+     "f1": 0.510805019895929,
+     "false_alarms": 4,
+     "false_alarms_per_hour": 0.002916514764855997,
+     "false_positive_rate": 0.033479159071576135,
+     "fn": 7440,
+     "fp": 551,
+     "normal_hours": 1371.5,
+     "precision": 0.8833368621638789,
+     "recall": 0.35928349982776436,
+     "time_in_alarm": 0.05049216186656945,
+     "tn": 15907,
+     "tp": 4172
+    }
+   }
+  },
+  "unseen_assets": {
+   "hist_gradient_boosting": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 0,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.916666666666668,
+      "other_normal_operation": 1325.5
+     }
+    },
+    "average_precision": 0.4066480366493872,
+    "by_category": {
+     "DERATE": {
+      "detected": 0,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 0,
+      "event_class": 3,
+      "event_recall": 0.0,
+      "event_recall_interval": [
+       0.0,
+       0.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {},
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_recall": [
+      0.0,
+      0.0
+     ],
+     "event_skill": [
+      0.0,
+      0.0
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.0
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.0
+     ],
+     "recall": [
+      0.0,
+      0.0
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.0
+     ]
+    },
+    "scores_sha256": "b4ce76a508efbfd2fd0a34667e69e2c5054a0ce21337a28f9ca80533d8a954d1",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.0,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.0,
+     "event_skill": 0.0,
+     "events": 10,
+     "events_detected": 0,
+     "f1": NaN,
+     "false_alarms": 0,
+     "false_alarms_per_hour": 0.0,
+     "false_positive_rate": 0.0,
+     "fn": 11853,
+     "fp": 0,
+     "normal_hours": 1351.4166666666665,
+     "precision": NaN,
+     "recall": 0.0,
+     "time_in_alarm": 0.0,
+     "tn": 16217,
+     "tp": 0
+    }
+   },
+   "isolation_forest": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 9
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.916666666666668,
+      "other_normal_operation": 1325.5
+     }
+    },
+    "average_precision": 0.5285728416389027,
+    "by_category": {
+     "DERATE": {
+      "detected": 1,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 1,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 1,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 5,
+      "event_class": 3,
+      "event_recall": 0.8333333333333334,
+      "event_recall_interval": [
+       0.5,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 1,
+      "median_hours": 50.333333333333336,
+      "q25_hours": 50.333333333333336,
+      "q75_hours": 50.333333333333336
+     },
+     "SENSOR": {
+      "detected": 5,
+      "median_hours": 64.5,
+      "q25_hours": 39.416666666666664,
+      "q75_hours": 82.83333333333333
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.34292379916295224,
+      0.7422080794334756
+     ],
+     "event_recall": [
+      0.3,
+      0.8891666666666651
+     ],
+     "event_skill": [
+      -0.3351491531401221,
+      0.40312775515223437
+     ],
+     "f1": [
+      0.003507700235772693,
+      0.013631887676595728
+     ],
+     "false_alarms_per_hour": [
+      0.004463123682995192,
+      0.013473811068242265
+     ],
+     "false_positive_rate": [
+      0.0027445867502117294,
+      0.010953520703860287
+     ],
+     "precision": [
+      0.1104621090617482,
+      0.6637222544610475
+     ],
+     "recall": [
+      0.0017807215512501936,
+      0.006969479791703195
+     ],
+     "time_in_alarm": [
+      0.032830412716179605,
+      0.09275124387050604
+     ]
+    },
+    "scores_sha256": "bcca799fc8548bc4438104340194d4d98fe83b7ce870409f23028d1a41d7fe01",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.5809073661262619,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.6,
+     "event_skill": 0.019092633873738052,
+     "events": 10,
+     "events_detected": 6,
+     "f1": 0.008326394671107412,
+     "false_alarms": 12,
+     "false_alarms_per_hour": 0.008879570820743666,
+     "false_positive_rate": 0.006598014429302584,
+     "fn": 11803,
+     "fp": 107,
+     "normal_hours": 1351.4166666666665,
+     "precision": 0.3184713375796178,
+     "recall": 0.004218341348181895,
+     "time_in_alarm": 0.06271196892150213,
+     "tn": 16110,
+     "tp": 50
+    }
+   },
+   "logistic_regression": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 1,
+      "other_normal_operation": 5
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.916666666666668,
+      "other_normal_operation": 1325.5
+     }
+    },
+    "average_precision": 0.6943990119362146,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 4,
+      "event_class": 3,
+      "event_recall": 0.6666666666666666,
+      "event_recall_interval": [
+       0.3333333333333333,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 29.5,
+      "q25_hours": 22.75,
+      "q75_hours": 36.25
+     },
+     "SENSOR": {
+      "detected": 4,
+      "median_hours": 18.416666666666668,
+      "q25_hours": 0.22916666666666666,
+      "q75_hours": 49.6875
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.6927798576968356
+     ],
+     "event_recall": [
+      0.2857142857142857,
+      0.9
+     ],
+     "event_skill": [
+      -0.1984457694793939,
+      0.7692307692307693
+     ],
+     "f1": [
+      0.11922597974916041,
+      0.6720499014968031
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.011632849937096377
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.04458029696325267
+     ],
+     "precision": [
+      0.6088180112570356,
+      1.0
+     ],
+     "recall": [
+      0.06630225696074632,
+      0.5203150707067031
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.30287673691063544
+     ]
+    },
+    "scores_sha256": "0bdec54eb7ffa6b277a4996cfd7b1f4746892a2db99ac03e4dc94995587c562a",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.3537078193238015,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.6,
+     "event_skill": 0.24629218067619846,
+     "events": 10,
+     "events_detected": 6,
+     "f1": 0.4204309449636552,
+     "false_alarms": 6,
+     "false_alarms_per_hour": 0.004439785410371833,
+     "false_positive_rate": 0.019485724856631928,
+     "fn": 8614,
+     "fp": 316,
+     "normal_hours": 1351.4166666666665,
+     "precision": 0.9111111111111111,
+     "recall": 0.2732641525352231,
+     "time_in_alarm": 0.10963803416168219,
+     "tn": 15901,
+     "tp": 3239
+    }
+   },
+   "rolling_deviation": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 7
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.916666666666668,
+      "other_normal_operation": 1325.5
+     }
+    },
+    "average_precision": 0.5363631039050494,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 2,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 0,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 6,
+      "event_class": 3,
+      "event_recall": 1.0,
+      "event_recall_interval": [
+       1.0,
+       1.0
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 0.25,
+      "q25_hours": 0.25,
+      "q75_hours": 0.25
+     },
+     "SENSOR": {
+      "detected": 6,
+      "median_hours": 7.375,
+      "q25_hours": 2.1666666666666665,
+      "q75_hours": 54.145833333333336
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.32272647877306937,
+      0.6844593934740011
+     ],
+     "event_recall": [
+      0.5454545454545454,
+      1.0
+     ],
+     "event_skill": [
+      -0.02470616308711786,
+      0.5826287931827867
+     ],
+     "f1": [
+      0.010340833868046363,
+      0.026461652219183826
+     ],
+     "false_alarms_per_hour": [
+      0.0039622267714455525,
+      0.01150607830373205
+     ],
+     "false_positive_rate": [
+      0.0040995813104510795,
+      0.012299297617473663
+     ],
+     "precision": [
+      0.24536637931034483,
+      0.6760904134484323
+     ],
+     "recall": [
+      0.005261496369567505,
+      0.013559427604038625
+     ],
+     "time_in_alarm": [
+      0.027231234046178766,
+      0.07864666652365163
+     ]
+    },
+    "scores_sha256": "0fc46e1eb0c2c9a9fb6404fa3e2a58cf0478f02db30437ceb4e201be0ff61240",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.5159896401653749,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.8,
+     "event_skill": 0.2840103598346252,
+     "events": 10,
+     "events_detected": 8,
+     "f1": 0.018520049607275733,
+     "false_alarms": 10,
+     "false_alarms_per_hour": 0.007399642350619721,
+     "false_positive_rate": 0.008016279213171364,
+     "fn": 11741,
+     "fp": 130,
+     "normal_hours": 1351.4166666666665,
+     "precision": 0.4628099173553719,
+     "recall": 0.009449084619927444,
+     "time_in_alarm": 0.051057532219276065,
+     "tn": 16087,
+     "tp": 112
+    }
+   },
+   "static_threshold": {
+    "alarm_context": {
+     "false_alarms": {
+      "during_dropout": 0,
+      "during_planned_work": 3,
+      "other_normal_operation": 0
+     },
+     "hours": {
+      "during_dropout": 0.0,
+      "during_planned_work": 25.916666666666668,
+      "other_normal_operation": 1325.5
+     }
+    },
+    "average_precision": 0.6450102091135494,
+    "by_category": {
+     "DERATE": {
+      "detected": 2,
+      "events": 2
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "events": 2
+     },
+     "SENSOR_BIAS": {
+      "detected": 1,
+      "events": 2
+     },
+     "SENSOR_DRIFT": {
+      "detected": 0,
+      "events": 2
+     },
+     "SENSOR_STUCK": {
+      "detected": 0,
+      "events": 2
+     }
+    },
+    "by_class": [
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 1,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 2,
+      "detected": 2,
+      "event_class": 2,
+      "event_recall": null,
+      "events": 2,
+      "withheld_reason": "Fewer than 5 events or 3 clusters."
+     },
+     {
+      "clusters": 6,
+      "detected": 1,
+      "event_class": 3,
+      "event_recall": 0.16666666666666666,
+      "event_recall_interval": [
+       0.0,
+       0.5
+      ],
+      "events": 6
+     }
+    ],
+    "delays": {
+     "DERATE": {
+      "detected": 2,
+      "median_hours": 12.375,
+      "q25_hours": 8.520833333333332,
+      "q75_hours": 16.229166666666664
+     },
+     "RESTRICTION": {
+      "detected": 2,
+      "median_hours": 29.875,
+      "q25_hours": 25.520833333333336,
+      "q75_hours": 34.22916666666667
+     },
+     "SENSOR": {
+      "detected": 1,
+      "median_hours": 73.41666666666667,
+      "q25_hours": 73.41666666666667,
+      "q75_hours": 73.41666666666667
+     }
+    },
+    "interval": {
+     "chance_event_recall": [
+      0.0,
+      0.40141518722763186
+     ],
+     "event_recall": [
+      0.18181818181818182,
+      0.8181818181818182
+     ],
+     "event_skill": [
+      -0.06646740144290064,
+      0.6666666666666666
+     ],
+     "f1": [
+      0.18914846381191594,
+      0.7279520549867852
+     ],
+     "false_alarms_per_hour": [
+      0.0,
+      0.005099297285134572
+     ],
+     "false_positive_rate": [
+      0.0,
+      0.05022054489080635
+     ],
+     "precision": [
+      0.6446898900486284,
+      1.0
+     ],
+     "recall": [
+      0.10598899154088681,
+      0.5928694562365743
+     ],
+     "time_in_alarm": [
+      0.0,
+      0.08022304249188439
+     ]
+    },
+    "scores_sha256": "e12df5b3e48a96b1a520150a3a68bbe49917b4065378d91008dedd26b0a3b186",
+    "summary": {
+     "active_at_onset_not_counted": 0,
+     "chance_event_recall": 0.19641219086615969,
+     "clusters": 14,
+     "event_clusters": 10,
+     "event_recall": 0.5,
+     "event_skill": 0.3035878091338403,
+     "events": 10,
+     "events_detected": 5,
+     "f1": 0.5114774114774114,
+     "false_alarms": 3,
+     "false_alarms_per_hour": 0.0022198927051859164,
+     "false_positive_rate": 0.020842325954245546,
+     "fn": 7664,
+     "fp": 338,
+     "normal_hours": 1351.4166666666665,
+     "precision": 0.9253368676827921,
+     "recall": 0.35341263815067914,
+     "time_in_alarm": 0.033791700067830055,
+     "tn": 15879,
+     "tp": 4189
+    }
+   }
+  }
+ },
+ "robustness": {
+  "hist_gradient_boosting": {
+   "rows_20pct_missing": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.02745133582856808,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.5,
+    "event_skill": 0.47254866417143193,
+    "events": 20,
+    "events_detected": 10,
+    "f1": 0.5108230719377835,
+    "false_alarms": 1,
+    "false_alarms_per_hour": 0.0002912692055632418,
+    "false_positive_rate": 0.00041263137454792593,
+    "fn": 15079,
+    "fp": 17,
+    "normal_hours": 3433.25,
+    "precision": 0.9978478288390935,
+    "recall": 0.343277731806106,
+    "time_in_alarm": 0.0018932498361610719,
+    "tn": 41182,
+    "tp": 7882
+   },
+   "sensors_25pct_removed": {
+    "active_at_onset_not_counted": 1,
+    "chance_event_recall": 0.02745133582856808,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.35,
+    "event_skill": 0.3225486641714319,
+    "events": 20,
+    "events_detected": 7,
+    "f1": 0.4907115317209954,
+    "false_alarms": 1,
+    "false_alarms_per_hour": 0.0002912692055632418,
+    "false_positive_rate": 0.017524697201388384,
+    "fn": 15261,
+    "fp": 722,
+    "normal_hours": 3433.25,
+    "precision": 0.9142721443837568,
+    "recall": 0.33535124776795433,
+    "time_in_alarm": 0.017379062598606762,
+    "tn": 40477,
+    "tp": 7700
+   },
+   "ten_percent_of_time_lost": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.02745133582856808,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.55,
+    "event_skill": 0.522548664171432,
+    "events": 20,
+    "events_detected": 11,
+    "f1": 0.5071800536531481,
+    "false_alarms": 1,
+    "false_alarms_per_hour": 0.0002912692055632418,
+    "false_positive_rate": 0.016723706886089467,
+    "fn": 14926,
+    "fp": 689,
+    "normal_hours": 3433.25,
+    "precision": 0.9210224667583677,
+    "recall": 0.34994120465136536,
+    "time_in_alarm": 0.002427243379693682,
+    "tn": 40510,
+    "tp": 8035
+   }
+  },
+  "isolation_forest": {
+   "rows_20pct_missing": {
+    "active_at_onset_not_counted": 2,
+    "chance_event_recall": 0.8271784794381635,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.9,
+    "event_skill": 0.07282152056183655,
+    "events": 20,
+    "events_detected": 18,
+    "f1": 0.037117814081725035,
+    "false_alarms": 64,
+    "false_alarms_per_hour": 0.018641229156047476,
+    "false_positive_rate": 0.02157819364547683,
+    "fn": 22510,
+    "fp": 889,
+    "normal_hours": 3433.25,
+    "precision": 0.3365671641791045,
+    "recall": 0.019642001654980184,
+    "time_in_alarm": 0.1319206776863516,
+    "tn": 40310,
+    "tp": 451
+   },
+   "sensors_25pct_removed": {
+    "active_at_onset_not_counted": 2,
+    "chance_event_recall": 0.7473948085351273,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.8,
+    "event_skill": 0.05260519146487275,
+    "events": 20,
+    "events_detected": 16,
+    "f1": 0.025466045272969372,
+    "false_alarms": 50,
+    "false_alarms_per_hour": 0.014563460278162091,
+    "false_positive_rate": 0.018568411854656665,
+    "fn": 22655,
+    "fp": 765,
+    "normal_hours": 3433.25,
+    "precision": 0.2857142857142857,
+    "recall": 0.013326945690518706,
+    "time_in_alarm": 0.10480836913517319,
+    "tn": 40434,
+    "tp": 306
+   },
+   "ten_percent_of_time_lost": {
+    "active_at_onset_not_counted": 13,
+    "chance_event_recall": 0.9998609926596652,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 1.0,
+    "event_skill": 0.00013900734033478468,
+    "events": 20,
+    "events_detected": 20,
+    "f1": 0.1826277749096541,
+    "false_alarms": 343,
+    "false_alarms_per_hour": 0.09990533750819194,
+    "false_positive_rate": 0.1262409281778684,
+    "fn": 20131,
+    "fp": 5201,
+    "normal_hours": 3433.25,
+    "precision": 0.35238451002365834,
+    "recall": 0.12325247158224815,
+    "time_in_alarm": 0.7275904754969781,
+    "tn": 35998,
+    "tp": 2830
+   }
+  },
+  "logistic_regression": {
+   "rows_20pct_missing": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.12981140922826148,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.2,
+    "event_skill": 0.07018859077173853,
+    "events": 20,
+    "events_detected": 4,
+    "f1": 0.15810434090003983,
+    "false_alarms": 5,
+    "false_alarms_per_hour": 0.001456346027816209,
+    "false_positive_rate": 0.003980679142697638,
+    "fn": 20976,
+    "fp": 164,
+    "normal_hours": 3433.25,
+    "precision": 0.9236854350860866,
+    "recall": 0.08645093854797264,
+    "time_in_alarm": 0.012476030971625526,
+    "tn": 41035,
+    "tp": 1985
+   },
+   "sensors_25pct_removed": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.12981140922826148,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.1,
+    "event_skill": -0.029811409228261476,
+    "events": 20,
+    "events_detected": 2,
+    "f1": 0.10946697187704382,
+    "false_alarms": 5,
+    "false_alarms_per_hour": 0.001456346027816209,
+    "false_positive_rate": 0.003980679142697638,
+    "fn": 21622,
+    "fp": 164,
+    "normal_hours": 3433.25,
+    "precision": 0.8908848968729208,
+    "recall": 0.05831627542354427,
+    "time_in_alarm": 0.012476030971625526,
+    "tn": 41035,
+    "tp": 1339
+   },
+   "ten_percent_of_time_lost": {
+    "active_at_onset_not_counted": 2,
+    "chance_event_recall": 0.2632228659382144,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.9,
+    "event_skill": 0.6367771340617856,
+    "events": 20,
+    "events_detected": 18,
+    "f1": 0.7211154295654065,
+    "false_alarms": 11,
+    "false_alarms_per_hour": 0.00320396126119566,
+    "false_positive_rate": 0.01373819752906624,
+    "fn": 9695,
+    "fp": 566,
+    "normal_hours": 3433.25,
+    "precision": 0.9590803932909197,
+    "recall": 0.5777622925830757,
+    "time_in_alarm": 0.049782761717517415,
+    "tn": 40633,
+    "tp": 13266
+   }
+  },
+  "rolling_deviation": {
+   "rows_20pct_missing": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.5390538248881656,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.8,
+    "event_skill": 0.2609461751118345,
+    "events": 20,
+    "events_detected": 16,
+    "f1": 0.021720685559137965,
+    "false_alarms": 28,
+    "false_alarms_per_hour": 0.008155537755770772,
+    "false_positive_rate": 0.00861671399791257,
+    "fn": 22705,
+    "fp": 355,
+    "normal_hours": 3433.25,
+    "precision": 0.41898527004909986,
+    "recall": 0.01114934018553199,
+    "time_in_alarm": 0.056894584820019904,
+    "tn": 40844,
+    "tp": 256
+   },
+   "sensors_25pct_removed": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.5390538248881656,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.75,
+    "event_skill": 0.21094617511183444,
+    "events": 20,
+    "events_detected": 15,
+    "f1": 0.01972453664342799,
+    "false_alarms": 28,
+    "false_alarms_per_hour": 0.008155537755770772,
+    "false_positive_rate": 0.008034175586786088,
+    "fn": 22729,
+    "fp": 331,
+    "normal_hours": 3433.25,
+    "precision": 0.41207815275310833,
+    "recall": 0.010104089543138364,
+    "time_in_alarm": 0.05633631884269036,
+    "tn": 40868,
+    "tp": 232
+   },
+   "ten_percent_of_time_lost": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.5390538248881656,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.8,
+    "event_skill": 0.2609461751118345,
+    "events": 20,
+    "events_detected": 16,
+    "f1": 0.020232073787563226,
+    "false_alarms": 28,
+    "false_alarms_per_hour": 0.008155537755770772,
+    "false_positive_rate": 0.007961358285395277,
+    "fn": 22723,
+    "fp": 328,
+    "normal_hours": 3433.25,
+    "precision": 0.4204946996466431,
+    "recall": 0.010365402203736771,
+    "time_in_alarm": 0.05631204640889342,
+    "tn": 40871,
+    "tp": 238
+   }
+  },
+  "static_threshold": {
+   "rows_20pct_missing": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.22123582711051504,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.55,
+    "event_skill": 0.328764172889485,
+    "events": 20,
+    "events_detected": 11,
+    "f1": 0.45244086562657276,
+    "false_alarms": 9,
+    "false_alarms_per_hour": 0.0026214228500691765,
+    "false_positive_rate": 0.039782518993179444,
+    "fn": 15769,
+    "fp": 1639,
+    "normal_hours": 3433.25,
+    "precision": 0.8144038047786207,
+    "recall": 0.3132267758372893,
+    "time_in_alarm": 0.05437025170513848,
+    "tn": 39560,
+    "tp": 7192
+   },
+   "sensors_25pct_removed": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.15364405385385058,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.55,
+    "event_skill": 0.39635594614614944,
+    "events": 20,
+    "events_detected": 11,
+    "f1": 0.4110017294133298,
+    "false_alarms": 6,
+    "false_alarms_per_hour": 0.0017476152333794509,
+    "false_positive_rate": 0.02252481856355737,
+    "fn": 16782,
+    "fp": 928,
+    "normal_hours": 3433.25,
+    "precision": 0.8694245110454482,
+    "recall": 0.26910848830625844,
+    "time_in_alarm": 0.03271924075827083,
+    "tn": 40271,
+    "tp": 6179
+   },
+   "ten_percent_of_time_lost": {
+    "active_at_onset_not_counted": 0,
+    "chance_event_recall": 0.22123582711051504,
+    "clusters": 32,
+    "event_clusters": 20,
+    "event_recall": 0.55,
+    "event_skill": 0.328764172889485,
+    "events": 20,
+    "events_detected": 11,
+    "f1": 0.45041126973622014,
+    "false_alarms": 9,
+    "false_alarms_per_hour": 0.0026214228500691765,
+    "false_positive_rate": 0.039418432486225397,
+    "fn": 15815,
+    "fp": 1624,
+    "normal_hours": 3433.25,
+    "precision": 0.8148232611174459,
+    "recall": 0.31122337877270156,
+    "time_in_alarm": 0.054345979271341535,
+    "tn": 39575,
+    "tp": 7146
+   }
+  }
+ },
+ "track": "SYNTHETIC experiment: uncalibrated fictional AETHER model"
+}

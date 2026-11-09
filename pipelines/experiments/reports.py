@@ -55,6 +55,20 @@ def _interval(result: dict, key: str, digits: int = 3) -> str:
     return f"{_f(bounds[0], digits)} to {_f(bounds[1], digits)}" if bounds else "not reported"
 
 
+def _count_cell(counts: dict, key: str) -> str:
+    return f"{counts[key]['detected']} of {counts[key]['events']}" if key in counts else "n/a"
+
+
+def _delay_cell(delays: dict, key: str) -> str:
+    if key not in delays:
+        return "none detected"
+    return f"{delays[key]['median_hours']:.1f} h ({delays[key]['detected']} detected)"
+
+
+def _context_cell(context: dict, key: str) -> str:
+    return f"{context['false_alarms'][key]} in {context['hours'][key]:.0f} h"
+
+
 def _write(path, lines: list[str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines).rstrip() + "\n")
@@ -98,7 +112,7 @@ def _method_table(methods: dict, *, sample_level: bool = True) -> list[str]:
 
 
 def _selection(selection: dict) -> list[str]:
-    preferred = selection.get("preferred")
+    preferred = str(selection.get("preferred"))
     return [
         f"**Preferred under the declared rule: {LABEL.get(preferred, 'none')}.** {selection.get('reason', '')}",
         "",
@@ -365,9 +379,9 @@ def aether() -> None:
     ]
     for method in METHODS:
         c = in_regime["methods"][method]["by_category"]
-        cell = lambda k, c=c: f"{c[k]['detected']} of {c[k]['events']}" if k in c else "n/a"  # noqa: E731
         lines.append(
-            f"| {LABEL[method]} | {cell('RESTRICTION')} | {cell('DERATE')} | {cell('SENSOR_BIAS')} | {cell('SENSOR_DRIFT')} | {cell('SENSOR_STUCK')} |"
+            f"| {LABEL[method]} | {_count_cell(c, 'RESTRICTION')} | {_count_cell(c, 'DERATE')} | {_count_cell(c, 'SENSOR_BIAS')} | "
+            f"{_count_cell(c, 'SENSOR_DRIFT')} | {_count_cell(c, 'SENSOR_STUCK')} |"
         )
     lines += [
         "",
@@ -381,13 +395,8 @@ def aether() -> None:
     ]
     for method in METHODS:
         d = in_regime["methods"][method]["delays"]
-        cell = lambda k, d=d: (
-            f"{d[k]['median_hours']:.1f} h ({d[k]['detected']} detected)"
-            if k in d
-            else "none detected"
-        )  # noqa: E731
         lines.append(
-            f"| {LABEL[method]} | {cell('RESTRICTION')} | {cell('DERATE')} | {cell('SENSOR')} |"
+            f"| {LABEL[method]} | {_delay_cell(d, 'RESTRICTION')} | {_delay_cell(d, 'DERATE')} | {_delay_cell(d, 'SENSOR')} |"
         )
     lines += [
         "",
@@ -398,9 +407,8 @@ def aether() -> None:
     ]
     for method in METHODS:
         ctx = in_regime["methods"][method]["alarm_context"]
-        cell = lambda k, ctx=ctx: f"{ctx['false_alarms'][k]} in {ctx['hours'][k]:.0f} h"  # noqa: E731
         lines.append(
-            f"| {LABEL[method]} | {cell('during_planned_work')} | {cell('during_dropout')} | {cell('other_normal_operation')} |"
+            f"| {LABEL[method]} | {_context_cell(ctx, 'during_planned_work')} | {_context_cell(ctx, 'during_dropout')} | {_context_cell(ctx, 'other_normal_operation')} |"
         )
     if held is not None:
         lines += [
@@ -599,7 +607,7 @@ def robustness() -> None:
         ("Development folds", development["ambiguous_sensitivity"], development["methods"]),
         ("Holdout", holdout and holdout["ambiguous_sensitivity"], holdout and holdout["methods"]),
     ):
-        if not source:
+        if not source or not primary:
             continue
         lines += [
             f"### {title}",

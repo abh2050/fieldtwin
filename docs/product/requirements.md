@@ -1,6 +1,6 @@
 # Product requirements
 
-Status shows delivery as of Gate 4. "Planned" means no implementation exists yet.
+Status shows delivery as of Gate 5. "Planned" means no implementation exists yet.
 
 ## Personas
 
@@ -17,7 +17,7 @@ Status shows delivery as of Gate 4. "Planned" means no implementation exists yet
 |---|---|---|---|---|
 | UC-01 | Asset overview | Show the fictional wells, pads, gathering, and compression assets | 4, 8 | Asset network and simulation implemented; display planned |
 | UC-02 | Production context | Show production in its original reporting grain, never lease totals as well output | 2, 8 | Canonical records with verified units; display planned |
-| UC-03 | Fault detection | Detect anomalies against the known synthetic onset. Evaluate 3W separately on its own labels. | 5 | Synthetic scenario and benchmark events ready; detection planned |
+| UC-03 | Fault detection | Detect anomalies against the known synthetic onset. Evaluate 3W separately on its own labels. | 5 | Five detectors evaluated on separate 3W and AETHER tracks; display planned. Not field-validated |
 | UC-04 | Aerial inspection | Show georeferenced evidence, keeping proximity separate from attribution | 6 | Planned; sources deferred |
 | UC-05 | Maintenance prioritization | Use transparent rules and calibrated risk where available | 7 | Planned |
 | UC-06 | Human-approved work orders | Approve, reject, or request evidence, enforced on the backend | 7 | Planned |

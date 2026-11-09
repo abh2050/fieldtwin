@@ -182,7 +182,7 @@ def _perturbed_features(track_rows_table: pd.DataFrame, kind: str, seed: int, sp
     parts = []
     for index, case_id in enumerate(pd.unique(track_rows_table["seq"])):
         telemetry = pd.read_parquet(TELEMETRY / f"{case_id}.parquet")
-        values = telemetry[list(spec.sensors)].to_numpy(dtype=float)
+        values = telemetry[list(spec.sensors)].to_numpy(dtype=float, copy=True)
         rng = np.random.default_rng(
             np.random.SeedSequence([seed, index, PERTURBATIONS.index(kind)])
         )

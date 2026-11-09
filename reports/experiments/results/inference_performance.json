@@ -1,0 +1,213 @@
+{
+ "hardware": {
+  "logical_cpus": 11,
+  "machine": "arm64",
+  "memory_gb": 18.0,
+  "platform": "macOS-27.0",
+  "processor": "arm",
+  "python": "3.12.13"
+ },
+ "rows": [
+  {
+   "artifact_bytes": 2008220,
+   "artifact_sha256": "9b67b7fd30b6bd777623a7c7930187da53ebf0a6b14e0119b15306ca902887f8",
+   "batch_stream_agree": true,
+   "load_seconds": 0.07003758393693715,
+   "model": "3w_hist_gradient_boosting",
+   "non_window_sample_latency_ms_p50": 0.003375,
+   "peak_python_allocation_mb": 0.5134391784667969,
+   "process_peak_rss_mb": 313.09375,
+   "replay_source": "WELL-00004_20140806210033",
+   "samples": 9000,
+   "window_latency_ms": {
+    "max": 14.842209,
+    "p50": 4.114875,
+    "p95": 4.533550199999999,
+    "p99": 4.93476856
+   },
+   "windows": 145,
+   "windows_compared": 145
+  },
+  {
+   "artifact_bytes": 3199948,
+   "artifact_sha256": "f1ce2d0656a781794bbafb8c7f19cec552497db422ab3b21da534d98104bf556",
+   "batch_stream_agree": true,
+   "load_seconds": 0.029860874987207353,
+   "model": "3w_isolation_forest",
+   "non_window_sample_latency_ms_p50": 0.003416,
+   "peak_python_allocation_mb": 0.7187566757202148,
+   "process_peak_rss_mb": 325.828125,
+   "replay_source": "WELL-00004_20140806210033",
+   "samples": 9000,
+   "window_latency_ms": {
+    "max": 9.181625,
+    "p50": 4.186125,
+    "p95": 4.3267999999999995,
+    "p99": 4.5374000400000005
+   },
+   "windows": 145,
+   "windows_compared": 145
+  },
+  {
+   "artifact_bytes": 8016,
+   "artifact_sha256": "2da3000d2d25538b34250b07f16e3669608b2756b11310fe9102cb9ef7536cc7",
+   "batch_stream_agree": true,
+   "load_seconds": 0.0008295420557260513,
+   "model": "3w_logistic_regression",
+   "non_window_sample_latency_ms_p50": 0.003209,
+   "peak_python_allocation_mb": 0.5171670913696289,
+   "process_peak_rss_mb": 300.859375,
+   "replay_source": "WELL-00004_20140806210033",
+   "samples": 9000,
+   "window_latency_ms": {
+    "max": 5.400209,
+    "p50": 0.324208,
+    "p95": 0.37936619999999993,
+    "p99": 0.508847
+   },
+   "windows": 145,
+   "windows_compared": 145
+  },
+  {
+   "artifact_bytes": 1682,
+   "artifact_sha256": "e63c6eee795b5ffcec6b414cacd529ae1c47c0f17e15024130a58e22dd3e755d",
+   "batch_stream_agree": true,
+   "load_seconds": 0.0006041249725967646,
+   "model": "3w_rolling_deviation",
+   "non_window_sample_latency_ms_p50": 0.003125,
+   "peak_python_allocation_mb": 0.5475959777832031,
+   "process_peak_rss_mb": 301.890625,
+   "replay_source": "WELL-00004_20140806210033",
+   "samples": 9000,
+   "window_latency_ms": {
+    "max": 1.116917,
+    "p50": 0.762916,
+    "p95": 0.8115077999999999,
+    "p99": 0.82424656
+   },
+   "windows": 145,
+   "windows_compared": 145
+  },
+  {
+   "artifact_bytes": 1595,
+   "artifact_sha256": "568dbdeefdcec084951e23cc63d292f67417bf5d45c0e502b8eed90c3e62df1d",
+   "batch_stream_agree": true,
+   "load_seconds": 0.0012342920526862144,
+   "model": "3w_static_threshold",
+   "non_window_sample_latency_ms_p50": 0.003459,
+   "peak_python_allocation_mb": 0.5120353698730469,
+   "process_peak_rss_mb": 300.84375,
+   "replay_source": "WELL-00004_20140806210033",
+   "samples": 9000,
+   "window_latency_ms": {
+    "max": 0.372292,
+    "p50": 0.156208,
+    "p95": 0.19506679999999996,
+    "p99": 0.28154004000000005
+   },
+   "windows": 145,
+   "windows_compared": 145
+  },
+  {
+   "artifact_bytes": 1039826,
+   "artifact_sha256": "9037a4b1969a1edcd12c026ee91c3a5366963d7610c95840ff8b17fb79101e63",
+   "batch_stream_agree": true,
+   "load_seconds": 0.022852082969620824,
+   "model": "aether_hist_gradient_boosting",
+   "non_window_sample_latency_ms_p50": 0.009166,
+   "peak_python_allocation_mb": 0.05385398864746094,
+   "process_peak_rss_mb": 256.40625,
+   "replay_source": "test-RESTRICTION-00",
+   "samples": 2016,
+   "window_latency_ms": {
+    "max": 5.77925,
+    "p50": 1.651334,
+    "p95": 1.674333,
+    "p99": 1.748
+   },
+   "windows": 2005,
+   "windows_compared": 2005
+  },
+  {
+   "artifact_bytes": 1501984,
+   "artifact_sha256": "f278f51f05199648a9cfe598249e01d83abe2b07fb0af0cfb4ab9973eaa962b3",
+   "batch_stream_agree": true,
+   "load_seconds": 0.022081291885115206,
+   "model": "aether_isolation_forest",
+   "non_window_sample_latency_ms_p50": 0.006833,
+   "peak_python_allocation_mb": 0.3799266815185547,
+   "process_peak_rss_mb": 264.796875,
+   "replay_source": "test-RESTRICTION-00",
+   "samples": 2016,
+   "window_latency_ms": {
+    "max": 12.579,
+    "p50": 3.947833,
+    "p95": 4.2846,
+    "p99": 4.577958000000001
+   },
+   "windows": 2005,
+   "windows_compared": 2005
+  },
+  {
+   "artifact_bytes": 7731,
+   "artifact_sha256": "96895d2193d893b800b4430169512c80f622aed1b92f15e78612f42e81aab80b",
+   "batch_stream_agree": true,
+   "load_seconds": 0.000750000006519258,
+   "model": "aether_logistic_regression",
+   "non_window_sample_latency_ms_p50": 0.006292,
+   "peak_python_allocation_mb": 0.05511665344238281,
+   "process_peak_rss_mb": 250.71875,
+   "replay_source": "test-RESTRICTION-00",
+   "samples": 2016,
+   "window_latency_ms": {
+    "max": 5.348042,
+    "p50": 0.215041,
+    "p95": 0.413583,
+    "p99": 0.43126200000000003
+   },
+   "windows": 2005,
+   "windows_compared": 2005
+  },
+  {
+   "artifact_bytes": 2107,
+   "artifact_sha256": "161b88bf75d34a5ea72f4d541093a20742a2e0b03dff3858bc4b49f5d0b5cbfd",
+   "batch_stream_agree": true,
+   "load_seconds": 0.0014739579055458307,
+   "model": "aether_rolling_deviation",
+   "non_window_sample_latency_ms_p50": 0.006125,
+   "peak_python_allocation_mb": 1.256331443786621,
+   "process_peak_rss_mb": 254.359375,
+   "replay_source": "test-RESTRICTION-00",
+   "samples": 2016,
+   "window_latency_ms": {
+    "max": 1.385834,
+    "p50": 1.107125,
+    "p95": 1.1549168,
+    "p99": 1.2523496800000002
+   },
+   "windows": 2005,
+   "windows_compared": 2005
+  },
+  {
+   "artifact_bytes": 2125,
+   "artifact_sha256": "05a0316ab43ec40c553d1b680fe3f900c83132dd86af8462b6f57d8869f785c8",
+   "batch_stream_agree": true,
+   "load_seconds": 0.000641833059489727,
+   "model": "aether_static_threshold",
+   "non_window_sample_latency_ms_p50": 0.006458,
+   "peak_python_allocation_mb": 0.053974151611328125,
+   "process_peak_rss_mb": 250.59375,
+   "replay_source": "test-RESTRICTION-00",
+   "samples": 2016,
+   "window_latency_ms": {
+    "max": 0.158291,
+    "p50": 0.041041,
+    "p95": 0.056292,
+    "p99": 0.059916
+   },
+   "windows": 2005,
+   "windows_compared": 2005
+  }
+ ],
+ "threads": 1
+}

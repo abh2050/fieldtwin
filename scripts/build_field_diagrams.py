@@ -289,9 +289,103 @@ def sequence_page() -> Page:
     return page
 
 
+def detection_page() -> Page:
+    page = Page("detection-evaluation", "Detection evaluation (Gate 5)", 1500, 760)
+    page.box(
+        "note",
+        "Two evidence tracks, never pooled. Fault truth and source labels reach scoring only, never inference. Rules were committed before fitting (ADR 0017).",
+        20,
+        10,
+        1400,
+        26,
+        NOTE,
+    )
+    observed = "rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+    truth = "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;"
+    shared = "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+    page.box("t3w", "Petrobras 3W files\nOBSERVED benchmark", 20, 70, 170, 50, observed)
+    page.box("audit", "Label audit\n43 ambiguous excluded", 220, 70, 170, 50, observed)
+    page.box(
+        "plaus", "Plausibility limits\nimpossible values to missing", 420, 70, 190, 50, observed
+    )
+    page.box("w3w", "Causal windows\n300 s, each minute", 640, 70, 170, 50, observed)
+    page.box("split", "Splits by well\nholdout + 4 dev folds", 840, 70, 170, 50, observed)
+    page.box("design", "Benchmark design\nheld-out regimes", 20, 300, 170, 50, SYN)
+    page.box("guard", "Process guard\ntimeout + stack dump", 220, 300, 170, 50, SYN)
+    page.box("sim", "Gate 4 solver and sensors\nvaried parameters", 420, 300, 190, 50, SYN)
+    page.box("tele", "Telemetry\nsensor values only", 640, 300, 170, 50, SYN)
+    page.box("truthfiles", "Fault truth\nseparate files", 640, 400, 170, 50, truth)
+    page.box("labels", "Source labels\nseparate column", 640, 170, 170, 40, truth)
+    page.box(
+        "features", "Shared feature code\nmean, spread, slope, missing", 1040, 185, 190, 50, shared
+    )
+    page.box("detectors", "Five detectors\nfit on training only", 1040, 300, 190, 50, shared)
+    page.box("calib", "Threshold on validation\nbudget + time in alarm", 1040, 400, 190, 50, shared)
+    page.box("score", "Scoring\nepisodes, chance, bootstrap", 780, 520, 190, 50, truth)
+    page.box("mlflow", "MLflow, local\nparameters, metrics, artifacts", 1270, 520, 190, 50, BOX)
+    page.box(
+        "request", "InferenceRequest\nasset, definitions, readings, quality", 20, 620, 230, 50, BOX
+    )
+    page.box("engine", "StreamingEngine\nsame features and alarm rule", 300, 620, 230, 50, shared)
+    page.box(
+        "prediction", "Prediction\nscore, threshold, evidence, INFERRED", 580, 620, 250, 50, BOX
+    )
+    for source, target in (
+        ("t3w", "audit"),
+        ("audit", "plaus"),
+        ("plaus", "w3w"),
+        ("w3w", "split"),
+        ("design", "guard"),
+        ("guard", "sim"),
+        ("sim", "tele"),
+        ("split", "features"),
+        ("tele", "features"),
+        ("features", "detectors"),
+        ("detectors", "calib"),
+        ("calib", "score"),
+        ("calib", "mlflow"),
+        ("request", "engine"),
+        ("engine", "prediction"),
+    ):
+        page.edge(source, target)
+    page.edge("sim", "truthfiles", "", "dashed=1;endArrow=block;html=1;strokeColor=#b85450;")
+    page.edge(
+        "truthfiles",
+        "score",
+        "scoring only",
+        "dashed=1;endArrow=block;html=1;strokeColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;",
+    )
+    # Routed between the telemetry and feature boxes, so it can't be read as an input.
+    page.edge(
+        "labels",
+        "score",
+        "scoring only",
+        "dashed=1;endArrow=block;html=1;strokeColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0.75;entryY=0;",
+        ((925, 190), (925, 520)),
+    )
+    page.edge("w3w", "labels", "", "dashed=1;endArrow=block;html=1;strokeColor=#b85450;")
+    page.edge(
+        "detectors",
+        "engine",
+        "model bundle + checksum",
+        "dashed=1;endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;exitX=0;exitY=0.75;entryX=0.5;entryY=0;",
+        ((1020, 337), (1020, 595), (415, 595)),
+    )
+    page.box(
+        "legend",
+        "Blue: OBSERVED 3W. Yellow: SYNTHETIC AETHER. Green: shared code. Red: truth and labels, read only for scoring.",
+        20,
+        710,
+        1400,
+        26,
+        NOTE,
+    )
+    return page
+
+
 def main() -> int:
     text = DRAWIO.read_text()
-    pages = [topology_page(), network_page(), sequence_page()]
+    pages = [topology_page(), network_page(), sequence_page(), detection_page()]
     for page in pages:
         text = re.sub(rf'  <diagram id="{page.page_id}".*?</diagram>\n', "", text, flags=re.S)
     text = text.replace("</mxfile>", "".join(p.xml() for p in pages) + "</mxfile>")

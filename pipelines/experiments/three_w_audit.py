@@ -80,7 +80,7 @@ def overlap_summary(real: pd.DataFrame) -> dict:
         spans.append((table.loc[instance, "source_well_id"], times.min(), times.max(), instance))
     spans.sort()
     pairs = identical = conflicts = shared_seconds = cross_class = 0
-    for i, (well, start, end, instance) in enumerate(spans):
+    for i, (well, _start, end, instance) in enumerate(spans):
         for other_well, other_start, _, other in spans[i + 1 :]:
             if other_well != well or other_start > end:
                 if other_well != well:
