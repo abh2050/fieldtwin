@@ -17,11 +17,11 @@ All methods use the same splits, the same causal features, preprocessing fitted 
 
 | Method | 3W development skill | 3W holdout skill | AETHER in-regime skill | AETHER held-out skill | 3W development false alarms per hour | Explainability | Maintainability | p95 window latency, 3W / AETHER (ms) |
 |---|---:|---:|---:|---:|---:|---|---|---|
-| Static limits | -0.001 | 0.025 | 0.329 | -0.021 | 0.002 | High: one fixed band per sensor | Low: fixed limits, refit only to recompute bands | 0.20 / 0.06 |
-| Rolling deviation | 0.160 | -0.048 | 0.211 | 0.222 | 0.053 | High: names the sensor that moved from its own past | Low: no training labels | 0.81 / 1.15 |
-| Logistic regression | 0.104 | 0.146 | 0.597 | 0.219 | 0.022 | Medium: linear weights on named features | Medium: retrain when sensors change | 0.38 / 0.41 |
-| Isolation forest | -0.103 | 0.033 | -0.014 | -0.023 | 0.037 | Low: path-length score with no direct reason | Medium: retrain on fresh normal data | 4.33 / 4.28 |
-| Gradient boosting | -0.051 | -0.117 | 0.450 | 0.320 | 0.019 | Low: 150 trees | Higher: retrain and recheck calibration | 4.53 / 1.67 |
+| Static limits | -0.001 | 0.025 | 0.329 | -0.021 | 0.002 | High: one fixed band per sensor | Low: fixed limits, refit only to recompute bands | 0.15 / 0.07 |
+| Rolling deviation | 0.160 | -0.048 | 0.211 | 0.222 | 0.053 | High: names the sensor that moved from its own past | Low: no training labels | 0.84 / 1.34 |
+| Logistic regression | 0.104 | 0.146 | 0.597 | 0.219 | 0.022 | Medium: linear weights on named features | Medium: retrain when sensors change | 0.36 / 0.40 |
+| Isolation forest | -0.103 | 0.033 | -0.014 | -0.023 | 0.037 | Low: path-length score with no direct reason | Medium: retrain on fresh normal data | 4.24 / 4.13 |
+| Gradient boosting | -0.051 | -0.117 | 0.450 | 0.320 | 0.019 | Low: 150 trees | Higher: retrain and recheck calibration | 4.36 / 1.72 |
 
 Explainability and maintainability are judgments about each method's form, not measurements. Robustness is in [robustness](robustness.md), and latency in [inference performance](inference_performance.md).
 

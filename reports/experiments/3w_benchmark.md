@@ -153,7 +153,7 @@ Gradient boosting's sample-level average precision on the same development wells
 | As compared above | 0.119 | -0.051 | 0.019 | 0.808 |
 | Without level features | 0.151 | 0.033 | 0.011 | 0.830 |
 | Without missingness features | 0.119 | -0.020 | 0.014 | 0.809 |
-| Adding simulated and hand-drawn training data | 0.333 | 0.180 | 0.016 | 0.809 |
+| Adding simulated and hand-drawn training data | 0.182 | 0.024 | 0.017 | 0.840 |
 
 ## Limits
 

@@ -83,6 +83,13 @@ def to_class(raw: np.ndarray) -> np.ndarray:
     return output
 
 
+def sequence_id(row: dict) -> str:
+    """Real instance names are unique. Simulated and hand-drawn names repeat across classes."""
+    if row["origin"] == "REAL":
+        return str(row["source_instance_id"])
+    return f"{row['filed_class']}/{row['source_instance_id']}"
+
+
 def _one(row: dict, path: Path, spec: FeatureSpec) -> pd.DataFrame:
     values, times, labels = read_instance(path, spec.sensors)
     features, ends = build_features(values, times, spec)
@@ -90,8 +97,8 @@ def _one(row: dict, path: Path, spec: FeatureSpec) -> pd.DataFrame:
     frame.insert(0, "t", times[ends])
     frame.insert(1, "raw_label", np.nan_to_num(labels[ends], nan=-1).astype(np.int16))
     frame.insert(2, "source_y", to_class(labels[ends]))
-    frame.insert(0, "seq", row["source_instance_id"])
-    frame.insert(1, "well", row["source_well_id"] or row["source_instance_id"])
+    frame.insert(0, "seq", sequence_id(row))
+    frame.insert(1, "well", row["source_well_id"] or sequence_id(row))
     frame.insert(2, "origin", row["origin"])
     frame.insert(3, "filed_class", row["filed_class"])
     frame.insert(4, "evaluability", row["evaluability"])
@@ -101,12 +108,9 @@ def _one(row: dict, path: Path, spec: FeatureSpec) -> pd.DataFrame:
 def build_windows() -> None:
     audits = pd.read_parquet(EXPERIMENTS / "3w_label_audit.parquet")
     root = batch_root()
-    paths = {f.stem: f for f in root.glob("dataset/*/*.parquet")}
-    first = paths[audits["source_instance_id"].iloc[0]]
-    spec = spec_for(sensors_of(first))
+    spec = spec_for(sensors_of(root / audits["source_path"].iloc[0]))
     parts = Parallel(n_jobs=8)(
-        delayed(_one)(row, paths[row["source_instance_id"]], spec)
-        for row in audits.to_dict("records")
+        delayed(_one)(row, root / row["source_path"], spec) for row in audits.to_dict("records")
     )
     pd.concat(parts, ignore_index=True).to_parquet(WINDOWS, index=False)
 

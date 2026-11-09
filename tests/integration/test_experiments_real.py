@@ -95,3 +95,15 @@ def test_recorded_results_name_the_code_and_data_they_came_from():
         if path.exists():
             result = json.loads(path.read_text())
             assert len(result["git_sha"]) == 40 and len(result["dataset_sha256"]) == 64
+
+
+def test_generated_instances_sharing_a_name_stay_separate(audits):
+    from pipelines.experiments.three_w_data import load_track
+
+    _, meta, _ = load_track()
+    generated = audits[audits["origin"] != "REAL"]
+    assert (
+        generated["source_instance_id"].duplicated().any()
+    )  # The source reuses names across classes.
+    assert meta.loc[meta["origin"] != "REAL", "seq"].nunique() == len(generated)
+    assert meta.groupby("seq")["filed_class"].nunique().max() == 1

@@ -292,7 +292,10 @@ def holdout() -> None:
         _rows(table, w) for w in (fold.train_wells, fold.validation_wells, fold.test_wells)
     )
     selection = read_result("3w_development")["selection"]
-    paths = {f.stem: f for f in batch_root().glob("dataset/*/*.parquet")}
+    # Holdout sequences are real instances, whose names are unique.
+    paths = {
+        f.stem: f for f in batch_root().glob("dataset/*/*.parquet") if f.stem.startswith("WELL-")
+    }
     test_seqs = list(pd.unique(table["seq"].to_numpy()[test]))
     perturbed: dict[str, np.ndarray] = {}
     for kind in PERTURBATIONS:

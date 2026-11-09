@@ -1,0 +1,824 @@
+Gate 5 execution log
+started=2026-11-09T22:06:15Z
+
+=== Fresh database
+$ docker compose down -v
+ Container fieldtwin-postgres-1 Stopping 
+ Container fieldtwin-postgres-1 Stopped 
+ Container fieldtwin-postgres-1 Removing 
+ Container fieldtwin-postgres-1 Removed 
+ Network fieldtwin_default Removing 
+ Volume fieldtwin_pgdata Removing 
+ Network fieldtwin_default Removed 
+ Volume fieldtwin_pgdata Removed 
+exit=0
+
+=== Start PostGIS
+$ docker compose up -d --wait postgres
+ Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Creating 
+ Volume fieldtwin_pgdata Creating 
+ Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Created 
+ Volume fieldtwin_pgdata Created 
+ Network fieldtwin_default Created 
+ Network fieldtwin_default Created 
+ Container fieldtwin-postgres-1 Creating 
+ Container fieldtwin-postgres-1 Created 
+ Container fieldtwin-postgres-1 Starting 
+ Container fieldtwin-postgres-1 Started 
+ Container fieldtwin-postgres-1 Waiting 
+ Container fieldtwin-postgres-1 Healthy 
+exit=0
+
+=== Migrate
+$ uv run python -m packages.repositories.database
+server_version=16.4 (Debian 16.4-1.pgdg110+2)
+postgis_version=3.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+applied 0001_foundation.sql
+applied 0002_assets.sql
+applied 0003_measurement_semantics.sql
+applied 0004_records.sql
+applied 0005_compatibility_scenarios.sql
+applied 0006_quality_reconciliation.sql
+applied 0007_operations.sql
+applied 0008_views.sql
+applied 0009_reconciliation_decisions.sql
+applied 0010_scenario_runs_and_events.sql
+applied 0011_domain_boundaries.sql
+applied 0012_application_role_and_provenance_chain.sql
+applied 0013_physical_network.sql
+migrations_applied=13
+tables_in_public=44
+exit=0
+
+=== Seed
+$ uv run python -m pipelines.normalize.seed
+seeded source_systems: 3
+seeded units: 12
+seeded unit_conversions: 11
+seeded equipment_classes: 7
+seeded transformations: 19
+seeded physical_nodes: 32
+seeded physical_edges: 36
+seeded measurement_definitions: 41
+seeded equipment_measurement_capabilities: 41
+seeded sensor_tags: 68
+seeded sensor_tag_mappings: 68
+seeded production_unit_rules: 3
+seeded source_event_classes: 10
+seeded domain_compatibility_requirements: 7
+seeded domain_compatibility_assessments: 40
+seeded domain_boundaries: 2
+seeded assets: 47
+seeded asset_relationships: 21
+exit=0
+
+=== Source schemas
+$ uv run python -m pipelines.profile.source_schemas
+wrote data_contracts/sources/generated/nm_ocd.schema.json
+wrote data_contracts/sources/generated/petrobras_3w.schema.json
+exit=0
+
+=== Load real batches
+$ uv run python -m pipelines.normalize.load
+{
+  "nm_ocd": {
+    "batch_id": "nm_ocd-20261105-15ddeb88ae",
+    "wells": 681,
+    "completions": 441,
+    "history": 1098,
+    "production": 36754,
+    "reconciliation_evidence": 2724,
+    "exceptions": 40
+  },
+  "petrobras_3w": {
+    "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+    "wells": 40,
+    "events": 498,
+    "observations": 13446,
+    "exceptions": 10
+  }
+}
+exit=0
+
+=== 3W benchmark events
+$ uv run python -m pipelines.normalize.petrobras_3w_events
+benchmark_events=498
+exit=0
+
+=== AETHER-FAULT-001
+$ uv run python -m pipelines.synthetic.aether_fault_001
+nominal: sha256=d36fdd5afba2677cc9d5c6eb523e3659f9402b8fc657c9e78148a40f8811cd13 invariants=12 events=0
+fault: sha256=a365b1e3321c523e1ad84ddc15b693c581c3837b6fd6aecab50a258c03658403 invariants=12 events=2
+{"runs": 2, "series": 8, "links": 8, "events": 2, "assignments": 2}
+exit=0
+
+=== AETHER Field, six scenarios
+$ uv run python -m pipelines.synthetic.aether_field
+AETHER-NET-NORMAL: sha256=80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1 checks=16 rows=78624
+AETHER-FAULT-001-NET: sha256=54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8 checks=17 rows=78624
+AETHER-NET-COMPRESSOR-DERATE: sha256=718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab checks=17 rows=78624
+AETHER-NET-SENSOR-DRIFT: sha256=4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6 checks=16 rows=78624
+AETHER-NET-COMM-DROPOUT: sha256=59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7 checks=16 rows=78624
+AETHER-NET-PLANNED-SHUTDOWN: sha256=35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc checks=17 rows=78624
+{"runs": 6, "series": 234, "links": 234, "events": 9}
+exit=0
+
+=== Reconciliation engine
+$ uv run python -m pipelines.reconcile.run
+{
+  "identity": 1123,
+  "semantic": 164,
+  "geospatial": 711,
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+exit=0
+
+=== Reconciliation again (expect already_run)
+$ uv run python -m pipelines.reconcile.run
+{
+  "identity": "already_run",
+  "semantic": "already_run",
+  "geospatial": "already_run",
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+exit=0
+
+=== Canonical validation
+$ uv run python -m pipelines.normalize.validate_canonical
+PASS wells_match_bronze: 681 vs 681
+PASS history_matches_bronze: 1098 vs 1098
+PASS production_matches_bronze: 36754 vs 36754
+PASS completions_match_bronze: 441 vs 441
+PASS instances_match_bronze: 498 vs 498
+PASS volume_total_G_matches_bronze: 234786955 vs 234786955
+PASS volume_total_O_matches_bronze: 28360084 vs 28360084
+PASS volume_total_W_matches_bronze: 170361799 vs 170361799
+PASS usable_wells_outside_county_box: 0
+PASS non_usable_assets_with_geometry: 0
+PASS quarantined_without_exception: 0
+PASS quarantined_without_reported_coordinates: 0
+PASS production_lineage_complete: 36754 vs 36754
+PASS telemetry_lineage_complete: 498 vs 498
+PASS ocd_channels_marked_independent: 0
+PASS scenario_mappings_present: 0
+PASS real_observations_linked_to_fictional_assets: 0
+PASS non_synthetic_fictional_assets: 0
+PASS generated_instances_marked_observed: 0
+PASS pressure_tags_with_assumed_reference: 0
+PASS cross_domain_tag_mappings: 0
+checks=21 failed=0
+exit=0
+
+=== Gate 2 reports
+$ uv run python -m pipelines.normalize.reports
+wrote reports/data_quality/production_units.md
+wrote reports/reconciliation/semantic_compatibility.md
+exit=0
+
+=== Reconciliation reports
+$ uv run python -m pipelines.reconcile.reports
+wrote reports/reconciliation/entity_resolution.md
+wrote reports/reconciliation/semantic_validation.md
+wrote reports/reconciliation/geospatial_associations.md
+exit=0
+
+=== Scenario report
+$ uv run python -m pipelines.synthetic.report
+wrote reports/scenarios/aether_fault_001.md
+exit=0
+
+=== Field reports
+$ uv run python -m pipelines.synthetic.field_reports
+wrote 5 reports to reports/simulation
+exit=0
+
+=== Field diagrams
+$ env PYTHONPATH=. uv run python scripts/build_field_diagrams.py
+pages: ['logical', 'aws', 'boundaries', 'scenario', 'aether-topology', 'aether-network', 'simulation-sequence', 'detection-evaluation']
+exit=0
+
+=== Remove derived Gate 5 data
+$ rm -rf data/gold/experiments
+exit=0
+
+=== 3W label audit
+$ uv run python -m pipelines.experiments.three_w_audit
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+origin      evaluability             
+HAND_DRAWN  FULLY_LABELED                 20
+REAL        AMBIGUOUS_OR_INCONSISTENT     43
+            PARTIALLY_LABELED            299
+SIMULATED   FULLY_LABELED                136
+holdout 23 8 ('WELL-00004', 'WELL-00008', 'WELL-00012', 'WELL-00016', 'WELL-00024', 'WELL-00029', 'WELL-00030', 'WELL-00034', 'WELL-00039')
+dev_0 17 6 ('WELL-00003', 'WELL-00007', 'WELL-00014', 'WELL-00023', 'WELL-00025', 'WELL-00027', 'WELL-00035', 'WELL-00038')
+dev_1 18 6 ('WELL-00001', 'WELL-00011', 'WELL-00015', 'WELL-00021', 'WELL-00026', 'WELL-00033', 'WELL-00042')
+dev_2 16 5 ('WELL-00005', 'WELL-00006', 'WELL-00010', 'WELL-00013', 'WELL-00020', 'WELL-00028', 'WELL-00031', 'WELL-00032', 'WELL-00037', 'WELL-00040')
+dev_3 20 5 ('WELL-00002', 'WELL-00009', 'WELL-00019', 'WELL-00022', 'WELL-00036', 'WELL-00041')
+fold        dev_0                  dev_1                  dev_2                  dev_3                  holdout                 
+side         test train validation  test train validation  test train validation  test train validation    test train validation
+filed_class                                                                                                                     
+0              16    43         15    15    45         14    28    45          1    15    45         14      26    58         16
+1               0     3          1     1     1          2     2     2          0     1     1          2       0     4          0
+2               3    16          1    13     6          1     2    17          1     2    18          0       2    17          3
+3              31     0          1     1     0         31     0     1         31     0     1         31       0     1         31
+4              16    26          9     9    34          8    17    26          8     9    34          8       9    35         16
+5               0     6          1     1     0          6     6     1          0     0     1          6       4     7          0
+6               0     3          0     0     3          0     0     3          0     3     0          0       3     3          0
+7               4    12          1     3    12          2     2    13          2     8     7          2      19    13          4
+8               2     7          3     3     8          1     3     5          4     4     7          1       2    10          2
+9              11    25         10    12    26          8    11    27          8    12    25          9      11    35         11
+   filed_class  instances  wells  supports_evaluation  largest_well_share  supports_unseen_well_claim
+0            0        100      9                 True               0.150                        True
+1            1          4      3                False               0.500                        True
+2            2         22      7                 True               0.591                        True
+3            3         32      2                False               0.969                        True
+4            4         60      7                 True               0.150                        True
+5            5         11      3                 True               0.545                        True
+6            6          6      2                False               0.500                        True
+7            7         36      6                 True               0.528                        True
+8            8         14      9                 True               0.286                        True
+9            9         57     15                 True               0.158                        True
+exit=0
+
+=== AETHER benchmark data, under the process guard
+$ uv run python -m pipelines.experiments.aether_data
+{
+ "cases": 272,
+ "category_counts": {
+  "COMM": 20,
+  "DERATE": 36,
+  "NORMAL": 36,
+  "PLANNED": 36,
+  "RESTRICTION": 36,
+  "SENSOR_BIAS": 36,
+  "SENSOR_DRIFT": 36,
+  "SENSOR_STUCK": 36
+ },
+ "dataset_sha256": "52e38b27fbea6443a9b0e7ea3a7acb9d9db7d8de42e3441de8290b496f698ec0",
+ "failed": [],
+ "max_case_seconds": 2.925,
+ "median_case_seconds": 2.006,
+ "outcomes": {
+  "OK": 272
+ },
+ "parameter_sets_sha256": "a844d831bde541f080908764d7e3c02aa9bb5f38bd537d6181c2961de0b028d7",
+ "provenance": "SYNTHETIC",
+ "regime_counts": {
+  "compressor_outside": 14,
+  "deliverability_outside": 14,
+  "fault_with_dropout": 14,
+  "in_regime": 160,
+  "noise_high": 14,
+  "onset_outside": 14,
+  "severity_high": 14,
+  "severity_low": 14,
+  "unseen_assets": 14
+ },
+ "split_counts": {
+  "held_out": 112,
+  "test": 32,
+  "train": 96,
+  "validation": 32
+ }
+}
+exit=0
+
+=== 3W development folds
+$ uv run python -m pipelines.experiments.three_w_run --stage development
+2026/11/09 14:17:46 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+static_threshold dev_0 thr 2.6767 met True
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+static_threshold dev_1 thr 2.9382 met True
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+static_threshold dev_2 thr 11.5177 met True
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+static_threshold dev_3 thr 2.3553 met True
+static_threshold recall 0.031446540880503145 FA/h 0.0021 P 0.99867097019176 R 0.06605965463108321
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+rolling_deviation dev_0 thr 6.8398 met True
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+rolling_deviation dev_1 thr 6.2896 met True
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+rolling_deviation dev_2 thr 31230.3788 met True
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+rolling_deviation dev_3 thr 7.6863 met True
+rolling_deviation recall 0.44654088050314467 FA/h 0.0528 P 0.8612153038259565 R 0.021626373626373627
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+logistic_regression dev_0 thr 27.8554 met True
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+logistic_regression dev_1 thr 48.317 met True
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+logistic_regression dev_2 thr 103.279 met True
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 56 57 58 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 56 57 58 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 56 57 58 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+logistic_regression dev_3 thr 85.88 met True
+logistic_regression recall 0.2893081761006289 FA/h 0.0222 P 0.8737901033170201 R 0.10090423861852434
+isolation_forest dev_0 thr 0.4906 met True
+isolation_forest dev_1 thr 0.6062 met True
+isolation_forest dev_2 thr 0.7028 met True
+isolation_forest dev_3 thr 0.6357 met True
+isolation_forest recall 0.13836477987421383 FA/h 0.037 P 0.8958646319285206 R 0.3557299843014129
+hist_gradient_boosting dev_0 thr 6.5352 met True
+hist_gradient_boosting dev_1 thr 4.6886 met True
+hist_gradient_boosting dev_2 thr 9.2954 met True
+hist_gradient_boosting dev_3 thr 6.7302 met True
+hist_gradient_boosting recall 0.11949685534591195 FA/h 0.019 P 0.9401777424061547 R 0.22254317111459967
+variant no_level_features 0.1509433962264151 0.010560963159840177
+variant no_missingness_features 0.11949685534591195 0.01372925210779223
+variant with_generated_training_data 0.3333333333333333 0.015841444739760267
+{
+ "preferred": "logistic_regression",
+ "reason": "logistic_regression had the best event skill within budget (0.104). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
+ "tied": [
+  "logistic_regression",
+  "isolation_forest"
+ ]
+}
+exit=0
+
+=== AETHER in-regime test
+$ uv run python -m pipelines.experiments.aether_run --stage in_regime
+2026/11/09 14:25:43 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+static_threshold recall 0.55 FA/h 0.0026 P 0.8148483476686283 R 0.3135751927180872
+rolling_deviation recall 0.75 FA/h 0.0082 P 0.4194107452339688 R 0.010539610644135708
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+logistic_regression recall 0.9 FA/h 0.0038 P 0.958703481392557 R 0.6956143025129568
+isolation_forest recall 0.55 FA/h 0.0087 P 0.23391812865497075 R 0.00522625321196812
+hist_gradient_boosting recall 0.45 FA/h 0.0 P 0.999485265731566 R 0.3382692391446366
+{'preferred': 'logistic_regression', 'reason': 'logistic_regression had the best event skill within budget (0.597). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.', 'tied': ['logistic_regression', 'hist_gradient_boosting']}
+exit=0
+
+=== 3W holdout, rerun
+$ uv run python -m pipelines.experiments.three_w_run --stage holdout
+2026/11/09 14:26:27 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+static_threshold recall 0.025 FA/h 0.0
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+rolling_deviation recall 0.35 FA/h 0.046853037638606904
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+logistic_regression recall 0.225 FA/h 0.00468530376386069
+isolation_forest recall 0.175 FA/h 0.00937060752772138
+hist_gradient_boosting recall 0.025 FA/h 0.00937060752772138
+exit=0
+
+=== AETHER held-out regimes, rerun
+$ uv run python -m pipelines.experiments.aether_run --stage held_out
+2026/11/09 14:27:22 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=500).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+severity_high {'static_threshold': (4, 10, np.float64(0.001)), 'rolling_deviation': (8, 10, np.float64(0.01)), 'logistic_regression': (8, 10, np.float64(0.007)), 'isolation_forest': (5, 10, np.float64(0.007)), 'hist_gradient_boosting': (5, 10, np.float64(0.0))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+severity_low {'static_threshold': (4, 10, np.float64(0.003)), 'rolling_deviation': (6, 10, np.float64(0.005)), 'logistic_regression': (6, 10, np.float64(0.003)), 'isolation_forest': (5, 10, np.float64(0.008)), 'hist_gradient_boosting': (3, 10, np.float64(0.0))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+unseen_assets {'static_threshold': (5, 10, np.float64(0.002)), 'rolling_deviation': (8, 10, np.float64(0.007)), 'logistic_regression': (6, 10, np.float64(0.004)), 'isolation_forest': (6, 10, np.float64(0.009)), 'hist_gradient_boosting': (0, 10, np.float64(0.0))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+noise_high {'static_threshold': (5, 10, np.float64(0.003)), 'rolling_deviation': (8, 10, np.float64(0.006)), 'logistic_regression': (8, 10, np.float64(0.001)), 'isolation_forest': (7, 10, np.float64(0.009)), 'hist_gradient_boosting': (5, 10, np.float64(0.001))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+deliverability_outside {'static_threshold': (0, 10, np.float64(0.01)), 'rolling_deviation': (8, 10, np.float64(0.007)), 'logistic_regression': (4, 10, np.float64(0.01)), 'isolation_forest': (7, 10, np.float64(0.011)), 'hist_gradient_boosting': (3, 10, np.float64(0.0))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+onset_outside {'static_threshold': (3, 10, np.float64(0.002)), 'rolling_deviation': (6, 10, np.float64(0.009)), 'logistic_regression': (9, 10, np.float64(0.002)), 'isolation_forest': (3, 10, np.float64(0.012)), 'hist_gradient_boosting': (5, 10, np.float64(0.002))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+compressor_outside {'static_threshold': (0, 10, np.float64(0.01)), 'rolling_deviation': (4, 10, np.float64(0.002)), 'logistic_regression': (0, 10, np.float64(0.012)), 'isolation_forest': (2, 10, np.float64(0.004)), 'hist_gradient_boosting': (5, 10, np.float64(0.0))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+fault_with_dropout {'static_threshold': (4, 10, np.float64(0.002)), 'rolling_deviation': (7, 10, np.float64(0.007)), 'logistic_regression': (8, 10, np.float64(0.002)), 'isolation_forest': (7, 10, np.float64(0.007)), 'hist_gradient_boosting': (5, 10, np.float64(0.003))}
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/numpy/lib/_type_check_impl.py:485: RuntimeWarning: overflow encountered in cast
+  _nx.copyto(d, maxf, where=idx_posinf)
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+.venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:1626: RuntimeWarning: divide by zero encountered in log
+  return xp.log(self.predict_proba(X))
+exit=0
+
+=== Results match the committed ones
+$ uv run python -m pipelines.experiments.reproducibility
+3w_development: 21 checksums, 0 differ; other values identical: True
+3w_holdout: 11 checksums, 0 differ; other values identical: True
+aether_dataset: 2 checksums, 0 differ; other values identical: True
+aether_in_regime: 7 checksums, 0 differ; other values identical: True
+aether_held_out: 50 checksums, 0 differ; other values identical: False
+exit=1
+
+=== Reliability stress
+$ uv run python -m pipelines.experiments.reliability_stress --repeats 30 --workers 4
+{'OK': 210} {'SOLVER_NONCONVERGENCE': 'SOLVER_NONCONVERGENCE', 'INFEASIBLE_STATE': 'INFEASIBLE_STATE', 'EXECUTION_TIMEOUT': 'EXECUTION_TIMEOUT', 'CRASH': 'CRASH'}
+exit=0
+
+=== Streaming latency and memory
+$ uv run python -m pipelines.experiments.inference_perf
+hist_gradient_boosting 4.356674999999999 True
+isolation_forest 4.2380249999999995 True
+logistic_regression 0.35589139999999997 True
+rolling_deviation 0.8398164 True
+static_threshold 0.153125 True
+aether:hist_gradient_boosting 1.7207584 True
+aether:isolation_forest 4.1338086 True
+aether:logistic_regression 0.39520879999999997 True
+aether:rolling_deviation 1.337242 True
+aether:static_threshold 0.0657334 True
+exit=0
+
+=== Gate 5 reports
+$ uv run python -m pipelines.experiments.reports
+exit=0
+
+=== Schema document
+$ uv run python -m pipelines.normalize.schema_docs
+wrote reports/data_quality/canonical_schema.md
+exit=0
+
+=== Dump schema
+$ bash -c docker compose exec -T postgres pg_dump -U fieldtwin -d fieldtwin --schema-only --no-owner --no-privileges | grep -v "^\\\\\(un\)\?restrict" > db/ddl/schema.sql && wc -l db/ddl/schema.sql
+    3961 db/ddl/schema.sql
+exit=0
+
+=== Bronze quality reports
+$ uv run python -m pipelines.profile.cli
+nm_ocd: reports/data_quality/nm_ocd.json
+petrobras_3w: reports/data_quality/petrobras_3w.json
+exit=0
+
+=== Raw integrity
+$ uv run python -m pipelines.profile.validate
+{
+  "validated_at": "2026-11-09T22:31:48Z",
+  "passed": true,
+  "sources": {
+    "nm_ocd": {
+      "batch_id": "nm_ocd-20261105-15ddeb88ae",
+      "files_verified": 5,
+      "files_verified_against_upstream_hash": 0,
+      "original_checksum": "b9c20868ea5f5a051619cc2301f422f2b7ff904402b592bd61f7f49193ccc90b",
+      "accepted_count": 38533,
+      "rejected_count": 4,
+      "integrity_problems": [],
+      "failed_quality_checks": [],
+      "passed": true
+    },
+    "petrobras_3w": {
+      "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+      "files_verified": 504,
+      "files_verified_against_upstream_hash": 503,
+      "original_checksum": "d3f2463e3aa75eda128b0e355902fd62203b6b37ddfbefbc4e8b5069f3fb1fa2",
+      "accepted_count": 498,
+      "rejected_count": 0,
+      "integrity_problems": [],
+      "failed_quality_checks": [],
+      "passed": true
+    }
+  }
+}
+exit=0
+
+=== Ruff lint
+$ uv run ruff check .
+All checks passed!
+exit=0
+
+=== Ruff format
+$ uv run ruff format --check .
+223 files already formatted
+exit=0
+
+=== Mypy
+$ uv run mypy
+Success: no issues found in 89 source files
+exit=0
+
+=== Offline tests
+$ uv run pytest -q
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 41%]
+........................................................................ [ 54%]
+........................................................................ [ 68%]
+........................................................................ [ 82%]
+........................................................................ [ 96%]
+....................                                                     [100%]
+=============================== warnings summary ===============================
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+  .venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [4 5 6 7]. At least one non-missing value is needed for imputation with strategy='median'.
+    warnings.warn(
+
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+  .venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+    return fnb._ureduce(a,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+524 passed, 264 deselected, 3 warnings in 30.86s
+exit=0
+
+=== Database tests on fixtures
+$ uv run pytest -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 31%]
+........................................................................ [ 63%]
+........................................................................ [ 94%]
+............                                                             [100%]
+228 passed, 560 deselected in 48.05s
+exit=0
+
+=== Tests on real data
+$ uv run pytest -m acquired -o addopts=--strict-markers -q
+.......................F.......                                          [100%]
+=================================== FAILURES ===================================
+_______ test_windows_never_cross_instances_and_end_on_minute_boundaries ________
+
+    def test_windows_never_cross_instances_and_end_on_minute_boundaries():
+        from pipelines.experiments.three_w_data import load_track
+    
+        track, _, _ = load_track()
+        table = track.table
+        assert (table["t"] % 60 == 0).all()
+>       assert table.groupby("seq")["t"].apply(lambda t: t.is_monotonic_increasing).all()
+E       assert np.False_
+E        +  where np.False_ = all()
+E        +    where all = seq\nDRAWN_00001                  False\nDRAWN_00002                  False\nDRAWN_00003                  False\nDRAWN_000...051903     True\nWELL-00042_20141221190219     True\nWELL-00042_20141222024535     True\nName: t, Length: 451, dtype: bool.all
+E        +      where seq\nDRAWN_00001                  False\nDRAWN_00002                  False\nDRAWN_00003                  False\nDRAWN_000...051903     True\nWELL-00042_20141221190219     True\nWELL-00042_20141222024535     True\nName: t, Length: 451, dtype: bool = apply(<function test_windows_never_cross_instances_and_end_on_minute_boundaries.<locals>.<lambda> at 0x11e279580>)
+E        +        where apply = <pandas.api.typing.SeriesGroupBy object at 0x11e2dbf80>.apply
+
+tests/integration/test_experiments_real.py:74: AssertionError
+=============================== warnings summary ===============================
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+  .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+    warnings.warn(
+
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+  .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+    warnings.warn(
+
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+  .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_experiments_real.py::test_windows_never_cross_instances_and_end_on_minute_boundaries
+1 failed, 30 passed, 757 deselected, 7 warnings in 7.97s
+exit=1
+
+=== Every CI command in a clean copy
+$ bash scripts/ci_local.sh
+clean_copy_files=317
+raw_or_bronze_parquet_outside_fixtures=0
+--- uv sync --frozen
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + zipp==4.1.2
+exit=0
+--- uv run ruff check .
+All checks passed!
+exit=0
+--- uv run ruff format --check .
+223 files already formatted
+exit=0
+--- uv run mypy
+Success: no issues found in 89 source files
+exit=0
+--- uv run pytest tests/unit tests/integration/test_acquisition.py -q
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+517 passed, 3 warnings in 69.48s (0:01:09)
+exit=0
+--- uv run pytest tests/contract -q
+.......                                                                  [100%]
+7 passed, 3 deselected in 0.78s
+exit=0
+--- uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 91%]
+.......                                                                  [100%]
+79 passed in 36.94s
+exit=0
+--- uv run pytest tests/provenance -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 96%]
+.....                                                                    [100%]
+149 passed, 5 deselected in 14.78s
+exit=0
+--- uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found
+exit=0
+--- docker run --rm -v <temp-dir>:/repo zricethezav/gitleaks:v8.30.1 detect --source /repo --no-git --redact --no-banner
+[90m10:35PM[0m [32mINF[0m [1mscanned ~4430549 bytes (4.43 MB) in 615ms[0m
+[90m10:35PM[0m [32mINF[0m [1mno leaks found[0m
+exit=0
+--- docker run --rm -v <temp-dir>:/repo -w /repo rhysd/actionlint:1.7.7 -color=false
+exit=0
+failed_ci_commands=0
+exit=0
+
+failed_steps=2
+finished=2026-11-09T22:35:44Z

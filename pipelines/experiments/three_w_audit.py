@@ -55,6 +55,8 @@ def run_audit() -> pd.DataFrame:
                 filed_class=item.filed_class,
                 class_name=item.source_event_class,
             ).to_dict()
+            # Generated files reuse names across class folders, so the path is the identity.
+            | {"source_path": item.source_path}
         )
     return pd.DataFrame(rows)
 

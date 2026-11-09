@@ -36,7 +36,7 @@ def _strip(value):
     if isinstance(value, list):
         return [_strip(v) for v in value]
     if isinstance(value, float):
-        return round(value, 9)
+        return "nan" if value != value else round(value, 9)
     return value
 
 
