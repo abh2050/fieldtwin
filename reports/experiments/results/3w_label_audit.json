@@ -1,0 +1,1565 @@
+{
+ "ambiguous": {
+  "count": 43,
+  "instances": [
+   "WELL-00010_20180517000402",
+   "WELL-00010_20180715083053",
+   "WELL-00010_20180717234051",
+   "WELL-00010_20180720234103",
+   "WELL-00010_20180723134436",
+   "WELL-00015_20190922060029",
+   "WELL-00016_20190924191606",
+   "WELL-00016_20190925110952",
+   "WELL-00033_20190925190420",
+   "WELL-00033_20190926065206",
+   "WELL-00033_20190928030111",
+   "WELL-00033_20190928210207",
+   "WELL-00033_20190930190000",
+   "WELL-00033_20191004020000",
+   "WELL-00034_20190825004401",
+   "WELL-00034_20190825150318",
+   "WELL-00034_20190826050146",
+   "WELL-00034_20190831210153",
+   "WELL-00034_20190901060904",
+   "WELL-00034_20191003180056",
+   "WELL-00035_20190819093245",
+   "WELL-00035_20190823193122",
+   "WELL-00035_20190824140503",
+   "WELL-00035_20190827090706",
+   "WELL-00035_20190923023106",
+   "WELL-00035_20190925061122",
+   "WELL-00036_20190925100042",
+   "WELL-00036_20190930013035",
+   "WELL-00036_20190930083101",
+   "WELL-00037_20190924193953",
+   "WELL-00037_20190924213000",
+   "WELL-00038_20190924212924",
+   "WELL-00038_20190925093222",
+   "WELL-00039_20190918150111",
+   "WELL-00039_20190924200204",
+   "WELL-00041_20190814154301",
+   "WELL-00041_20190817173916",
+   "WELL-00041_20190819163753",
+   "WELL-00041_20190822143519",
+   "WELL-00041_20190906051807",
+   "WELL-00041_20190917161232",
+   "WELL-00041_20190924202109",
+   "WELL-00041_20190925111412"
+  ],
+  "normal_rows": 2046346,
+  "null_rows": 154800,
+  "rows": 2201146,
+  "wells": {
+   "WELL-00010": 5,
+   "WELL-00015": 1,
+   "WELL-00016": 2,
+   "WELL-00033": 6,
+   "WELL-00034": 6,
+   "WELL-00035": 6,
+   "WELL-00036": 3,
+   "WELL-00037": 2,
+   "WELL-00038": 2,
+   "WELL-00039": 2,
+   "WELL-00041": 8
+  }
+ },
+ "by_grade": [
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "ABRUPT_INCREASE_OF_BSW",
+   "event_eligible": 10,
+   "filed_class": 1,
+   "instances": 10,
+   "normal_exposure_eligible": 10,
+   "null_rows": 0,
+   "origin": "HAND_DRAWN",
+   "rows": 547200,
+   "wells": 0,
+   "with_pre_event_normal": 10
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "SCALING_IN_PCK",
+   "event_eligible": 10,
+   "filed_class": 7,
+   "instances": 10,
+   "normal_exposure_eligible": 10,
+   "null_rows": 0,
+   "origin": "HAND_DRAWN",
+   "rows": 2419210,
+   "wells": 0,
+   "with_pre_event_normal": 10
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "NORMAL",
+   "event_eligible": 0,
+   "filed_class": 0,
+   "instances": 100,
+   "normal_exposure_eligible": 100,
+   "null_rows": 360000,
+   "origin": "REAL",
+   "rows": 2030904,
+   "wells": 9,
+   "with_pre_event_normal": 0
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "ABRUPT_INCREASE_OF_BSW",
+   "event_eligible": 4,
+   "filed_class": 1,
+   "instances": 4,
+   "normal_exposure_eligible": 4,
+   "null_rows": 14400,
+   "origin": "REAL",
+   "rows": 236794,
+   "wells": 3,
+   "with_pre_event_normal": 4
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "SPURIOUS_CLOSURE_OF_DHSV",
+   "event_eligible": 22,
+   "filed_class": 2,
+   "instances": 22,
+   "normal_exposure_eligible": 22,
+   "null_rows": 79200,
+   "origin": "REAL",
+   "rows": 277001,
+   "wells": 7,
+   "with_pre_event_normal": 22
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "SEVERE_SLUGGING",
+   "event_eligible": 32,
+   "filed_class": 3,
+   "instances": 32,
+   "normal_exposure_eligible": 0,
+   "null_rows": 115200,
+   "origin": "REAL",
+   "rows": 684352,
+   "wells": 2,
+   "with_pre_event_normal": 0
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "FLOW_INSTABILITY",
+   "event_eligible": 60,
+   "filed_class": 4,
+   "instances": 60,
+   "normal_exposure_eligible": 0,
+   "null_rows": 216000,
+   "origin": "REAL",
+   "rows": 645606,
+   "wells": 7,
+   "with_pre_event_normal": 0
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "RAPID_PRODUCTIVITY_LOSS",
+   "event_eligible": 11,
+   "filed_class": 5,
+   "instances": 11,
+   "normal_exposure_eligible": 11,
+   "null_rows": 39600,
+   "origin": "REAL",
+   "rows": 439408,
+   "wells": 3,
+   "with_pre_event_normal": 11
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "QUICK_RESTRICTION_IN_PCK",
+   "event_eligible": 6,
+   "filed_class": 6,
+   "instances": 6,
+   "normal_exposure_eligible": 6,
+   "null_rows": 21600,
+   "origin": "REAL",
+   "rows": 77477,
+   "wells": 2,
+   "with_pre_event_normal": 6
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "SCALING_IN_PCK",
+   "event_eligible": 36,
+   "filed_class": 7,
+   "instances": 36,
+   "normal_exposure_eligible": 36,
+   "null_rows": 129600,
+   "origin": "REAL",
+   "rows": 7864945,
+   "wells": 6,
+   "with_pre_event_normal": 36
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "HYDRATE_IN_PRODUCTION_LINE",
+   "event_eligible": 14,
+   "filed_class": 8,
+   "instances": 14,
+   "normal_exposure_eligible": 14,
+   "null_rows": 50400,
+   "origin": "REAL",
+   "rows": 4809035,
+   "wells": 9,
+   "with_pre_event_normal": 14
+  },
+  {
+   "evaluability": "AMBIGUOUS_OR_INCONSISTENT",
+   "event_class_name": "HYDRATE_IN_SERVICE_LINE",
+   "event_eligible": 0,
+   "filed_class": 9,
+   "instances": 43,
+   "normal_exposure_eligible": 0,
+   "null_rows": 154800,
+   "origin": "REAL",
+   "rows": 2201146,
+   "wells": 11,
+   "with_pre_event_normal": 0
+  },
+  {
+   "evaluability": "PARTIALLY_LABELED",
+   "event_class_name": "HYDRATE_IN_SERVICE_LINE",
+   "event_eligible": 14,
+   "filed_class": 9,
+   "instances": 14,
+   "normal_exposure_eligible": 14,
+   "null_rows": 50400,
+   "origin": "REAL",
+   "rows": 434226,
+   "wells": 7,
+   "with_pre_event_normal": 14
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "ABRUPT_INCREASE_OF_BSW",
+   "event_eligible": 20,
+   "filed_class": 1,
+   "instances": 20,
+   "normal_exposure_eligible": 20,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 1415985,
+   "wells": 0,
+   "with_pre_event_normal": 20
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "SPURIOUS_CLOSURE_OF_DHSV",
+   "event_eligible": 16,
+   "filed_class": 2,
+   "instances": 16,
+   "normal_exposure_eligible": 16,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 460784,
+   "wells": 0,
+   "with_pre_event_normal": 16
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "SEVERE_SLUGGING",
+   "event_eligible": 20,
+   "filed_class": 3,
+   "instances": 20,
+   "normal_exposure_eligible": 0,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 1082981,
+   "wells": 0,
+   "with_pre_event_normal": 0
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "RAPID_PRODUCTIVITY_LOSS",
+   "event_eligible": 20,
+   "filed_class": 5,
+   "instances": 20,
+   "normal_exposure_eligible": 20,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 585981,
+   "wells": 0,
+   "with_pre_event_normal": 20
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "QUICK_RESTRICTION_IN_PCK",
+   "event_eligible": 20,
+   "filed_class": 6,
+   "instances": 20,
+   "normal_exposure_eligible": 20,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 539980,
+   "wells": 0,
+   "with_pre_event_normal": 20
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "HYDRATE_IN_PRODUCTION_LINE",
+   "event_eligible": 20,
+   "filed_class": 8,
+   "instances": 20,
+   "normal_exposure_eligible": 20,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 539980,
+   "wells": 0,
+   "with_pre_event_normal": 20
+  },
+  {
+   "evaluability": "FULLY_LABELED",
+   "event_class_name": "HYDRATE_IN_SERVICE_LINE",
+   "event_eligible": 20,
+   "filed_class": 9,
+   "instances": 20,
+   "normal_exposure_eligible": 20,
+   "null_rows": 0,
+   "origin": "SIMULATED",
+   "rows": 933180,
+   "wells": 0,
+   "with_pre_event_normal": 20
+  }
+ ],
+ "coverage": [
+  {
+   "filed_class": 0,
+   "fold": "holdout",
+   "instances": 58,
+   "side": "train",
+   "wells": 5
+  },
+  {
+   "filed_class": 1,
+   "fold": "holdout",
+   "instances": 4,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 2,
+   "fold": "holdout",
+   "instances": 17,
+   "side": "train",
+   "wells": 5
+  },
+  {
+   "filed_class": 3,
+   "fold": "holdout",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "holdout",
+   "instances": 35,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 5,
+   "fold": "holdout",
+   "instances": 7,
+   "side": "train",
+   "wells": 2
+  },
+  {
+   "filed_class": 6,
+   "fold": "holdout",
+   "instances": 3,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "holdout",
+   "instances": 13,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 8,
+   "fold": "holdout",
+   "instances": 10,
+   "side": "train",
+   "wells": 5
+  },
+  {
+   "filed_class": 9,
+   "fold": "holdout",
+   "instances": 35,
+   "side": "train",
+   "wells": 9
+  },
+  {
+   "filed_class": 0,
+   "fold": "holdout",
+   "instances": 16,
+   "side": "validation",
+   "wells": 2
+  },
+  {
+   "filed_class": 2,
+   "fold": "holdout",
+   "instances": 3,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "holdout",
+   "instances": 31,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "holdout",
+   "instances": 16,
+   "side": "validation",
+   "wells": 2
+  },
+  {
+   "filed_class": 7,
+   "fold": "holdout",
+   "instances": 4,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "holdout",
+   "instances": 2,
+   "side": "validation",
+   "wells": 2
+  },
+  {
+   "filed_class": 9,
+   "fold": "holdout",
+   "instances": 11,
+   "side": "validation",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "holdout",
+   "instances": 26,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 2,
+   "fold": "holdout",
+   "instances": 2,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "holdout",
+   "instances": 9,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 5,
+   "fold": "holdout",
+   "instances": 4,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 6,
+   "fold": "holdout",
+   "instances": 3,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "holdout",
+   "instances": 19,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "holdout",
+   "instances": 2,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 9,
+   "fold": "holdout",
+   "instances": 11,
+   "side": "test",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_0",
+   "instances": 43,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_0",
+   "instances": 3,
+   "side": "train",
+   "wells": 2
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_0",
+   "instances": 16,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_0",
+   "instances": 26,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_0",
+   "instances": 6,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 6,
+   "fold": "dev_0",
+   "instances": 3,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_0",
+   "instances": 12,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_0",
+   "instances": 7,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_0",
+   "instances": 25,
+   "side": "train",
+   "wells": 6
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_0",
+   "instances": 15,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_0",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_0",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_0",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_0",
+   "instances": 9,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_0",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_0",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_0",
+   "instances": 3,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_0",
+   "instances": 10,
+   "side": "validation",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_0",
+   "instances": 16,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_0",
+   "instances": 3,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_0",
+   "instances": 31,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_0",
+   "instances": 16,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_0",
+   "instances": 4,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_0",
+   "instances": 2,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_0",
+   "instances": 11,
+   "side": "test",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_1",
+   "instances": 45,
+   "side": "train",
+   "wells": 5
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_1",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_1",
+   "instances": 6,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_1",
+   "instances": 34,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 6,
+   "fold": "dev_1",
+   "instances": 3,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_1",
+   "instances": 12,
+   "side": "train",
+   "wells": 2
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_1",
+   "instances": 8,
+   "side": "train",
+   "wells": 5
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_1",
+   "instances": 26,
+   "side": "train",
+   "wells": 6
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_1",
+   "instances": 14,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_1",
+   "instances": 2,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_1",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_1",
+   "instances": 31,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_1",
+   "instances": 8,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_1",
+   "instances": 6,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_1",
+   "instances": 2,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_1",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_1",
+   "instances": 8,
+   "side": "validation",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_1",
+   "instances": 15,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_1",
+   "instances": 1,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_1",
+   "instances": 13,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_1",
+   "instances": 1,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_1",
+   "instances": 9,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_1",
+   "instances": 1,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_1",
+   "instances": 3,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_1",
+   "instances": 3,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_1",
+   "instances": 12,
+   "side": "test",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_2",
+   "instances": 45,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_2",
+   "instances": 2,
+   "side": "train",
+   "wells": 2
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_2",
+   "instances": 17,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_2",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_2",
+   "instances": 26,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_2",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 6,
+   "fold": "dev_2",
+   "instances": 3,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_2",
+   "instances": 13,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_2",
+   "instances": 5,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_2",
+   "instances": 27,
+   "side": "train",
+   "wells": 6
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_2",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_2",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_2",
+   "instances": 31,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_2",
+   "instances": 8,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_2",
+   "instances": 2,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_2",
+   "instances": 4,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_2",
+   "instances": 8,
+   "side": "validation",
+   "wells": 2
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_2",
+   "instances": 28,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_2",
+   "instances": 2,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_2",
+   "instances": 2,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_2",
+   "instances": 17,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_2",
+   "instances": 6,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_2",
+   "instances": 2,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_2",
+   "instances": 3,
+   "side": "test",
+   "wells": 3
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_2",
+   "instances": 11,
+   "side": "test",
+   "wells": 4
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_3",
+   "instances": 45,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_3",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_3",
+   "instances": 18,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_3",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_3",
+   "instances": 34,
+   "side": "train",
+   "wells": 4
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_3",
+   "instances": 1,
+   "side": "train",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_3",
+   "instances": 7,
+   "side": "train",
+   "wells": 3
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_3",
+   "instances": 7,
+   "side": "train",
+   "wells": 5
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_3",
+   "instances": 25,
+   "side": "train",
+   "wells": 7
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_3",
+   "instances": 14,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_3",
+   "instances": 2,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 3,
+   "fold": "dev_3",
+   "instances": 31,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_3",
+   "instances": 8,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 5,
+   "fold": "dev_3",
+   "instances": 6,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_3",
+   "instances": 2,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_3",
+   "instances": 1,
+   "side": "validation",
+   "wells": 1
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_3",
+   "instances": 9,
+   "side": "validation",
+   "wells": 3
+  },
+  {
+   "filed_class": 0,
+   "fold": "dev_3",
+   "instances": 15,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 1,
+   "fold": "dev_3",
+   "instances": 1,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 2,
+   "fold": "dev_3",
+   "instances": 2,
+   "side": "test",
+   "wells": 2
+  },
+  {
+   "filed_class": 4,
+   "fold": "dev_3",
+   "instances": 9,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 6,
+   "fold": "dev_3",
+   "instances": 3,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 7,
+   "fold": "dev_3",
+   "instances": 8,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 8,
+   "fold": "dev_3",
+   "instances": 4,
+   "side": "test",
+   "wells": 1
+  },
+  {
+   "filed_class": 9,
+   "fold": "dev_3",
+   "instances": 12,
+   "side": "test",
+   "wells": 2
+  }
+ ],
+ "credible_classes": [
+  {
+   "filed_class": 0,
+   "instances": 100,
+   "largest_well_share": 0.15,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 9
+  },
+  {
+   "filed_class": 1,
+   "instances": 4,
+   "largest_well_share": 0.5,
+   "supports_evaluation": false,
+   "supports_unseen_well_claim": true,
+   "wells": 3
+  },
+  {
+   "filed_class": 2,
+   "instances": 22,
+   "largest_well_share": 0.591,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 7
+  },
+  {
+   "filed_class": 3,
+   "instances": 32,
+   "largest_well_share": 0.969,
+   "supports_evaluation": false,
+   "supports_unseen_well_claim": true,
+   "wells": 2
+  },
+  {
+   "filed_class": 4,
+   "instances": 60,
+   "largest_well_share": 0.15,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 7
+  },
+  {
+   "filed_class": 5,
+   "instances": 11,
+   "largest_well_share": 0.545,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 3
+  },
+  {
+   "filed_class": 6,
+   "instances": 6,
+   "largest_well_share": 0.5,
+   "supports_evaluation": false,
+   "supports_unseen_well_claim": true,
+   "wells": 2
+  },
+  {
+   "filed_class": 7,
+   "instances": 36,
+   "largest_well_share": 0.528,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 6
+  },
+  {
+   "filed_class": 8,
+   "instances": 14,
+   "largest_well_share": 0.286,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 9
+  },
+  {
+   "filed_class": 9,
+   "instances": 57,
+   "largest_well_share": 0.158,
+   "supports_evaluation": true,
+   "supports_unseen_well_claim": true,
+   "wells": 15
+  }
+ ],
+ "folds": {
+  "dev_0": {
+   "test": [
+    "WELL-00003",
+    "WELL-00007",
+    "WELL-00014",
+    "WELL-00023",
+    "WELL-00025",
+    "WELL-00027",
+    "WELL-00035",
+    "WELL-00038"
+   ],
+   "train": [
+    "WELL-00002",
+    "WELL-00005",
+    "WELL-00006",
+    "WELL-00009",
+    "WELL-00010",
+    "WELL-00011",
+    "WELL-00019",
+    "WELL-00020",
+    "WELL-00021",
+    "WELL-00022",
+    "WELL-00028",
+    "WELL-00031",
+    "WELL-00032",
+    "WELL-00037",
+    "WELL-00040",
+    "WELL-00041",
+    "WELL-00042"
+   ],
+   "validation": [
+    "WELL-00001",
+    "WELL-00013",
+    "WELL-00015",
+    "WELL-00026",
+    "WELL-00033",
+    "WELL-00036"
+   ]
+  },
+  "dev_1": {
+   "test": [
+    "WELL-00001",
+    "WELL-00011",
+    "WELL-00015",
+    "WELL-00021",
+    "WELL-00026",
+    "WELL-00033",
+    "WELL-00042"
+   ],
+   "train": [
+    "WELL-00002",
+    "WELL-00003",
+    "WELL-00005",
+    "WELL-00007",
+    "WELL-00010",
+    "WELL-00013",
+    "WELL-00019",
+    "WELL-00022",
+    "WELL-00023",
+    "WELL-00027",
+    "WELL-00028",
+    "WELL-00031",
+    "WELL-00032",
+    "WELL-00035",
+    "WELL-00036",
+    "WELL-00038",
+    "WELL-00040",
+    "WELL-00041"
+   ],
+   "validation": [
+    "WELL-00006",
+    "WELL-00009",
+    "WELL-00014",
+    "WELL-00020",
+    "WELL-00025",
+    "WELL-00037"
+   ]
+  },
+  "dev_2": {
+   "test": [
+    "WELL-00005",
+    "WELL-00006",
+    "WELL-00010",
+    "WELL-00013",
+    "WELL-00020",
+    "WELL-00028",
+    "WELL-00031",
+    "WELL-00032",
+    "WELL-00037",
+    "WELL-00040"
+   ],
+   "train": [
+    "WELL-00001",
+    "WELL-00002",
+    "WELL-00003",
+    "WELL-00007",
+    "WELL-00011",
+    "WELL-00015",
+    "WELL-00022",
+    "WELL-00023",
+    "WELL-00025",
+    "WELL-00026",
+    "WELL-00027",
+    "WELL-00033",
+    "WELL-00035",
+    "WELL-00036",
+    "WELL-00038",
+    "WELL-00041"
+   ],
+   "validation": [
+    "WELL-00009",
+    "WELL-00014",
+    "WELL-00019",
+    "WELL-00021",
+    "WELL-00042"
+   ]
+  },
+  "dev_3": {
+   "test": [
+    "WELL-00002",
+    "WELL-00009",
+    "WELL-00019",
+    "WELL-00022",
+    "WELL-00036",
+    "WELL-00041"
+   ],
+   "train": [
+    "WELL-00001",
+    "WELL-00003",
+    "WELL-00005",
+    "WELL-00007",
+    "WELL-00010",
+    "WELL-00011",
+    "WELL-00013",
+    "WELL-00015",
+    "WELL-00021",
+    "WELL-00023",
+    "WELL-00026",
+    "WELL-00027",
+    "WELL-00028",
+    "WELL-00031",
+    "WELL-00032",
+    "WELL-00033",
+    "WELL-00035",
+    "WELL-00037",
+    "WELL-00038",
+    "WELL-00040"
+   ],
+   "validation": [
+    "WELL-00006",
+    "WELL-00014",
+    "WELL-00020",
+    "WELL-00025",
+    "WELL-00042"
+   ]
+  },
+  "holdout": {
+   "test": [
+    "WELL-00004",
+    "WELL-00008",
+    "WELL-00012",
+    "WELL-00016",
+    "WELL-00024",
+    "WELL-00029",
+    "WELL-00030",
+    "WELL-00034",
+    "WELL-00039"
+   ],
+   "train": [
+    "WELL-00001",
+    "WELL-00002",
+    "WELL-00005",
+    "WELL-00006",
+    "WELL-00009",
+    "WELL-00010",
+    "WELL-00011",
+    "WELL-00013",
+    "WELL-00015",
+    "WELL-00019",
+    "WELL-00020",
+    "WELL-00021",
+    "WELL-00022",
+    "WELL-00026",
+    "WELL-00028",
+    "WELL-00031",
+    "WELL-00032",
+    "WELL-00033",
+    "WELL-00036",
+    "WELL-00037",
+    "WELL-00040",
+    "WELL-00041",
+    "WELL-00042"
+   ],
+   "validation": [
+    "WELL-00003",
+    "WELL-00007",
+    "WELL-00014",
+    "WELL-00023",
+    "WELL-00025",
+    "WELL-00027",
+    "WELL-00035",
+    "WELL-00038"
+   ]
+  }
+ },
+ "instances": 498,
+ "null_rows_leading_only": true,
+ "overlap": {
+  "cross_class_pairs": 2,
+  "identical_sensor_rows": 173,
+  "label_conflicts": 0,
+  "pairs": 173,
+  "shared_hours": 162.1
+ },
+ "plausibility": {
+  "ABER-CKP": {
+   "instances": 1,
+   "readings": {
+    "REAL": 161538
+   }
+  },
+  "P-ANULAR": {
+   "instances": 1,
+   "readings": {
+    "REAL": 320019
+   }
+  },
+  "P-JUS-CKGL": {
+   "instances": 15,
+   "readings": {
+    "REAL": 363236
+   }
+  },
+  "P-JUS-CKP": {
+   "instances": 4,
+   "readings": {
+    "REAL": 1456941
+   }
+  },
+  "P-MON-CKP": {
+   "instances": 1,
+   "readings": {
+    "REAL": 46
+   }
+  },
+  "P-PDG": {
+   "instances": 3,
+   "readings": {
+    "REAL": 305679
+   }
+  },
+  "P-TPT": {
+   "instances": 10,
+   "readings": {
+    "REAL": 1004849
+   }
+  },
+  "T-MON-CKP": {
+   "instances": 1,
+   "readings": {
+    "REAL": 161538
+   }
+  },
+  "T-PDG": {
+   "instances": 8,
+   "readings": {
+    "REAL": 1872832
+   }
+  }
+ }
+}

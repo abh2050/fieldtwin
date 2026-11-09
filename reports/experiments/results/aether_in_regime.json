@@ -38,7 +38,7 @@
    "validation": 32
   }
  },
- "git_sha": "55ea77d44d92795ae01f23b40a3303ff35cf20b3",
+ "git_sha": "7bf8460df44bb4f44992014c1551571150f7d98a",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -116,7 +116,7 @@
    "calibration": {
     "budget_met": true,
     "stopped_by": "time-in-alarm limit",
-    "threshold": 0.8206506223283573,
+    "threshold": 1.718419573116457,
     "validation_event_recall": 0.5,
     "validation_false_alarms_per_hour": 0.002050831319124002,
     "validation_time_in_alarm": 0.04880490246343905
@@ -175,7 +175,7 @@
      "q75_hours": 26.416666666666668
     }
    },
-   "fit_seconds": 25.98281708394643,
+   "fit_seconds": 18.499206708977,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -214,7 +214,7 @@
      0.0
     ]
    },
-   "scores_sha256": "3021dae6fa4a60dd3db20fced4deca0ac5c4f08db2b95b72bc92647d7eee6b1a",
+   "scores_sha256": "8879d217ce2020b7ee2ef7ae7144bcac93b03acf4f64448120e03a12439dd7e6",
    "summary": {
     "active_at_onset_not_counted": 0,
     "chance_event_recall": 0.0,
@@ -237,7 +237,7 @@
     "tn": 41195,
     "tp": 7767
    },
-   "threshold": 0.8206506223283573,
+   "threshold": 1.718419573116457,
    "training_rows": 108599
   },
   "isolation_forest": {
@@ -334,7 +334,7 @@
      "q75_hours": 45.25
     }
    },
-   "fit_seconds": 0.6678452090127394,
+   "fit_seconds": 0.5777566250180826,
    "interval": {
     "chance_event_recall": [
      0.43738954867198115,
@@ -404,7 +404,7 @@
     "false_alarms": {
      "during_dropout": 0,
      "during_planned_work": 3,
-     "other_normal_operation": 1
+     "other_normal_operation": 10
     },
     "hours": {
      "during_dropout": 55.916666666666664,
@@ -412,7 +412,7 @@
      "other_normal_operation": 3335.9166666666665
     }
    },
-   "average_precision": 0.876001019758388,
+   "average_precision": 0.8362484380067604,
    "by_category": {
     "DERATE": {
      "detected": 4,
@@ -431,7 +431,7 @@
      "events": 4
     },
     "SENSOR_STUCK": {
-     "detected": 3,
+     "detected": 2,
      "events": 4
     }
    },
@@ -454,11 +454,11 @@
     },
     {
      "clusters": 12,
-     "detected": 11,
+     "detected": 10,
      "event_class": 3,
-     "event_recall": 0.9166666666666666,
+     "event_recall": 0.8333333333333334,
      "event_recall_interval": [
-      0.75,
+      0.5833333333333334,
       1.0
      ],
      "events": 12
@@ -467,10 +467,10 @@
    "calibration": {
     "budget_met": true,
     "stopped_by": "time-in-alarm limit",
-    "threshold": 0.9819150649903315,
+    "threshold": 2.769561262630093,
     "validation_event_recall": 0.8,
-    "validation_false_alarms_per_hour": 0.0005859518054640005,
-    "validation_time_in_alarm": 0.009204326277497009
+    "validation_false_alarms_per_hour": 0.0032227349300520034,
+    "validation_time_in_alarm": 0.034058448692595035
    },
    "confusion": {
     "classes": [
@@ -515,80 +515,80 @@
     },
     "RESTRICTION": {
      "detected": 4,
-     "median_hours": 12.791666666666668,
-     "q25_hours": 8.104166666666668,
-     "q75_hours": 17.5
+     "median_hours": 10.416666666666666,
+     "q25_hours": 5.895833333333334,
+     "q75_hours": 15.583333333333332
     },
     "SENSOR": {
-     "detected": 11,
-     "median_hours": 34.75,
-     "q25_hours": 1.0833333333333333,
-     "q75_hours": 41.208333333333336
+     "detected": 10,
+     "median_hours": 10.791666666666668,
+     "q25_hours": 1.1041666666666665,
+     "q75_hours": 19.520833333333332
     }
    },
-   "fit_seconds": 7.9349034579936415,
+   "fit_seconds": 7.569803915917873,
    "interval": {
     "chance_event_recall": [
-     0.02612112187502816,
-     0.19624114083163313
+     0.08456184947635206,
+     0.5010414071979796
     ],
     "event_recall": [
-     0.8421052631578947,
+     0.75,
      1.0
     ],
     "event_skill": [
-     0.7020119023712817,
-     0.9692211790859081
+     0.3290573276037672,
+     0.8650293335031224
     ],
     "f1": [
-     0.5730431752277164,
-     0.8575420459654107
+     0.6720230245220118,
+     0.9014272240133251
     ],
     "false_alarms_per_hour": [
-     0.0002804654089778093,
-     0.0022851960472979912
+     0.0009010542550367245,
+     0.007389045147657812
     ],
     "false_positive_rate": [
-     0.0002371082288366591,
-     0.017216440519108922
+     0.004153902876333363,
+     0.03384063503764674
     ],
     "precision": [
-     0.9324200749105522,
-     0.999351142934881
+     0.905071139016719,
+     0.9906549414002381
     ],
     "recall": [
-     0.4067973293249193,
-     0.7607248695255323
+     0.5268842824758445,
+     0.8433671146484623
     ],
     "time_in_alarm": [
-     0.0018178297544143864,
-     0.029734079062318473
+     0.012795404460054402,
+     0.11981775312148747
     ]
    },
-   "scores_sha256": "4481e7b256df8c1c4eb9e33529f4233ddf9b36926a587ed4f7d6bfaefd85ce77",
+   "scores_sha256": "168b769b17484a9796f3c703a7a6bca522d374c49c4a009a4d7e4940e887bd24",
    "summary": {
-    "active_at_onset_not_counted": 1,
-    "chance_event_recall": 0.10529600085649626,
+    "active_at_onset_not_counted": 2,
+    "chance_event_recall": 0.3029099741362664,
     "clusters": 32,
     "event_clusters": 20,
-    "event_recall": 0.95,
-    "event_skill": 0.8447039991435037,
+    "event_recall": 0.9,
+    "event_skill": 0.5970900258637336,
     "events": 20,
-    "events_detected": 19,
-    "f1": 0.7374495407872992,
-    "false_alarms": 4,
-    "false_alarms_per_hour": 0.0011650768222529672,
-    "false_positive_rate": 0.008252627490958519,
-    "fn": 9351,
-    "fp": 340,
+    "events_detected": 18,
+    "f1": 0.8062391156205043,
+    "false_alarms": 13,
+    "false_alarms_per_hour": 0.0037864996723221437,
+    "false_positive_rate": 0.016699434452292532,
+    "fn": 6989,
+    "fp": 688,
     "normal_hours": 3433.25,
-    "precision": 0.9756272401433692,
-    "recall": 0.5927442184573842,
-    "time_in_alarm": 0.01480618461613146,
-    "tn": 40859,
-    "tp": 13610
+    "precision": 0.958703481392557,
+    "recall": 0.6956143025129568,
+    "time_in_alarm": 0.05813247894366368,
+    "tn": 40511,
+    "tp": 15972
    },
-   "threshold": 0.9819150649903315,
+   "threshold": 2.769561262630093,
    "training_rows": 108599
   },
   "rolling_deviation": {
@@ -685,7 +685,7 @@
      "q75_hours": 75.58333333333333
     }
    },
-   "fit_seconds": 0.050717915990389884,
+   "fit_seconds": 0.0492221669992432,
    "interval": {
     "chance_event_recall": [
      0.42601354524788615,
@@ -844,7 +844,7 @@
      "q75_hours": 36.58333333333333
     }
    },
-   "fit_seconds": 0.06311874999664724,
+   "fit_seconds": 0.06637616700027138,
    "interval": {
     "chance_event_recall": [
      0.08008350168256652,
@@ -912,9 +912,10 @@
  },
  "selection": {
   "preferred": "logistic_regression",
-  "reason": "logistic_regression had the best event skill within budget (0.845). 1 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
+  "reason": "logistic_regression had the best event skill within budget (0.597). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
   "tied": [
-   "logistic_regression"
+   "logistic_regression",
+   "hist_gradient_boosting"
   ]
  },
  "track": "SYNTHETIC experiment: uncalibrated fictional AETHER model"

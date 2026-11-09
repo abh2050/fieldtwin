@@ -94,48 +94,48 @@
   },
   "logistic_regression": {
    "count_as_normal": {
-    "active_at_onset_not_counted": 0,
-    "chance_event_recall": 0.0,
+    "active_at_onset_not_counted": 12,
+    "chance_event_recall": 0.16194884752679337,
     "clusters": 31,
     "event_clusters": 27,
-    "event_recall": 0.0,
-    "event_skill": 0.0,
+    "event_recall": 0.2893081761006289,
+    "event_skill": 0.12735932857383556,
     "events": 159,
-    "events_detected": 0,
-    "f1": NaN,
-    "false_alarms": 0,
-    "false_alarms_per_hour": 0.0,
-    "false_positive_rate": 0.0,
-    "fn": 159250,
-    "fp": 0,
+    "events_detected": 46,
+    "f1": 0.18073535862511106,
+    "false_alarms": 25,
+    "false_alarms_per_hour": 0.01746114894360049,
+    "false_positive_rate": 0.029090274140038414,
+    "fn": 143181,
+    "fp": 2499,
     "normal_hours": 1431.75,
-    "precision": NaN,
-    "recall": 0.0,
-    "time_in_alarm": 0.0,
-    "tn": 85905,
-    "tp": 0
+    "precision": 0.8654136148211977,
+    "recall": 0.10090423861852434,
+    "time_in_alarm": 0.05400151329957511,
+    "tn": 83406,
+    "tp": 16069
    },
    "count_as_positive": {
-    "active_at_onset_not_counted": 0,
-    "chance_event_recall": 0.0,
+    "active_at_onset_not_counted": 17,
+    "chance_event_recall": 0.19543524958832056,
     "clusters": 31,
     "event_clusters": 31,
-    "event_recall": 0.0,
-    "event_skill": 0.0,
+    "event_recall": 0.2552083333333333,
+    "event_skill": 0.05977308374501275,
     "events": 192,
-    "events_detected": 0,
-    "f1": NaN,
-    "false_alarms": 0,
-    "false_alarms_per_hour": 0.0,
-    "false_positive_rate": 0.0,
-    "fn": 188342,
-    "fp": 0,
+    "events_detected": 49,
+    "f1": 0.15704412546517807,
+    "false_alarms": 21,
+    "false_alarms_per_hour": 0.022178022635664374,
+    "false_positive_rate": 0.040853325823315086,
+    "fn": 172095,
+    "fp": 2321,
     "normal_hours": 946.8833333333333,
-    "precision": NaN,
-    "recall": 0.0,
-    "time_in_alarm": 0.0,
-    "tn": 56813,
-    "tp": 0
+    "precision": 0.875,
+    "recall": 0.08626328699918234,
+    "time_in_alarm": 0.07382113248728284,
+    "tn": 54492,
+    "tp": 16247
    }
   },
   "rolling_deviation": {
@@ -394,7 +394,7 @@
    ]
   }
  ],
- "git_sha": "55ea77d44d92795ae01f23b40a3303ff35cf20b3",
+ "git_sha": "7bf8460df44bb4f44992014c1551571150f7d98a",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -506,7 +506,7 @@
     "dev_0": {
      "budget_met": true,
      "stopped_by": "false-alarm budget",
-     "threshold": 0.9985485618985295,
+     "threshold": 6.535200419941838,
      "validation_event_recall": 0.23529411764705882,
      "validation_false_alarms_per_hour": 0.03371327660940761,
      "validation_time_in_alarm": 0.040054583400224754
@@ -514,7 +514,7 @@
     "dev_1": {
      "budget_met": true,
      "stopped_by": "time-in-alarm limit",
-     "threshold": 0.9908005567111566,
+     "threshold": 4.688612308878193,
      "validation_event_recall": 0.3157894736842105,
      "validation_false_alarms_per_hour": 0.03645938829248532,
      "validation_time_in_alarm": 0.039092566335831476
@@ -522,7 +522,7 @@
     "dev_2": {
      "budget_met": true,
      "stopped_by": "time-in-alarm limit",
-     "threshold": 0.9999081536133282,
+     "threshold": 9.295393319638274,
      "validation_event_recall": 0.05555555555555555,
      "validation_false_alarms_per_hour": 0.04044489383215369,
      "validation_time_in_alarm": 0.046511627906976744
@@ -530,13 +530,13 @@
     "dev_3": {
      "budget_met": true,
      "stopped_by": "time-in-alarm limit",
-     "threshold": 0.9988057004601295,
+     "threshold": 6.730195424561308,
      "validation_event_recall": 0.0847457627118644,
      "validation_false_alarms_per_hour": 0.029653059207274887,
      "validation_time_in_alarm": 0.031728773351784124
     }
    },
-   "fit_seconds": 69.45249762421008,
+   "fit_seconds": 77.54736937617417,
    "interval": {
     "chance_event_recall": [
      0.0505443176785265,
@@ -577,10 +577,10 @@
    },
    "mean_fold_average_precision": 0.8081433401107809,
    "scores_sha256": {
-    "dev_0": "a513e767da30a3393402300fc6b25d8970769f091e733456f6d59ef8b979d4a4",
-    "dev_1": "93461c7e735d9508ca55aac5c5dd566e210655d6c20c1d11f7f2dc1131e25bd5",
-    "dev_2": "2f520c2e7c63a1a3f33c17c5ba6d92d6bf2767c12ea66f88fd8325fc00741875",
-    "dev_3": "19b294fbe91245845eed914922864a18081d0df67a328b2da9a30b7359fc1699"
+    "dev_0": "49bfabfca2469e78c975cc7b01a6859363fa9789e267b8c13b870152b4b88a9b",
+    "dev_1": "2b2ecf79845e34c77005ad951c6f4d96ea8a84b5551287c43402965fce79fc75",
+    "dev_2": "932a278dd3dbf8e2040e6c9b906e10232d43e8c01a708620da6ca80a56a6dcb8",
+    "dev_3": "00bcd6c80b262eda4262ec71165c8d65a8b74f09014a8184922a7bddfc021938"
    },
    "summary": {
     "active_at_onset_not_counted": 14,
@@ -729,7 +729,7 @@
      "validation_time_in_alarm": 0.021350202629237917
     }
    },
-   "fit_seconds": 1.427971542114392,
+   "fit_seconds": 1.6451087910681963,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -810,18 +810,18 @@
     },
     {
      "clusters": 6,
-     "detected": 0,
+     "detected": 19,
      "event_class": 2,
-     "event_recall": 0.0,
+     "event_recall": 0.95,
      "event_recall_interval": [
-      0.0,
-      0.0
+      0.8,
+      1.0
      ],
      "events": 20
     },
     {
      "clusters": 2,
-     "detected": 0,
+     "detected": 17,
      "event_class": 3,
      "event_recall": null,
      "events": 32,
@@ -840,7 +840,7 @@
     },
     {
      "clusters": 2,
-     "detected": 0,
+     "detected": 2,
      "event_class": 5,
      "event_recall": null,
      "events": 7,
@@ -867,23 +867,23 @@
     },
     {
      "clusters": 7,
-     "detected": 0,
+     "detected": 7,
      "event_class": 8,
-     "event_recall": 0.0,
+     "event_recall": 0.5833333333333334,
      "event_recall_interval": [
-      0.0,
-      0.0
+      0.3076923076923077,
+      1.0
      ],
      "events": 12
     },
     {
      "clusters": 6,
-     "detected": 0,
+     "detected": 1,
      "event_class": 9,
-     "event_recall": 0.0,
+     "event_recall": 0.07692307692307693,
      "event_recall_interval": [
       0.0,
-      0.0
+      0.23076923076923078
      ],
      "events": 13
     }
@@ -892,95 +892,103 @@
     "dev_0": {
      "budget_met": true,
      "stopped_by": "time-in-alarm limit",
-     "threshold": 1.000001,
-     "validation_event_recall": 0.0,
-     "validation_false_alarms_per_hour": 0.0,
-     "validation_time_in_alarm": 0.0
+     "threshold": 27.855401527088514,
+     "validation_event_recall": 0.058823529411764705,
+     "validation_false_alarms_per_hour": 0.02408091186386258,
+     "validation_time_in_alarm": 0.026328463637823086
     },
     "dev_1": {
      "budget_met": true,
      "stopped_by": "time-in-alarm limit",
-     "threshold": 1.000001,
-     "validation_event_recall": 0.0,
-     "validation_false_alarms_per_hour": 0.0,
-     "validation_time_in_alarm": 0.0
+     "threshold": 48.31699280484675,
+     "validation_event_recall": 0.2982456140350877,
+     "validation_false_alarms_per_hour": 0.012153129430828441,
+     "validation_time_in_alarm": 0.04405509418675309
     },
     "dev_2": {
      "budget_met": true,
      "stopped_by": "false-alarm budget",
-     "threshold": 1.000001,
-     "validation_event_recall": 0.0,
-     "validation_false_alarms_per_hour": 0.0,
-     "validation_time_in_alarm": 0.0
+     "threshold": 103.27903394299317,
+     "validation_event_recall": 0.35185185185185186,
+     "validation_false_alarms_per_hour": 0.12807549713515337,
+     "validation_time_in_alarm": 0.4291652623300753
     },
     "dev_3": {
      "budget_met": true,
-     "stopped_by": "false-alarm budget",
-     "threshold": 1.000001,
-     "validation_event_recall": 0.0,
-     "validation_false_alarms_per_hour": 0.0,
-     "validation_time_in_alarm": 0.0
+     "stopped_by": "time-in-alarm limit",
+     "threshold": 85.87997436523438,
+     "validation_event_recall": 0.3389830508474576,
+     "validation_false_alarms_per_hour": 0.04151428289018484,
+     "validation_time_in_alarm": 0.04892754769200356
     }
    },
-   "fit_seconds": 23.081573167000897,
+   "fit_seconds": 25.33104116783943,
    "interval": {
     "chance_event_recall": [
      0.0,
-     0.0
+     0.3832591288156675
     ],
     "event_recall": [
-     0.0,
-     0.0
+     0.10869565217391304,
+     0.45458532695374776
     ],
     "event_skill": [
-     0.0,
-     0.0
+     -0.16264438661274513,
+     0.3427820017346771
+    ],
+    "f1": [
+     0.009602694489243812,
+     0.4424634769822384
     ],
     "false_alarms_per_hour": [
      0.0,
-     0.0
+     0.057794914606023644
     ],
     "false_positive_rate": [
-     0.0,
-     0.0
+     0.0014700833445006572,
+     0.11082244225539874
+    ],
+    "precision": [
+     0.654483191233326,
+     0.9950755042468113
     ],
     "recall": [
-     0.0,
-     0.0
+     0.004841050319151701,
+     0.28962056308128575
     ],
     "time_in_alarm": [
-     0.0,
-     0.0
+     0.0036155996668748103,
+     0.20116615173148883
     ]
    },
-   "mean_fold_average_precision": 0.7034618137761459,
+   "mean_fold_average_precision": 0.7357425416395889,
    "scores_sha256": {
-    "dev_0": "408c1f2980a192cada5b0eda8ec425698e56e0b6d726764d52970cea0a4965eb",
-    "dev_1": "5288a1e058bd9e1439161e2d3370202ca118d19039fb413174391555b36d1ec7",
-    "dev_2": "92dcdb2c99742a98bcb7d190835e266aaa0c0ace9bdec8f0e194f0d159435585",
-    "dev_3": "b1feda222f0f43fbba0d83e60ae9d1c263761e4ef8a77c6221d873c90c21688f"
+    "dev_0": "edf650be87bc2f58e69fe798770f0d0899e45934e5e5cd12d231ce267f0b40ef",
+    "dev_1": "94961fbdfd35d22f33699b3ceeb14732545058599a3dc47f0e3ba01921500495",
+    "dev_2": "1babe17798bd1d8550d155c25a45c92a8d39c46d34338bcc71c8aad861e49a65",
+    "dev_3": "fc7d3924fcd1e25b7257b947040dab7ddaf3c07b77f38ec08726596867f82a40"
    },
    "summary": {
-    "active_at_onset_not_counted": 0,
-    "chance_event_recall": 0.0,
+    "active_at_onset_not_counted": 12,
+    "chance_event_recall": 0.1854391042871128,
     "clusters": 31,
     "event_clusters": 27,
-    "event_recall": 0.0,
-    "event_skill": 0.0,
+    "event_recall": 0.2893081761006289,
+    "event_skill": 0.10386907181351612,
     "events": 159,
-    "events_detected": 0,
-    "f1": NaN,
-    "false_alarms": 0,
-    "false_alarms_per_hour": 0.0,
-    "false_positive_rate": 0.0,
-    "fn": 159250,
-    "fp": 0,
+    "events_detected": 46,
+    "f1": 0.18091646025669894,
+    "false_alarms": 21,
+    "false_alarms_per_hour": 0.022178022635664374,
+    "false_positive_rate": 0.040853325823315086,
+    "fn": 143181,
+    "fp": 2321,
     "normal_hours": 946.8833333333333,
-    "precision": NaN,
-    "recall": 0.0,
-    "time_in_alarm": 0.0,
-    "tn": 56813,
-    "tp": 0
+    "precision": 0.8737901033170201,
+    "recall": 0.10090423861852434,
+    "time_in_alarm": 0.07382113248728284,
+    "tn": 54492,
+    "tp": 16069
    }
   },
   "rolling_deviation": {
@@ -1107,7 +1115,7 @@
      "validation_time_in_alarm": 0.0260946921024019
     }
    },
-   "fit_seconds": 0.12132670800201595,
+   "fit_seconds": 0.15464320802129805,
    "interval": {
     "chance_event_recall": [
      0.12398639926895699,
@@ -1300,7 +1308,7 @@
      "validation_time_in_alarm": 0.015716121379855688
     }
    },
-   "fit_seconds": 0.1443091668188572,
+   "fit_seconds": 0.16770545905455947,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1371,13 +1379,11 @@
   }
  },
  "selection": {
-  "preferred": "static_threshold",
-  "reason": "logistic_regression had the best event skill within budget (0.000). 4 method(s) have skill intervals including it, and static_threshold is the simplest of them.",
+  "preferred": "logistic_regression",
+  "reason": "logistic_regression had the best event skill within budget (0.104). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
   "tied": [
-   "static_threshold",
    "logistic_regression",
-   "isolation_forest",
-   "hist_gradient_boosting"
+   "isolation_forest"
   ]
  },
  "track": "OBSERVED benchmark: Petrobras 3W recorded instances",
