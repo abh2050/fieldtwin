@@ -12,8 +12,8 @@
  },
  "dataset_sha256": "52e38b27fbea6443a9b0e7ea3a7acb9d9db7d8de42e3441de8290b496f698ec0",
  "failed": [],
- "max_case_seconds": 2.925,
- "median_case_seconds": 2.006,
+ "max_case_seconds": 2.474,
+ "median_case_seconds": 1.833,
  "outcomes": {
   "OK": 272
  },

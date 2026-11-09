@@ -13,8 +13,8 @@
   },
   "dataset_sha256": "52e38b27fbea6443a9b0e7ea3a7acb9d9db7d8de42e3441de8290b496f698ec0",
   "failed": [],
-  "max_case_seconds": 2.925,
-  "median_case_seconds": 2.006,
+  "max_case_seconds": 2.474,
+  "median_case_seconds": 1.833,
   "outcomes": {
    "OK": 272
   },
@@ -38,7 +38,7 @@
    "validation": 32
   }
  },
- "git_sha": "a5d46907853be69ce31d2fc91612b1a7556451bf",
+ "git_sha": "f887604a9a80dbc6e12f7e2772a496aa2d14a3c8",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -175,7 +175,7 @@
      "q75_hours": 26.416666666666668
     }
    },
-   "fit_seconds": 20.91571487498004,
+   "fit_seconds": 26.34090470802039,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -334,7 +334,7 @@
      "q75_hours": 45.25
     }
    },
-   "fit_seconds": 0.5999717500526458,
+   "fit_seconds": 0.5883806659840047,
    "interval": {
     "chance_event_recall": [
      0.43738954867198115,
@@ -526,7 +526,7 @@
      "q75_hours": 19.520833333333332
     }
    },
-   "fit_seconds": 7.882829166948795,
+   "fit_seconds": 7.636628124979325,
    "interval": {
     "chance_event_recall": [
      0.08456184947635206,
@@ -685,7 +685,7 @@
      "q75_hours": 75.58333333333333
     }
    },
-   "fit_seconds": 0.05014966707676649,
+   "fit_seconds": 0.048069416894577444,
    "interval": {
     "chance_event_recall": [
      0.42601354524788615,
@@ -844,7 +844,7 @@
      "q75_hours": 36.58333333333333
     }
    },
-   "fit_seconds": 0.08607729210052639,
+   "fit_seconds": 0.07444300001952797,
    "interval": {
     "chance_event_recall": [
      0.08008350168256652,

@@ -1,5 +1,5 @@
 Gate 5 execution log
-started=2026-11-09T22:06:15Z
+started=2026-11-09T22:51:43Z
 
 === Fresh database
 $ docker compose down -v
@@ -7,16 +7,16 @@ $ docker compose down -v
  Container fieldtwin-postgres-1 Stopped 
  Container fieldtwin-postgres-1 Removing 
  Container fieldtwin-postgres-1 Removed 
- Network fieldtwin_default Removing 
  Volume fieldtwin_pgdata Removing 
+ Network fieldtwin_default Removing 
  Network fieldtwin_default Removed 
  Volume fieldtwin_pgdata Removed 
 exit=0
 
 === Start PostGIS
 $ docker compose up -d --wait postgres
- Network fieldtwin_default Creating 
  Volume fieldtwin_pgdata Creating 
+ Network fieldtwin_default Creating 
  Volume fieldtwin_pgdata Creating 
  Network fieldtwin_default Creating 
  Volume fieldtwin_pgdata Created 
@@ -273,8 +273,8 @@ $ uv run python -m pipelines.experiments.aether_data
  },
  "dataset_sha256": "52e38b27fbea6443a9b0e7ea3a7acb9d9db7d8de42e3441de8290b496f698ec0",
  "failed": [],
- "max_case_seconds": 2.925,
- "median_case_seconds": 2.006,
+ "max_case_seconds": 2.474,
+ "median_case_seconds": 1.833,
  "outcomes": {
   "OK": 272
  },
@@ -302,7 +302,7 @@ exit=0
 
 === 3W development folds
 $ uv run python -m pipelines.experiments.three_w_run --stage development
-2026/11/09 14:17:46 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+2026/11/09 14:54:11 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
 .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
   warnings.warn(
 .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
@@ -426,7 +426,7 @@ hist_gradient_boosting dev_3 thr 6.7302 met True
 hist_gradient_boosting recall 0.11949685534591195 FA/h 0.019 P 0.9401777424061547 R 0.22254317111459967
 variant no_level_features 0.1509433962264151 0.010560963159840177
 variant no_missingness_features 0.11949685534591195 0.01372925210779223
-variant with_generated_training_data 0.3333333333333333 0.015841444739760267
+variant with_generated_training_data 0.18238993710691823 0.016897541055744283
 {
  "preferred": "logistic_regression",
  "reason": "logistic_regression had the best event skill within budget (0.104). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
@@ -439,7 +439,7 @@ exit=0
 
 === AETHER in-regime test
 $ uv run python -m pipelines.experiments.aether_run --stage in_regime
-2026/11/09 14:25:43 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+2026/11/09 15:05:32 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
 .venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
 STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
 
@@ -465,7 +465,7 @@ exit=0
 
 === 3W holdout, rerun
 $ uv run python -m pipelines.experiments.three_w_run --stage holdout
-2026/11/09 14:26:27 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+2026/11/09 15:06:21 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
 .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
   warnings.warn(
 .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
@@ -528,7 +528,7 @@ exit=0
 
 === AETHER held-out regimes, rerun
 $ uv run python -m pipelines.experiments.aether_run --stage held_out
-2026/11/09 14:27:22 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+2026/11/09 15:07:19 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
 .venv/lib/python3.12/site-packages/sklearn/linear_model/_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 500 iteration(s) (status=1):
 STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
 
@@ -604,8 +604,8 @@ $ uv run python -m pipelines.experiments.reproducibility
 3w_holdout: 11 checksums, 0 differ; other values identical: True
 aether_dataset: 2 checksums, 0 differ; other values identical: True
 aether_in_regime: 7 checksums, 0 differ; other values identical: True
-aether_held_out: 50 checksums, 0 differ; other values identical: False
-exit=1
+aether_held_out: 50 checksums, 0 differ; other values identical: True
+exit=0
 
 === Reliability stress
 $ uv run python -m pipelines.experiments.reliability_stress --repeats 30 --workers 4
@@ -614,16 +614,16 @@ exit=0
 
 === Streaming latency and memory
 $ uv run python -m pipelines.experiments.inference_perf
-hist_gradient_boosting 4.356674999999999 True
-isolation_forest 4.2380249999999995 True
-logistic_regression 0.35589139999999997 True
-rolling_deviation 0.8398164 True
-static_threshold 0.153125 True
-aether:hist_gradient_boosting 1.7207584 True
-aether:isolation_forest 4.1338086 True
-aether:logistic_regression 0.39520879999999997 True
-aether:rolling_deviation 1.337242 True
-aether:static_threshold 0.0657334 True
+hist_gradient_boosting 4.191942 True
+isolation_forest 4.354699999999999 True
+logistic_regression 0.35556659999999995 True
+rolling_deviation 0.8408586 True
+static_threshold 0.15096679999999998 True
+aether:hist_gradient_boosting 1.6841409999999999 True
+aether:isolation_forest 4.1212914 True
+aether:logistic_regression 0.4307088 True
+aether:rolling_deviation 1.22475 True
+aether:static_threshold 0.058875 True
 exit=0
 
 === Gate 5 reports
@@ -649,7 +649,7 @@ exit=0
 === Raw integrity
 $ uv run python -m pipelines.profile.validate
 {
-  "validated_at": "2026-11-09T22:31:48Z",
+  "validated_at": "2026-11-09T23:12:51Z",
   "passed": true,
   "sources": {
     "nm_ocd": {
@@ -714,7 +714,7 @@ tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boostin
     return fnb._ureduce(a,
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-524 passed, 264 deselected, 3 warnings in 30.86s
+524 passed, 265 deselected, 3 warnings in 29.54s
 exit=0
 
 === Database tests on fixtures
@@ -723,29 +723,12 @@ $ uv run pytest -m db and not acquired -o addopts=--strict-markers -q
 ........................................................................ [ 63%]
 ........................................................................ [ 94%]
 ............                                                             [100%]
-228 passed, 560 deselected in 48.05s
+228 passed, 561 deselected in 48.92s
 exit=0
 
 === Tests on real data
 $ uv run pytest -m acquired -o addopts=--strict-markers -q
-.......................F.......                                          [100%]
-=================================== FAILURES ===================================
-_______ test_windows_never_cross_instances_and_end_on_minute_boundaries ________
-
-    def test_windows_never_cross_instances_and_end_on_minute_boundaries():
-        from pipelines.experiments.three_w_data import load_track
-    
-        track, _, _ = load_track()
-        table = track.table
-        assert (table["t"] % 60 == 0).all()
->       assert table.groupby("seq")["t"].apply(lambda t: t.is_monotonic_increasing).all()
-E       assert np.False_
-E        +  where np.False_ = all()
-E        +    where all = seq\nDRAWN_00001                  False\nDRAWN_00002                  False\nDRAWN_00003                  False\nDRAWN_000...051903     True\nWELL-00042_20141221190219     True\nWELL-00042_20141222024535     True\nName: t, Length: 451, dtype: bool.all
-E        +      where seq\nDRAWN_00001                  False\nDRAWN_00002                  False\nDRAWN_00003                  False\nDRAWN_000...051903     True\nWELL-00042_20141221190219     True\nWELL-00042_20141222024535     True\nName: t, Length: 451, dtype: bool = apply(<function test_windows_never_cross_instances_and_end_on_minute_boundaries.<locals>.<lambda> at 0x11e279580>)
-E        +        where apply = <pandas.api.typing.SeriesGroupBy object at 0x11e2dbf80>.apply
-
-tests/integration/test_experiments_real.py:74: AssertionError
+................................                                         [100%]
 =============================== warnings summary ===============================
 tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
   .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
@@ -764,10 +747,8 @@ tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_s
     warnings.warn(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-=========================== short test summary info ============================
-FAILED tests/integration/test_experiments_real.py::test_windows_never_cross_instances_and_end_on_minute_boundaries
-1 failed, 30 passed, 757 deselected, 7 warnings in 7.97s
-exit=1
+32 passed, 757 deselected, 7 warnings in 7.64s
+exit=0
 
 === Every CI command in a clean copy
 $ bash scripts/ci_local.sh
@@ -790,21 +771,21 @@ exit=0
 --- uv run pytest tests/unit tests/integration/test_acquisition.py -q
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-517 passed, 3 warnings in 69.48s (0:01:09)
+517 passed, 3 warnings in 60.80s (0:01:00)
 exit=0
 --- uv run pytest tests/contract -q
 .......                                                                  [100%]
-7 passed, 3 deselected in 0.78s
+7 passed, 3 deselected in 0.63s
 exit=0
 --- uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py -m db and not acquired -o addopts=--strict-markers -q
 ........................................................................ [ 91%]
 .......                                                                  [100%]
-79 passed in 36.94s
+79 passed in 35.89s
 exit=0
 --- uv run pytest tests/provenance -m db and not acquired -o addopts=--strict-markers -q
 ........................................................................ [ 96%]
 .....                                                                    [100%]
-149 passed, 5 deselected in 14.78s
+149 passed, 5 deselected in 12.90s
 exit=0
 --- uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
 WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
@@ -812,13 +793,13 @@ WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-too
 No known vulnerabilities found
 exit=0
 --- docker run --rm -v <temp-dir>:/repo zricethezav/gitleaks:v8.30.1 detect --source /repo --no-git --redact --no-banner
-[90m10:35PM[0m [32mINF[0m [1mscanned ~4430549 bytes (4.43 MB) in 615ms[0m
-[90m10:35PM[0m [32mINF[0m [1mno leaks found[0m
+[90m11:16PM[0m [32mINF[0m [1mscanned ~4430635 bytes (4.43 MB) in 546ms[0m
+[90m11:16PM[0m [32mINF[0m [1mno leaks found[0m
 exit=0
 --- docker run --rm -v <temp-dir>:/repo -w /repo rhysd/actionlint:1.7.7 -color=false
 exit=0
 failed_ci_commands=0
 exit=0
 
-failed_steps=2
-finished=2026-11-09T22:35:44Z
+failed_steps=0
+finished=2026-11-09T23:16:31Z
