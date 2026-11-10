@@ -1,6 +1,6 @@
 # Gate 6 report: aerial evidence
 
-**Status: implemented and stopped for technical review.** The work is on branch `gate-6` and isn't merged. The final local rebuild ran 34 steps, and one failed: three live checks against the OCD FTP server, which refused connections throughout the run. Gate 6 doesn't use that server. Hosted CI is recorded below once it has run.
+**Status: implemented and stopped for technical review.** The work is on branch `gate-6` and isn't merged. The final local rebuild ran 34 steps, and one failed: three live checks against the OCD FTP server, which refused connections throughout the run. Gate 6 doesn't use that server. Hosted CI passed: [all 9 jobs](https://github.com/abh2050/fieldtwin/actions/runs/42871247818) on commit `2074644`.
 
 Date: 2026-11-10. Branch: `gate-6`. Full output of the final local rebuild: [`gate_6_execution_log.txt`](gate_6_execution_log.txt). Decisions: [ADR 0018](../../docs/adr/0018-aerial-evidence-as-proximity.md).
 
@@ -30,7 +30,7 @@ The specification's Gate 6 deliverables are imagery ingestion, spatial coverage,
 | 5 | Inspection review | **Met, with no reviews recorded** | Blinded queue, a limited set of outcomes, append-only ledger, and supersession, enforced in Python and in the database. Inspection requests for fictional assets only. |
 | 6 | Displays evidence without unsupported claims | **Met for the evidence view model and generated pages** | Claim guard on every sentence, fixed statements of what the evidence can't show, and attribution on every card. The application screens themselves are Gate 8, so this gate's display is a locally generated page. |
 | 7 | Earlier gates still pass | **Met** | The rebuild from an empty database reran Gates 2 to 4. AETHER-FAULT-001 and all six field-scenario hashes match their recorded values. 236 database tests passed. 37 tests on real data passed, among them 2 earlier-gate reconciliation tests that failed in a first rebuild that left out the reconciliation stage. |
-| 8 | Tests and CI | **Met locally; hosted CI pending** | 588 offline tests passed. 7 contract tests passed. Every CI command passed in a clean copy of the tracked files. |
+| 8 | Tests and CI | **Met** | 588 offline tests passed. 7 contract tests passed. Every CI command passed in a clean copy of the tracked files. [All 9 hosted CI jobs passed](https://github.com/abh2050/fieldtwin/actions/runs/42871247818) on commit `2074644`, including simulation reproducibility on Linux x86, Linux ARM, and macOS ARM. This line was added afterward, so its own commit has a separate CI run. |
 
 ## How the evidence is limited
 
