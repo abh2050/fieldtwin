@@ -1,5 +1,5 @@
 Gate 6 execution log
-started=2026-11-10T18:16:00Z
+started=2026-11-10T19:43:55Z
 
 === Fresh database
 $ docker compose down -v
@@ -170,7 +170,7 @@ exit=0
 
 === Carbon Mapper (reuses the completed batch)
 $ uv run python -m pipelines.acquire.cli carbon_mapper
-{"ts": "2026-11-10T18:16:30Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "reusing completed batch", "batch_id": "carbon_mapper-20261110-7e46740d69"}
+{"ts": "2026-11-10T19:44:28Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "reusing completed batch", "batch_id": "carbon_mapper-20261110-7e46740d69"}
 {
   "batch_id": "carbon_mapper-20261110-7e46740d69",
   "processing_status": "COMPLETE",
@@ -358,7 +358,7 @@ exit=0
 === Raw integrity of the aerial batches
 $ uv run python -m pipelines.inspection.verify
 {
-  "validated_at": "2026-11-10T18:16:32Z",
+  "validated_at": "2026-11-10T19:44:31Z",
   "passed": true,
   "sources": {
     "carbon_mapper": {
@@ -382,7 +382,7 @@ exit=0
 === Raw integrity of the Gate 1 batches
 $ uv run python -m pipelines.profile.validate
 {
-  "validated_at": "2026-11-10T18:16:34Z",
+  "validated_at": "2026-11-10T19:44:33Z",
   "passed": true,
   "sources": {
     "nm_ocd": {
@@ -505,7 +505,7 @@ exit=0
 
 === Dump schema
 $ bash -c docker compose exec -T postgres pg_dump -U fieldtwin -d fieldtwin --schema-only --no-owner --no-privileges | grep -v "^\\\\\(un\)\?restrict" > db/ddl/schema.sql && wc -l db/ddl/schema.sql
-    4174 db/ddl/schema.sql
+    4186 db/ddl/schema.sql
 exit=0
 
 === Ruff lint
@@ -544,16 +544,16 @@ tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boostin
     return fnb._ureduce(a,
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-595 passed, 282 deselected, 2 warnings in 34.26s
+595 passed, 286 deselected, 2 warnings in 35.16s
 exit=0
 
 === Database tests on fixtures
 $ uv run pytest -m db and not acquired -o addopts=--strict-markers -q
-........................................................................ [ 30%]
-........................................................................ [ 60%]
-........................................................................ [ 90%]
-......................                                                   [100%]
-238 passed, 639 deselected in 49.80s
+........................................................................ [ 29%]
+........................................................................ [ 59%]
+........................................................................ [ 89%]
+..........................                                               [100%]
+242 passed, 639 deselected in 50.30s
 exit=0
 
 === Tests on real data
@@ -577,346 +577,14 @@ tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_s
     warnings.warn(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-37 passed, 840 deselected, 7 warnings in 12.71s
+37 passed, 844 deselected, 7 warnings in 12.84s
 exit=0
 
 === Live endpoint checks
 $ uv run pytest -m live -o addopts=--strict-markers -q
-.FFF...                                                                  [100%]
-=================================== FAILURES ===================================
-____________________ test_ftp_files_exist[data_dictionary] _____________________
-
-self = <pipelines.acquire.common.transport.Ftp object at 0x11ddccbf0>
-path = '/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx'
-
-    def stat(self, path: str) -> tuple[int, str]:
-        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
-        try:
->           return self._stat(path)
-                   ^^^^^^^^^^^^^^^^
-
-pipelines/acquire/common/transport.py:81: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:404: in wrapped_f
-    return copy(f, *args, **kw)
-           ^^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:550: in __call__
-    do = self.iter(retry_state=retry_state)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:440: in iter
-    result = action(retry_state)
-             ^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:482: in exc_check
-    retry_exc.reraise()
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:216: in reraise
-    raise self.last_attempt.result()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
-    raise self._exception
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:553: in __call__
-    result = fn(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^
-pipelines/acquire/common/transport.py:71: in _stat
-    with self._connect() as connection:
-         ^^^^^^^^^^^^^^^
-pipelines/acquire/common/transport.py:64: in _connect
-    connection = ftplib.FTP(self.host, timeout=self.timeout)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:121: in __init__
-    self.connect(host)
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:158: in connect
-    self.sock = socket.create_connection((self.host, self.port), self.timeout,
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:865: in create_connection
-    raise exceptions[0]
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-address = ('ftp.emnrd.nm.gov', 21), timeout = 120.0, source_address = None
-all_errors = False
-
-    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
-                          source_address=None, *, all_errors=False):
-        """Connect to *address* and return the socket object.
-    
-        Convenience function.  Connect to *address* (a 2-tuple ``(host,
-        port)``) and return the socket object.  Passing the optional
-        *timeout* parameter will set the timeout on the socket instance
-        before attempting to connect.  If no *timeout* is supplied, the
-        global default timeout setting returned by :func:`getdefaulttimeout`
-        is used.  If *source_address* is set it must be a tuple of (host, port)
-        for the socket to bind as a source address before making the connection.
-        A host of '' or port 0 tells the OS to use the default. When a connection
-        cannot be created, raises the last error if *all_errors* is False,
-        and an ExceptionGroup of all errors if *all_errors* is True.
-        """
-    
-        host, port = address
-        exceptions = []
-        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
-            af, socktype, proto, canonname, sa = res
-            sock = None
-            try:
-                sock = socket(af, socktype, proto)
-                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                    sock.settimeout(timeout)
-                if source_address:
-                    sock.bind(source_address)
->               sock.connect(sa)
-E               ConnectionRefusedError: [Errno 61] Connection refused
-
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:850: ConnectionRefusedError
-
-The above exception was the direct cause of the following exception:
-
-name = 'data_dictionary'
-
-    @pytest.mark.parametrize("name", list(OCD["ftp"]["files"]))
-    def test_ftp_files_exist(name):
-        path = f"{OCD['ftp']['base_path']}/{OCD['ftp']['files'][name]}"
->       size, modified = Ftp(OCD["ftp"]["host"]).stat(path)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-tests/integration/test_live_endpoints.py:29: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = <pipelines.acquire.common.transport.Ftp object at 0x11ddccbf0>
-path = '/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx'
-
-    def stat(self, path: str) -> tuple[int, str]:
-        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
-        try:
-            return self._stat(path)
-        except _TRANSIENT as exc:
->           raise SourceUnavailable(f"FTP stat of {path} failed: {exc}") from exc
-E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx failed: [Errno 61] Connection refused
-
-pipelines/acquire/common/transport.py:83: SourceUnavailable
-______________________ test_ftp_files_exist[wellhistory] _______________________
-
-self = <pipelines.acquire.common.transport.Ftp object at 0x11ecee690>
-path = '/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip'
-
-    def stat(self, path: str) -> tuple[int, str]:
-        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
-        try:
->           return self._stat(path)
-                   ^^^^^^^^^^^^^^^^
-
-pipelines/acquire/common/transport.py:81: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:404: in wrapped_f
-    return copy(f, *args, **kw)
-           ^^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:550: in __call__
-    do = self.iter(retry_state=retry_state)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:440: in iter
-    result = action(retry_state)
-             ^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:482: in exc_check
-    retry_exc.reraise()
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:216: in reraise
-    raise self.last_attempt.result()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
-    raise self._exception
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:553: in __call__
-    result = fn(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^
-pipelines/acquire/common/transport.py:71: in _stat
-    with self._connect() as connection:
-         ^^^^^^^^^^^^^^^
-pipelines/acquire/common/transport.py:64: in _connect
-    connection = ftplib.FTP(self.host, timeout=self.timeout)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:121: in __init__
-    self.connect(host)
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:158: in connect
-    self.sock = socket.create_connection((self.host, self.port), self.timeout,
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:865: in create_connection
-    raise exceptions[0]
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-address = ('ftp.emnrd.nm.gov', 21), timeout = 120.0, source_address = None
-all_errors = False
-
-    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
-                          source_address=None, *, all_errors=False):
-        """Connect to *address* and return the socket object.
-    
-        Convenience function.  Connect to *address* (a 2-tuple ``(host,
-        port)``) and return the socket object.  Passing the optional
-        *timeout* parameter will set the timeout on the socket instance
-        before attempting to connect.  If no *timeout* is supplied, the
-        global default timeout setting returned by :func:`getdefaulttimeout`
-        is used.  If *source_address* is set it must be a tuple of (host, port)
-        for the socket to bind as a source address before making the connection.
-        A host of '' or port 0 tells the OS to use the default. When a connection
-        cannot be created, raises the last error if *all_errors* is False,
-        and an ExceptionGroup of all errors if *all_errors* is True.
-        """
-    
-        host, port = address
-        exceptions = []
-        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
-            af, socktype, proto, canonname, sa = res
-            sock = None
-            try:
-                sock = socket(af, socktype, proto)
-                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                    sock.settimeout(timeout)
-                if source_address:
-                    sock.bind(source_address)
->               sock.connect(sa)
-E               ConnectionRefusedError: [Errno 61] Connection refused
-
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:850: ConnectionRefusedError
-
-The above exception was the direct cause of the following exception:
-
-name = 'wellhistory'
-
-    @pytest.mark.parametrize("name", list(OCD["ftp"]["files"]))
-    def test_ftp_files_exist(name):
-        path = f"{OCD['ftp']['base_path']}/{OCD['ftp']['files'][name]}"
->       size, modified = Ftp(OCD["ftp"]["host"]).stat(path)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-tests/integration/test_live_endpoints.py:29: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = <pipelines.acquire.common.transport.Ftp object at 0x11ecee690>
-path = '/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip'
-
-    def stat(self, path: str) -> tuple[int, str]:
-        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
-        try:
-            return self._stat(path)
-        except _TRANSIENT as exc:
->           raise SourceUnavailable(f"FTP stat of {path} failed: {exc}") from exc
-E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip failed: [Errno 61] Connection refused
-
-pipelines/acquire/common/transport.py:83: SourceUnavailable
-______________________ test_ftp_files_exist[wcproduction] ______________________
-
-self = <pipelines.acquire.common.transport.Ftp object at 0x11dfb33b0>
-path = '/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip'
-
-    def stat(self, path: str) -> tuple[int, str]:
-        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
-        try:
->           return self._stat(path)
-                   ^^^^^^^^^^^^^^^^
-
-pipelines/acquire/common/transport.py:81: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:404: in wrapped_f
-    return copy(f, *args, **kw)
-           ^^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:550: in __call__
-    do = self.iter(retry_state=retry_state)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:440: in iter
-    result = action(retry_state)
-             ^^^^^^^^^^^^^^^^^^^
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:482: in exc_check
-    retry_exc.reraise()
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:216: in reraise
-    raise self.last_attempt.result()
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
-    return self.__get_result()
-           ^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
-    raise self._exception
-.venv/lib/python3.12/site-packages/tenacity/__init__.py:553: in __call__
-    result = fn(*args, **kwargs)
-             ^^^^^^^^^^^^^^^^^^^
-pipelines/acquire/common/transport.py:71: in _stat
-    with self._connect() as connection:
-         ^^^^^^^^^^^^^^^
-pipelines/acquire/common/transport.py:64: in _connect
-    connection = ftplib.FTP(self.host, timeout=self.timeout)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:121: in __init__
-    self.connect(host)
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:158: in connect
-    self.sock = socket.create_connection((self.host, self.port), self.timeout,
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:865: in create_connection
-    raise exceptions[0]
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-address = ('ftp.emnrd.nm.gov', 21), timeout = 120.0, source_address = None
-all_errors = False
-
-    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
-                          source_address=None, *, all_errors=False):
-        """Connect to *address* and return the socket object.
-    
-        Convenience function.  Connect to *address* (a 2-tuple ``(host,
-        port)``) and return the socket object.  Passing the optional
-        *timeout* parameter will set the timeout on the socket instance
-        before attempting to connect.  If no *timeout* is supplied, the
-        global default timeout setting returned by :func:`getdefaulttimeout`
-        is used.  If *source_address* is set it must be a tuple of (host, port)
-        for the socket to bind as a source address before making the connection.
-        A host of '' or port 0 tells the OS to use the default. When a connection
-        cannot be created, raises the last error if *all_errors* is False,
-        and an ExceptionGroup of all errors if *all_errors* is True.
-        """
-    
-        host, port = address
-        exceptions = []
-        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
-            af, socktype, proto, canonname, sa = res
-            sock = None
-            try:
-                sock = socket(af, socktype, proto)
-                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
-                    sock.settimeout(timeout)
-                if source_address:
-                    sock.bind(source_address)
->               sock.connect(sa)
-E               ConnectionRefusedError: [Errno 61] Connection refused
-
-../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:850: ConnectionRefusedError
-
-The above exception was the direct cause of the following exception:
-
-name = 'wcproduction'
-
-    @pytest.mark.parametrize("name", list(OCD["ftp"]["files"]))
-    def test_ftp_files_exist(name):
-        path = f"{OCD['ftp']['base_path']}/{OCD['ftp']['files'][name]}"
->       size, modified = Ftp(OCD["ftp"]["host"]).stat(path)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-tests/integration/test_live_endpoints.py:29: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
-
-self = <pipelines.acquire.common.transport.Ftp object at 0x11dfb33b0>
-path = '/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip'
-
-    def stat(self, path: str) -> tuple[int, str]:
-        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
-        try:
-            return self._stat(path)
-        except _TRANSIENT as exc:
->           raise SourceUnavailable(f"FTP stat of {path} failed: {exc}") from exc
-E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip failed: [Errno 61] Connection refused
-
-pipelines/acquire/common/transport.py:83: SourceUnavailable
-=========================== short test summary info ============================
-FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[data_dictionary]
-FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[wellhistory]
-FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[wcproduction]
-3 failed, 4 passed, 870 deselected in 96.78s (0:01:36)
-exit=1
+.......                                                                  [100%]
+7 passed, 874 deselected in 7.89s
+exit=0
 
 === Every CI command in a clean copy
 $ bash scripts/ci_local.sh
@@ -939,21 +607,21 @@ exit=0
 --- uv run pytest tests/unit tests/integration/test_acquisition.py -q
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-587 passed, 1 skipped, 2 warnings in 72.27s (0:01:12)
+587 passed, 1 skipped, 2 warnings in 76.74s (0:01:16)
 exit=0
 --- uv run pytest tests/contract -q
 .......                                                                  [100%]
-7 passed, 3 deselected in 0.81s
+7 passed, 3 deselected in 0.70s
 exit=0
 --- uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py -m db and not acquired -o addopts=--strict-markers -q
 ........................................................................ [ 91%]
 .......                                                                  [100%]
-79 passed in 34.19s
+79 passed in 34.31s
 exit=0
 --- uv run pytest tests/provenance -m db and not acquired -o addopts=--strict-markers -q
-........................................................................ [ 90%]
-...............                                                          [100%]
-159 passed, 5 deselected in 17.00s
+........................................................................ [ 88%]
+...................                                                      [100%]
+163 passed, 5 deselected in 17.70s
 exit=0
 --- uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
 WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
@@ -961,13 +629,13 @@ WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-too
 No known vulnerabilities found
 exit=0
 --- docker run --rm -v <temp-dir>:/repo zricethezav/gitleaks:v8.30.1 detect --source /repo --no-git --redact --no-banner
-[90m6:22PM[0m [32mINF[0m [1mscanned ~5331907 bytes (5.33 MB) in 690ms[0m
-[90m6:22PM[0m [32mINF[0m [1mno leaks found[0m
+[90m7:49PM[0m [32mINF[0m [1mscanned ~5327588 bytes (5.33 MB) in 692ms[0m
+[90m7:49PM[0m [32mINF[0m [1mno leaks found[0m
 exit=0
 --- docker run --rm -v <temp-dir>:/repo -w /repo rhysd/actionlint:1.7.7 -color=false
 exit=0
 failed_ci_commands=0
 exit=0
 
-failed_steps=1
-finished=2026-11-10T18:22:24Z
+failed_steps=0
+finished=2026-11-10T19:49:03Z

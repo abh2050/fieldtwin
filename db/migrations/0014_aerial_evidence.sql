@@ -32,11 +32,23 @@ CREATE TRIGGER inspection_review_events_append_only BEFORE UPDATE OR DELETE ON i
 CREATE FUNCTION enforce_review_chain() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
   observation_system text;
+  observation_record text;
   previous_evidence text;
 BEGIN
-  SELECT source_system_id INTO observation_system FROM observations WHERE observation_id = NEW.observation_id;
-  IF observation_system NOT IN ('carbon_mapper', 'naip') THEN
-    RAISE EXCEPTION 'reviews cover aerial evidence only, not %', observation_system USING ERRCODE = 'check_violation';
+  SELECT source_system_id, source_record_id INTO observation_system, observation_record
+    FROM observations WHERE observation_id = NEW.observation_id;
+  -- The kind, the identifier, and the observation must all name the same piece of evidence.
+  IF NOT ((NEW.evidence_kind = 'PLUME' AND observation_system = 'carbon_mapper')
+       OR (NEW.evidence_kind = 'NAIP_CHIP' AND observation_system = 'naip')) THEN
+    RAISE EXCEPTION 'evidence kind % does not match an observation from %', NEW.evidence_kind, observation_system
+      USING ERRCODE = 'check_violation';
+  END IF;
+  IF NEW.evidence_id IS DISTINCT FROM observation_record THEN
+    RAISE EXCEPTION 'evidence_id % is not the identifier of observation % (%)',
+      NEW.evidence_id, NEW.observation_id, observation_record USING ERRCODE = 'check_violation';
+  END IF;
+  IF cardinality(NEW.visible_features) <> (SELECT count(DISTINCT f) FROM unnest(NEW.visible_features) AS f) THEN
+    RAISE EXCEPTION 'each visible feature is recorded once' USING ERRCODE = 'check_violation';
   END IF;
   IF NEW.supersedes IS NOT NULL THEN
     SELECT evidence_id INTO previous_evidence FROM inspection_review_events WHERE review_id = NEW.supersedes;

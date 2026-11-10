@@ -42,6 +42,8 @@ Review found two defects, and both are fixed.
 1. **The baseline ignored where Carbon Mapper looked.** Version 1 compared plumes with uniform points over the whole study box, but plumes can only be detected inside observed scenes, and the median scene with a plume covers 19% of the box. Version 2 draws each plume's null points inside the footprint of the scene that observed it, and resamples scenes for the interval, with a one-plume-per-location-group sensitivity for persistent sources. The uniform box is kept only as a labelled geometric reference. The conclusion survived the correction (34.7% against 17.0% within 250 m), but the version 1 wording overstated what the old baseline showed. Version 2 was designed and run after the version 1 numbers were known.
 2. **Blind review and the claim boundary were not enforced.** The blind flag accepted `false` in both the model and the database, and the free-text note reached the database without the guard. The flag is now `true`-only in both, the note is replaced by a feature vocabulary checked in the database, and the guard gains emission-verb paraphrases. Its documentation now says what it is: a pattern backstop on generated text, not a semantic check.
 
+A re-review then found that a review could name the wrong evidence: the database checked only that the observation was aerial. The review trigger now requires the evidence kind to match the observation's source (`PLUME` for Carbon Mapper, `NAIP_CHIP` for NAIP), the evidence ID to equal the observation's source record ID, and visible features to be distinct.
+
 Migration 0014 was changed in place rather than amended, because it has never been merged or applied outside development databases.
 
 ## Consequences
