@@ -30,9 +30,9 @@ Date: 2026-11-10, revised after two technical reviews. Branch: `gate-5`. Full ou
 | 5 | Both tracks produce independent reports | **Met** | [3W benchmark](../experiments/3w_benchmark.md) and [AETHER benchmark](../experiments/aether_synthetic_benchmark.md) |
 | 6 | False alarms and detection measured with explicit definitions | **Met** | Rules in `config/experiments/gate5_evaluation.yaml`, now version 4. Sample-level and event-level metrics are separate. |
 | 7 | Inference runs without ground-truth fault state | **Met** | The contracts have no field for truth and refuse extra fields. Inference code imports neither the simulator nor the labels, which a test checks. Batch and streaming scores agree for all 10 models. |
-| 8 | Model artifacts and experiments are reproducible | REPRO_PLACEHOLDER |
+| 8 | Model artifacts and experiments are reproducible | **Met** | A rebuild from an empty experiment folder reproduced all 91 score, artifact, and dataset checksums, and every other recorded value. The dataset checksum covers each file's path and content. Seeds, splits, configurations, feature names, parameters, convergence, metrics, hardware, and artifact checksums are logged to a local MLflow store. Every stage attempt is kept in `reports/experiments/attempts/`. Reproduction is shown on one machine only, and latency varies between runs. |
 | 9 | Numerical reliability tests and timeout protections exist | **Met** | 210 of 210 stress runs completed with matching hashes. Nonconvergence, infeasible state, timeout, and crash were each forced and classified correctly. Logistic regression now refuses an unconverged fit. [Reliability stress](../simulation/reliability_stress.md) |
-| 10 | Gate 0–4 regression tests pass | REGRESSION_PLACEHOLDER |
+| 10 | Gate 0–4 regression tests pass | **Met** | The final rebuild reran Gates 0 to 4 from an empty database, with 0 failures: 535 offline tests, 228 database tests, 33 real-data tests, and every CI command in a clean copy. Gate 4's six simulation hashes are unchanged. |
 | 11 | CI passes on the feature branch | CI_PLACEHOLDER |
 | 12 | Limitations and unsupported claims disclosed | **Met** | See [Limitations](#limitations) |
 
@@ -117,7 +117,7 @@ In-regime: 20 events. Held-out regimes pooled: 80 events.
 The streaming contract takes asset identity, measurement definitions, timestamped readings with quality, and the model's identity and version. It returns everything the directive lists, with provenance `INFERRED` and the input class `OBSERVED` or `SYNTHETIC`.
 
 On one Apple Silicon machine with one thread:
-- **Latency:** p95 per window from 0.06 ms (AETHER static limits) to 6.0 ms (3W gradient boosting). Most of it is contract validation.
+- **Latency:** p95 per window from 0.06 ms (AETHER static limits) to 4.2 ms (3W isolation forest) in the final run. Most of it is contract validation. The slowest model's p95 has varied between about 4 and 6 ms across reruns on this laptop.
 - **Memory:** process peak RSS of 250 to 330 MB, mostly the Python runtime.
 - **Artifacts:** from 2 KB to 3.1 MB.
 
@@ -139,7 +139,21 @@ All 272 AETHER cases and 210 stress runs went through the guard without a failur
 
 ## Evidence
 
-EVIDENCE_PLACEHOLDER
+The final rebuild ran 39 steps from an empty database and an empty experiment folder, from 04:42 to 05:03 UTC on 2026-11-10. All passed, the log has no convergence warnings, and all four forced failures were classified correctly.
+
+| Suite | Passed | Failed |
+|---|---:|---:|
+| Offline tests | 535 | 0 |
+| Database tests on fixtures | 228 | 0 |
+| Tests on acquired real data | 33 | 0 |
+| CI commands in a clean copy: unit | 528 | 0 |
+| CI commands in a clean copy: contract | 7 | 0 |
+| CI commands in a clean copy: Postgres integration | 79 | 0 |
+| CI commands in a clean copy: provenance | 149 | 0 |
+
+Ruff, the format check, and mypy pass, and canonical validation shows 21 checks with 0 failures.
+
+**Interrupted and slow runs.** An earlier attempt at this rebuild started while a commit was being made. That commit picked up the run's truncated log. The run was stopped before any experiment stage, and the log was restored in its own commit. Separately, two local runs of the offline suite took over 5 minutes of wall-clock time while reporting about 30 seconds of test time. The slowness didn't reproduce under a per-test watchdog, where the suite took 33 seconds. Its cause wasn't determined, so it's listed here rather than ruled out.
 
 ## Required reports
 

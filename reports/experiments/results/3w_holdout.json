@@ -677,7 +677,7 @@
    "WELL-00038"
   ]
  },
- "git_sha": "d9291bfcbb6ed021d5fcb2a1313c3edd80e00d5b",
+ "git_sha": "18134a6182fb6d676c5b02feb0ddc1a9d4c6a9be",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -892,7 +892,7 @@
      ]
     ]
    },
-   "fit_seconds": 22.558758749975823,
+   "fit_seconds": 21.669061042019166,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1027,7 +1027,7 @@
     "validation_time_in_alarm": 0.045012503473187
    },
    "confusion": null,
-   "fit_seconds": 0.39228870801161975,
+   "fit_seconds": 0.4075756659731269,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1301,7 +1301,7 @@
      ]
     ]
    },
-   "fit_seconds": 9.949637667043135,
+   "fit_seconds": 10.388259875006042,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1436,7 +1436,7 @@
     "validation_time_in_alarm": 0.02361767157543762
    },
    "confusion": null,
-   "fit_seconds": 0.05133833293803036,
+   "fit_seconds": 0.04852770792786032,
    "interval": {
     "chance_event_recall": [
      0.04010732388662751,
@@ -1571,7 +1571,7 @@
     "validation_time_in_alarm": 0.045290358432898026
    },
    "confusion": null,
-   "fit_seconds": 0.04519299999810755,
+   "fit_seconds": 0.0580168750602752,
    "interval": {
     "chance_event_recall": [
      0.0,

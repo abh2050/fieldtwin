@@ -1,0 +1,36 @@
+static_threshold recall 0.025 FA/h 0.0
+rolling_deviation recall 0.35 FA/h 0.02811182258316414
+logistic_regression recall 0.2 FA/h 0.0
+isolation_forest recall 0.175 FA/h 0.00937060752772138
+hist_gradient_boosting recall 0.075 FA/h 0.00937060752772138
+2026/11/09 20:53:55 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a,
+.venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1215: RuntimeWarning: All-NaN slice encountered
+  return fnb._ureduce(a, func=_nanmedian, keepdims=keepdims,
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
+.venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [48 49 50 60 61 62 68 69 70 76 77 78 84 85 86]. At least one non-missing value is needed for imputation with strategy='median'.
+  warnings.warn(
