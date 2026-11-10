@@ -96,7 +96,13 @@ A result below its minimum is INCONCLUSIVE and never counts toward MET.
 
 ## Keeping the final cases untouched
 
-1. **Freeze before generation.** Final cases can't be generated until `config/diagnostics/d1_freeze.yaml` is committed. It must hold the method's commit, the preregistration's SHA-256, and the method configuration's SHA-256. The generator checks this and refuses otherwise.
+1. **Freeze before generation, and only after review.** Final cases can't be generated until `pipelines/diagnostics/freeze.py` passes. That needs a committed `config/diagnostics/d1_freeze.yaml` meeting four conditions:
+   - It holds a SHA-256 for every file that can change a final result. That covers the preregistration and method configuration; the diagnosis, forward model, measurement selection, and update; the measurement port, scoring, and case generator; the simulator and the configurations it reads; and the dependency lockfile. The protected set is defined in the guard, so a record can't leave a file out.
+   - Every protected file on disk matches the record, and matches the recorded method commit.
+   - The record's own checksum is intact.
+   - The record and every protected file are identical to the reviewed `origin/main`. A freeze record on an unmerged branch unlocks nothing.
+
+   Regression tests show final generation is refused after a change to any of these, and while the record isn't merged.
 2. **Truth stays out of diagnosis.** Case truth is written to its own directory. The diagnosis package can't import the generator or truth modules, which a test enforces. Its one entry point takes telemetry, the planned-operations calendar, the network design, and a measurement port. The port returns only the reading of a measurement the method asked for.
 3. **One final run.** The final evaluation runs once through the attempt recorder, which keeps every attempt. A rerun is allowed only after a crash, with the cause stated.
 4. **Logged changes.** Any change to the preregistration gets a new version and an entry with date, reason, and timing: before development results, after development results but before the freeze, after the freeze but before final results, or after final results.

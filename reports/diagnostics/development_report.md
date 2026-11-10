@@ -68,6 +68,16 @@ The rule was the smallest temperature in {2, 3, 4} that kept every coverage line
 4. **Held-out code paths were smoke-tested, not evaluated.** No development case has a shut-in or a dropout, so a unit test feeds a development case with a declared shut-in and a pad's telemetry blanked. It checks that the diagnosis completes and stays well formed. Units offline need no special code: the method uses the measured suction pressure.
 5. **The healthy-baseline assumption.** The method assumes the first 6 hours are healthy. That holds in every split, where onset is at least 12 hours, but it is an assumption about the data, not something the method checks.
 
+## Freeze guard
+
+The first freeze guard checked only the freeze record's preregistration hash. Review found three problems with it. It didn't cover the method's code, it didn't verify file contents, and it passed on the unmerged branch, so merging unlocked nothing that wasn't already unlocked. `pipelines/diagnostics/freeze.py` replaces it, as described in the [D1 specification](../../docs/product/d1_diagnostic_spec.md). Regression tests show final generation refused in each of these cases:
+- after changing the method configuration, diagnosis code, forward model, scoring, the measurement port, or the preregistration
+- after a hand edit to the freeze record
+- when the record points at another commit
+- before the record is merged
+
+The guard was strengthened after the development results; it changes no computed value. Neither final split has been generated.
+
 ## Process notes
 
 - Per-case rows are kept in `data/gold/diagnostics/results/`, which isn't committed. Metrics are committed here. The three temperature runs were trimmed to their metrics.

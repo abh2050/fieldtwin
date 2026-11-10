@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 import json
 import shutil
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -21,7 +22,9 @@ from packages.diagnostics.diagnose import (
     valid_actions,
 )
 from packages.diagnostics.forward import Forward, calibrate_wells, sensors
-from pipelines.diagnostics.cases import FinalSplitLocked, build_case, check_freeze, prereg, simulate
+from pipelines.diagnostics import cases, freeze
+from pipelines.diagnostics.cases import build_case, prereg, simulate
+from pipelines.diagnostics.freeze import FinalSplitLocked
 from pipelines.diagnostics.port import MeasurementPort
 from pipelines.diagnostics.scoring import brier, climatology, hypotheses
 
@@ -92,19 +95,141 @@ def test_in_regime_cases_use_only_in_regime_pipes():
     assert not pipes & {"FL-A-06", "FL-B-03", "GS-TRUNK"}
 
 
-def test_final_splits_are_locked_without_a_committed_freeze_record(tmp_path):
-    (tmp_path / "config" / "diagnostics").mkdir(parents=True)
-    shutil.copy(
-        ROOT / "config" / "diagnostics" / "d1_preregistration.yaml",
-        tmp_path / "config" / "diagnostics",
+# The freeze guard, on a temporary copy of the repository's protected files
+
+
+def _git(repo: Path, *args: str) -> None:
+    subprocess.run(
+        ["git", "-c", "user.email=test@example.invalid", "-c", "user.name=test", *args],
+        cwd=repo,
+        check=True,
+        capture_output=True,
     )
+
+
+@pytest.fixture
+def frozen_repo(tmp_path):
+    """A repository whose freeze record was committed and merged: the approved state."""
+    for name in freeze.protected_files(ROOT):
+        (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(ROOT / name, tmp_path / name)
+    _git(tmp_path, "init", "-q")
+    _git(tmp_path, "add", "-A")
+    _git(tmp_path, "commit", "-q", "-m", "method")
+    method = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=tmp_path, capture_output=True, text=True
+    ).stdout.strip()
+    freeze.write_record(tmp_path)
+    _git(tmp_path, "add", "-A")
+    _git(tmp_path, "commit", "-q", "-m", "freeze")
+    _git(tmp_path, "update-ref", "refs/remotes/origin/main", "HEAD")
+    return tmp_path, method
+
+
+def _merge(repo: Path) -> None:
+    """Commit everything and move origin/main to it, as if the change had been reviewed and merged."""
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "change")
+    _git(repo, "update-ref", "refs/remotes/origin/main", "HEAD")
+
+
+def test_the_approved_freeze_unlocks_the_final_splits(frozen_repo):
+    repo, method = frozen_repo
+    record = freeze.check_freeze(repo)
+    assert record["method_commit"] == method
+    assert set(record["protected_files"]) >= {
+        "config/diagnostics/d1_method.yaml",
+        "config/diagnostics/d1_preregistration.yaml",
+        "packages/diagnostics/diagnose.py",
+        "packages/diagnostics/forward.py",
+        "pipelines/diagnostics/scoring.py",
+        "pipelines/diagnostics/port.py",
+        "pipelines/diagnostics/cases.py",
+        "packages/scenario_engine/network_solver.py",
+        "config/facility/aether_network.yaml",
+        "uv.lock",
+    }
+
+
+def test_no_freeze_record_is_locked(tmp_path):
     with pytest.raises(FinalSplitLocked, match="isn't frozen"):
-        check_freeze(tmp_path)
-    (tmp_path / "config" / "diagnostics" / "d1_freeze.yaml").write_text(
-        yaml.safe_dump({"preregistration_sha256": "x"})
+        freeze.check_freeze(tmp_path)
+
+
+def test_an_unmerged_freeze_record_unlocks_nothing(frozen_repo):
+    repo, method = frozen_repo
+    _git(repo, "update-ref", "refs/remotes/origin/main", method)
+    with pytest.raises(FinalSplitLocked, match="hasn't been reviewed and merged"):
+        freeze.check_freeze(repo)
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "config/diagnostics/d1_method.yaml",
+        "packages/diagnostics/diagnose.py",
+        "packages/diagnostics/forward.py",
+        "pipelines/diagnostics/scoring.py",
+        "pipelines/diagnostics/port.py",
+        "config/diagnostics/d1_preregistration.yaml",
+    ],
+)
+def test_changing_a_protected_file_locks_the_final_splits(frozen_repo, name):
+    repo, _ = frozen_repo
+    with open(repo / name, "a") as handle:
+        handle.write("\n# changed after the freeze\n")
+    with pytest.raises(FinalSplitLocked, match="uncommitted"):
+        freeze.check_freeze(repo)
+    _merge(repo)
+    with pytest.raises(
+        FinalSplitLocked, match="changed since the freeze|different preregistration"
+    ):
+        freeze.check_freeze(repo)
+
+
+def test_editing_the_freeze_record_locks_the_final_splits(frozen_repo):
+    repo, _ = frozen_repo
+    path = repo / freeze.RECORD
+    path.write_text(path.read_text().replace("date: ", "date: 1999-01-01 # ", 1))
+    with pytest.raises(FinalSplitLocked, match="uncommitted"):
+        freeze.check_freeze(repo)
+    _merge(repo)
+    with pytest.raises(FinalSplitLocked, match="edited by hand"):
+        freeze.check_freeze(repo)
+
+
+def test_a_record_pointing_at_another_commit_is_refused(frozen_repo):
+    repo, _ = frozen_repo
+    path = repo / freeze.RECORD
+    record = yaml.safe_load(path.read_text())
+    (repo / "packages/diagnostics/diagnose.py").write_text("# a different method\n")
+    _merge(repo)
+    other = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=repo, capture_output=True, text=True
+    ).stdout.strip()
+    (repo / "packages/diagnostics/diagnose.py").write_text(
+        (ROOT / "packages/diagnostics/diagnose.py").read_text()
+    )
+    record["method_commit"] = other
+    record["record_sha256"] = freeze.record_digest(record)
+    path.write_text(yaml.safe_dump(record, sort_keys=False))
+    _merge(repo)
+    with pytest.raises(FinalSplitLocked, match="at the recorded method commit"):
+        freeze.check_freeze(repo)
+
+
+def test_generation_of_a_final_split_goes_through_the_guard(monkeypatch):
+    calls = []
+    monkeypatch.setattr(
+        cases,
+        "check_freeze",
+        lambda root: calls.append(root) or (_ for _ in ()).throw(FinalSplitLocked("locked")),
     )
     with pytest.raises(FinalSplitLocked):
-        check_freeze(tmp_path)
+        cases.generate("final_in_regime")
+    with pytest.raises(FinalSplitLocked):
+        cases.generate("final_held_out")
+    assert len(calls) == 2
 
 
 # Forward model and diagnosis on one generated development case

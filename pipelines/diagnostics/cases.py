@@ -1,7 +1,8 @@
 """Generate D1 cases exactly as config/diagnostics/d1_preregistration.yaml declares.
 
-Development and calibration splits can be generated at any time. A final split is refused unless
-the freeze record exists, is committed unchanged, and names this preregistration's SHA-256.
+Development and calibration splits can be generated at any time. A final split is refused unless the
+freeze guard in freeze.py passes: every file that can change a result matches the committed freeze
+record, and the record and those files are identical to the reviewed main branch.
 
 Each case writes three things, kept apart:
 - telemetry/<case>.parquet: what a diagnosis may read (wide permanent-sensor values, NaN when bad)
@@ -15,7 +16,6 @@ import argparse
 import dataclasses
 import hashlib
 import json
-import subprocess
 import zlib
 from pathlib import Path
 from typing import Any, cast
@@ -35,14 +35,12 @@ from packages.scenario_engine.field_simulation import GOOD, _telemetry, _truth_f
 from packages.scenario_engine.network_graph import REPO_ROOT
 from packages.scenario_engine.network_solver import NetworkModel, solve_network
 
+from .freeze import FinalSplitLocked, check_freeze
+
 PREREGISTRATION = REPO_ROOT / "config" / "diagnostics" / "d1_preregistration.yaml"
 OUT = REPO_ROOT / "data" / "gold" / "diagnostics"
 DEVELOPMENT_SPLITS = ("development", "calibration")
 FINAL_SPLITS = ("final_in_regime", "final_held_out")
-
-
-class FinalSplitLocked(RuntimeError):
-    """A final split was requested before the method was frozen."""
 
 
 def prereg() -> dict[str, Any]:
@@ -51,26 +49,6 @@ def prereg() -> dict[str, Any]:
 
 def prereg_sha256() -> str:
     return hashlib.sha256(PREREGISTRATION.read_bytes()).hexdigest()
-
-
-def check_freeze(root: Path = REPO_ROOT) -> dict[str, Any]:
-    """The freeze record must exist, be committed without local edits, and match the preregistration."""
-    path = root / prereg()["protection"]["freeze_record"]
-    if not path.exists():
-        raise FinalSplitLocked(f"{path.relative_to(root)} doesn't exist; the method isn't frozen")
-    relative = str(path.relative_to(root))
-    tracked = subprocess.run(
-        ["git", "ls-files", "--error-unmatch", relative], cwd=root, capture_output=True
-    )
-    dirty = subprocess.run(
-        ["git", "status", "--porcelain", "--", relative], cwd=root, capture_output=True, text=True
-    )
-    if tracked.returncode != 0 or dirty.stdout.strip():
-        raise FinalSplitLocked("the freeze record must be committed with no local changes")
-    record = yaml.safe_load(path.read_text())
-    if record.get("preregistration_sha256") != prereg_sha256():
-        raise FinalSplitLocked("the freeze record names a different preregistration")
-    return record
 
 
 def _uniform(rng: np.random.Generator, bounds: list[float]) -> float:
