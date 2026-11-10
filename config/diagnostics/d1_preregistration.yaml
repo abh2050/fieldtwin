@@ -3,15 +3,16 @@
 # Version 1, 2026-11-10. Committed before any D1 case was generated, any diagnostic method was written,
 # or any D1 result was seen. Version 2, 2026-11-10, after technical review and still before any case,
 # method, or result. Version 3, 2026-11-10, still before any case, method, or result: the simulator
-# is extended so flowlines can hold a restriction (see `changes`). Everything here is SYNTHETIC: a
-# fictional field and an uncalibrated model.
+# is extended so flowlines can hold a restriction. Version 4, 2026-11-10, still before any case, method,
+# or result: the primary case set and the impact tolerance are corrected (see `changes`). Everything
+# here is SYNTHETIC: a fictional field and an uncalibrated model.
 #
 # Rules for this file:
 # - Any change after this commit gets a new version and an entry in `changes`, with its date, reason,
 #   and timing (see `change_timing`). Nothing is edited silently.
 # - Final evaluation cases are never generated until a freeze record exists (see `protection`).
 # - Thresholds are judgments made now, without data. They are not tuned later.
-version: 3
+version: 4
 provenance_class: SYNTHETIC
 spec: docs/product/d1_diagnostic_spec.md
 
@@ -128,12 +129,16 @@ truth:
   production_impact_sm3_per_s: >-
     total field flow with the restriction removed minus total field flow with it, both solved at the
     case's true operating state at the diagnosis time
+  # Version 4: the material subset is reported, not used to choose primary cases.
   material_threshold: impact at or above 1% of the no-restriction field flow
 
 # How a diagnosis is scored. Fixed now.
 scoring:
-  primary_cases: restriction cases with material impact (truth.material_threshold)
-  secondary_cases: all restriction cases, and no-restriction cases separately
+  # Version 4: every restriction case is primary. The nominal-model sweep shows every in-range
+  # restriction (severity 0.10 and above) shifts some permanent sensor's 2-hour mean by at least 3.9
+  # standard errors, while no in-range flowline restriction reaches 1% of field flow.
+  primary_cases: all restriction cases
+  secondary_cases: the material subset (truth.material_threshold), and no-restriction cases separately
   localization:
     top1: share of primary cases whose true pipe is ranked first
     top3: share of primary cases whose true pipe is in the first three
@@ -145,8 +150,11 @@ scoring:
     # Secondary diagnostic only. Not an acceptance line.
     conditional_error: absolute error of the point estimate, on primary cases whose true pipe is ranked first
   impact:
-    relative_error: absolute error divided by the true impact, on primary cases
-    within_tolerance: error at most max(20% of the true impact, 0.5% of the no-restriction field flow)
+    # Version 4: relative error only where the true impact is at least 0.1% of field flow, so tiny
+    # denominators don't dominate. The tolerance floor is 0.05% of field flow, below the whole impact of
+    # most flowline restrictions, so predicting no loss can't pass where a real loss exists.
+    relative_error: absolute error divided by the true impact, on primary cases whose true impact is at least 0.1% of the no-restriction field flow
+    within_tolerance: error at most max(20% of the true impact, 0.05% of the no-restriction field flow)
   joint_success:
     # A primary case succeeds only if all three hold for the same case.
     rule: the true pipe is ranked first, AND severity absolute error is at most 0.10, AND the impact error is within the impact tolerance above
@@ -217,14 +225,17 @@ acceptance_held_out:
   per_regime_coverage_80: {between: [0.65, 0.92]}
   # Joint success, conditional severity error, and the rest are reported per regime, not accepted on.
 
-# Minimum sample support. Counted on the final cases after the material filter, before any scoring.
+# Minimum sample support. Counted on the final cases before any scoring.
 # Below a minimum, the affected result is INCONCLUSIVE and can never count toward MET.
 minimum_support:
   final_in_regime:
-    primary_cases: 90           # expected about 128 restriction cases before the material filter
+    primary_cases: 90           # expected about 128 restriction cases
     no_restriction_cases: 15    # expected about 22
+    # The subset used for impact_median_relative_error (true impact at least 0.1% of field flow).
+    # Expected about 61 from the nominal-model sweep; below 40 that one line is INCONCLUSIVE.
+    impact_relative_error_cases: 40
   final_held_out:
-    primary_cases_per_regime: 20   # expected about 34 restriction cases per regime before the filter
+    primary_cases_per_regime: 20   # expected about 34 restriction cases per regime
     pooled_primary_cases: 120
   per_pipe:
     # Pipe-level results are reported only for pipes with at least this many primary cases in that
@@ -285,3 +296,21 @@ changes:
       - A run's truth table gains a severity column for a flowline only when that run restricts it, so every earlier run keeps its accepted truth table.
       - Regression evidence, recorded in ADR 0020: the six Gate 4 scenario hashes match their recorded values, the Gate 3 golden values pass, and five regenerated Gate 5 benchmark cases (four restriction cases, including a held-out GS-TRUNK case, and one normal case) are identical to the stored files.
       - Nothing else in the preregistration changes.
+  - version: 4
+    date: 2026-11-10
+    timing: BEFORE_DEVELOPMENT_RESULTS
+    reason: >-
+      A sweep of the nominal Gate 4 model (scripts/d1_preregistration_sweep.py, output in
+      reports/diagnostics/preregistration_sweep.json; no D1 case generated) showed version 3 would be
+      INCONCLUSIVE by construction. No in-range flowline restriction reaches 1% of field flow (flowlines
+      need severity 0.63 to 0.65; the range tops out at 0.60), so only severe GS-A and GS-B cases, about 7
+      of the expected 128 restriction cases, would be primary against a minimum of 90. The unseen-pipes
+      regime would have about 5 against a minimum of 20. Yet every in-range restriction shifts some
+      permanent sensor's 2-hour mean by at least 3.9 standard errors, so the cases are diagnosable. Separately,
+      the 0.5%-of-field-flow impact tolerance floor exceeded the whole impact of nearly every flowline
+      restriction, so predicting no loss would pass the impact test there.
+    what:
+      - Primary cases are all restriction cases. The 1% material subset is reported as secondary.
+      - The impact tolerance floor falls from 0.5% to 0.05% of field flow. This tightens the test.
+      - Median relative impact error is computed on primary cases with true impact at least 0.1% of field flow, with its own minimum support of 40 cases.
+      - Every other threshold, every support minimum, the generator, seeds, and splits are unchanged.

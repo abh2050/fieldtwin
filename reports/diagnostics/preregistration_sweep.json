@@ -1,0 +1,242 @@
+{
+  "purpose": "Evidence for D1 preregistration version 4. Nominal model only; no D1 case generated.",
+  "field_flow_sm3_per_s": 7.11808,
+  "noise": {
+    "pressure_pa": 2000.0,
+    "dp_pa": 500.0,
+    "flow_sm3_per_s": 0.0015,
+    "samples_averaged": 24
+  },
+  "severity_grid": [
+    0.1,
+    0.69,
+    0.01
+  ],
+  "pipes": {
+    "FL-A-01": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.9,
+        "0.30": 34.4,
+        "0.60": 521.7
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00045,
+        "0.60": 0.00721,
+        "0.69": 0.01818
+      }
+    },
+    "FL-A-02": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.2,
+        "0.30": 29.8,
+        "0.60": 449.8
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00044,
+        "0.60": 0.00702,
+        "0.69": 0.01749
+      }
+    },
+    "FL-A-03": {
+      "severity_where_impact_reaches_1pct": 0.63,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 5.4,
+        "0.30": 38.2,
+        "0.60": 579.1
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00045,
+        "0.60": 0.00732,
+        "0.69": 0.01861
+      }
+    },
+    "FL-A-04": {
+      "severity_where_impact_reaches_1pct": 0.63,
+      "severity_where_impact_reaches_0p1pct": 0.39,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.7,
+        "0.30": 33.3,
+        "0.60": 499.9
+      },
+      "impact_share_at": {
+        "0.10": 7e-05,
+        "0.30": 0.00047,
+        "0.60": 0.00746,
+        "0.69": 0.01855
+      }
+    },
+    "FL-A-05": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 3.9,
+        "0.30": 27.5,
+        "0.60": 414.5
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00044,
+        "0.60": 0.00698,
+        "0.69": 0.01725
+      }
+    },
+    "FL-A-06": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.9,
+        "0.30": 34.8,
+        "0.60": 530.2
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00043,
+        "0.60": 0.00704,
+        "0.69": 0.01789
+      }
+    },
+    "FL-B-01": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.3,
+        "0.30": 30.1,
+        "0.60": 456.6
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00043,
+        "0.60": 0.00686,
+        "0.69": 0.01722
+      }
+    },
+    "FL-B-02": {
+      "severity_where_impact_reaches_1pct": 0.65,
+      "severity_where_impact_reaches_0p1pct": 0.42,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.7,
+        "0.30": 33.0,
+        "0.60": 511.6
+      },
+      "impact_share_at": {
+        "0.10": 5e-05,
+        "0.30": 0.00038,
+        "0.60": 0.00626,
+        "0.69": 0.01624
+      }
+    },
+    "FL-B-03": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.0,
+        "0.30": 28.4,
+        "0.60": 429.3
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00044,
+        "0.60": 0.00695,
+        "0.69": 0.01726
+      }
+    },
+    "FL-B-04": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.8,
+        "0.30": 33.6,
+        "0.60": 507.0
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00045,
+        "0.60": 0.00727,
+        "0.69": 0.01823
+      }
+    },
+    "FL-B-05": {
+      "severity_where_impact_reaches_1pct": 0.65,
+      "severity_where_impact_reaches_0p1pct": 0.42,
+      "largest_sensor_shift_se_at": {
+        "0.10": 5.0,
+        "0.30": 35.3,
+        "0.60": 546.8
+      },
+      "impact_share_at": {
+        "0.10": 5e-05,
+        "0.30": 0.00039,
+        "0.60": 0.00639,
+        "0.69": 0.01662
+      }
+    },
+    "FL-B-06": {
+      "severity_where_impact_reaches_1pct": 0.64,
+      "severity_where_impact_reaches_0p1pct": 0.4,
+      "largest_sensor_shift_se_at": {
+        "0.10": 4.3,
+        "0.30": 30.5,
+        "0.60": 460.0
+      },
+      "impact_share_at": {
+        "0.10": 6e-05,
+        "0.30": 0.00045,
+        "0.60": 0.00716,
+        "0.69": 0.01783
+      }
+    },
+    "GS-A": {
+      "severity_where_impact_reaches_1pct": 0.44,
+      "severity_where_impact_reaches_0p1pct": 0.17,
+      "largest_sensor_shift_se_at": {
+        "0.10": 20.6,
+        "0.30": 144.8,
+        "0.60": 2190.8
+      },
+      "impact_share_at": {
+        "0.10": 0.00045,
+        "0.30": 0.0032,
+        "0.60": 0.05162,
+        "0.69": 0.12963
+      }
+    },
+    "GS-B": {
+      "severity_where_impact_reaches_1pct": 0.44,
+      "severity_where_impact_reaches_0p1pct": 0.18,
+      "largest_sensor_shift_se_at": {
+        "0.10": 19.7,
+        "0.30": 139.1,
+        "0.60": 2123.0
+      },
+      "impact_share_at": {
+        "0.10": 0.00043,
+        "0.30": 0.00302,
+        "0.60": 0.04909,
+        "0.69": 0.1244
+      }
+    },
+    "GS-TRUNK": {
+      "severity_where_impact_reaches_1pct": 0.36,
+      "severity_where_impact_reaches_0p1pct": 0.11,
+      "largest_sensor_shift_se_at": {
+        "0.10": 24.2,
+        "0.30": 170.0,
+        "0.60": 2534.8
+      },
+      "impact_share_at": {
+        "0.10": 0.00089,
+        "0.30": 0.00633,
+        "0.60": 0.10283,
+        "0.69": 0.26091
+      }
+    }
+  }
+}

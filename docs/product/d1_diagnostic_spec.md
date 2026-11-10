@@ -1,6 +1,6 @@
 # Diagnostic Milestone D1: gathering-line restriction diagnosis
 
-Status: **preregistered, not started.** No case has been generated, no method written, and no result seen. Frozen plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 3. Why: [diagnostic reset](diagnostic_reset.md) and [ADR 0020](../adr/0020-diagnostic-reset.md).
+Status: **preregistered, not started.** No case has been generated, no method written, and no result seen. Frozen plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 4. Why: [diagnostic reset](diagnostic_reset.md) and [ADR 0020](../adr/0020-diagnostic-reset.md).
 
 Everything in D1 is SYNTHETIC: fictional AETHER Field and its uncalibrated Gate 4 model. A D1 result says what a model-based diagnosis can do inside that model, not what it would do on a real field.
 
@@ -56,17 +56,17 @@ The permanent sensors read with 2,000 Pa (pressure), 500 Pa (segment differentia
 
 ## Acceptance criteria
 
-Scored on material restrictions (true impact at least 1% of field flow) unless stated. Thresholds were set without data. Where a criterion names the B1 baseline, the lower end of the 95% bootstrap interval of the difference must be above zero.
+Scored on all restriction cases (the primary cases) unless stated. Restrictions costing at least 1% of field flow form a material subset that is reported, not accepted on. Thresholds were set without data. Where a criterion names the B1 baseline, the lower end of the 95% bootstrap interval of the difference must be above zero.
 
 | Area | Criterion | In regime | Held-out regimes |
 |---|---|---|---|
 | Localization | Top-1: true pipe ranked first | ≥ 0.70 and beats B1 | ≥ 0.60 pooled, ≥ 0.55 in each regime |
 | Localization | Top-3 | ≥ 0.90 | reported |
 | No restriction | NONE ranked first on no-restriction cases | ≥ 0.80 | reported |
-| No restriction | NONE ranked first on material restrictions | ≤ 0.10 | reported |
+| No restriction | NONE ranked first on restriction cases | ≤ 0.10 | reported |
 | Joint success | True pipe first, severity within 0.10, and impact within tolerance, all in the same case; mislocalized cases count as failures | ≥ 0.55 | reported |
-| Impact | Within max(20% of truth, 0.5% of field flow) | ≥ 80% of cases | reported |
-| Impact | Median relative error | ≤ 0.15 | reported |
+| Impact | Within max(20% of truth, 0.05% of field flow) | ≥ 80% of cases | reported |
+| Impact | Median relative error, on cases with true impact at least 0.1% of field flow | ≤ 0.15 | reported |
 | Uncertainty | Brier skill score against the generator-matched climatology, over all cases | ≥ 0.50 | reported |
 | Uncertainty | Expected calibration error of the top probability | ≤ 0.10 | reported |
 | Uncertainty | 80% interval coverage, severity and impact | 0.72 to 0.88 | 0.65 to 0.92 in each regime |
@@ -77,12 +77,13 @@ Scored on material restrictions (true impact at least 1% of field flow) unless s
 
 **Secondary diagnostics, reported but not accepted on:** severity mean absolute error where the true pipe is ranked first (target 0.07 or less), every line on each held-out regime, pipe-level results, Brier skill against the uniform prior, and the same-type random comparison.
 
-**Minimum support.** Counted on the final cases after the material filter, before scoring:
+**Minimum support.** Counted on the final cases before scoring:
 
-| Count | Minimum | Expected before the filter |
+| Count | Minimum | Expected |
 |---|---:|---:|
 | In-regime primary cases | 90 | about 128 |
 | In-regime no-restriction cases | 15 | about 22 |
+| In-regime cases with impact at least 0.1% of field flow, for the relative impact error | 40 | about 61 |
 | Primary cases per held-out regime | 20 | about 34 |
 | Pooled held-out primary cases | 120 | about 204 |
 | Primary cases per pipe, for any pipe-level result | 8 | about 10 in-regime |
@@ -107,6 +108,7 @@ A result below its minimum is INCONCLUSIVE and never counts toward MET.
 | 1 | 2026-11-10 | Before any case, method, or result | Initial preregistration |
 | 2 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS`, after technical review | Brier baseline is now the generator-matched climatology, not a uniform prior. The random comparator is defined over 55 enumerated actions, with burden reported separately. A joint success rate is an acceptance line, and conditional severity error is secondary. Minimum sample support is frozen, with INCONCLUSIVE below it. |
 | 3 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS` | The Gate 4 solver refused flowline restrictions, so 12 of 15 hypotheses couldn't be generated. The solver now accepts them under the same restriction law. Gate 3, Gate 4, and sampled Gate 5 outputs are unchanged. |
+| 4 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS` | A nominal-model sweep (no case generated) showed version 3 would be INCONCLUSIVE by construction. No in-range flowline restriction reaches 1% of field flow, leaving about 7 primary cases against a minimum of 90, yet every in-range restriction moves a permanent sensor by at least 3.9 standard errors. Primary cases are now all restriction cases, and the material subset is reported. The impact tolerance floor falls from 0.5% to 0.05% of field flow, a stricter test. Relative impact error uses cases with impact at least 0.1% of field flow, with its own minimum of 40. |
 
 ## Not decided yet
 
