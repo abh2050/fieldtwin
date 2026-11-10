@@ -104,15 +104,18 @@ def run_with_timeout(
         process.start()
         send.close()
         message = None
-        if receive.poll(timeout_s):
+        # Ready means a result arrived or the child closed its end by exiting. Only a wait that ran
+        # out is a timeout. Checking is_alive() instead raced with a crashing child still exiting.
+        ready = receive.poll(timeout_s)
+        if ready:
             try:
                 message = receive.recv()
             except EOFError:
                 message = None
         elapsed = time.monotonic() - started
-        timed_out = message is None and process.is_alive()
+        timed_out = not ready
         if process.is_alive():
-            if message is not None:
+            if not timed_out:
                 process.join(5.0)
             if process.is_alive():
                 process.kill()

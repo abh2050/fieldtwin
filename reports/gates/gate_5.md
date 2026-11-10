@@ -1,6 +1,6 @@
 # Gate 5 report: anomaly detection, benchmark evaluation, and uncertainty
 
-**Status: ALL 12 ACCEPTANCE CRITERIA MET after two reviews, stopped for technical review.** The work is on branch `gate-5`, with a [successful CI run](https://github.com/abh2050/fieldtwin/actions/runs/42756301105). It isn't merged. Meeting the criteria means the evaluation was done properly. It doesn't mean any method works: 3W shows no robust evidence of skill above chance.
+**Status: CI_STATUS_PLACEHOLDER**
 
 Date: 2026-11-10, revised after two technical reviews. Branch: `gate-5`. Full output of the final local rebuild: [`gate_5_execution_log.txt`](gate_5_execution_log.txt). Every experiment attempt is recorded in [`attempts/`](../experiments/attempts/).
 
@@ -30,10 +30,10 @@ Date: 2026-11-10, revised after two technical reviews. Branch: `gate-5`. Full ou
 | 5 | Both tracks produce independent reports | **Met** | [3W benchmark](../experiments/3w_benchmark.md) and [AETHER benchmark](../experiments/aether_synthetic_benchmark.md) |
 | 6 | False alarms and detection measured with explicit definitions | **Met** | Rules in `config/experiments/gate5_evaluation.yaml`, now version 4. Sample-level and event-level metrics are separate. |
 | 7 | Inference runs without ground-truth fault state | **Met** | The contracts have no field for truth and refuse extra fields. Inference code imports neither the simulator nor the labels, which a test checks. Batch and streaming scores agree for all 10 models. |
-| 8 | Model artifacts and experiments are reproducible | **Met** | A rebuild from an empty experiment folder reproduced all 91 score, artifact, and dataset checksums, and every other recorded value. The dataset checksum covers each file's path and content. Seeds, splits, configurations, feature names, parameters, convergence, metrics, hardware, and artifact checksums are logged to a local MLflow store. Every stage attempt is kept in `reports/experiments/attempts/`. Reproduction is shown on one machine only. |
+| 8 | Model artifacts and experiments are reproducible | REPRO_PLACEHOLDER |
 | 9 | Numerical reliability tests and timeout protections exist | **Met** | 210 of 210 stress runs completed with matching hashes. Nonconvergence, infeasible state, timeout, and crash were each forced and classified correctly. Logistic regression now refuses an unconverged fit. [Reliability stress](../simulation/reliability_stress.md) |
-| 10 | Gate 0–4 regression tests pass | **Met** | The final rebuild reran Gates 0 to 4 from an empty database, with 0 failures: 534 offline tests, 228 database tests, 33 real-data tests, and every CI command in a clean copy. Gate 4's six simulation hashes are unchanged. |
-| 11 | CI passes on the feature branch | **Met** | [All 9 jobs passed](https://github.com/abh2050/fieldtwin/actions/runs/42756301105) on commit `317c260`, including simulation reproducibility on Linux x86, Linux ARM, and macOS ARM. This line was added afterward, so its own commit has a separate CI run. |
+| 10 | Gate 0–4 regression tests pass | REGRESSION_PLACEHOLDER |
+| 11 | CI passes on the feature branch | CI_PLACEHOLDER |
 | 12 | Limitations and unsupported claims disclosed | **Met** | See [Limitations](#limitations) |
 
 ## Review findings and what changed
@@ -133,25 +133,13 @@ Hardening added:
 
 All 272 AETHER cases and 210 stress runs went through the guard without a failure.
 
+**A race in the guard, found by CI.** After the second review, one hosted CI run reported a forced crash as `EXECUTION_TIMEOUT`. A crashing child closes its pipe before it has fully exited, and the guard decided "timeout" from whether the child still looked alive. It now decides from whether the wait actually ran out. 40 of 40 forced crashes, 3 of 3 hangs, and 3 of 3 forced nonconvergences then classified correctly, and a test repeats the crash case. No recorded result came from a misclassified run: every AETHER case and stress run had finished normally.
+
 **The Gate 4 hang is not claimed fixed.** Its cause was never found, and it didn't recur in 30 repeats of the work that was running when it happened.
 
 ## Evidence
 
-The final rebuild ran 39 steps from an empty database and an empty experiment folder, from 03:56 to 04:30 UTC on 2026-11-10. All passed, and the log has no convergence warnings.
-
-| Suite | Passed | Failed |
-|---|---:|---:|
-| Offline tests | 534 | 0 |
-| Database tests on fixtures | 228 | 0 |
-| Tests on acquired real data | 33 | 0 |
-| CI commands in a clean copy: unit | 527 | 0 |
-| CI commands in a clean copy: contract | 7 | 0 |
-| CI commands in a clean copy: Postgres integration | 79 | 0 |
-| CI commands in a clean copy: provenance | 149 | 0 |
-
-Ruff, the format check, and mypy pass, and canonical validation shows 21 checks with 0 failures.
-
-**An interrupted run.** A first attempt at this rebuild started while the previous commit was being made. That commit picked up the run's freshly truncated log. The run was stopped before any experiment stage, the log was restored in its own commit, and the rebuild was then rerun alone.
+EVIDENCE_PLACEHOLDER
 
 ## Required reports
 

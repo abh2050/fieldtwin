@@ -65,3 +65,13 @@ def test_solver_iterations_are_limited_in_configuration():
 
     solver = default_setup()[0].solver
     assert 0 < solver.max_iterations <= 200 and 0 < solver.max_active_set_passes <= 50
+
+
+def test_a_crash_is_never_reported_as_a_timeout():
+    # A crashing child closes the pipe before it has fully exited. Classifying by whether it still
+    # looked alive once mistook this for a timeout in CI.
+    outcomes = {
+        run_with_timeout(MODULE + "forced_crash", {}, timeout_s=60, label="c").outcome
+        for _ in range(8)
+    }
+    assert outcomes == {Outcome.CRASH}
