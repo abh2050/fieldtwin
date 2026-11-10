@@ -20,6 +20,13 @@ What a field model can offer that a generic anomaly detector can't is inverse di
 
 Gate 5's holdouts were read several times while defects were being fixed, and Gates 5 and 7 both changed rules after seeing some results. Each change was disclosed, but each weakened the evidence. D1's claim, that a model-based diagnosis localizes and sizes restrictions with calibrated uncertainty, is exactly the kind that is easy to fool yourself about. The final cases therefore stay ungenerated until the method is frozen.
 
+## Change log
+
+| Preregistration version | Date | Timing | Change and reason |
+|---:|---|---|---|
+| 1 | 2026-11-10 | Before any case, method, or result | Initial preregistration. |
+| 2 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS` | Technical review found four gaps. A uniform 16-way Brier baseline was too easy to beat given the generator's frequencies, so it was replaced with a generator-matched climatology. The random-measurement comparator was ambiguous about targets, so it now samples from 55 enumerated valid actions, with duration and burden reported separately. Severity error ignored mislocalized cases, so a joint success rate became an acceptance line. The material-impact filter could leave too few cases, so minimum support was frozen, with INCONCLUSIVE below it. Still no case generated and no method written. |
+
 ## Consequences
 
 - Reusable infrastructure (acquisition, provenance, audit, guarded state, evidence rebuilds, CI) stays and is maintained. Its value no longer depends on the detector.

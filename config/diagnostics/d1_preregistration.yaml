@@ -1,14 +1,16 @@
 # D1 preregistration: gathering-line restriction diagnosis on fictional AETHER Field.
 #
 # Version 1, 2026-11-10. Committed before any D1 case was generated, any diagnostic method was written,
-# or any D1 result was seen. Everything here is SYNTHETIC: a fictional field and an uncalibrated model.
+# or any D1 result was seen. Version 2, 2026-11-10, after technical review and still before any case,
+# method, or result (see `changes`). Everything here is SYNTHETIC: a fictional field and an
+# uncalibrated model.
 #
 # Rules for this file:
 # - Any change after this commit gets a new version and an entry in `changes`, with its date, reason,
 #   and timing (see `change_timing`). Nothing is edited silently.
 # - Final evaluation cases are never generated until a freeze record exists (see `protection`).
 # - Thresholds are judgments made now, without data. They are not tuned later.
-version: 1
+version: 2
 provenance_class: SYNTHETIC
 spec: docs/product/d1_diagnostic_spec.md
 
@@ -79,24 +81,41 @@ generator:
       dropout: true                  # one pad's telemetry lost for 6 to 18 hours before diagnosis
 
 # Measurements the method may recommend. One measurement per case is simulated for evaluation.
+# An action is a measurement type with one target. The complete action set is every pair below: 55 actions.
 measurements:
   PORTABLE_DP:
-    target: one pipe
+    targets: [FL-A-01, FL-A-02, FL-A-03, FL-A-04, FL-A-05, FL-A-06,
+              FL-B-01, FL-B-02, FL-B-03, FL-B-04, FL-B-05, FL-B-06,
+              GS-A, GS-B, GS-TRUNK]                                  # 15 actions
     reading: pressure difference across the pipe, averaged over 1 hour
     noise_std_pa: 200.0
+    duration_h: 1.0
+    burden: NON_INTRUSIVE
   PRECISION_PT:
-    target: one node with a permanent pressure sensor
+    targets: [WH:A-01, WH:A-02, WH:A-03, WH:A-04, WH:A-05, WH:A-06,
+              WH:B-01, WH:B-02, WH:B-03, WH:B-04, WH:B-05, WH:B-06,
+              HDR-A, HDR-B, MANIFOLD, COMP-SUCTION]                 # 16 actions
     reading: calibrated gauge pressure, averaged over 1 hour
     noise_std_pa: 300.0
+    duration_h: 1.0
+    burden: NON_INTRUSIVE
   WELL_TEST:
-    target: one well
+    targets: [A-01, A-02, A-03, A-04, A-05, A-06, B-01, B-02, B-03, B-04, B-05, B-06]  # 12 actions
     reading: test-separator gas flow, averaged over 4 hours
     noise_std_sm3_per_s: 0.0005
+    duration_h: 4.0
+    burden: FLOW_DIVERTED      # the well's gas is routed through a test separator; production continues
   SHUT_IN_TEST:
-    target: one well
+    targets: [A-01, A-02, A-03, A-04, A-05, A-06, B-01, B-02, B-03, B-04, B-05, B-06]  # 12 actions
     reading: every permanent sensor before and after a 2-hour shut-in, network re-solved
     noise: permanent sensor noise for the case
+    duration_h: 2.0
+    burden: PRODUCTION_INTERRUPTING   # the well's flow is lost for the duration
+  # Every action is valid except WELL_TEST and SHUT_IN_TEST on a well that the planned-operations
+  # calendar shows shut in at the diagnosis time. Validity uses only the calendar, never truth.
   # Readings are produced by the simulator from the case's true state. Only the reading is returned.
+  # Burden is reported per recommended action as type, duration_h, and deferred production
+  # (the shut-in well's flow times the duration for SHUT_IN_TEST, zero otherwise).
 
 # Truth used for scoring, computed by the generator and stored apart from telemetry.
 truth:
@@ -119,23 +138,50 @@ scoring:
     specificity: share of no-restriction cases where NONE is ranked first
     miss_rate: share of primary cases where NONE is ranked first
   severity:
-    error: absolute error of the point estimate, on primary cases whose true pipe is ranked first
+    # Secondary diagnostic only. Not an acceptance line.
+    conditional_error: absolute error of the point estimate, on primary cases whose true pipe is ranked first
   impact:
     relative_error: absolute error divided by the true impact, on primary cases
     within_tolerance: error at most max(20% of the true impact, 0.5% of the no-restriction field flow)
+  joint_success:
+    # A primary case succeeds only if all three hold for the same case.
+    rule: the true pipe is ranked first, AND severity absolute error is at most 0.10, AND the impact error is within the impact tolerance above
+    rate: share of primary cases that succeed; cases whose true pipe isn't ranked first count as failures
   uncertainty:
-    pipe_probabilities: Brier skill score against the uniform prior over the 16 hypotheses, and expected calibration error over 10 equal-width bins of the top-ranked probability
+    pipe_probabilities: >-
+      Brier skill score of the 16-way probabilities against the climatology baseline (B0_climatology),
+      over all cases of the split, restriction and no-restriction alike. Expected calibration error over
+      10 equal-width bins of the top-ranked probability.
     intervals: empirical coverage of the method's central 80% and 95% intervals for severity and impact
   measurement:
     # Scored by simulating the recommended measurement for each case and updating the diagnosis.
     entropy_reduction: relative reduction in entropy of the pipe posterior after the measurement
     top1_gain: top-1 after the measurement minus top-1 before, on primary cases
-    against_random: paired difference in entropy reduction between the recommended measurement and one drawn uniformly from the menu
+    against_random: >-
+      paired difference in entropy reduction between the recommended action and one action drawn
+      uniformly from the case's valid actions (see `measurements`), with the draw seeded by
+      random_action_seed plus the case's index in its split
+    random_action_seed: 20261112
+    burden_reported_separately: >-
+      For the recommended and the random actions: the share of each measurement type, mean duration_h,
+      share PRODUCTION_INTERRUPTING, and mean deferred production. Also entropy reduction per
+      measurement-hour. Burden is reported, not traded off inside the acceptance lines.
+    same_type_random: >-
+      Secondary: entropy reduction of the recommended action against one drawn uniformly from valid
+      actions of the same measurement type, which separates choosing a good target from choosing an
+      informative type.
   intervals: 95% percentile bootstrap over cases, 2000 resamples, seed 20261111
 
 # Baselines, frozen now, run on the same cases.
 baselines:
-  B0_uniform: every hypothesis equally likely; severity and impact at their development-split means
+  B0_climatology: >-
+    The generator's own class frequencies for the split being scored, known exactly from this file:
+    no restriction 0.15; each in-regime restriction pipe 0.85 / 12 = 0.0708333; the three pipes never
+    restricted in-regime (FL-A-06, FL-B-03, GS-TRUNK) 0. For the unseen_pipes regime the method is
+    scored against the same in-regime climatology, because that is all a developer could know, and the
+    regime's own generator frequencies (0.15 none, 0.85 / 3 each unseen pipe) are reported alongside.
+    Severity and impact at their development-split means.
+  B0_uniform: every hypothesis equally likely. Reported for reference only; not an acceptance comparator.
   B1_residual: >-
     rank pipes by the standardized residual of their observed pressure drop against the Gate 4 model
     solved with nominal well parameters at the measured suction pressure. Segments use their DPT
@@ -149,10 +195,10 @@ acceptance_in_regime:
   top3: {at_least: 0.90}
   specificity: {at_least: 0.80}
   miss_rate: {at_most: 0.10}
-  severity_mean_absolute_error: {at_most: 0.07}
+  joint_success_rate: {at_least: 0.55}
   impact_within_tolerance: {at_least: 0.80}
   impact_median_relative_error: {at_most: 0.15}
-  brier_skill_score: {at_least: 0.50}
+  brier_skill_score_vs_climatology: {at_least: 0.50}
   expected_calibration_error: {at_most: 0.10}
   coverage_80: {between: [0.72, 0.88]}   # severity and impact separately
   coverage_95: {between: [0.90, 0.98]}
@@ -165,13 +211,30 @@ acceptance_held_out:
   pooled_top1: {at_least: 0.60}
   per_regime_top1: {at_least: 0.55}
   per_regime_coverage_80: {between: [0.65, 0.92]}
-  # If any held-out line fails, D1 is reported as met in regime only, with the failing regimes named.
+  # Joint success, conditional severity error, and the rest are reported per regime, not accepted on.
 
-# Outcome labels, fixed now.
+# Minimum sample support. Counted on the final cases after the material filter, before any scoring.
+# Below a minimum, the affected result is INCONCLUSIVE and can never count toward MET.
+minimum_support:
+  final_in_regime:
+    primary_cases: 90           # expected about 128 restriction cases before the material filter
+    no_restriction_cases: 15    # expected about 22
+  final_held_out:
+    primary_cases_per_regime: 20   # expected about 34 restriction cases per regime before the filter
+    pooled_primary_cases: 120
+  per_pipe:
+    # Pipe-level results are reported only for pipes with at least this many primary cases in that
+    # split; the others are listed as INCONCLUSIVE. Pipe-level results are never acceptance lines.
+    primary_cases: 8
+
+# Outcome labels, fixed now. Support is checked first.
 outcomes:
-  MET: every in-regime and held-out line holds
-  MET_IN_REGIME_ONLY: every in-regime line holds and at least one held-out line fails
-  NOT_MET: any in-regime line fails
+  INCONCLUSIVE: in-regime support is below its minimum, whatever the scores
+  NOT_MET: in-regime support is met and any in-regime line fails
+  MET_IN_REGIME_ONLY: >-
+    every in-regime line holds with support, and at least one held-out line fails or a held-out regime
+    (or the pooled held-out count) is below its minimum; failing and INCONCLUSIVE regimes are named
+  MET: every in-regime and held-out line holds and every support minimum is met
 
 # Controls that keep the final cases untouched.
 protection:
@@ -195,4 +258,13 @@ change_timing:
   - AFTER_FREEZE_BEFORE_FINAL_RESULTS
   - AFTER_FINAL_RESULTS
 
-changes: []
+changes:
+  - version: 2
+    date: 2026-11-10
+    timing: BEFORE_DEVELOPMENT_RESULTS
+    reason: Technical review of version 1, before any case was generated or method written.
+    what:
+      - Brier skill is scored against a generator-matched climatology (B0_climatology) instead of the uniform 16-way prior, which the generator's 15% no-restriction share and three never-restricted pipes made too easy to beat.
+      - The random-measurement comparator draws uniformly from the 55 enumerated valid actions (type plus target), seeded per case. Duration and operational burden are declared per type and reported separately; a same-type random comparator is added as a secondary result.
+      - A joint diagnostic-success rate (true pipe first, severity within 0.10, impact within tolerance) becomes an acceptance line at 0.55 or more. Conditional severity error becomes a secondary diagnostic.
+      - Minimum sample support is frozen for primary cases overall, no-restriction cases, primary cases per held-out regime and pooled, and per pipe. Results below a minimum are INCONCLUSIVE and never count toward MET.

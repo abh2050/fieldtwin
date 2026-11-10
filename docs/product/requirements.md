@@ -32,7 +32,7 @@ This replaces the original goal of an end-to-end inspection and maintenance prod
 
 ## Diagnostic requirements (Milestone D1)
 
-Gathering-line restrictions only, on fictional AETHER Field. Specification: [D1](d1_diagnostic_spec.md). Frozen evaluation plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml).
+Gathering-line restrictions only, on fictional AETHER Field. Specification: [D1](d1_diagnostic_spec.md). Frozen evaluation plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 2.
 
 | ID | Requirement | Status |
 |---|---|---|
@@ -40,10 +40,12 @@ Gathering-line restrictions only, on fictional AETHER Field. Specification: [D1]
 | D1-02 | Explain the evidence for and against each leading candidate, sized against sensor noise | Preregistered |
 | D1-03 | Estimate restriction severity with central 80% and 95% intervals | Preregistered |
 | D1-04 | Estimate production impact in sm³/s with central 80% and 95% intervals | Preregistered |
-| D1-05 | Quantify uncertainty so that probabilities and intervals are calibrated | Preregistered |
-| D1-06 | Recommend the next measurement expected to reduce localization uncertainty the most, and update after its reading | Preregistered |
+| D1-05 | Quantify uncertainty so that probabilities and intervals are calibrated, and probabilities beat the generator-matched climatology | Preregistered |
+| D1-06 | Recommend the next measurement action (type and target) expected to reduce localization uncertainty the most, report its duration and operational burden, and update after its reading | Preregistered |
 | D1-07 | Read only operator-visible inputs. Truth reaches a diagnosis only as a requested measurement's reading | Preregistered |
 | D1-08 | Final evaluation cases stay ungenerated until the method is frozen, and are scored once | Preregistered |
+| D1-09 | Succeed jointly: the right pipe, severity, and impact in the same case | Preregistered |
+| D1-10 | Report a result as INCONCLUSIVE when its case count is below the frozen minimum, never as met | Preregistered |
 
 Excluded from D1: work-order generation, approvals, routing, aerial evidence, cloud deployment, and frontend work.
 
