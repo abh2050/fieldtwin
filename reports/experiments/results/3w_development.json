@@ -341,7 +341,7 @@
    }
   }
  },
- "dataset_sha256": "6db9a743fbe5e3b166eb659577a32cbeb400ccb6c596d2e01a9ff7ed71c95dfc",
+ "dataset_sha256": "9c5d273aa3cfff88a2cac453f93be6111f5ef0dd099c128be2e03ddd011fa4b6",
  "folds": [
   {
    "name": "dev_0",
@@ -504,7 +504,7 @@
    ]
   }
  ],
- "git_sha": "481d4b0d37fcfa66d47d8622ea1b37fa81e7fde0",
+ "git_sha": "740211e239718032ef97d893008efb10e3f837cc",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -650,7 +650,7 @@
      "validation_time_in_alarm": 0.027181970940001975
     }
    },
-   "fit_seconds": 86.7509685838595,
+   "fit_seconds": 63.034084542887285,
    "interval": {
     "chance_event_recall": [
      0.0505443176785265,
@@ -847,7 +847,7 @@
      "validation_time_in_alarm": 0.032222991005238705
     }
    },
-   "fit_seconds": 1.458919416880235,
+   "fit_seconds": 1.4320855848491192,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1060,7 +1060,7 @@
      "validation_time_in_alarm": 0.04121775229811209
     }
    },
-   "fit_seconds": 25.149850707966834,
+   "fit_seconds": 24.768780540907755,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1257,7 +1257,7 @@
      "validation_time_in_alarm": 0.03508945339527528
     }
    },
-   "fit_seconds": 0.12118404195643961,
+   "fit_seconds": 0.13223058404400945,
    "interval": {
     "chance_event_recall": [
      0.14584807377216102,
@@ -1454,7 +1454,7 @@
      "validation_time_in_alarm": 0.015617277849164772
     }
    },
-   "fit_seconds": 0.14294491801410913,
+   "fit_seconds": 0.1414303338387981,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -1525,11 +1525,28 @@
   }
  },
  "selection": {
-  "preferred": "logistic_regression",
-  "reason": "logistic_regression had the best event skill within budget (0.156). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.",
+  "excluded": {
+   "hist_gradient_boosting": {
+    "false_alarms_per_hour": 0.01900973368771232,
+    "time_in_alarm": 0.05627233203668174
+   },
+   "isolation_forest": {
+    "false_alarms_per_hour": 0.03485117842747259,
+    "time_in_alarm": 0.1606322496611691
+   },
+   "logistic_regression": {
+    "false_alarms_per_hour": 0.012673155791808213,
+    "time_in_alarm": 0.06183443930086424
+   },
+   "rolling_deviation": {
+    "false_alarms_per_hour": 0.06653406790699312,
+    "time_in_alarm": 0.048069983982539206
+   }
+  },
+  "preferred": "static_threshold",
+  "reason": "1 method(s) met both alarm limits. static_threshold had the best event skill among them (-0.001). 1 method(s) have skill intervals including it, and static_threshold is the simplest of them.",
   "tied": [
-   "logistic_regression",
-   "isolation_forest"
+   "static_threshold"
   ]
  },
  "track": "OBSERVED benchmark: Petrobras 3W recorded instances",

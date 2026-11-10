@@ -41,6 +41,14 @@ Review found three defects after both holdouts had been read. Version 3 fixes th
 
 These fixes changed the AETHER selection: three methods are now statistically tied there, and the rule picks the simplest, static limits. Every experiment stage now runs through `pipelines/experiments/run_stage.py`, which keeps each attempt, including failures, with result hashes before and after.
 
+## Second review
+
+A second review found that selection checked only the false-alarm budget, though calibration enforces both alarm limits. Static limits were chosen on AETHER while in alarm for 5.45% of normal time on the selection data, over the 5% limit. Version 4 requires both limits at selection. Held-out results still play no part in selection, since using them would tune on an exposed holdout.
+
+The 3W dataset checksum covered only file names and sizes. It now covers each file's path relative to the dataset root and its content.
+
+On unlabeled leading rows, the primary rule is unchanged, and the sensitivity result is the credible reading: 3W shows no robust evidence of skill above chance. A future protocol could treat episodes starting in the unlabeled part as indeterminate, neither false alarms nor clean.
+
 ## Consequences
 
 - 3W classes with few wells can't support credible per-class numbers, and they're reported as unsupported.

@@ -38,7 +38,7 @@
    "validation": 32
   }
  },
- "git_sha": "481d4b0d37fcfa66d47d8622ea1b37fa81e7fde0",
+ "git_sha": "740211e239718032ef97d893008efb10e3f837cc",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -176,7 +176,7 @@
      "q75_hours": 46.41666666666667
     }
    },
-   "fit_seconds": 20.812762832967564,
+   "fit_seconds": 24.999722208012827,
    "interval": {
     "chance_event_recall": [
      0.0,
@@ -336,7 +336,7 @@
      "q75_hours": 45.25
     }
    },
-   "fit_seconds": 0.6015122910030186,
+   "fit_seconds": 0.6055396249284968,
    "interval": {
     "chance_event_recall": [
      0.43738954867198115,
@@ -533,7 +533,7 @@
      "q75_hours": 21.5
     }
    },
-   "fit_seconds": 9.475119290989824,
+   "fit_seconds": 9.398590540979058,
    "interval": {
     "chance_event_recall": [
      0.07461236541766952,
@@ -693,7 +693,7 @@
      "q75_hours": 67.33333333333334
     }
    },
-   "fit_seconds": 0.053653999930247664,
+   "fit_seconds": 0.04855412500910461,
    "interval": {
     "chance_event_recall": [
      0.43987942459028234,
@@ -853,7 +853,7 @@
      "q75_hours": 26.625
     }
    },
-   "fit_seconds": 0.07095933402888477,
+   "fit_seconds": 0.0673665419453755,
    "interval": {
     "chance_event_recall": [
      0.08008350168256652,
@@ -920,11 +920,27 @@
   }
  },
  "selection": {
-  "preferred": "static_threshold",
-  "reason": "logistic_regression had the best event skill within budget (0.567). 3 method(s) have skill intervals including it, and static_threshold is the simplest of them.",
+  "excluded": {
+   "isolation_forest": {
+    "false_alarms_per_hour": 0.008738076166897256,
+    "time_in_alarm": 0.06320541760722348
+   },
+   "logistic_regression": {
+    "false_alarms_per_hour": 0.0034952304667589017,
+    "time_in_alarm": 0.05881210708997791
+   },
+   "rolling_deviation": {
+    "false_alarms_per_hour": 0.008738076166897256,
+    "time_in_alarm": 0.0596616422728707
+   },
+   "static_threshold": {
+    "false_alarms_per_hour": 0.0026214228500691765,
+    "time_in_alarm": 0.05449161387412316
+   }
+  },
+  "preferred": "hist_gradient_boosting",
+  "reason": "1 method(s) met both alarm limits. hist_gradient_boosting had the best event skill among them (0.500). 1 method(s) have skill intervals including it, and hist_gradient_boosting is the simplest of them.",
   "tied": [
-   "static_threshold",
-   "logistic_regression",
    "hist_gradient_boosting"
   ]
  },
