@@ -8,16 +8,16 @@ Measured on arm64, macOS-27.0, Python 3.12.13, 11 logical CPUs and 18.0 GB memor
 
 | Model | Windows | p50 (ms) | p95 (ms) | p99 (ms) | Max (ms) | Peak Python allocation (MB) | Process peak RSS (MB) | Artifact (KB) | Batch and streaming agree |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| `3w_hist_gradient_boosting` | 145 | 4.12 | 4.17 | 4.24 | 10.86 | 0.5 | 312 | 1961 | yes (145 windows) |
-| `3w_isolation_forest` | 145 | 4.16 | 4.35 | 4.54 | 9.48 | 0.7 | 326 | 3125 | yes (145 windows) |
-| `3w_logistic_regression` | 145 | 0.39 | 0.41 | 0.57 | 5.69 | 0.6 | 301 | 8 | yes (145 windows) |
-| `3w_rolling_deviation` | 145 | 0.82 | 0.84 | 0.86 | 1.16 | 0.5 | 302 | 2 | yes (145 windows) |
-| `3w_static_threshold` | 145 | 0.14 | 0.15 | 0.17 | 0.29 | 0.5 | 301 | 2 | yes (145 windows) |
-| `aether_hist_gradient_boosting` | 2005 | 1.70 | 1.74 | 1.83 | 7.11 | 0.1 | 256 | 1015 | yes (2005 windows) |
-| `aether_isolation_forest` | 2005 | 4.02 | 4.22 | 5.37 | 135.86 | 0.4 | 265 | 1467 | yes (2005 windows) |
-| `aether_logistic_regression` | 2005 | 0.41 | 0.66 | 1.73 | 8.14 | 0.3 | 251 | 8 | yes (2005 windows) |
-| `aether_rolling_deviation` | 2005 | 1.20 | 1.33 | 1.52 | 3.07 | 1.3 | 255 | 2 | yes (2005 windows) |
-| `aether_static_threshold` | 2005 | 0.04 | 0.06 | 0.09 | 0.25 | 0.1 | 251 | 2 | yes (2005 windows) |
+| `3w_hist_gradient_boosting` | 145 | 5.16 | 5.98 | 6.69 | 12.43 | 0.5 | 313 | 1961 | yes (145 windows) |
+| `3w_isolation_forest` | 145 | 4.66 | 5.11 | 5.60 | 9.53 | 0.7 | 326 | 3125 | yes (145 windows) |
+| `3w_logistic_regression` | 145 | 0.43 | 0.97 | 1.59 | 7.95 | 0.6 | 301 | 8 | yes (145 windows) |
+| `3w_rolling_deviation` | 145 | 0.82 | 0.98 | 1.06 | 1.21 | 0.5 | 303 | 2 | yes (145 windows) |
+| `3w_static_threshold` | 145 | 0.15 | 0.20 | 0.25 | 0.44 | 0.5 | 301 | 2 | yes (145 windows) |
+| `aether_hist_gradient_boosting` | 2005 | 1.85 | 2.42 | 3.26 | 7.65 | 0.1 | 256 | 1015 | yes (2005 windows) |
+| `aether_isolation_forest` | 2005 | 4.01 | 4.11 | 4.37 | 18.95 | 0.4 | 264 | 1467 | yes (2005 windows) |
+| `aether_logistic_regression` | 2005 | 0.27 | 0.46 | 0.51 | 5.20 | 0.3 | 251 | 8 | yes (2005 windows) |
+| `aether_rolling_deviation` | 2005 | 1.20 | 1.27 | 1.65 | 4.26 | 1.3 | 255 | 2 | yes (2005 windows) |
+| `aether_static_threshold` | 2005 | 0.04 | 0.06 | 0.06 | 0.17 | 0.1 | 250 | 2 | yes (2005 windows) |
 
 Latency covers a call that ends a window and so produces a prediction. Most of that time goes to validating each observation against the contract, not to the model. Peak RSS includes the Python runtime and libraries. These are single-machine measurements, not a deployment benchmark.
 
