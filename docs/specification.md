@@ -1341,6 +1341,8 @@ Never claim a gate passed without execution evidence.
 
 # 18. DEVELOPMENT GATES
 
+> **Roadmap changed on 2026-11-10 ([ADR 0020](adr/0020-diagnostic-reset.md)).** Gates 0 to 4 are the foundation and Gates 5 to 7 are completed experimental evidence. Gates 8 to 10 below are **paused**. Diagnostic Milestone D1 ([specification](product/d1_diagnostic_spec.md)) comes next, before any UI or deployment work. The gate definitions below are kept as originally written.
+
 ## Gate 0 — Project foundation
 
 Deliver:
