@@ -1,0 +1,198 @@
+# D1 preregistration: gathering-line restriction diagnosis on fictional AETHER Field.
+#
+# Version 1, 2026-11-10. Committed before any D1 case was generated, any diagnostic method was written,
+# or any D1 result was seen. Everything here is SYNTHETIC: a fictional field and an uncalibrated model.
+#
+# Rules for this file:
+# - Any change after this commit gets a new version and an entry in `changes`, with its date, reason,
+#   and timing (see `change_timing`). Nothing is edited silently.
+# - Final evaluation cases are never generated until a freeze record exists (see `protection`).
+# - Thresholds are judgments made now, without data. They are not tuned later.
+version: 1
+provenance_class: SYNTHETIC
+spec: docs/product/d1_diagnostic_spec.md
+
+# The question every diagnosis answers.
+hypotheses:
+  # Every pipe in the Gate 4 network can hold a restriction. The method must always rank all of them,
+  # including pipes that never appear in development cases, plus the no-restriction hypothesis.
+  candidate_pipes: [FL-A-01, FL-A-02, FL-A-03, FL-A-04, FL-A-05, FL-A-06,
+                    FL-B-01, FL-B-02, FL-B-03, FL-B-04, FL-B-05, FL-B-06,
+                    GS-A, GS-B, GS-TRUNK]
+  include_no_restriction: true
+  # A restriction is located to a pipe. Position within a pipe is not identifiable in this model.
+
+# What a diagnosis may read. Anything else is a protocol violation.
+inputs:
+  allowed:
+    - permanent sensor telemetry for the diagnosis window, with quality flags (the Gate 4 sensor set)
+    - the planned-operations calendar for the case (an operator knows it)
+    - the network design configuration (config/facility/aether_network.yaml), as nominal values
+    - readings returned by the measurement port, for measurements the method itself requested
+  forbidden:
+    - truth tables, fault parameters, the case category, severity, or the faulted pipe
+    - the generator's per-case draws (well multipliers, noise multiplier, setpoints, seeds)
+    - any final-split case before the freeze record exists
+  # Telemetry runs from the case start to the diagnosis time. The diagnosis is made at that time.
+  diagnosis_time_s: 259200  # end of day 3
+
+# Case generation. Seeds are disjoint from every earlier gate (Gate 5 used 500000 to 899999).
+generator:
+  simulator: aether-field-network v1 (packages/scenario_engine), unmodified
+  interval_s: 300
+  duration_s: 259200          # 3 days
+  restriction_share: 0.85     # the rest have no restriction
+  seed_base:
+    development: 1100000
+    calibration: 1200000
+    final_in_regime: 1300000
+    final_held_out: 1400000   # plus 10000 times the regime index, in the order listed below
+  cases:
+    development: 300
+    calibration: 100
+    final_in_regime: 150
+    final_held_out_per_regime: 40
+  # In-regime ranges, used by development, calibration, and final_in_regime.
+  in_regime:
+    restriction_pipes: [FL-A-01, FL-A-02, FL-A-03, FL-A-04, FL-A-05,
+                        FL-B-01, FL-B-02, FL-B-04, FL-B-05, FL-B-06, GS-A, GS-B]
+    severity: [0.10, 0.60]
+    onset_days: [0.5, 1.5]
+    ramp_days: [0.25, 1.0]    # every restriction reaches full severity before the diagnosis time
+    well_multiplier: [0.90, 1.10]   # per-well deliverability, unknown to the method
+    noise_multiplier: [0.75, 1.25]  # on the Gate 4 sensor noise
+    suction_setpoint_pa_abs: [1500000.0, 1700000.0]
+    units_offline: 0
+    shut_in_wells: 0
+    dropout: false
+  # Each held-out regime changes only the named settings. No case from these is seen before the final run.
+  held_out_regimes:
+    severity_high: {severity: [0.62, 0.69]}
+    unseen_pipes: {restriction_pipes: [FL-A-06, FL-B-03, GS-TRUNK]}
+    noise_high: {noise_multiplier: [2.0, 3.0]}
+    deliverability_outside: {well_multiplier_bands: [[0.75, 0.85], [1.15, 1.25]]}
+    compressor_outside:
+      suction_setpoint_bands: [[1300000.0, 1450000.0], [1750000.0, 1900000.0]]
+      units_offline: 1
+    degraded_operations:
+      shut_in_wells: [1, 2]          # randomly chosen, declared in the planned-operations calendar
+      dropout: true                  # one pad's telemetry lost for 6 to 18 hours before diagnosis
+
+# Measurements the method may recommend. One measurement per case is simulated for evaluation.
+measurements:
+  PORTABLE_DP:
+    target: one pipe
+    reading: pressure difference across the pipe, averaged over 1 hour
+    noise_std_pa: 200.0
+  PRECISION_PT:
+    target: one node with a permanent pressure sensor
+    reading: calibrated gauge pressure, averaged over 1 hour
+    noise_std_pa: 300.0
+  WELL_TEST:
+    target: one well
+    reading: test-separator gas flow, averaged over 4 hours
+    noise_std_sm3_per_s: 0.0005
+  SHUT_IN_TEST:
+    target: one well
+    reading: every permanent sensor before and after a 2-hour shut-in, network re-solved
+    noise: permanent sensor noise for the case
+  # Readings are produced by the simulator from the case's true state. Only the reading is returned.
+
+# Truth used for scoring, computed by the generator and stored apart from telemetry.
+truth:
+  faulted_pipe: the restricted pipe, or NONE
+  severity: restriction severity at the diagnosis time (the simulator's `max_severity`)
+  production_impact_sm3_per_s: >-
+    total field flow with the restriction removed minus total field flow with it, both solved at the
+    case's true operating state at the diagnosis time
+  material_threshold: impact at or above 1% of the no-restriction field flow
+
+# How a diagnosis is scored. Fixed now.
+scoring:
+  primary_cases: restriction cases with material impact (truth.material_threshold)
+  secondary_cases: all restriction cases, and no-restriction cases separately
+  localization:
+    top1: share of primary cases whose true pipe is ranked first
+    top3: share of primary cases whose true pipe is in the first three
+    mean_reciprocal_rank: over primary cases
+  no_restriction:
+    specificity: share of no-restriction cases where NONE is ranked first
+    miss_rate: share of primary cases where NONE is ranked first
+  severity:
+    error: absolute error of the point estimate, on primary cases whose true pipe is ranked first
+  impact:
+    relative_error: absolute error divided by the true impact, on primary cases
+    within_tolerance: error at most max(20% of the true impact, 0.5% of the no-restriction field flow)
+  uncertainty:
+    pipe_probabilities: Brier skill score against the uniform prior over the 16 hypotheses, and expected calibration error over 10 equal-width bins of the top-ranked probability
+    intervals: empirical coverage of the method's central 80% and 95% intervals for severity and impact
+  measurement:
+    # Scored by simulating the recommended measurement for each case and updating the diagnosis.
+    entropy_reduction: relative reduction in entropy of the pipe posterior after the measurement
+    top1_gain: top-1 after the measurement minus top-1 before, on primary cases
+    against_random: paired difference in entropy reduction between the recommended measurement and one drawn uniformly from the menu
+  intervals: 95% percentile bootstrap over cases, 2000 resamples, seed 20261111
+
+# Baselines, frozen now, run on the same cases.
+baselines:
+  B0_uniform: every hypothesis equally likely; severity and impact at their development-split means
+  B1_residual: >-
+    rank pipes by the standardized residual of their observed pressure drop against the Gate 4 model
+    solved with nominal well parameters at the measured suction pressure. Segments use their DPT
+    sensors; flowlines use wellhead pressure minus header pressure. NONE is ranked first when no
+    residual exceeds 3 standard deviations.
+
+# Acceptance on final_in_regime. Every line must hold for D1 to be met. Where a line names a baseline,
+# the lower end of the bootstrap interval of the difference must be above zero.
+acceptance_in_regime:
+  top1: {at_least: 0.70, beats: B1_residual}
+  top3: {at_least: 0.90}
+  specificity: {at_least: 0.80}
+  miss_rate: {at_most: 0.10}
+  severity_mean_absolute_error: {at_most: 0.07}
+  impact_within_tolerance: {at_least: 0.80}
+  impact_median_relative_error: {at_most: 0.15}
+  brier_skill_score: {at_least: 0.50}
+  expected_calibration_error: {at_most: 0.10}
+  coverage_80: {between: [0.72, 0.88]}   # severity and impact separately
+  coverage_95: {between: [0.90, 0.98]}
+  measurement_entropy_reduction: {at_least: 0.25}
+  measurement_top1_gain: {at_least: 0.08, interval_above_zero: true}
+  measurement_against_random: {interval_above_zero: true}
+
+# Acceptance on final_held_out. Reported per regime and pooled.
+acceptance_held_out:
+  pooled_top1: {at_least: 0.60}
+  per_regime_top1: {at_least: 0.55}
+  per_regime_coverage_80: {between: [0.65, 0.92]}
+  # If any held-out line fails, D1 is reported as met in regime only, with the failing regimes named.
+
+# Outcome labels, fixed now.
+outcomes:
+  MET: every in-regime and held-out line holds
+  MET_IN_REGIME_ONLY: every in-regime line holds and at least one held-out line fails
+  NOT_MET: any in-regime line fails
+
+# Controls that keep the final cases untouched.
+protection:
+  development_splits: [development, calibration]   # free to use during method development
+  final_splits: [final_in_regime, final_held_out]
+  freeze_record: config/diagnostics/d1_freeze.yaml
+  freeze_record_contents: [method commit SHA, SHA-256 of this file, SHA-256 of the method configuration, date]
+  rule: >-
+    The generator refuses to produce a final split unless the freeze record exists, is committed, and
+    matches this file's hash. The final evaluation runs once through the attempt recorder; every
+    attempt, including failures, is kept, and a rerun is allowed only for a crash, with the cause stated.
+  truth_storage: case truth is written to a separate directory that diagnosis code never reads
+  code_boundary: >-
+    The diagnosis package may not import the generator or truth modules, enforced by a test. Its only
+    entry point takes the allowed inputs and a measurement port.
+
+# How a later change is classified. Every entry in `changes` names one of these.
+change_timing:
+  - BEFORE_DEVELOPMENT_RESULTS
+  - AFTER_DEVELOPMENT_RESULTS_BEFORE_FREEZE
+  - AFTER_FREEZE_BEFORE_FINAL_RESULTS
+  - AFTER_FINAL_RESULTS
+
+changes: []
