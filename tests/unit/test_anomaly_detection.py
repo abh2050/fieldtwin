@@ -392,13 +392,17 @@ def test_calibration_uses_the_lowest_threshold_within_budget():
     )
 
 
-def _row(method, skill, alarms, low, high):
+def _row(method, skill, alarms, low, high, in_alarm=0.01):
     return {
         "method": method,
         "event_skill": skill,
         "false_alarms_per_hour": alarms,
+        "time_in_alarm": in_alarm,
         "interval": {"event_skill": [low, high]},
     }
+
+
+LIMITS = {"budget": 0.05, "max_time_in_alarm": 0.05}
 
 
 def test_selection_prefers_the_simplest_tied_method():
@@ -408,19 +412,30 @@ def test_selection_prefers_the_simplest_tied_method():
         _row("medium", 0.5, 0.01, 0.3, 0.6),
         _row("complex", 0.7, 0.04, 0.5, 0.9),
     ]
-    assert select_preferred(rows, order=order, budget=0.05)["preferred"] == "simple"
+    assert select_preferred(rows, order=order, **LIMITS)["preferred"] == "simple"
 
 
 def test_selection_excludes_methods_over_budget():
     order = ["simple", "complex"]
     rows = [_row("simple", 0.9, 1.0, 0.8, 1.0), _row("complex", 0.5, 0.01, 0.4, 0.6)]
-    assert select_preferred(rows, order=order, budget=0.05)["preferred"] == "complex"
+    assert select_preferred(rows, order=order, **LIMITS)["preferred"] == "complex"
     assert (
-        select_preferred([_row("simple", 0.9, 1.0, 0.8, 1.0)], order=order, budget=0.05)[
-            "preferred"
-        ]
+        select_preferred([_row("simple", 0.9, 1.0, 0.8, 1.0)], order=order, **LIMITS)["preferred"]
         is None
     )
+
+
+def test_selection_excludes_methods_over_the_time_in_alarm_limit():
+    order = ["simple", "complex"]
+    rows = [
+        _row("simple", 0.6, 0.01, 0.4, 0.8, in_alarm=0.0545),
+        _row("complex", 0.5, 0.0, 0.3, 0.7, in_alarm=0.0),
+    ]
+    result = select_preferred(rows, order=order, **LIMITS)
+    assert result["preferred"] == "complex"
+    assert result["excluded"] == {
+        "simple": {"false_alarms_per_hour": 0.01, "time_in_alarm": 0.0545}
+    }
 
 
 def test_calibration_doesnt_choose_an_alarm_that_never_turns_off():

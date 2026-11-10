@@ -370,16 +370,39 @@ def by_class(
     return rows
 
 
-def select_preferred(rows: list[dict], *, order: list[str], budget: float) -> dict:
-    """The declared rule: within budget, best skill, then the simplest method statistically tied."""
-    eligible = [
-        r
+def select_preferred(
+    rows: list[dict], *, order: list[str], budget: float, max_time_in_alarm: float
+) -> dict:
+    """The declared rule: within both alarm limits, best skill, then the simplest method statistically tied.
+
+    Both limits are operating constraints, so a method breaking either on the selection data can't be chosen.
+    """
+
+    def within(row: dict) -> bool:
+        rate, in_alarm = row["false_alarms_per_hour"], row["time_in_alarm"]
+        return (
+            rate == rate
+            and rate <= budget
+            and in_alarm == in_alarm
+            and in_alarm <= max_time_in_alarm
+        )
+
+    eligible = [r for r in rows if within(r)]
+    excluded = {
+        r["method"]: {
+            "false_alarms_per_hour": r["false_alarms_per_hour"],
+            "time_in_alarm": r["time_in_alarm"],
+        }
         for r in rows
-        if r["false_alarms_per_hour"] == r["false_alarms_per_hour"]
-        and r["false_alarms_per_hour"] <= budget
-    ]
+        if not within(r)
+    }
     if not eligible:
-        return {"preferred": None, "reason": "No method met the false-alarm budget.", "tied": []}
+        return {
+            "preferred": None,
+            "reason": "No method met both alarm limits.",
+            "tied": [],
+            "excluded": excluded,
+        }
     best = max(eligible, key=lambda r: r["event_skill"])
     tied = [
         r["method"]
@@ -393,6 +416,7 @@ def select_preferred(rows: list[dict], *, order: list[str], budget: float) -> di
     preferred = min(tied, key=order.index)
     return {
         "preferred": preferred,
-        "reason": f"{best['method']} had the best event skill within budget ({best['event_skill']:.3f}). {len(tied)} method(s) have skill intervals including it, and {preferred} is the simplest of them.",
+        "reason": f"{len(eligible)} method(s) met both alarm limits. {best['method']} had the best event skill among them ({best['event_skill']:.3f}). {len(tied)} method(s) have skill intervals including it, and {preferred} is the simplest of them.",
         "tied": tied,
+        "excluded": excluded,
     }

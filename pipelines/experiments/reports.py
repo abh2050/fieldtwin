@@ -511,7 +511,7 @@ def comparison() -> None:
     lines = ["# Model comparison", "", GENERATED, "", BOTH, ""]
     lines += [
         "All methods use the same splits, the same causal features, preprocessing fitted on training data only, and the same operating point. "
-        "Parameters were fixed in advance and not tuned. Selection follows the declared rule: within the false-alarm budget, best event skill, then the simplest tied method.",
+        "Parameters were fixed in advance and not tuned. Selection follows the declared rule: within both alarm limits, the false-alarm budget, best event skill, then the simplest tied method.",
         "",
         "## Selection",
         "",

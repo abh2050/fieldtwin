@@ -155,12 +155,16 @@ def in_regime() -> None:
             "method": m,
             "event_skill": r["summary"]["event_skill"] or 0.0,
             "false_alarms_per_hour": r["summary"]["false_alarms_per_hour"],
+            "time_in_alarm": r["summary"]["time_in_alarm"],
             "interval": r["interval"],
         }
         for m, r in methods.items()
     ]
     selection = select_preferred(
-        table, order=config["methods"], budget=config["alarm"]["false_alarms_per_hour_budget"]
+        table,
+        order=config["methods"],
+        budget=config["alarm"]["false_alarms_per_hour_budget"],
+        max_time_in_alarm=config["alarm"]["max_fraction_of_normal_time_in_alarm"],
     )
     write_result(
         "aether_in_regime",

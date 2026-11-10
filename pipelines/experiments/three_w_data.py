@@ -144,12 +144,20 @@ def load_track() -> tuple[Track, pd.DataFrame, FeatureSpec]:
     )
 
 
-def dataset_sha256() -> str:
+def tree_sha256(root: Path, pattern: str) -> str:
+    """Each file's path relative to `root` and the SHA-256 of its content, in path order.
+
+    The relative path keeps files that share a name in different class folders apart.
+    """
     digest = hashlib.sha256()
-    for path in sorted(batch_root().glob("dataset/*/*.parquet")):
-        digest.update(path.name.encode())
-        digest.update(str(path.stat().st_size).encode())
+    for path in sorted(root.glob(pattern)):
+        digest.update(path.relative_to(root).as_posix().encode() + b"\0")
+        digest.update(hashlib.sha256(path.read_bytes()).hexdigest().encode() + b"\n")
     return digest.hexdigest()
+
+
+def dataset_sha256() -> str:
+    return tree_sha256(batch_root(), "dataset/*/*.parquet")
 
 
 def with_policy(table: pd.DataFrame, policy: str) -> pd.DataFrame:
