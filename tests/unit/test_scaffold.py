@@ -35,6 +35,18 @@ def test_required_paths_exist():
         "reports/simulation/diagrams/aether_asset_topology.png",
         "reports/simulation/diagrams/aether_physical_network.png",
         "reports/simulation/diagrams/simulation_sequence.png",
+        "config/experiments/gate5_evaluation.yaml",
+        "config/experiments/aether_benchmark.yaml",
+        "docs/adr/0017-detection-evaluation-design.md",
+        "reports/gates/gate_5.md",
+        "reports/experiments/3w_label_audit.md",
+        "reports/experiments/3w_benchmark.md",
+        "reports/experiments/aether_synthetic_benchmark.md",
+        "reports/experiments/model_comparison.md",
+        "reports/experiments/robustness.md",
+        "reports/experiments/inference_performance.md",
+        "reports/experiments/detection_evaluation.png",
+        "reports/simulation/reliability_stress.md",
         ".github/workflows/ci.yml",
     ]  # fmt: skip
     missing = [path for path in required if not (REPO_ROOT / path).exists()]

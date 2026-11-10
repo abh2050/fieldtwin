@@ -28,3 +28,7 @@ data/fixtures_local/
 
 # OS
 .DS_Store
+
+# MLflow stores, kept local
+mlruns/
+mlflow.db

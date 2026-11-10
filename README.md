@@ -8,9 +8,9 @@ These datasets do not describe one facility. Petrobras 3W was not measured at a 
 
 ## Status
 
-Gates 0 to 4 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, and a coupled simulation of the whole fictional field. There is no trained ML model, application UI, or AWS deployment yet.
+Gates 0 to 5 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, a coupled simulation of the whole fictional field, and an anomaly-detection evaluation on two separate tracks. There is no application UI or AWS deployment yet, and no detection result is field-validated.
 
-Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [Gate 4](reports/gates/gate_4.md), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
+Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [Gate 4](reports/gates/gate_4.md), [Gate 5](reports/gates/gate_5.md), [detection experiments](reports/experiments/), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
 
 ## Quick start
 
@@ -32,6 +32,9 @@ make benchmark-events scenario reconcile gate3-reports
 
 # The whole fictional field
 make field field-reports
+
+# Detection experiments: development first, then the holdout
+make gate5-audit gate5-data gate5-development gate5-holdout gate5-reports
 ```
 
 `make acquire` reuses a completed batch. `make acquire REFRESH=1` checks upstream for a new version. A first run took about 11 minutes on the development machine, mostly scanning 48 million OCD production rows.

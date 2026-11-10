@@ -1,4 +1,4 @@
-.PHONY: field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
+.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
 
 bootstrap:
 	bash scripts/bootstrap.sh
@@ -46,6 +46,33 @@ reconcile:
 gate3-reports:
 	uv run python -m pipelines.reconcile.reports
 	uv run python -m pipelines.synthetic.report
+
+# Gate 5. Development stages choose a method; holdout stages read the holdout once.
+gate5-audit:
+	uv run python -m pipelines.experiments.three_w_audit
+
+gate5-data:
+	uv run python -m pipelines.experiments.aether_data
+
+gate5-development:
+	uv run python -m pipelines.experiments.run_stage 3w-development -- pipelines.experiments.three_w_run --stage development
+	uv run python -m pipelines.experiments.run_stage aether-in-regime -- pipelines.experiments.aether_run --stage in_regime
+
+gate5-holdout:
+	uv run python -m pipelines.experiments.run_stage 3w-holdout -- pipelines.experiments.three_w_run --stage holdout
+	uv run python -m pipelines.experiments.run_stage aether-held-out -- pipelines.experiments.aether_run --stage held_out
+
+gate5-performance:
+	uv run python -m pipelines.experiments.inference_perf
+
+gate5-stress:
+	uv run python -m pipelines.experiments.reliability_stress
+
+gate5-reports:
+	uv run python -m pipelines.experiments.reports
+
+gate5:
+	bash scripts/gate5_evidence.sh
 
 # The whole fictional field: six scenarios, checks, outputs, and lineage.
 field:

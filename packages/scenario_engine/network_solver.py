@@ -221,15 +221,18 @@ class _Flows:
 
 
 def _path(model: NetworkModel, well: str) -> list[Edge]:
-    edges = []
+    edges: list[Edge] = []
     node = f"{WELLHEAD_PREFIX}{well}"
-    while node != model.suction:
+    # A validated graph is a tree, so this limit can only trip on a corrupted graph.
+    for _ in range(len(model.graph.nodes)):
+        if node == model.suction:
+            return edges
         edge = model.graph.downstream_edge(node)
         if edge is None:
             raise InfeasibleNetworkState(f"{well} has no path to suction")
         edges.append(edge)
         node = edge.target
-    return edges
+    raise InfeasibleNetworkState(f"{well}: the path to suction didn't end")
 
 
 def _build_flows(
@@ -462,12 +465,14 @@ def solve_network(model: NetworkModel, state: NetworkState) -> NetworkSolution:
 
 def _reaches_suction(model: NetworkModel, well: str, closed: frozenset[str]) -> bool:
     node = f"{WELLHEAD_PREFIX}{well}"
-    while node != model.suction:
+    for _ in range(len(model.graph.nodes)):
+        if node == model.suction:
+            return True
         edge = model.graph.downstream_edge(node)
         if edge is None or (edge.valve_asset_id and edge.valve_asset_id in closed):
             return False
         node = edge.target
-    return True
+    raise InfeasibleNetworkState(f"{well}: the path to suction didn't end")
 
 
 def _connected_sections(model: NetworkModel, closed: frozenset[str]) -> list[set[str]]:

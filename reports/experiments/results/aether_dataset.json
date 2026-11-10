@@ -1,0 +1,39 @@
+{
+ "cases": 272,
+ "category_counts": {
+  "COMM": 20,
+  "DERATE": 36,
+  "NORMAL": 36,
+  "PLANNED": 36,
+  "RESTRICTION": 36,
+  "SENSOR_BIAS": 36,
+  "SENSOR_DRIFT": 36,
+  "SENSOR_STUCK": 36
+ },
+ "dataset_sha256": "52e38b27fbea6443a9b0e7ea3a7acb9d9db7d8de42e3441de8290b496f698ec0",
+ "failed": [],
+ "max_case_seconds": 2.591,
+ "median_case_seconds": 1.807,
+ "outcomes": {
+  "OK": 272
+ },
+ "parameter_sets_sha256": "a844d831bde541f080908764d7e3c02aa9bb5f38bd537d6181c2961de0b028d7",
+ "provenance": "SYNTHETIC",
+ "regime_counts": {
+  "compressor_outside": 14,
+  "deliverability_outside": 14,
+  "fault_with_dropout": 14,
+  "in_regime": 160,
+  "noise_high": 14,
+  "onset_outside": 14,
+  "severity_high": 14,
+  "severity_low": 14,
+  "unseen_assets": 14
+ },
+ "split_counts": {
+  "held_out": 112,
+  "test": 32,
+  "train": 96,
+  "validation": 32
+ }
+}

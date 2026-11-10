@@ -82,8 +82,13 @@ def test_diagram_pages_exist_and_name_every_network_asset():
 def test_diagram_is_generated_from_the_current_configuration():
     import re
 
-    from scripts.build_field_diagrams import network_page, sequence_page, topology_page
+    from scripts.build_field_diagrams import (
+        detection_page,
+        network_page,
+        sequence_page,
+        topology_page,
+    )
 
-    for page in (topology_page(), network_page(), sequence_page()):
+    for page in (topology_page(), network_page(), sequence_page(), detection_page()):
         stored = re.search(rf'  <diagram id="{page.page_id}".*?</diagram>\n', DRAWIO, re.S)
         assert stored and stored.group(0) == page.xml(), "Run scripts/build_field_diagrams.py."
