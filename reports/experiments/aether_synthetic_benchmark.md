@@ -41,9 +41,9 @@ Sample level, at the same thresholds. These count windows, not events.
 | Isolation forest | 0.234 | 0.005 | 0.010 | 0.0095 | 0.487 |
 | Gradient boosting | 0.999 | 0.342 | 0.509 | 0.0002 | 0.765 |
 
-**Preferred under the declared rule: Static limits.** logistic_regression had the best event skill within budget (0.567). 3 method(s) have skill intervals including it, and static_threshold is the simplest of them.
+**Preferred under the declared rule: Gradient boosting.** 1 method(s) met both alarm limits. hist_gradient_boosting had the best event skill among them (0.500). 1 method(s) have skill intervals including it, and hist_gradient_boosting is the simplest of them.
 
-Tied methods: Static limits, Logistic regression, Gradient boosting.
+Tied methods: Gradient boosting.
 
 ### Detection by fault type
 

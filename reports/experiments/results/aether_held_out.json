@@ -214,7 +214,7 @@
    "onset_s": 172800
   }
  },
- "git_sha": "481d4b0d37fcfa66d47d8622ea1b37fa81e7fde0",
+ "git_sha": "8e904e1818f78d975ac169f6348aee4861052390",
  "hardware": {
   "logical_cpus": 11,
   "machine": "arm64",
@@ -991,11 +991,27 @@
   }
  },
  "preferred_from_in_regime": {
-  "preferred": "static_threshold",
-  "reason": "logistic_regression had the best event skill within budget (0.567). 3 method(s) have skill intervals including it, and static_threshold is the simplest of them.",
+  "excluded": {
+   "isolation_forest": {
+    "false_alarms_per_hour": 0.008738076166897256,
+    "time_in_alarm": 0.06320541760722348
+   },
+   "logistic_regression": {
+    "false_alarms_per_hour": 0.0034952304667589017,
+    "time_in_alarm": 0.05881210708997791
+   },
+   "rolling_deviation": {
+    "false_alarms_per_hour": 0.008738076166897256,
+    "time_in_alarm": 0.0596616422728707
+   },
+   "static_threshold": {
+    "false_alarms_per_hour": 0.0026214228500691765,
+    "time_in_alarm": 0.05449161387412316
+   }
+  },
+  "preferred": "hist_gradient_boosting",
+  "reason": "1 method(s) met both alarm limits. hist_gradient_boosting had the best event skill among them (0.500). 1 method(s) have skill intervals including it, and hist_gradient_boosting is the simplest of them.",
   "tied": [
-   "static_threshold",
-   "logistic_regression",
    "hist_gradient_boosting"
   ]
  },

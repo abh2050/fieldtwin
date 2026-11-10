@@ -36,9 +36,9 @@ Sample level, at the same thresholds. These count windows, not events.
 | Isolation forest | 0.894 | 0.360 | 0.513 | 0.1198 | 0.787 |
 | Gradient boosting | 0.940 | 0.223 | 0.360 | 0.0399 | 0.808 |
 
-**Preferred under the declared rule: Logistic regression.** logistic_regression had the best event skill within budget (0.156). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.
+**Preferred under the declared rule: Static limits.** 1 method(s) met both alarm limits. static_threshold had the best event skill among them (-0.001). 1 method(s) have skill intervals including it, and static_threshold is the simplest of them.
 
-Tied methods: Logistic regression, Isolation forest.
+Tied methods: Static limits.
 
 ## Holdout
 
@@ -62,7 +62,7 @@ Sample level, at the same thresholds. These count windows, not events.
 | Isolation forest | 0.070 | 0.007 | 0.013 | 0.3247 | 0.707 |
 | Gradient boosting | 0.982 | 0.031 | 0.060 | 0.0020 | 0.703 |
 
-The method preferred in development was Logistic regression.
+The method preferred in development was Static limits.
 
 ### Event recall by class on the holdout
 
