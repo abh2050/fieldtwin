@@ -32,7 +32,7 @@ This replaces the original goal of an end-to-end inspection and maintenance prod
 
 ## Diagnostic requirements (Milestone D1)
 
-Gathering-line restrictions only, on fictional AETHER Field. Specification: [D1](d1_diagnostic_spec.md). Frozen evaluation plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 3.
+Gathering-line restrictions only, on fictional AETHER Field. Specification: [D1](d1_diagnostic_spec.md). Frozen evaluation plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 4.
 
 | ID | Requirement | Status |
 |---|---|---|
