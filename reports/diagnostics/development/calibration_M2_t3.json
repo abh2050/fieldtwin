@@ -1,0 +1,90 @@
+{
+ "split": "calibration",
+ "method": {
+  "name": "M2_t3",
+  "calibrate_wells": true,
+  "baseline_hours": 6.0,
+  "current_hours": 2.0,
+  "severity_step": 0.01,
+  "severity_max": 0.69,
+  "prior_none": 0.15,
+  "model_error": {
+   "PRESSURE": 0.0,
+   "DP": 0.0,
+   "FLOW": 0.0
+  },
+  "temperature": 3.0,
+  "support_mass": 0.999,
+  "support_cap": 120,
+  "shut_in_support_cap": 40,
+  "eig_draws": 48,
+  "seed": 20261112
+ },
+ "seconds": 60.5,
+ "metrics": {
+  "cases": 100,
+  "primary_cases": 85,
+  "no_restriction_cases": 15,
+  "material_subset_cases": 2,
+  "top1": 1.0,
+  "top1_interval": [
+   1.0,
+   1.0
+  ],
+  "top3": 1.0,
+  "mean_reciprocal_rank": 1.0,
+  "miss_rate": 0.0,
+  "severity_conditional_mae": 0.003038111039809415,
+  "joint_success_rate": 1.0,
+  "joint_success_interval": [
+   1.0,
+   1.0
+  ],
+  "impact_within_tolerance": 1.0,
+  "impact_relative_error_cases": 46,
+  "impact_median_relative_error": 0.003976826096809395,
+  "coverage_80": {
+   "severity": 0.8705882352941177,
+   "impact": 0.8352941176470589
+  },
+  "coverage_95": {
+   "severity": 0.9529411764705882,
+   "impact": 0.9529411764705882
+  },
+  "b1_top1": 0.6588235294117647,
+  "top1_minus_b1_interval": [
+   0.23529411764705882,
+   0.4470588235294118
+  ],
+  "specificity": 1.0,
+  "brier_skill_score_vs_climatology": 0.9788748929381328,
+  "brier_skill_score_vs_uniform": 0.979330256357022,
+  "expected_calibration_error": 0.05044520245349215,
+  "mean_entropy_before_nats": 0.21359930397828117,
+  "measurement_entropy_reduction": 0.18231847542852955,
+  "measurement_against_random_mean": 0.026571352230566957,
+  "measurement_against_random_interval": [
+   0.007746470723934685,
+   0.04930707145600525
+  ],
+  "measurement_top1_gain": 0.0,
+  "measurement_top1_gain_interval": [
+   0.0,
+   0.0
+  ],
+  "recommended_types": {
+   "PORTABLE_DP": 84,
+   "PRECISION_PT": 1,
+   "SHUT_IN_TEST": 15
+  },
+  "recommended_mean_duration_h": 1.15,
+  "recommended_share_production_interrupting": 0.15,
+  "random_types": {
+   "PORTABLE_DP": 34,
+   "PRECISION_PT": 27,
+   "SHUT_IN_TEST": 25,
+   "WELL_TEST": 14
+  }
+ },
+ "note": "Temperature tuning run on the calibration split. Per-case rows removed; metrics kept."
+}
