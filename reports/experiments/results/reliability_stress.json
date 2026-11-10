@@ -1,7 +1,7 @@
 {
  "forced_failures": {
   "CRASH": {
-   "elapsed_s": 1.169,
+   "elapsed_s": 1.158,
    "matches": true,
    "observed": "CRASH",
    "stack_captured": false
@@ -13,13 +13,13 @@
    "stack_captured": false
   },
   "INFEASIBLE_STATE": {
-   "elapsed_s": 1.165,
+   "elapsed_s": 1.069,
    "matches": true,
    "observed": "INFEASIBLE_STATE",
    "stack_captured": false
   },
   "SOLVER_NONCONVERGENCE": {
-   "elapsed_s": 1.16,
+   "elapsed_s": 1.07,
    "matches": true,
    "observed": "SOLVER_NONCONVERGENCE",
    "stack_captured": false
@@ -41,49 +41,49 @@
   "AETHER-FAULT-001-NET": {
    "hash_matches": 30,
    "max_newton_iterations": 4,
-   "max_seconds": 2.131,
+   "max_seconds": 2.132,
    "ok": 30,
    "runs": 30
   },
   "AETHER-NET-COMM-DROPOUT": {
    "hash_matches": 30,
    "max_newton_iterations": 4,
-   "max_seconds": 1.977,
+   "max_seconds": 1.68,
    "ok": 30,
    "runs": 30
   },
   "AETHER-NET-COMPRESSOR-DERATE": {
    "hash_matches": 30,
    "max_newton_iterations": 8,
-   "max_seconds": 1.898,
+   "max_seconds": 2.2,
    "ok": 30,
    "runs": 30
   },
   "AETHER-NET-NORMAL": {
    "hash_matches": 30,
    "max_newton_iterations": 4,
-   "max_seconds": 1.622,
+   "max_seconds": 1.703,
    "ok": 30,
    "runs": 30
   },
   "AETHER-NET-PLANNED-SHUTDOWN": {
    "hash_matches": 30,
    "max_newton_iterations": 4,
-   "max_seconds": 1.507,
+   "max_seconds": 2.01,
    "ok": 30,
    "runs": 30
   },
   "AETHER-NET-SENSOR-DRIFT": {
    "hash_matches": 30,
    "max_newton_iterations": 4,
-   "max_seconds": 1.521,
+   "max_seconds": 1.732,
    "ok": 30,
    "runs": 30
   },
   "propagation": {
    "hash_matches": 0,
    "max_newton_iterations": null,
-   "max_seconds": 2.278,
+   "max_seconds": 3.209,
    "ok": 30,
    "runs": 30
   }

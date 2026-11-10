@@ -1,0 +1,7 @@
+static_threshold recall 0.6 FA/h 0.0026 P 0.8163242518981688 R 0.3184094769391577
+rolling_deviation recall 0.85 FA/h 0.0087 P 0.42225859247135844 R 0.011236444405731457
+logistic_regression recall 0.85 FA/h 0.0035 P 0.9541944231562813 R 0.7049344540742999
+isolation_forest recall 0.55 FA/h 0.0087 P 0.23391812865497075 R 0.00522625321196812
+hist_gradient_boosting recall 0.5 FA/h 0.0 P 0.9988537952114112 R 0.3415791995122164
+{'preferred': 'static_threshold', 'reason': 'logistic_regression had the best event skill within budget (0.567). 3 method(s) have skill intervals including it, and static_threshold is the simplest of them.', 'tied': ['static_threshold', 'logistic_regression', 'hist_gradient_boosting']}
+2026/11/09 18:38:36 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.

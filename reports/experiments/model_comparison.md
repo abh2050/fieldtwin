@@ -18,10 +18,10 @@ All methods use the same splits, the same causal features, preprocessing fitted 
 | Method | 3W development skill | 3W holdout skill | AETHER in-regime skill | AETHER held-out skill | 3W development false alarms per hour | Explainability | Maintainability | p95 window latency, 3W / AETHER (ms) |
 |---|---:|---:|---:|---:|---:|---|---|---|
 | Static limits | -0.001 | 0.025 | 0.379 | -0.021 | 0.002 | High: one fixed band per sensor | Low: fixed limits, refit only to recompute bands | 0.15 / 0.06 |
-| Rolling deviation | 0.127 | 0.042 | 0.286 | 0.222 | 0.067 | High: names the sensor that moved from its own past | Low: no training labels | 0.84 / 1.22 |
-| Logistic regression | 0.156 | 0.200 | 0.567 | 0.179 | 0.013 | Medium: linear weights on named features | Medium: retrain when sensors change | 0.40 / 0.45 |
-| Isolation forest | -0.096 | 0.033 | -0.014 | -0.023 | 0.035 | Low: path-length score with no direct reason | Medium: retrain on fresh normal data | 4.22 / 4.41 |
-| Gradient boosting | -0.051 | -0.067 | 0.500 | 0.329 | 0.019 | Low: 150 trees | Higher: retrain and recheck calibration | 4.16 / 1.72 |
+| Rolling deviation | 0.127 | 0.042 | 0.286 | 0.222 | 0.067 | High: names the sensor that moved from its own past | Low: no training labels | 0.84 / 1.33 |
+| Logistic regression | 0.156 | 0.200 | 0.567 | 0.179 | 0.013 | Medium: linear weights on named features | Medium: retrain when sensors change | 0.41 / 0.66 |
+| Isolation forest | -0.096 | 0.033 | -0.014 | -0.023 | 0.035 | Low: path-length score with no direct reason | Medium: retrain on fresh normal data | 4.35 / 4.22 |
+| Gradient boosting | -0.051 | -0.067 | 0.500 | 0.329 | 0.019 | Low: 150 trees | Higher: retrain and recheck calibration | 4.17 / 1.74 |
 
 Explainability and maintainability are judgments about each method's form, not measurements. Robustness is in [robustness](robustness.md), and latency in [inference performance](inference_performance.md).
 
