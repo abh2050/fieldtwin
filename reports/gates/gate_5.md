@@ -1,6 +1,6 @@
 # Gate 5 report: anomaly detection, benchmark evaluation, and uncertainty
 
-**Status: CI_STATUS_PLACEHOLDER**
+**Status: ALL 12 ACCEPTANCE CRITERIA MET after two reviews, stopped for technical review.** The work is on branch `gate-5`, with a [successful CI run](https://github.com/abh2050/fieldtwin/actions/runs/42759697691). It isn't merged. Meeting the criteria means the evaluation was done properly. It doesn't mean any method works: 3W shows no robust evidence of skill above chance.
 
 Date: 2026-11-10, revised after two technical reviews. Branch: `gate-5`. Full output of the final local rebuild: [`gate_5_execution_log.txt`](gate_5_execution_log.txt). Every experiment attempt is recorded in [`attempts/`](../experiments/attempts/).
 
@@ -33,7 +33,7 @@ Date: 2026-11-10, revised after two technical reviews. Branch: `gate-5`. Full ou
 | 8 | Model artifacts and experiments are reproducible | **Met** | A rebuild from an empty experiment folder reproduced all 91 score, artifact, and dataset checksums, and every other recorded value. The dataset checksum covers each file's path and content. Seeds, splits, configurations, feature names, parameters, convergence, metrics, hardware, and artifact checksums are logged to a local MLflow store. Every stage attempt is kept in `reports/experiments/attempts/`. Reproduction is shown on one machine only, and latency varies between runs. |
 | 9 | Numerical reliability tests and timeout protections exist | **Met** | 210 of 210 stress runs completed with matching hashes. Nonconvergence, infeasible state, timeout, and crash were each forced and classified correctly. Logistic regression now refuses an unconverged fit. [Reliability stress](../simulation/reliability_stress.md) |
 | 10 | Gate 0–4 regression tests pass | **Met** | The final rebuild reran Gates 0 to 4 from an empty database, with 0 failures: 535 offline tests, 228 database tests, 33 real-data tests, and every CI command in a clean copy. Gate 4's six simulation hashes are unchanged. |
-| 11 | CI passes on the feature branch | CI_PLACEHOLDER |
+| 11 | CI passes on the feature branch | **Met** | [All 9 jobs passed](https://github.com/abh2050/fieldtwin/actions/runs/42759697691) on commit `0c6ed26`, including simulation reproducibility on Linux x86, Linux ARM, and macOS ARM. An earlier run on `97b4924` failed one unit test, which exposed the guard race described under Reliability. This line was added afterward, so its own commit has a separate CI run. |
 | 12 | Limitations and unsupported claims disclosed | **Met** | See [Limitations](#limitations) |
 
 ## Review findings and what changed
