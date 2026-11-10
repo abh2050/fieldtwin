@@ -360,6 +360,36 @@ END $$;
 
 
 --
+-- Name: enforce_recommendation(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_recommendation() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  term_total integer;
+  unknown text;
+  alarm_run text;
+BEGIN
+  SELECT coalesce(sum((t->>'points')::integer), -1) INTO term_total FROM jsonb_array_elements(NEW.terms) AS t;
+  IF term_total <> NEW.priority_score THEN
+    RAISE EXCEPTION 'priority score % is not the sum of its terms (%)', NEW.priority_score, term_total
+      USING ERRCODE = 'check_violation';
+  END IF;
+  SELECT a INTO unknown FROM unnest(NEW.candidate_assets || NEW.suppressed_assets) AS a
+    WHERE a NOT IN (SELECT asset_id FROM assets) LIMIT 1;
+  IF unknown IS NOT NULL THEN
+    RAISE EXCEPTION '% is not a fictional asset', unknown USING ERRCODE = 'check_violation';
+  END IF;
+  SELECT scenario_run_id INTO alarm_run FROM detector_alarms WHERE alarm_id = NEW.alarm_id;
+  IF alarm_run IS DISTINCT FROM NEW.scenario_run_id THEN
+    RAISE EXCEPTION 'a recommendation must come from an alarm in its own run' USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
 -- Name: enforce_request_trigger(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -455,6 +485,87 @@ END $$;
 
 
 --
+-- Name: enforce_status_change(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_status_change() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  latest work_order_transitions%ROWTYPE;
+BEGIN
+  IF NEW.status IS NOT DISTINCT FROM OLD.status THEN
+    RETURN NEW;
+  END IF;
+  SELECT * INTO latest FROM work_order_transitions WHERE work_order_id = NEW.work_order_id
+    ORDER BY sequence DESC LIMIT 1;
+  IF latest.transition_id IS NULL OR latest.from_status IS DISTINCT FROM OLD.status OR latest.to_status <> NEW.status THEN
+    RAISE EXCEPTION 'status change % to % has no matching transition', OLD.status, NEW.status
+      USING ERRCODE = 'check_violation';
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM audit_events WHERE correlation_id = 'transition:' || latest.transition_id) THEN
+    RAISE EXCEPTION 'status change has no audit event' USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_transition_order(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_transition_order() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  current_status text;
+  recorded integer;
+  previous timestamptz;
+BEGIN
+  SELECT status INTO current_status FROM work_orders WHERE work_order_id = NEW.work_order_id;
+  SELECT count(*), max(decided_at) INTO recorded, previous FROM work_order_transitions WHERE work_order_id = NEW.work_order_id;
+  IF NEW.sequence <> recorded THEN
+    RAISE EXCEPTION 'transition % is out of sequence (expected %)', NEW.sequence, recorded USING ERRCODE = 'check_violation';
+  END IF;
+  IF NEW.decision <> 'CREATE' AND NEW.from_status IS DISTINCT FROM current_status THEN
+    RAISE EXCEPTION 'work order is %, not %', current_status, NEW.from_status USING ERRCODE = 'check_violation';
+  END IF;
+  IF previous IS NOT NULL AND NEW.decided_at < previous THEN
+    RAISE EXCEPTION 'transitions must be recorded in time order' USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_work_order_creation(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_work_order_creation() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  rec recommendations%ROWTYPE;
+BEGIN
+  IF NEW.recommendation_id IS NULL THEN
+    RETURN NEW;  -- Rows from before Gate 7 keep their original rules.
+  END IF;
+  SELECT * INTO rec FROM recommendations WHERE recommendation_id = NEW.recommendation_id;
+  IF NEW.status <> 'RECOMMENDED' THEN
+    RAISE EXCEPTION 'a work order starts as RECOMMENDED' USING ERRCODE = 'check_violation';
+  END IF;
+  IF rec.action NOT IN ('FIELD_INSPECTION', 'CHECK_INSTRUMENTATION') THEN
+    RAISE EXCEPTION 'recommendation % does not dispatch', rec.recommendation_id USING ERRCODE = 'check_violation';
+  END IF;
+  IF NEW.asset_id IS DISTINCT FROM rec.candidate_assets[1] OR NEW.scenario_id IS DISTINCT FROM rec.scenario_id
+     OR NEW.priority IS DISTINCT FROM rec.priority_score OR NEW.priority_band IS DISTINCT FROM rec.priority_band THEN
+    RAISE EXCEPTION 'work order must match its recommendation' USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
 -- Name: reject_change(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -519,7 +630,10 @@ CREATE TABLE public.approval_events (
     action text NOT NULL,
     justification text NOT NULL,
     "timestamp" timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT approval_events_action_check CHECK ((action = ANY (ARRAY['APPROVE'::text, 'REJECT'::text, 'REQUEST_EVIDENCE'::text])))
+    actor_kind text,
+    actor_role text,
+    CONSTRAINT approval_events_action_check CHECK ((action = ANY (ARRAY['APPROVE'::text, 'REJECT'::text, 'REQUEST_EVIDENCE'::text]))),
+    CONSTRAINT approval_events_actor_kind_check CHECK ((actor_kind = ANY (ARRAY['HUMAN'::text, 'SCRIPTED_DEMO'::text])))
 );
 
 
@@ -779,6 +893,42 @@ CREATE SEQUENCE public.data_quality_exceptions_exception_id_seq
 --
 
 ALTER SEQUENCE public.data_quality_exceptions_exception_id_seq OWNED BY public.data_quality_exceptions.exception_id;
+
+
+--
+-- Name: detector_alarms; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.detector_alarms (
+    alarm_id text NOT NULL,
+    scenario_id text NOT NULL,
+    scenario_run_id text NOT NULL,
+    started_at timestamp with time zone NOT NULL,
+    score double precision NOT NULL,
+    threshold double precision NOT NULL,
+    model_id text NOT NULL,
+    model_version text NOT NULL,
+    model_sha256 text NOT NULL,
+    evidence jsonb NOT NULL,
+    earlier_starts_in_lookback integer NOT NULL,
+    first_alarm_at timestamp with time zone NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    input_provenance public.provenance_class NOT NULL,
+    CONSTRAINT alarm_crossed_threshold CHECK ((score >= threshold)),
+    CONSTRAINT detector_alarms_check CHECK ((first_alarm_at <= started_at)),
+    CONSTRAINT detector_alarms_earlier_starts_in_lookback_check CHECK ((earlier_starts_in_lookback >= 0)),
+    CONSTRAINT detector_alarms_evidence_check CHECK ((jsonb_typeof(evidence) = 'array'::text)),
+    CONSTRAINT detector_alarms_input_provenance_check CHECK ((input_provenance = 'SYNTHETIC'::public.provenance_class)),
+    CONSTRAINT detector_alarms_model_sha256_check CHECK ((model_sha256 ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT detector_alarms_provenance_class_check CHECK ((provenance_class = 'INFERRED'::public.provenance_class))
+);
+
+
+--
+-- Name: TABLE detector_alarms; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.detector_alarms IS 'Alarm starts from the Gate 5 detector on simulated telemetry. A score is never a failure probability.';
 
 
 --
@@ -1332,6 +1482,45 @@ CREATE TABLE public.production_unit_rules (
 --
 
 COMMENT ON TABLE public.production_unit_rules IS 'Verified meaning of each product kind. A production row must match a rule, so ambiguous units cannot be stored.';
+
+
+--
+-- Name: recommendations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.recommendations (
+    recommendation_id text NOT NULL,
+    alarm_id text NOT NULL,
+    scenario_id text NOT NULL,
+    scenario_run_id text NOT NULL,
+    decided_at timestamp with time zone NOT NULL,
+    action text NOT NULL,
+    candidate_assets text[] NOT NULL,
+    suppressed_assets text[] NOT NULL,
+    priority_score integer NOT NULL,
+    priority_band text,
+    respond_within_h integer,
+    terms jsonb NOT NULL,
+    explanation jsonb NOT NULL,
+    rules_version integer NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT dispatch_has_band_and_candidate CHECK (((action = ANY (ARRAY['FIELD_INSPECTION'::text, 'CHECK_INSTRUMENTATION'::text])) = ((priority_band IS NOT NULL) AND (cardinality(candidate_assets) > 0)))),
+    CONSTRAINT recommendations_action_check CHECK ((action = ANY (ARRAY['FIELD_INSPECTION'::text, 'CHECK_INSTRUMENTATION'::text, 'NO_ACTION_PLANNED_OPERATION'::text, 'NEEDS_EVIDENCE'::text]))),
+    CONSTRAINT recommendations_explanation_check CHECK (((jsonb_typeof(explanation) = 'array'::text) AND (jsonb_array_length(explanation) > 0))),
+    CONSTRAINT recommendations_priority_band_check CHECK ((priority_band = ANY (ARRAY['P1'::text, 'P2'::text, 'P3'::text]))),
+    CONSTRAINT recommendations_priority_score_check CHECK ((priority_score >= 0)),
+    CONSTRAINT recommendations_provenance_class_check CHECK ((provenance_class = 'SYNTHETIC'::public.provenance_class)),
+    CONSTRAINT recommendations_respond_within_h_check CHECK ((respond_within_h > 0)),
+    CONSTRAINT recommendations_rules_version_check CHECK ((rules_version > 0)),
+    CONSTRAINT recommendations_terms_check CHECK (((jsonb_typeof(terms) = 'array'::text) AND (jsonb_array_length(terms) > 0)))
+);
+
+
+--
+-- Name: TABLE recommendations; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recommendations IS 'Deterministic, explained recommendations. Every score point comes from a stored term.';
 
 
 --
@@ -2273,6 +2462,60 @@ CREATE VIEW public.v_telemetry_lineage AS
 
 
 --
+-- Name: work_order_transitions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.work_order_transitions (
+    transition_id bigint NOT NULL,
+    work_order_id bigint NOT NULL,
+    sequence integer NOT NULL,
+    decision text NOT NULL,
+    from_status text,
+    to_status text NOT NULL,
+    actor_id text NOT NULL,
+    actor_kind text NOT NULL,
+    actor_role text NOT NULL,
+    justification text NOT NULL,
+    decided_at timestamp with time zone NOT NULL,
+    recorded_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT allowed_transition CHECK (((((((((decision = 'CREATE'::text) AND (COALESCE(from_status, '-'::text) = '-'::text) AND (to_status = 'RECOMMENDED'::text)) OR ((decision = 'APPROVE'::text) AND (COALESCE(from_status, '-'::text) = 'RECOMMENDED'::text) AND (to_status = 'APPROVED'::text))) OR ((decision = 'REJECT'::text) AND (COALESCE(from_status, '-'::text) = 'RECOMMENDED'::text) AND (to_status = 'REJECTED'::text))) OR ((decision = 'REQUEST_EVIDENCE'::text) AND (COALESCE(from_status, '-'::text) = 'RECOMMENDED'::text) AND (to_status = 'NEEDS_EVIDENCE'::text))) OR ((decision = 'RESUBMIT'::text) AND (COALESCE(from_status, '-'::text) = 'NEEDS_EVIDENCE'::text) AND (to_status = 'RECOMMENDED'::text))) OR ((decision = 'REJECT'::text) AND (COALESCE(from_status, '-'::text) = 'NEEDS_EVIDENCE'::text) AND (to_status = 'REJECTED'::text))) OR ((decision = 'COMPLETE'::text) AND (COALESCE(from_status, '-'::text) = 'APPROVED'::text) AND (to_status = 'COMPLETED'::text)))),
+    CONSTRAINT only_the_engine_creates CHECK (((decision = 'CREATE'::text) = (actor_kind = 'SYSTEM'::text))),
+    CONSTRAINT supervisor_decides CHECK (((decision <> ALL (ARRAY['APPROVE'::text, 'REJECT'::text, 'REQUEST_EVIDENCE'::text])) OR (actor_role = 'MAINTENANCE_SUPERVISOR'::text))),
+    CONSTRAINT work_order_transitions_actor_id_check CHECK ((length(btrim(actor_id)) > 0)),
+    CONSTRAINT work_order_transitions_actor_kind_check CHECK ((actor_kind = ANY (ARRAY['HUMAN'::text, 'SCRIPTED_DEMO'::text, 'SYSTEM'::text]))),
+    CONSTRAINT work_order_transitions_decision_check CHECK ((decision = ANY (ARRAY['CREATE'::text, 'APPROVE'::text, 'REJECT'::text, 'REQUEST_EVIDENCE'::text, 'RESUBMIT'::text, 'COMPLETE'::text]))),
+    CONSTRAINT work_order_transitions_justification_check CHECK ((length(btrim(justification)) > 0)),
+    CONSTRAINT work_order_transitions_sequence_check CHECK ((sequence >= 0))
+);
+
+
+--
+-- Name: TABLE work_order_transitions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.work_order_transitions IS 'Authoritative work-order history. SCRIPTED_DEMO actors stand in for people in demonstration runs and are never human decisions.';
+
+
+--
+-- Name: work_order_transitions_transition_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.work_order_transitions_transition_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: work_order_transitions_transition_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.work_order_transitions_transition_id_seq OWNED BY public.work_order_transitions.transition_id;
+
+
+--
 -- Name: work_orders; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2287,6 +2530,10 @@ CREATE TABLE public.work_orders (
     estimated_cost numeric(12,2),
     evidence_reference text NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
+    external_id text,
+    recommendation_id text,
+    priority_band text,
+    CONSTRAINT work_orders_priority_band_check CHECK ((priority_band = ANY (ARRAY['P1'::text, 'P2'::text, 'P3'::text]))),
     CONSTRAINT work_orders_status_check CHECK ((status = ANY (ARRAY['RECOMMENDED'::text, 'APPROVED'::text, 'REJECTED'::text, 'NEEDS_EVIDENCE'::text, 'COMPLETED'::text])))
 );
 
@@ -2430,6 +2677,13 @@ ALTER TABLE ONLY public.source_reconciliation_evidence ALTER COLUMN evidence_id 
 
 
 --
+-- Name: work_order_transitions transition_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_order_transitions ALTER COLUMN transition_id SET DEFAULT nextval('public.work_order_transitions_transition_id_seq'::regclass);
+
+
+--
 -- Name: work_orders work_order_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -2514,6 +2768,14 @@ ALTER TABLE ONLY public.data_quality_exceptions
 
 ALTER TABLE ONLY public.data_quality_exceptions
     ADD CONSTRAINT data_quality_exceptions_pkey PRIMARY KEY (exception_id);
+
+
+--
+-- Name: detector_alarms detector_alarms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.detector_alarms
+    ADD CONSTRAINT detector_alarms_pkey PRIMARY KEY (alarm_id);
 
 
 --
@@ -2730,6 +2992,14 @@ ALTER TABLE ONLY public.production_unit_rules
 
 ALTER TABLE ONLY public.production_unit_rules
     ADD CONSTRAINT production_unit_rules_source_system_id_product_kind_unit_id_key UNIQUE (source_system_id, product_kind, unit_id);
+
+
+--
+-- Name: recommendations recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recommendations
+    ADD CONSTRAINT recommendations_pkey PRIMARY KEY (recommendation_id);
 
 
 --
@@ -3021,6 +3291,30 @@ ALTER TABLE ONLY public.units
 
 
 --
+-- Name: work_order_transitions work_order_transitions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_order_transitions
+    ADD CONSTRAINT work_order_transitions_pkey PRIMARY KEY (transition_id);
+
+
+--
+-- Name: work_order_transitions work_order_transitions_work_order_id_sequence_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_order_transitions
+    ADD CONSTRAINT work_order_transitions_work_order_id_sequence_key UNIQUE (work_order_id, sequence);
+
+
+--
+-- Name: work_orders work_orders_external_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_orders
+    ADD CONSTRAINT work_orders_external_id_key UNIQUE (external_id);
+
+
+--
 -- Name: work_orders work_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3204,6 +3498,13 @@ CREATE TRIGGER audit_events_append_only BEFORE DELETE OR UPDATE ON public.audit_
 
 
 --
+-- Name: detector_alarms detector_alarms_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER detector_alarms_append_only BEFORE DELETE OR UPDATE ON public.detector_alarms FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
 -- Name: asset_observation_links fictional_link_chain_guard; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -3250,6 +3551,20 @@ CREATE TRIGGER observation_sensor_source_guard BEFORE INSERT OR UPDATE ON public
 --
 
 CREATE TRIGGER physical_edge_rule_guard BEFORE INSERT OR UPDATE ON public.physical_edges FOR EACH ROW EXECUTE FUNCTION public.enforce_physical_connection();
+
+
+--
+-- Name: recommendations recommendation_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER recommendation_guard BEFORE INSERT ON public.recommendations FOR EACH ROW EXECUTE FUNCTION public.enforce_recommendation();
+
+
+--
+-- Name: recommendations recommendations_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER recommendations_append_only BEFORE DELETE OR UPDATE ON public.recommendations FOR EACH ROW EXECUTE FUNCTION public.reject_change();
 
 
 --
@@ -3306,6 +3621,34 @@ CREATE TRIGGER shared_event_origin_guard BEFORE INSERT OR UPDATE ON public.share
 --
 
 CREATE TRIGGER shared_events_immutable BEFORE DELETE OR UPDATE ON public.shared_events FOR EACH ROW EXECUTE FUNCTION public.reject_change();
+
+
+--
+-- Name: work_orders work_order_creation_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER work_order_creation_guard BEFORE INSERT ON public.work_orders FOR EACH ROW EXECUTE FUNCTION public.enforce_work_order_creation();
+
+
+--
+-- Name: work_orders work_order_status_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER work_order_status_guard BEFORE UPDATE OF status ON public.work_orders FOR EACH ROW EXECUTE FUNCTION public.enforce_status_change();
+
+
+--
+-- Name: work_order_transitions work_order_transition_order; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER work_order_transition_order BEFORE INSERT ON public.work_order_transitions FOR EACH ROW EXECUTE FUNCTION public.enforce_transition_order();
+
+
+--
+-- Name: work_order_transitions work_order_transitions_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER work_order_transitions_append_only BEFORE DELETE OR UPDATE ON public.work_order_transitions FOR EACH ROW EXECUTE FUNCTION public.reject_change();
 
 
 --
@@ -3450,6 +3793,22 @@ ALTER TABLE ONLY public.data_quality_exceptions
 
 ALTER TABLE ONLY public.reconciliation_decisions
     ADD CONSTRAINT decision_review_fk FOREIGN KEY (review_id) REFERENCES public.reconciliation_reviews(review_id);
+
+
+--
+-- Name: detector_alarms detector_alarms_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.detector_alarms
+    ADD CONSTRAINT detector_alarms_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: detector_alarms detector_alarms_scenario_run_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.detector_alarms
+    ADD CONSTRAINT detector_alarms_scenario_run_id_fkey FOREIGN KEY (scenario_run_id) REFERENCES public.scenario_runs(scenario_run_id);
 
 
 --
@@ -3813,6 +4172,30 @@ ALTER TABLE ONLY public.production_unit_rules
 
 
 --
+-- Name: recommendations recommendations_alarm_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recommendations
+    ADD CONSTRAINT recommendations_alarm_id_fkey FOREIGN KEY (alarm_id) REFERENCES public.detector_alarms(alarm_id);
+
+
+--
+-- Name: recommendations recommendations_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recommendations
+    ADD CONSTRAINT recommendations_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: recommendations recommendations_scenario_run_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recommendations
+    ADD CONSTRAINT recommendations_scenario_run_id_fkey FOREIGN KEY (scenario_run_id) REFERENCES public.scenario_runs(scenario_run_id);
+
+
+--
 -- Name: reconciliation_decisions reconciliation_decisions_batch_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4165,11 +4548,27 @@ ALTER TABLE ONLY public.unit_conversions
 
 
 --
+-- Name: work_order_transitions work_order_transitions_work_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_order_transitions
+    ADD CONSTRAINT work_order_transitions_work_order_id_fkey FOREIGN KEY (work_order_id) REFERENCES public.work_orders(work_order_id);
+
+
+--
 -- Name: work_orders work_orders_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.work_orders
     ADD CONSTRAINT work_orders_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: work_orders work_orders_recommendation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.work_orders
+    ADD CONSTRAINT work_orders_recommendation_id_fkey FOREIGN KEY (recommendation_id) REFERENCES public.recommendations(recommendation_id);
 
 
 --

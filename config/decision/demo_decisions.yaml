@@ -1,0 +1,26 @@
+# Scripted decisions for the Gate 7 demonstration run on fictional AETHER Field. Version 1.
+#
+# A demonstration needs someone to approve a simulated work order, and no person is in the loop of an
+# automated rebuild. These scripted actors stand in for one. Their decisions are labelled SCRIPTED_DEMO
+# everywhere and never counted as human decisions. The policy is fixed in advance and uses no hindsight:
+# it doesn't look at simulator truth, so it approves false alarms as readily as real ones.
+version: 1
+provenance_class: SYNTHETIC
+
+supervisor:
+  actor_id: demo-supervisor
+  kind: SCRIPTED_DEMO
+  role: MAINTENANCE_SUPERVISOR
+  policy: approve_every_recommended_work_order
+  delay_h: 2.0
+  justification: >-
+    Scripted demonstration approval under a fixed approve-all policy. Not a human decision; the
+    evidence was not independently reviewed.
+
+field_crew:
+  actor_id: demo-field-crew
+  kind: SCRIPTED_DEMO
+  role: FIELD_TECHNICIAN
+  # Completion means the simulated visit happened. What was found is graded separately against truth.
+  complete_after_h: 6.0
+  justification: Scripted demonstration completion of the simulated visit.

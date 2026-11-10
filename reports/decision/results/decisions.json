@@ -1,0 +1,521 @@
+{
+  "demo_decisions_version": 1,
+  "faults_without_alarm": [
+    {
+      "category": "SENSOR_FAULT",
+      "faulted_assets": [
+        "A-03",
+        "GS-B"
+      ],
+      "scenario_id": "AETHER-NET-SENSOR-DRIFT"
+    }
+  ],
+  "grades": [
+    {
+      "faulted_assets": [
+        "GS-A"
+      ],
+      "outcome": "DISPATCHED_TO_FAULTED_ASSET",
+      "recommendation_id": "REC-95c3442869b8a273",
+      "scenario_category": "PHYSICAL_FAULT",
+      "scenario_id": "AETHER-FAULT-001-NET",
+      "work_order_id": "WO-d722f58e5e13",
+      "work_order_targets_faulted_asset": true
+    },
+    {
+      "faulted_assets": [
+        "C-01"
+      ],
+      "outcome": "DISPATCHED_TO_FAULTED_ASSET",
+      "recommendation_id": "REC-5600e372728dfcc7",
+      "scenario_category": "PHYSICAL_FAULT",
+      "scenario_id": "AETHER-NET-COMPRESSOR-DERATE",
+      "work_order_id": "WO-0ea398d3a074",
+      "work_order_targets_faulted_asset": true
+    },
+    {
+      "faulted_assets": [],
+      "outcome": "NOT_DISPATCHED",
+      "recommendation_id": "REC-7bd97a30a6717b73",
+      "scenario_category": "PLANNED_OPERATION",
+      "scenario_id": "AETHER-NET-PLANNED-SHUTDOWN",
+      "work_order_id": null,
+      "work_order_targets_faulted_asset": null
+    },
+    {
+      "faulted_assets": [],
+      "outcome": "DISPATCH_WITHOUT_FAULT",
+      "recommendation_id": "REC-6fa2c36c6120e682",
+      "scenario_category": "PLANNED_OPERATION",
+      "scenario_id": "AETHER-NET-PLANNED-SHUTDOWN",
+      "work_order_id": "WO-545f6996bd26",
+      "work_order_targets_faulted_asset": false
+    }
+  ],
+  "model": {
+    "model_id": "aether_hist_gradient_boosting",
+    "sha256": "2fca62fa8e8c0a217d865121f41f63534794586a1d522a6c0e1cba501553b813"
+  },
+  "recommendations": [
+    {
+      "action": "FIELD_INSPECTION",
+      "alarm_id": "ALM-e691dd131db7c8e3",
+      "candidate_assets": [
+        "GS-A",
+        "A-06",
+        "A-02"
+      ],
+      "decided_at": "2040-01-04T12:00:00Z",
+      "explanation": [
+        "Detector aether_hist_gradient_boosting v1 started an alarm at 2040-01-04 12:00 (score 1.618 over threshold 1.531). The score gates the alarm only; it is not a failure probability.",
+        "Sensors furthest from training normal: GS-A.DPT-NET, A-06.PT-WH, A-02.PT-WH. Their assets are the candidates: GS-A, A-06, A-02. This points to data, not a cause.",
+        "Priority score 50 = 30 alarm_started + 0 repeated_alarms + 0 evidence_age + 20 consequence + 0 open_inspection_request, band P2, respond within 72 h of simulated time."
+      ],
+      "failure_probability": null,
+      "model_id": "aether_hist_gradient_boosting",
+      "model_sha256": "2fca62fa8e8c0a217d865121f41f63534794586a1d522a6c0e1cba501553b813",
+      "model_version": "1",
+      "priority_band": "P2",
+      "priority_score": 50,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-95c3442869b8a273",
+      "respond_within_h": 72,
+      "rules_version": 3,
+      "scenario_id": "AETHER-FAULT-001-NET",
+      "scenario_run_id": "AETHER-FAULT-001-NET:v1:fault",
+      "suppressed_assets": [],
+      "terms": [
+        {
+          "input": "1 alarm start",
+          "name": "alarm_started",
+          "points": 30,
+          "rule": "evidence.alarm_started"
+        },
+        {
+          "input": "0 earlier starts in 24 h",
+          "name": "repeated_alarms",
+          "points": 0,
+          "rule": "evidence.repeat_alarm_points, capped at evidence.repeat_alarm_cap"
+        },
+        {
+          "input": "0.0 h since the first alarm",
+          "name": "evidence_age",
+          "points": 0,
+          "rule": "one point per evidence.age_step_h, capped at evidence.age_cap"
+        },
+        {
+          "input": "0.500 of the field's wells flow through GS-A",
+          "name": "consequence",
+          "points": 20,
+          "rule": "consequence.points_max times the largest consequence share among candidates"
+        },
+        {
+          "input": "none",
+          "name": "open_inspection_request",
+          "points": 0,
+          "rule": "evidence.open_inspection_request"
+        }
+      ]
+    },
+    {
+      "action": "FIELD_INSPECTION",
+      "alarm_id": "ALM-fd4d5d2b0fbbcfca",
+      "candidate_assets": [
+        "C-01",
+        "A-03",
+        "B-05"
+      ],
+      "decided_at": "2040-01-03T00:15:00Z",
+      "explanation": [
+        "Detector aether_hist_gradient_boosting v1 started an alarm at 2040-01-03 00:15 (score 6.794 over threshold 1.531). The score gates the alarm only; it is not a failure probability.",
+        "Sensors furthest from training normal: A-03.FT, C-01.FT, B-05.FT. Their assets are the candidates: A-03, C-01, B-05. This points to data, not a cause.",
+        "Priority score 40 = 30 alarm_started + 0 repeated_alarms + 0 evidence_age + 10 consequence + 0 open_inspection_request, band P2, respond within 72 h of simulated time."
+      ],
+      "failure_probability": null,
+      "model_id": "aether_hist_gradient_boosting",
+      "model_sha256": "2fca62fa8e8c0a217d865121f41f63534794586a1d522a6c0e1cba501553b813",
+      "model_version": "1",
+      "priority_band": "P2",
+      "priority_score": 40,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-5600e372728dfcc7",
+      "respond_within_h": 72,
+      "rules_version": 3,
+      "scenario_id": "AETHER-NET-COMPRESSOR-DERATE",
+      "scenario_run_id": "AETHER-NET-COMPRESSOR-DERATE:v1:fault",
+      "suppressed_assets": [],
+      "terms": [
+        {
+          "input": "1 alarm start",
+          "name": "alarm_started",
+          "points": 30,
+          "rule": "evidence.alarm_started"
+        },
+        {
+          "input": "0 earlier starts in 24 h",
+          "name": "repeated_alarms",
+          "points": 0,
+          "rule": "evidence.repeat_alarm_points, capped at evidence.repeat_alarm_cap"
+        },
+        {
+          "input": "0.0 h since the first alarm",
+          "name": "evidence_age",
+          "points": 0,
+          "rule": "one point per evidence.age_step_h, capped at evidence.age_cap"
+        },
+        {
+          "input": "0.250 of the field's wells flow through C-01",
+          "name": "consequence",
+          "points": 10,
+          "rule": "consequence.points_max times the largest consequence share among candidates"
+        },
+        {
+          "input": "none",
+          "name": "open_inspection_request",
+          "points": 0,
+          "rule": "evidence.open_inspection_request"
+        }
+      ]
+    },
+    {
+      "action": "NO_ACTION_PLANNED_OPERATION",
+      "alarm_id": "ALM-ed60e28f3b6c582f",
+      "candidate_assets": [],
+      "decided_at": "2040-01-04T00:10:00Z",
+      "explanation": [
+        "Detector aether_hist_gradient_boosting v1 started an alarm at 2040-01-04 00:10 (score 3.276 over threshold 1.531). The score gates the alarm only; it is not a failure probability.",
+        "Sensors furthest from training normal: GS-B.DPT-NET, B-01.PT-WH, B-04.PT-WH. Their assets are the candidates: GS-B, B-01, B-04. This points to data, not a cause.",
+        "GS-B is inside planned operation CLOSE_VALVE on IV-B (2040-01-04 00:00 to 2040-01-04 12:00); it is not dispatched.",
+        "B-01 is inside planned operation CLOSE_VALVE on IV-B (2040-01-04 00:00 to 2040-01-04 12:00); it is not dispatched.",
+        "B-04 is inside planned operation CLOSE_VALVE on IV-B (2040-01-04 00:00 to 2040-01-04 12:00); it is not dispatched."
+      ],
+      "failure_probability": null,
+      "model_id": "aether_hist_gradient_boosting",
+      "model_sha256": "2fca62fa8e8c0a217d865121f41f63534794586a1d522a6c0e1cba501553b813",
+      "model_version": "1",
+      "priority_band": null,
+      "priority_score": 30,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-7bd97a30a6717b73",
+      "respond_within_h": null,
+      "rules_version": 3,
+      "scenario_id": "AETHER-NET-PLANNED-SHUTDOWN",
+      "scenario_run_id": "AETHER-NET-PLANNED-SHUTDOWN:v1:nominal",
+      "suppressed_assets": [
+        "GS-B",
+        "B-01",
+        "B-04"
+      ],
+      "terms": [
+        {
+          "input": "1 alarm start",
+          "name": "alarm_started",
+          "points": 30,
+          "rule": "evidence.alarm_started"
+        },
+        {
+          "input": "0 earlier starts in 24 h",
+          "name": "repeated_alarms",
+          "points": 0,
+          "rule": "evidence.repeat_alarm_points, capped at evidence.repeat_alarm_cap"
+        },
+        {
+          "input": "0.0 h since the first alarm",
+          "name": "evidence_age",
+          "points": 0,
+          "rule": "one point per evidence.age_step_h, capped at evidence.age_cap"
+        },
+        {
+          "input": "no candidate",
+          "name": "consequence",
+          "points": 0,
+          "rule": "consequence.points_max times the largest consequence share among candidates"
+        },
+        {
+          "input": "none",
+          "name": "open_inspection_request",
+          "points": 0,
+          "rule": "evidence.open_inspection_request"
+        }
+      ]
+    },
+    {
+      "action": "FIELD_INSPECTION",
+      "alarm_id": "ALM-89f06c53aad4eae1",
+      "candidate_assets": [
+        "GS-B",
+        "HDR-B",
+        "B-01"
+      ],
+      "decided_at": "2040-01-04T12:45:00Z",
+      "explanation": [
+        "Detector aether_hist_gradient_boosting v1 started an alarm at 2040-01-04 12:45 (score 7.365 over threshold 1.531). The score gates the alarm only; it is not a failure probability.",
+        "Sensors furthest from training normal: GS-B.DPT-NET, B-01.PT-WH, HDR-B.PT-NET. Their assets are the candidates: GS-B, B-01, HDR-B. This points to data, not a cause.",
+        "Priority score 57 = 30 alarm_started + 5 repeated_alarms + 2 evidence_age + 20 consequence + 0 open_inspection_request, band P2, respond within 72 h of simulated time."
+      ],
+      "failure_probability": null,
+      "model_id": "aether_hist_gradient_boosting",
+      "model_sha256": "2fca62fa8e8c0a217d865121f41f63534794586a1d522a6c0e1cba501553b813",
+      "model_version": "1",
+      "priority_band": "P2",
+      "priority_score": 57,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-6fa2c36c6120e682",
+      "respond_within_h": 72,
+      "rules_version": 3,
+      "scenario_id": "AETHER-NET-PLANNED-SHUTDOWN",
+      "scenario_run_id": "AETHER-NET-PLANNED-SHUTDOWN:v1:nominal",
+      "suppressed_assets": [],
+      "terms": [
+        {
+          "input": "1 alarm start",
+          "name": "alarm_started",
+          "points": 30,
+          "rule": "evidence.alarm_started"
+        },
+        {
+          "input": "1 earlier starts in 24 h",
+          "name": "repeated_alarms",
+          "points": 5,
+          "rule": "evidence.repeat_alarm_points, capped at evidence.repeat_alarm_cap"
+        },
+        {
+          "input": "12.6 h since the first alarm",
+          "name": "evidence_age",
+          "points": 2,
+          "rule": "one point per evidence.age_step_h, capped at evidence.age_cap"
+        },
+        {
+          "input": "0.500 of the field's wells flow through GS-B",
+          "name": "consequence",
+          "points": 20,
+          "rule": "consequence.points_max times the largest consequence share among candidates"
+        },
+        {
+          "input": "none",
+          "name": "open_inspection_request",
+          "points": 0,
+          "rule": "evidence.open_inspection_request"
+        }
+      ]
+    }
+  ],
+  "rules_version": 3,
+  "scenarios": {
+    "AETHER-FAULT-001-NET": {
+      "alarms": 1,
+      "category": "PHYSICAL_FAULT",
+      "output_sha256": "54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8",
+      "scenario_run_id": "AETHER-FAULT-001-NET:v1:fault",
+      "windows": 2005
+    },
+    "AETHER-NET-COMM-DROPOUT": {
+      "alarms": 0,
+      "category": "COMMUNICATION_FAULT",
+      "output_sha256": "59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7",
+      "scenario_run_id": "AETHER-NET-COMM-DROPOUT:v1:fault",
+      "windows": 2005
+    },
+    "AETHER-NET-COMPRESSOR-DERATE": {
+      "alarms": 1,
+      "category": "PHYSICAL_FAULT",
+      "output_sha256": "718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab",
+      "scenario_run_id": "AETHER-NET-COMPRESSOR-DERATE:v1:fault",
+      "windows": 2005
+    },
+    "AETHER-NET-NORMAL": {
+      "alarms": 0,
+      "category": "NORMAL",
+      "output_sha256": "80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1",
+      "scenario_run_id": "AETHER-NET-NORMAL:v1:nominal",
+      "windows": 2005
+    },
+    "AETHER-NET-PLANNED-SHUTDOWN": {
+      "alarms": 2,
+      "category": "PLANNED_OPERATION",
+      "output_sha256": "35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc",
+      "scenario_run_id": "AETHER-NET-PLANNED-SHUTDOWN:v1:nominal",
+      "windows": 2005
+    },
+    "AETHER-NET-SENSOR-DRIFT": {
+      "alarms": 0,
+      "category": "SENSOR_FAULT",
+      "output_sha256": "4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6",
+      "scenario_run_id": "AETHER-NET-SENSOR-DRIFT:v1:fault",
+      "windows": 2005
+    }
+  },
+  "work_orders": [
+    {
+      "action": "FIELD_INSPECTION",
+      "asset_id": "GS-A",
+      "history": [
+        {
+          "actor": {
+            "actor_id": "decision-engine",
+            "kind": "SYSTEM",
+            "role": "DECISION_ENGINE"
+          },
+          "after": "RECOMMENDED",
+          "at": "2040-01-04T12:00:00Z",
+          "before": null,
+          "decision": "CREATE",
+          "justification": "Created from REC-95c3442869b8a273",
+          "sequence": 0,
+          "work_order_id": "WO-d722f58e5e13"
+        },
+        {
+          "actor": {
+            "actor_id": "demo-supervisor",
+            "kind": "SCRIPTED_DEMO",
+            "role": "MAINTENANCE_SUPERVISOR"
+          },
+          "after": "APPROVED",
+          "at": "2040-01-04T14:00:00Z",
+          "before": "RECOMMENDED",
+          "decision": "APPROVE",
+          "justification": "Scripted demonstration approval under a fixed approve-all policy. Not a human decision; the evidence was not independently reviewed.",
+          "sequence": 1,
+          "work_order_id": "WO-d722f58e5e13"
+        },
+        {
+          "actor": {
+            "actor_id": "demo-field-crew",
+            "kind": "SCRIPTED_DEMO",
+            "role": "FIELD_TECHNICIAN"
+          },
+          "after": "COMPLETED",
+          "at": "2040-01-04T20:00:00Z",
+          "before": "APPROVED",
+          "decision": "COMPLETE",
+          "justification": "Scripted demonstration completion of the simulated visit.",
+          "sequence": 2,
+          "work_order_id": "WO-d722f58e5e13"
+        }
+      ],
+      "priority_band": "P2",
+      "priority_score": 50,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-95c3442869b8a273",
+      "respond_within_h": 72,
+      "scenario_id": "AETHER-FAULT-001-NET",
+      "scenario_run_id": "AETHER-FAULT-001-NET:v1:fault",
+      "status": "COMPLETED",
+      "work_order_id": "WO-d722f58e5e13"
+    },
+    {
+      "action": "FIELD_INSPECTION",
+      "asset_id": "C-01",
+      "history": [
+        {
+          "actor": {
+            "actor_id": "decision-engine",
+            "kind": "SYSTEM",
+            "role": "DECISION_ENGINE"
+          },
+          "after": "RECOMMENDED",
+          "at": "2040-01-03T00:15:00Z",
+          "before": null,
+          "decision": "CREATE",
+          "justification": "Created from REC-5600e372728dfcc7",
+          "sequence": 0,
+          "work_order_id": "WO-0ea398d3a074"
+        },
+        {
+          "actor": {
+            "actor_id": "demo-supervisor",
+            "kind": "SCRIPTED_DEMO",
+            "role": "MAINTENANCE_SUPERVISOR"
+          },
+          "after": "APPROVED",
+          "at": "2040-01-03T02:15:00Z",
+          "before": "RECOMMENDED",
+          "decision": "APPROVE",
+          "justification": "Scripted demonstration approval under a fixed approve-all policy. Not a human decision; the evidence was not independently reviewed.",
+          "sequence": 1,
+          "work_order_id": "WO-0ea398d3a074"
+        },
+        {
+          "actor": {
+            "actor_id": "demo-field-crew",
+            "kind": "SCRIPTED_DEMO",
+            "role": "FIELD_TECHNICIAN"
+          },
+          "after": "COMPLETED",
+          "at": "2040-01-03T08:15:00Z",
+          "before": "APPROVED",
+          "decision": "COMPLETE",
+          "justification": "Scripted demonstration completion of the simulated visit.",
+          "sequence": 2,
+          "work_order_id": "WO-0ea398d3a074"
+        }
+      ],
+      "priority_band": "P2",
+      "priority_score": 40,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-5600e372728dfcc7",
+      "respond_within_h": 72,
+      "scenario_id": "AETHER-NET-COMPRESSOR-DERATE",
+      "scenario_run_id": "AETHER-NET-COMPRESSOR-DERATE:v1:fault",
+      "status": "COMPLETED",
+      "work_order_id": "WO-0ea398d3a074"
+    },
+    {
+      "action": "FIELD_INSPECTION",
+      "asset_id": "GS-B",
+      "history": [
+        {
+          "actor": {
+            "actor_id": "decision-engine",
+            "kind": "SYSTEM",
+            "role": "DECISION_ENGINE"
+          },
+          "after": "RECOMMENDED",
+          "at": "2040-01-04T12:45:00Z",
+          "before": null,
+          "decision": "CREATE",
+          "justification": "Created from REC-6fa2c36c6120e682",
+          "sequence": 0,
+          "work_order_id": "WO-545f6996bd26"
+        },
+        {
+          "actor": {
+            "actor_id": "demo-supervisor",
+            "kind": "SCRIPTED_DEMO",
+            "role": "MAINTENANCE_SUPERVISOR"
+          },
+          "after": "APPROVED",
+          "at": "2040-01-04T14:45:00Z",
+          "before": "RECOMMENDED",
+          "decision": "APPROVE",
+          "justification": "Scripted demonstration approval under a fixed approve-all policy. Not a human decision; the evidence was not independently reviewed.",
+          "sequence": 1,
+          "work_order_id": "WO-545f6996bd26"
+        },
+        {
+          "actor": {
+            "actor_id": "demo-field-crew",
+            "kind": "SCRIPTED_DEMO",
+            "role": "FIELD_TECHNICIAN"
+          },
+          "after": "COMPLETED",
+          "at": "2040-01-04T20:45:00Z",
+          "before": "APPROVED",
+          "decision": "COMPLETE",
+          "justification": "Scripted demonstration completion of the simulated visit.",
+          "sequence": 2,
+          "work_order_id": "WO-545f6996bd26"
+        }
+      ],
+      "priority_band": "P2",
+      "priority_score": 57,
+      "provenance_class": "SYNTHETIC",
+      "recommendation_id": "REC-6fa2c36c6120e682",
+      "respond_within_h": 72,
+      "scenario_id": "AETHER-NET-PLANNED-SHUTDOWN",
+      "scenario_run_id": "AETHER-NET-PLANNED-SHUTDOWN:v1:nominal",
+      "status": "COMPLETED",
+      "work_order_id": "WO-545f6996bd26"
+    }
+  ]
+}
