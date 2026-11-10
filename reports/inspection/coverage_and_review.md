@@ -26,11 +26,13 @@ Wells with plumes nearby, by number of plumes: 1: 91, 2-4: 86, 5+: 28.
 - Absence of a plume means only that nothing exceeded the instrument's detection limit when imaged.
 - These are real public records. None of them describes AETHER Field, which is fictional.
 
-Every sentence on a card passes a claim guard (`packages/inspection/claims.py`) that rejects leak, cause, attribution, defect, certainty, drone, and AETHER claims unless negated. The rendered pages are checked again line by line. Pages are written to `data/gold/inspection/`, which is not committed, because they show real wells beside real plume records.
+Every sentence on a card is generated from fixed templates and checked by a pattern guard (`packages/inspection/claims.py`) that rejects leak, emission-verb, cause, attribution, defect, certainty, drone, and AETHER wording unless negated. The rendered pages are checked again line by line. The guard matches words, not meaning: it is a backstop against a template slipping, not a semantic check, and it couldn't certify free prose. That is why reviews carry no free text (below). Pages are written to `data/gold/inspection/`, which is not committed, because they show real wells beside real plume records.
 
 ## Human review
 
-Review is blinded: the queue shows each chip by an opaque ID, with nothing about plumes, so the reading of an image isn't steered by whether a plume was detected nearby. Outcomes are limited to `NO_FEATURE_OF_NOTE`, `INFRASTRUCTURE_VISIBLE`, `IMAGE_UNUSABLE`, `FIELD_VERIFICATION_SUGGESTED`. None confirms a leak or names a source. Reviews are append-only; a correction supersedes, and the database enforces both.
+Every review is blind to plume status. The queue shows each chip by an opaque ID with nothing about plumes, and the review model and the database both refuse a review that isn't marked blind, including one inserted directly by the application role. Reviews hold no free text: the outcome is one of `NO_FEATURE_OF_NOTE`, `INFRASTRUCTURE_VISIBLE`, `IMAGE_UNUSABLE`, `FIELD_VERIFICATION_SUGGESTED`, and visible features come from a fixed list (`WELL_PAD`, `WELLHEAD_EQUIPMENT`, `TANK_BATTERY`, `COMPRESSION_EQUIPMENT`, `FLARE_STACK`, `PIT_OR_POND`, `PIPELINE_CORRIDOR`, `OTHER_STRUCTURE`, `CLOUD_OR_SHADOW`, `IMAGE_ARTIFACT`). The database refuses any other value. None of these confirms a leak, names a source, or judges equipment condition. Reviews are append-only, and a correction supersedes; the database enforces both.
+
+The blind flag records what the reviewer was shown by this workflow. Nothing can stop a person from looking up plume data elsewhere, so it is a property of the workflow, not a guarantee about the person.
 
 **Reviews recorded: 0** (0 items with a current finding; NO_FEATURE_OF_NOTE 0, INFRASTRUCTURE_VISIBLE 0, IMAGE_UNUSABLE 0, FIELD_VERIFICATION_SUGGESTED 0). The workflow is built and tested, but no human has reviewed these images yet, and none were invented.
 

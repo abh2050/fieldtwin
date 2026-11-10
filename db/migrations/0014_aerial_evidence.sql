@@ -3,6 +3,8 @@
 -- fictional assets only, from synthetic scenario events. Neither table can express source attribution.
 
 -- Human review of a plume or an image. Append-only; a correction is a new row that supersedes one.
+-- Reviews are always blind to plume status, and hold no free text: outcome and visible features come
+-- from fixed vocabularies, so nothing displayed from a review can assert a leak, a source, or a defect.
 CREATE TABLE inspection_review_events (
   review_id      text PRIMARY KEY,
   evidence_id    text NOT NULL,
@@ -12,8 +14,11 @@ CREATE TABLE inspection_review_events (
   outcome        text NOT NULL CHECK (outcome IN (
     'NO_FEATURE_OF_NOTE', 'INFRASTRUCTURE_VISIBLE', 'IMAGE_UNUSABLE', 'FIELD_VERIFICATION_SUGGESTED'
   )),
-  note           text NOT NULL DEFAULT '',
-  blinded_to_plume_status boolean NOT NULL,
+  visible_features text[] NOT NULL DEFAULT '{}' CHECK (visible_features <@ ARRAY[
+    'WELL_PAD', 'WELLHEAD_EQUIPMENT', 'TANK_BATTERY', 'COMPRESSION_EQUIPMENT', 'FLARE_STACK',
+    'PIT_OR_POND', 'PIPELINE_CORRIDOR', 'OTHER_STRUCTURE', 'CLOUD_OR_SHADOW', 'IMAGE_ARTIFACT'
+  ]::text[]),
+  blinded_to_plume_status boolean NOT NULL CHECK (blinded_to_plume_status),
   supersedes     text REFERENCES inspection_review_events,
   recorded_at    timestamptz NOT NULL,
   provenance_class provenance_class NOT NULL CHECK (provenance_class = 'OBSERVED')

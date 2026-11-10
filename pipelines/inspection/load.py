@@ -146,7 +146,7 @@ def load_inspection(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[st
                 system = "naip" if kind == "NAIP_CHIP" else "carbon_mapper"
                 cursor.execute(
                     """INSERT INTO inspection_review_events (review_id, evidence_id, evidence_kind, observation_id,
-                         reviewer, outcome, note, blinded_to_plume_status, supersedes, recorded_at, provenance_class)
+                         reviewer, outcome, visible_features, blinded_to_plume_status, supersedes, recorded_at, provenance_class)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'OBSERVED') ON CONFLICT DO NOTHING""",
                     (
                         event.review_id,
@@ -155,7 +155,7 @@ def load_inspection(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[st
                         ids[f"{system}:{event.evidence_id}"],
                         event.reviewer,
                         event.outcome.value,
-                        event.note,
+                        [f.value for f in event.visible_features],
                         event.blinded_to_plume_status,
                         event.supersedes,
                         event.recorded_at,

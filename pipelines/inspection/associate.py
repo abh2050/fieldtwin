@@ -11,8 +11,19 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+from shapely import wkt
+from shapely.geometry import Point, box
 
-from packages.inspection.association import Points, proximity_links, proximity_table, random_points
+from packages.inspection.association import (
+    Points,
+    first_of_each_group,
+    location_groups,
+    matched_null,
+    matched_table,
+    proximity_links,
+    proximity_table,
+    random_points,
+)
 from packages.inspection.coverage import Scene, well_coverage
 from pipelines.acquire.common import core
 
@@ -78,13 +89,46 @@ def run(root: Path = core.REPO_ROOT) -> dict[str, Any]:
         r: proximity_links(points, wells, float(r))
         for r in rules["association"]["sensitivity_radii_m"]
     }
-    baseline = random_points(
-        cm_cfg["study_area"]["bbox"],
-        rules["chance_baseline"]["points"],
-        rules["chance_baseline"]["seed"],
-    )
     radii = [radius, *rules["association"]["sensitivity_radii_m"]]
-    table = proximity_table(points, wells, baseline, radii)
+    area = box(*cm_cfg["study_area"]["bbox"])
+    footprints = {
+        row["scene_uuid"]: wkt.loads(row["footprint_wkt"]).intersection(area)
+        for row in scenes.to_dict("records")
+        if row["footprint_wkt"]
+    }
+    scene_of_plume = plumes["scene_id"].tolist()
+    outside = sum(
+        not footprints[s].buffer(1e-4).contains(Point(lon, lat))
+        for s, lat, lon in zip(scene_of_plume, points.lat, points.lon, strict=True)
+    )
+    matched = matched_null(
+        points,
+        scene_of_plume,
+        footprints,
+        wells,
+        rules["matched_null"]["points_per_plume"],
+        rules["matched_null"]["seed"],
+    )
+    matched_rows = matched_table(
+        matched,
+        radii,
+        rules["matched_null"]["scene_bootstrap_resamples"],
+        rules["matched_null"]["seed"],
+    )
+    groups = location_groups(points, rules["matched_null"]["source_group_link_m"])
+    grouped = first_of_each_group(matched, groups, plumes["scene_timestamp"].tolist())
+    grouped_rows = matched_table(
+        grouped,
+        radii,
+        rules["matched_null"]["scene_bootstrap_resamples"],
+        rules["matched_null"]["seed"],
+    )
+    reference = random_points(
+        cm_cfg["study_area"]["bbox"],
+        rules["geometric_reference"]["points"],
+        rules["geometric_reference"]["seed"],
+    )
+    table = proximity_table(points, wells, reference, radii)
     coverage = well_coverage(
         wells, scenes_from(scenes), links, rules["coverage"]["max_cloud_cover_pct"]
     )
@@ -124,7 +168,18 @@ def run(root: Path = core.REPO_ROOT) -> dict[str, Any]:
             "five_or_more": int((per_plume >= 5).sum()),
         },
         "sensitivity_links": {str(r): len(v) for r, v in sensitivity.items()},
-        "proximity_vs_chance": table,
+        "proximity_vs_matched_null": matched_rows,
+        "proximity_vs_matched_null_one_per_location_group": grouped_rows,
+        "location_groups": int(groups.max() + 1),
+        "plumes_outside_own_scene_footprint": int(outside),
+        "scenes_with_plumes": len(set(scene_of_plume)),
+        "median_footprint_share_of_study_area": round(
+            float(
+                pd.Series([footprints[s].area for s in set(scene_of_plume)]).median() / area.area
+            ),
+            3,
+        ),
+        "geometric_reference_uniform_box": table,
         "coverage_status": pd.Series([c.status.value for c in coverage])
         .value_counts()
         .sort_index()

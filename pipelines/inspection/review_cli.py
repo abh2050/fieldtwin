@@ -1,7 +1,7 @@
 """Record a human review finding, or list items still pending.
 
     uv run python -m pipelines.inspection.review_cli pending
-    uv run python -m pipelines.inspection.review_cli record CHIP-xxxx INFRASTRUCTURE_VISIBLE --reviewer NAME --note "..."
+    uv run python -m pipelines.inspection.review_cli record CHIP-xxxx INFRASTRUCTURE_VISIBLE --reviewer NAME --feature TANK_BATTERY
 
 Findings are appended to data/gold/inspection/reviews.jsonl. A correction uses --supersedes REVIEW_ID.
 """
@@ -14,12 +14,12 @@ import sys
 
 import pandas as pd
 
-from packages.inspection.claims import UnsupportedClaim
 from packages.inspection.review import (
     ReviewError,
     ReviewEvent,
     ReviewLedger,
     ReviewOutcome,
+    VisibleFeature,
     pending,
 )
 from pipelines.acquire.common import core
@@ -43,11 +43,14 @@ def main(argv: list[str] | None = None, root=core.REPO_ROOT) -> int:
     record.add_argument("evidence_id")
     record.add_argument("outcome", choices=[o.value for o in ReviewOutcome])
     record.add_argument("--reviewer", required=True)
-    record.add_argument("--note", default="")
-    record.add_argument("--supersedes")
     record.add_argument(
-        "--unblinded", action="store_true", help="the reviewer saw plume information"
+        "--feature",
+        action="append",
+        default=[],
+        choices=[f.value for f in VisibleFeature],
+        help="a feature visible in the image; repeat for several",
     )
+    record.add_argument("--supersedes")
     args = parser.parse_args(argv)
 
     ledger = ReviewLedger(root / GOLD / "reviews.jsonl")
@@ -68,12 +71,11 @@ def main(argv: list[str] | None = None, root=core.REPO_ROOT) -> int:
                 evidence_id=args.evidence_id,
                 reviewer=args.reviewer,
                 outcome=ReviewOutcome(args.outcome),
-                note=args.note,
-                blinded_to_plume_status=not args.unblinded,
+                visible_features=tuple(VisibleFeature(f) for f in args.feature),
                 supersedes=args.supersedes,
             )
         )
-    except (ReviewError, UnsupportedClaim, ValueError) as exc:
+    except (ReviewError, ValueError) as exc:
         print(f"Not recorded: {exc}", file=sys.stderr)
         return 1
     print(json.dumps(event.model_dump(mode="json"), indent=2))

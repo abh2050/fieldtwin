@@ -1027,15 +1027,17 @@ CREATE TABLE public.inspection_review_events (
     observation_id bigint NOT NULL,
     reviewer text NOT NULL,
     outcome text NOT NULL,
-    note text DEFAULT ''::text NOT NULL,
+    visible_features text[] DEFAULT '{}'::text[] NOT NULL,
     blinded_to_plume_status boolean NOT NULL,
     supersedes text,
     recorded_at timestamp with time zone NOT NULL,
     provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT inspection_review_events_blinded_to_plume_status_check CHECK (blinded_to_plume_status),
     CONSTRAINT inspection_review_events_evidence_kind_check CHECK ((evidence_kind = ANY (ARRAY['NAIP_CHIP'::text, 'PLUME'::text]))),
     CONSTRAINT inspection_review_events_outcome_check CHECK ((outcome = ANY (ARRAY['NO_FEATURE_OF_NOTE'::text, 'INFRASTRUCTURE_VISIBLE'::text, 'IMAGE_UNUSABLE'::text, 'FIELD_VERIFICATION_SUGGESTED'::text]))),
     CONSTRAINT inspection_review_events_provenance_class_check CHECK ((provenance_class = 'OBSERVED'::public.provenance_class)),
-    CONSTRAINT inspection_review_events_reviewer_check CHECK ((length(btrim(reviewer)) > 0))
+    CONSTRAINT inspection_review_events_reviewer_check CHECK ((length(btrim(reviewer)) > 0)),
+    CONSTRAINT inspection_review_events_visible_features_check CHECK ((visible_features <@ ARRAY['WELL_PAD'::text, 'WELLHEAD_EQUIPMENT'::text, 'TANK_BATTERY'::text, 'COMPRESSION_EQUIPMENT'::text, 'FLARE_STACK'::text, 'PIT_OR_POND'::text, 'PIPELINE_CORRIDOR'::text, 'OTHER_STRUCTURE'::text, 'CLOUD_OR_SHADOW'::text, 'IMAGE_ARTIFACT'::text]))
 );
 
 

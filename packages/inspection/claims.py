@@ -1,4 +1,8 @@
-"""A guard on every sentence the evidence layer shows. Unsupported claims raise instead of rendering.
+"""A pattern guard on every sentence the evidence layer generates. Unsupported claims raise.
+
+Displayed text comes from fixed templates; reviewers record no free text. This guard is a backstop
+that catches a template, or a future edit to one, that slips into an unsupported claim. It matches
+words, not meaning, so it is not a semantic check and can't certify arbitrary prose.
 
 The evidence here can support "a plume origin was detected N metres from this registered well" and
 "this image covers this location". It cannot support a leak at a well, a cause, an equipment defect,
@@ -14,6 +18,9 @@ _FORBIDDEN = {
     "LEAK_ASSERTED": r"\b(leak(s|ing|ed)?|leakage)\b(?!\s+labels?\b)",
     "CAUSE_ASSERTED": r"\b(caused by|emitted (by|from)|originat(es|ed|ing) (at|from)|came from|"
     r"coming from|responsible for|source of the (plume|emission))\b",
+    # Emission verbs say that something released gas, which proximity and imagery can't show.
+    "EMISSION_ASSERTED": r"\b(releas(e|es|ed|ing)|vent(s|ed|ing)?|emit(s|ted|ting)?|spew\w*|"
+    r"discharg(e|es|ed|ing)|escap(e|es|ed|ing)|puff\w*)\b",
     "ATTRIBUTION_ASSERTED": r"\b(attributed to|attributable to|the source is|is the source|"
     r"source well|emitting well|emitter)\b",
     "DEFECT_ASSERTED": r"\b(defect(ive)?|fault(y|ed)?|damaged|failure|failed equipment|corrosion)\b",

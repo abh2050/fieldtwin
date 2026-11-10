@@ -1,8 +1,9 @@
-# Rules for associating real aerial evidence with real registry wells. Version 1, 2026-11-10.
+# Rules for associating real aerial evidence with real registry wells.
+# Version 1, 2026-11-10. Version 2, 2026-11-10, after technical review: matched null replaces the box baseline.
 #
 # Disclosure: the plume-to-nearest-well distance distribution and a random-point baseline were
 # looked at once, during source inspection, before this radius was fixed.
-version: 1
+version: 2
 
 wells:
   source_system_id: nm_ocd
@@ -20,8 +21,18 @@ association:
   # Proximity carries no probability of source attribution, so no confidence value is stored.
   confidence: null
 
-chance_baseline:
-  # Uniform random points over the study area show how often proximity happens by chance.
+# Version 2 (after technical review): the comparison is a matched null drawn inside each plume's
+# own scene footprint, so it shares the plume's observation exposure. The uniform box is kept
+# only as a geometric reference; it includes land no scene observed and is not a chance level.
+matched_null:
+  points_per_plume: 200
+  seed: 20261110
+  scene_bootstrap_resamples: 2000
+  # Sensitivity: plumes whose origins chain within this distance count as one location group,
+  # a rough stand-in for a persistent source, and only the earliest plume of each is kept.
+  source_group_link_m: 100
+
+geometric_reference:
   points: 20000
   seed: 20261110
 

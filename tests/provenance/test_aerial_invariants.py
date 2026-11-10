@@ -44,12 +44,14 @@ def plume(db) -> int:
     ).fetchone()[0]
 
 
-def _review(db, review_id, observation_id, evidence_id="P1", supersedes=None):
+def _review(
+    db, review_id, observation_id, evidence_id="P1", supersedes=None, blind=True, features=()
+):
     db.execute(
         """INSERT INTO inspection_review_events (review_id, evidence_id, evidence_kind, observation_id, reviewer,
-             outcome, blinded_to_plume_status, supersedes, recorded_at, provenance_class)
-           VALUES (%s, %s, 'PLUME', %s, 'reviewer-a', 'NO_FEATURE_OF_NOTE', true, %s, now(), 'OBSERVED')""",
-        (review_id, evidence_id, observation_id, supersedes),
+             outcome, visible_features, blinded_to_plume_status, supersedes, recorded_at, provenance_class)
+           VALUES (%s, %s, 'PLUME', %s, 'reviewer-a', 'NO_FEATURE_OF_NOTE', %s, %s, %s, now(), 'OBSERVED')""",
+        (review_id, evidence_id, observation_id, list(features), blind, supersedes),
     )
 
 
@@ -133,6 +135,30 @@ def test_review_outcomes_exclude_attribution(db, plume):
            VALUES ('x', 'P1', 'PLUME', %s, 'reviewer-a', 'LEAK_CONFIRMED', true, now(), 'OBSERVED')""",
         (plume,),
     )
+
+
+def test_an_unblinded_review_is_refused_even_from_the_application_role(db, plume):
+    with pytest.raises(psycopg.errors.CheckViolation):
+        with db.transaction():
+            _review(db, "u1", plume, blind=False)
+    db.execute("SET LOCAL ROLE fieldtwin_app")
+    with pytest.raises(psycopg.errors.CheckViolation):
+        with db.transaction():
+            _review(db, "u2", plume, blind=False)
+    _review(db, "u3", plume, features=("TANK_BATTERY",))
+
+
+def test_reviews_hold_only_vocabulary_values(db, plume):
+    with pytest.raises(psycopg.errors.CheckViolation):
+        with db.transaction():
+            _review(db, "v1", plume, features=("This well released methane",))
+    columns = {
+        r[0]
+        for r in db.execute(
+            "SELECT column_name FROM information_schema.columns WHERE table_name = 'inspection_review_events'"
+        ).fetchall()
+    }
+    assert not {"note", "comment", "finding", "text"} & columns
 
 
 def test_reviews_cover_aerial_evidence_only(db):

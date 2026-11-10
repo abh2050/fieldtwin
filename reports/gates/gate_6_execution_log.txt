@@ -1,5 +1,5 @@
 Gate 6 execution log
-started=2026-11-10T17:55:38Z
+started=2026-11-10T18:16:00Z
 
 === Fresh database
 $ docker compose down -v
@@ -7,8 +7,8 @@ $ docker compose down -v
  Container fieldtwin-postgres-1 Stopped 
  Container fieldtwin-postgres-1 Removing 
  Container fieldtwin-postgres-1 Removed 
- Network fieldtwin_default Removing 
  Volume fieldtwin_pgdata Removing 
+ Network fieldtwin_default Removing 
  Volume fieldtwin_pgdata Removed 
  Network fieldtwin_default Removed 
 exit=0
@@ -16,9 +16,9 @@ exit=0
 === Start PostGIS
 $ docker compose up -d --wait postgres
  Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Creating 
+ Volume fieldtwin_pgdata Creating 
  Network fieldtwin_default Creating 
- Volume fieldtwin_pgdata Creating 
- Volume fieldtwin_pgdata Creating 
  Volume fieldtwin_pgdata Created 
  Volume fieldtwin_pgdata Created 
  Network fieldtwin_default Created 
@@ -170,7 +170,7 @@ exit=0
 
 === Carbon Mapper (reuses the completed batch)
 $ uv run python -m pipelines.acquire.cli carbon_mapper
-{"ts": "2026-11-10T17:56:07Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "reusing completed batch", "batch_id": "carbon_mapper-20261110-7e46740d69"}
+{"ts": "2026-11-10T18:16:30Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "reusing completed batch", "batch_id": "carbon_mapper-20261110-7e46740d69"}
 {
   "batch_id": "carbon_mapper-20261110-7e46740d69",
   "processing_status": "COMPLETE",
@@ -187,7 +187,7 @@ exit=0
 === Plume association and coverage
 $ uv run python -m pipelines.inspection.associate
 {
-  "rules_version": 1,
+  "rules_version": 2,
   "inputs": {
     "nm_ocd_batch": "nm_ocd-20261105-15ddeb88ae",
     "carbon_mapper_batch": "carbon_mapper-20261110-7e46740d69"
@@ -218,38 +218,122 @@ $ uv run python -m pipelines.inspection.associate
     "500": 1534,
     "1000": 4485
   },
-  "proximity_vs_chance": [
+  "proximity_vs_matched_null": [
+    {
+      "radius_m": 100.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.14285714285714285,
+      "matched_null_share": 0.03468131868131868,
+      "difference": 0.10817582417582416,
+      "difference_low": 0.07687104034841026,
+      "difference_high": 0.13919846806674338
+    },
+    {
+      "radius_m": 250.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.34725274725274724,
+      "matched_null_share": 0.16962637362637364,
+      "difference": 0.1776263736263736,
+      "difference_low": 0.12799809521810215,
+      "difference_high": 0.22807817341483932
+    },
+    {
+      "radius_m": 500.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.6043956043956044,
+      "matched_null_share": 0.4479230769230769,
+      "difference": 0.15647252747252743,
+      "difference_low": 0.11111706933182601,
+      "difference_high": 0.20497000262605025
+    },
+    {
+      "radius_m": 1000.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.7450549450549451,
+      "matched_null_share": 0.7228791208791208,
+      "difference": 0.02217582417582431,
+      "difference_low": -0.021264416124367462,
+      "difference_high": 0.06485405601158857
+    }
+  ],
+  "proximity_vs_matched_null_one_per_location_group": [
+    {
+      "radius_m": 100.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.21768707482993196,
+      "matched_null_share": 0.03448979591836735,
+      "difference": 0.18319727891156462,
+      "difference_low": 0.11576946266521997,
+      "difference_high": 0.2503396506262359
+    },
+    {
+      "radius_m": 250.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.41496598639455784,
+      "matched_null_share": 0.16843537414965984,
+      "difference": 0.246530612244898,
+      "difference_low": 0.15704633510529542,
+      "difference_high": 0.3328234730062237
+    },
+    {
+      "radius_m": 500.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.6190476190476191,
+      "matched_null_share": 0.4404421768707483,
+      "difference": 0.17860544217687074,
+      "difference_low": 0.10455281818181816,
+      "difference_high": 0.2562270706704164
+    },
+    {
+      "radius_m": 1000.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.7482993197278912,
+      "matched_null_share": 0.713469387755102,
+      "difference": 0.03482993197278916,
+      "difference_low": -0.03488754891631549,
+      "difference_high": 0.1058482142857143
+    }
+  ],
+  "location_groups": 147,
+  "plumes_outside_own_scene_footprint": 1,
+  "scenes_with_plumes": 142,
+  "median_footprint_share_of_study_area": 0.193,
+  "geometric_reference_uniform_box": [
     {
       "radius_m": 100.0,
       "plumes": 455,
       "plumes_within": 65,
       "plume_share": 0.14285714285714285,
-      "chance_share": 0.03235,
-      "share_above_chance": 0.11050714285714286
+      "reference_share": 0.03235
     },
     {
       "radius_m": 250.0,
       "plumes": 455,
       "plumes_within": 158,
       "plume_share": 0.34725274725274724,
-      "chance_share": 0.1592,
-      "share_above_chance": 0.18805274725274723
+      "reference_share": 0.1592
     },
     {
       "radius_m": 500.0,
       "plumes": 455,
       "plumes_within": 275,
       "plume_share": 0.6043956043956044,
-      "chance_share": 0.4195,
-      "share_above_chance": 0.18489560439560437
+      "reference_share": 0.4195
     },
     {
       "radius_m": 1000.0,
       "plumes": 455,
       "plumes_within": 339,
       "plume_share": 0.7450549450549451,
-      "chance_share": 0.69455,
-      "share_above_chance": 0.05050494505494507
+      "reference_share": 0.69455
     }
   ],
   "coverage_status": {
@@ -274,7 +358,7 @@ exit=0
 === Raw integrity of the aerial batches
 $ uv run python -m pipelines.inspection.verify
 {
-  "validated_at": "2026-11-10T17:56:09Z",
+  "validated_at": "2026-11-10T18:16:32Z",
   "passed": true,
   "sources": {
     "carbon_mapper": {
@@ -298,7 +382,7 @@ exit=0
 === Raw integrity of the Gate 1 batches
 $ uv run python -m pipelines.profile.validate
 {
-  "validated_at": "2026-11-10T17:56:10Z",
+  "validated_at": "2026-11-10T18:16:34Z",
   "passed": true,
   "sources": {
     "nm_ocd": {
@@ -421,7 +505,7 @@ exit=0
 
 === Dump schema
 $ bash -c docker compose exec -T postgres pg_dump -U fieldtwin -d fieldtwin --schema-only --no-owner --no-privileges | grep -v "^\\\\\(un\)\?restrict" > db/ddl/schema.sql && wc -l db/ddl/schema.sql
-    4172 db/ddl/schema.sql
+    4174 db/ddl/schema.sql
 exit=0
 
 === Ruff lint
@@ -445,11 +529,11 @@ $ uv run pytest -q
 ........................................................................ [ 24%]
 ........................................................................ [ 36%]
 ........................................................................ [ 48%]
-........................................................................ [ 61%]
-........................................................................ [ 73%]
-........................................................................ [ 85%]
-........................................................................ [ 97%]
-............                                                             [100%]
+........................................................................ [ 60%]
+........................................................................ [ 72%]
+........................................................................ [ 84%]
+........................................................................ [ 96%]
+...................                                                      [100%]
 =============================== warnings summary ===============================
 tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
   .venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [4 5 6 7]. At least one non-missing value is needed for imputation with strategy='median'.
@@ -460,16 +544,16 @@ tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boostin
     return fnb._ureduce(a,
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-588 passed, 280 deselected, 2 warnings in 32.90s
+595 passed, 282 deselected, 2 warnings in 34.26s
 exit=0
 
 === Database tests on fixtures
 $ uv run pytest -m db and not acquired -o addopts=--strict-markers -q
 ........................................................................ [ 30%]
-........................................................................ [ 61%]
-........................................................................ [ 91%]
-....................                                                     [100%]
-236 passed, 632 deselected in 49.85s
+........................................................................ [ 60%]
+........................................................................ [ 90%]
+......................                                                   [100%]
+238 passed, 639 deselected in 49.80s
 exit=0
 
 === Tests on real data
@@ -493,7 +577,7 @@ tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_s
     warnings.warn(
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-37 passed, 831 deselected, 7 warnings in 11.63s
+37 passed, 840 deselected, 7 warnings in 12.71s
 exit=0
 
 === Live endpoint checks
@@ -502,7 +586,7 @@ $ uv run pytest -m live -o addopts=--strict-markers -q
 =================================== FAILURES ===================================
 ____________________ test_ftp_files_exist[data_dictionary] _____________________
 
-self = <pipelines.acquire.common.transport.Ftp object at 0x1223a56d0>
+self = <pipelines.acquire.common.transport.Ftp object at 0x11ddccbf0>
 path = '/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx'
 
     def stat(self, path: str) -> tuple[int, str]:
@@ -597,7 +681,7 @@ name = 'data_dictionary'
 tests/integration/test_live_endpoints.py:29: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <pipelines.acquire.common.transport.Ftp object at 0x1223a56d0>
+self = <pipelines.acquire.common.transport.Ftp object at 0x11ddccbf0>
 path = '/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx'
 
     def stat(self, path: str) -> tuple[int, str]:
@@ -611,7 +695,7 @@ E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Publ
 pipelines/acquire/common/transport.py:83: SourceUnavailable
 ______________________ test_ftp_files_exist[wellhistory] _______________________
 
-self = <pipelines.acquire.common.transport.Ftp object at 0x1211362d0>
+self = <pipelines.acquire.common.transport.Ftp object at 0x11ecee690>
 path = '/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip'
 
     def stat(self, path: str) -> tuple[int, str]:
@@ -706,7 +790,7 @@ name = 'wellhistory'
 tests/integration/test_live_endpoints.py:29: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <pipelines.acquire.common.transport.Ftp object at 0x1211362d0>
+self = <pipelines.acquire.common.transport.Ftp object at 0x11ecee690>
 path = '/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip'
 
     def stat(self, path: str) -> tuple[int, str]:
@@ -720,7 +804,7 @@ E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Publ
 pipelines/acquire/common/transport.py:83: SourceUnavailable
 ______________________ test_ftp_files_exist[wcproduction] ______________________
 
-self = <pipelines.acquire.common.transport.Ftp object at 0x122b30530>
+self = <pipelines.acquire.common.transport.Ftp object at 0x11dfb33b0>
 path = '/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip'
 
     def stat(self, path: str) -> tuple[int, str]:
@@ -815,7 +899,7 @@ name = 'wcproduction'
 tests/integration/test_live_endpoints.py:29: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
-self = <pipelines.acquire.common.transport.Ftp object at 0x122b30530>
+self = <pipelines.acquire.common.transport.Ftp object at 0x11dfb33b0>
 path = '/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip'
 
     def stat(self, path: str) -> tuple[int, str]:
@@ -831,7 +915,7 @@ pipelines/acquire/common/transport.py:83: SourceUnavailable
 FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[data_dictionary]
 FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[wellhistory]
 FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[wcproduction]
-3 failed, 4 passed, 861 deselected in 97.40s (0:01:37)
+3 failed, 4 passed, 870 deselected in 96.78s (0:01:36)
 exit=1
 
 === Every CI command in a clean copy
@@ -855,21 +939,21 @@ exit=0
 --- uv run pytest tests/unit tests/integration/test_acquisition.py -q
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-580 passed, 1 skipped, 2 warnings in 81.72s (0:01:21)
+587 passed, 1 skipped, 2 warnings in 72.27s (0:01:12)
 exit=0
 --- uv run pytest tests/contract -q
 .......                                                                  [100%]
-7 passed, 3 deselected in 0.77s
+7 passed, 3 deselected in 0.81s
 exit=0
 --- uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py -m db and not acquired -o addopts=--strict-markers -q
 ........................................................................ [ 91%]
 .......                                                                  [100%]
-79 passed in 34.10s
+79 passed in 34.19s
 exit=0
 --- uv run pytest tests/provenance -m db and not acquired -o addopts=--strict-markers -q
-........................................................................ [ 91%]
-.............                                                            [100%]
-157 passed, 5 deselected in 16.75s
+........................................................................ [ 90%]
+...............                                                          [100%]
+159 passed, 5 deselected in 17.00s
 exit=0
 --- uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
 WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
@@ -877,8 +961,8 @@ WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-too
 No known vulnerabilities found
 exit=0
 --- docker run --rm -v <temp-dir>:/repo zricethezav/gitleaks:v8.30.1 detect --source /repo --no-git --redact --no-banner
-[90m6:02PM[0m [32mINF[0m [1mscanned ~5268206 bytes (5.27 MB) in 656ms[0m
-[90m6:02PM[0m [32mINF[0m [1mno leaks found[0m
+[90m6:22PM[0m [32mINF[0m [1mscanned ~5331907 bytes (5.33 MB) in 690ms[0m
+[90m6:22PM[0m [32mINF[0m [1mno leaks found[0m
 exit=0
 --- docker run --rm -v <temp-dir>:/repo -w /repo rhysd/actionlint:1.7.7 -color=false
 exit=0
@@ -886,4 +970,4 @@ failed_ci_commands=0
 exit=0
 
 failed_steps=1
-finished=2026-11-10T18:02:03Z
+finished=2026-11-10T18:22:24Z

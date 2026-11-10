@@ -1,8 +1,9 @@
 """Human review of aerial evidence, kept as an append-only ledger.
 
-A reviewer can note what an image shows, mark it unusable, or suggest field verification. There is no
-outcome for confirming a leak or naming a source, because imagery and proximity can't establish either.
-A corrected review is a new event that supersedes the old one. Nothing is edited or deleted.
+A reviewer records an outcome and the features visible in an image, both from fixed vocabularies.
+There is no free text, so nothing a reviewer records can assert a leak, a source, or a defect when it
+is displayed. Every review is blind to plume status; the model and the database both refuse one that
+isn't. A corrected review is a new event that supersedes the old one. Nothing is edited or deleted.
 """
 
 from __future__ import annotations
@@ -17,8 +18,6 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from . import claims
-
 
 class ReviewOutcome(StrEnum):
     NO_FEATURE_OF_NOTE = "NO_FEATURE_OF_NOTE"
@@ -27,23 +26,41 @@ class ReviewOutcome(StrEnum):
     FIELD_VERIFICATION_SUGGESTED = "FIELD_VERIFICATION_SUGGESTED"
 
 
+class VisibleFeature(StrEnum):
+    """What can be seen in an aerial photograph. None of these is a condition or an emission."""
+
+    WELL_PAD = "WELL_PAD"
+    WELLHEAD_EQUIPMENT = "WELLHEAD_EQUIPMENT"
+    TANK_BATTERY = "TANK_BATTERY"
+    COMPRESSION_EQUIPMENT = "COMPRESSION_EQUIPMENT"
+    FLARE_STACK = "FLARE_STACK"
+    PIT_OR_POND = "PIT_OR_POND"
+    PIPELINE_CORRIDOR = "PIPELINE_CORRIDOR"
+    OTHER_STRUCTURE = "OTHER_STRUCTURE"
+    CLOUD_OR_SHADOW = "CLOUD_OR_SHADOW"
+    IMAGE_ARTIFACT = "IMAGE_ARTIFACT"
+
+
 class ReviewEvent(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     review_id: str = Field(default_factory=lambda: uuid4().hex)
     evidence_id: str
     reviewer: str = Field(min_length=1)
     outcome: ReviewOutcome
-    note: str = ""
-    blinded_to_plume_status: bool
+    visible_features: tuple[VisibleFeature, ...] = ()
+    blinded_to_plume_status: Literal[True] = True
     supersedes: str | None = None
     recorded_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     provenance_class: Literal["OBSERVED"] = "OBSERVED"
 
-    @field_validator("note")
+    @field_validator("visible_features")
     @classmethod
-    def _note_is_supported(cls, note: str) -> str:
-        # A note is the reviewer's own record, but it can't assert what the evidence can't show.
-        return claims.check(note)
+    def _features_are_distinct(
+        cls, features: tuple[VisibleFeature, ...]
+    ) -> tuple[VisibleFeature, ...]:
+        if len(set(features)) != len(features):
+            raise ValueError("each visible feature is recorded once")
+        return tuple(sorted(features))
 
 
 class ReviewError(ValueError):

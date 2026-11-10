@@ -26,7 +26,13 @@ from packages.inspection.coverage import Scene, well_coverage
 from packages.inspection.evidence import LIMITS, build_card
 from packages.inspection.geodesy import EARTH_RADIUS_M, haversine_m
 from packages.inspection.requests import NotAFictionalAsset, request_from_event
-from packages.inspection.review import ReviewError, ReviewEvent, ReviewLedger, ReviewOutcome
+from packages.inspection.review import (
+    ReviewError,
+    ReviewEvent,
+    ReviewLedger,
+    ReviewOutcome,
+    VisibleFeature,
+)
 from pipelines.inspection.evidence import check_rendered
 
 LAT0, LON0 = 32.25, -104.08
@@ -91,15 +97,46 @@ def test_links_are_proximity_only_and_cannot_be_promoted():
             ProximityLink(**{**data, **change})
 
 
-def test_proximity_table_compares_plumes_with_random_points():
+def test_geometric_reference_compares_plumes_with_box_points():
     wells = _wells(("w", 0.0))
     plumes = Points.of(["a", "b"], [north(10), north(500)], [LON0, LON0])
     baseline = Points.of(
         ["r1", "r2", "r3", "r4"], [north(50), north(300), north(800), north(900)], [LON0] * 4
     )
     rows = {r["radius_m"]: r for r in proximity_table(plumes, wells, baseline, [100, 600])}
-    assert rows[100.0]["plume_share"] == 0.5 and rows[100.0]["chance_share"] == 0.25
-    assert rows[600.0]["share_above_chance"] == pytest.approx(1.0 - 0.5)
+    assert rows[100.0]["plume_share"] == 0.5 and rows[100.0]["reference_share"] == 0.25
+    assert rows[600.0]["reference_share"] == 0.5
+
+
+def test_matched_null_draws_inside_each_plumes_own_footprint():
+    from packages.inspection.association import (
+        first_of_each_group,
+        location_groups,
+        matched_null,
+        matched_table,
+        sample_in_polygon,
+    )
+
+    footprint = box(LON0 - 0.01, LAT0 - 0.01, LON0 + 0.01, LAT0 + 0.01)
+    lat, lon = sample_in_polygon(footprint, 500, np.random.default_rng(1))
+    assert len(lat) == 500 and footprint.bounds[0] <= lon.min() and lon.max() <= footprint.bounds[2]
+
+    # A well at the centre of one scene and far from the other: the null shares follow the scene.
+    far = box(LON0 + 0.5, LAT0, LON0 + 0.52, LAT0 + 0.02)
+    wells = _wells(("w", 0.0))
+    plumes = Points.of(["p1", "p2"], [LAT0, LAT0 + 0.01], [LON0, LON0 + 0.51])
+    null = matched_null(plumes, ["s1", "s2"], {"s1": footprint, "s2": far}, wells, 300, 3)
+    assert null.null_distance_m.shape == (2, 300)
+    assert null.null_distance_m[1].min() > 40_000
+    rows = {r["radius_m"]: r for r in matched_table(null, [1000], 200, 3)}
+    assert rows[1000.0]["plume_share"] == 0.5 and rows[1000.0]["scenes"] == 2
+    assert 0 < rows[1000.0]["matched_null_share"] < 0.5
+
+    grouped = Points.of(["a", "b", "c"], [LAT0, north(50), north(5000)], [LON0] * 3)
+    labels = location_groups(grouped, 100)
+    assert labels[0] == labels[1] != labels[2]
+    trio = matched_null(grouped, ["s1"] * 3, {"s1": footprint}, wells, 10, 1)
+    assert len(first_of_each_group(trio, labels, ["2024", "2020", "2021"]).plume_scene) == 2
 
 
 def test_random_points_are_reproducible_and_inside_the_box():
@@ -168,6 +205,11 @@ def test_scene_without_footprint_never_counts_as_coverage():
         "Confirmed emission.",
         "Drone image of the pad.",
         "Evidence for AETHER well A-03.",
+        "This well released methane.",
+        "The pad is venting gas.",
+        "Methane escaping from the tank battery.",
+        "The flare emits methane.",
+        "Gas discharged near the wellhead.",
     ],
 )
 def test_guard_rejects_unsupported_claims(text):
@@ -292,10 +334,28 @@ def test_review_cannot_confirm_a_leak_or_name_a_source():
         "DEFECT_FOUND",
     }
     with pytest.raises(pydantic.ValidationError):
-        _review(note="Leak visible at the wellhead")
-    with pytest.raises(pydantic.ValidationError):
         _review(reviewer="")
-    assert _review(note="Tank battery visible north of the pad.").note
+    features = (VisibleFeature.WELL_PAD, VisibleFeature.TANK_BATTERY)
+    assert _review(visible_features=features).visible_features == tuple(sorted(features))
+    with pytest.raises(pydantic.ValidationError):
+        _review(visible_features=(VisibleFeature.WELL_PAD, VisibleFeature.WELL_PAD))
+    with pytest.raises(pydantic.ValidationError):
+        _review(visible_features=("METHANE_LEAK",))
+
+
+def test_reviews_hold_no_free_text_and_are_always_blind():
+    with pytest.raises(pydantic.ValidationError):
+        _review(note="Tank battery visible north of the pad.")
+    with pytest.raises(pydantic.ValidationError):
+        _review(blinded_to_plume_status=False)
+    assert _review().blinded_to_plume_status is True
+    text_fields = {
+        name
+        for name, field in ReviewEvent.model_fields.items()
+        if field.annotation in (str, "str")
+        and name not in {"review_id", "evidence_id", "reviewer", "supersedes"}
+    }
+    assert not text_fields
 
 
 # Inspection requests

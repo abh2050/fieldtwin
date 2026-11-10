@@ -132,7 +132,7 @@ inspection-reports:
 	uv run python -m pipelines.inspection.reports
 
 # Lists unreviewed chips. Record one with:
-# uv run python -m pipelines.inspection.review_cli record CHIP-... OUTCOME --reviewer NAME --note "..."
+# uv run python -m pipelines.inspection.review_cli record CHIP-... OUTCOME --reviewer NAME --feature TANK_BATTERY
 inspection-review:
 	uv run python -m pipelines.inspection.review_cli pending
 

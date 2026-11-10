@@ -348,13 +348,13 @@ Reviewer findings on real aerial evidence. No outcome confirms a leak or names a
 | `observation_id` | bigint | no |  |
 | `reviewer` | text | no |  |
 | `outcome` | text | no |  |
-| `note` | text | no |  |
+| `visible_features` | text[] | no |  |
 | `blinded_to_plume_status` | boolean | no |  |
 | `supersedes` | text | yes |  |
 | `recorded_at` | timestamp with time zone | no |  |
 | `provenance_class` | provenance_class | no |  |
 
-Check constraints: `inspection_review_events_evidence_kind_check`, `inspection_review_events_outcome_check`, `inspection_review_events_provenance_class_check`, `inspection_review_events_reviewer_check`.
+Check constraints: `inspection_review_events_blinded_to_plume_status_check`, `inspection_review_events_evidence_kind_check`, `inspection_review_events_outcome_check`, `inspection_review_events_provenance_class_check`, `inspection_review_events_reviewer_check`, `inspection_review_events_visible_features_check`.
 Keys: 1 primary key, 2 foreign key, 0 unique.
 
 ### `measurement_definitions`
