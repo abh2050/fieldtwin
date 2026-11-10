@@ -1,6 +1,6 @@
 # Gate 6 report: aerial evidence
 
-**Status: revised after two reviews and stopped for re-review.** The work is on branch `gate-6` and isn't merged. The first review found two P1 defects and the re-review one more, all fixed (see [Review findings](#review-findings-and-what-changed)). The final local rebuild ran 34 steps, and all passed, including the live checks against the OCD FTP server, which had refused connections during earlier rebuilds. Hosted CI for this revision is recorded below once it has run.
+**Status: revised after two reviews and stopped for re-review.** The work is on branch `gate-6` and isn't merged. The first review found two P1 defects and the re-review one more, all fixed (see [Review findings](#review-findings-and-what-changed)). The final local rebuild ran 34 steps, and all passed, including the live checks against the OCD FTP server, which had refused connections during earlier rebuilds. Hosted CI passed on the revision: [all 9 jobs](https://github.com/abh2050/fieldtwin/actions/runs/42889091824) on commit `a7b9ad5`.
 
 Date: 2026-11-10. Branch: `gate-6`. Full output of the final local rebuild: [`gate_6_execution_log.txt`](gate_6_execution_log.txt). Decisions: [ADR 0018](../../docs/adr/0018-aerial-evidence-as-proximity.md).
 
@@ -30,7 +30,7 @@ The specification's Gate 6 deliverables are imagery ingestion, spatial coverage,
 | 5 | Inspection review | **Met, with no reviews recorded** | Blind review required in the model and the database. Outcome and visible features from fixed vocabularies, checked in the database; no free text. Each review's kind and evidence ID must match the observation it references. Append-only ledger with single supersession. Inspection requests for fictional assets only. |
 | 6 | Displays evidence without unsupported claims | **Met for the evidence view model and generated pages** | Text from fixed templates, a pattern guard as a backstop on every sentence, fixed statements of what the evidence can't show, and attribution on every card. No free text is displayed. The application screens themselves are Gate 8, so this gate's display is a locally generated page. |
 | 7 | Earlier gates still pass | **Met** | The rebuild from an empty database reran Gates 2 to 4. AETHER-FAULT-001 and all six field-scenario hashes match their recorded values. 242 database tests passed. 37 tests on real data passed, among them 2 earlier-gate reconciliation tests that failed in a first rebuild that left out the reconciliation stage. |
-| 8 | Tests and CI | **Met locally; hosted CI for this revision pending** | 595 offline tests passed. 7 contract tests passed. Every CI command passed in a clean copy of the tracked files. After the first review, [all 9 hosted CI jobs passed](https://github.com/abh2050/fieldtwin/actions/runs/42877223549) on `b4d329a`. |
+| 8 | Tests and CI | **Met** | 595 offline tests passed. 7 contract tests passed. Every CI command passed in a clean copy of the tracked files. [All 9 hosted CI jobs passed](https://github.com/abh2050/fieldtwin/actions/runs/42889091824) on the revision, commit `a7b9ad5`, including simulation reproducibility on Linux x86, Linux ARM, and macOS ARM. This line was added afterward, so its own commit has a separate CI run. |
 
 ## How the evidence is limited
 
