@@ -1,0 +1,1168 @@
+{
+  "batch_id": "carbon_mapper-20261110-7e46740d69",
+  "source_system_id": "carbon_mapper",
+  "source_version": "20261110",
+  "config_sha256": "7e46740d69a510b68bca370a218240abaad7d7cfed3f6ecde2d238656cca8c48",
+  "ingestion_timestamp": "2026-11-10T17:05:49Z",
+  "original_checksum": "cfdf3f735e0eb9bb594a2390730161e5bcfa80bc39cc89c8a647c3f34e2db9a3",
+  "source_record_count": 698,
+  "accepted_count": 698,
+  "rejected_count": 0,
+  "processing_status": "COMPLETE",
+  "manifest_uri": "data/manifests/carbon_mapper/carbon_mapper-20261110-7e46740d69.json",
+  "license": {
+    "explicit_license": "Carbon Mapper Terms of Use, effective 2026-01-13",
+    "terms_url": "https://carbonmapper.org/terms",
+    "note": "A limited, non-exclusive, revocable license for non-commercial use. Attribution is required in any use, reproduction, or distribution, and redistribution must carry the same non-commercial and attribution terms. Copies must be deleted if the license ends. No Creative Commons license is referenced.",
+    "attribution": "Data by Carbon Mapper\u00ae. Source: Carbon Mapper (data.carbonmapper.org)",
+    "usage_constraints": "Non-commercial research and demonstration only. Not for commercial use."
+  },
+  "files": [
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/plumes/page_000000.json",
+      "sha256": "6889ebb5c8108d04f40e241f5ed0e8b429bfd084bc4c1b5709ec08c826e05e99",
+      "size_bytes": 414145,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/plumes/page_000100.json",
+      "sha256": "647e9ba39cc8e6201a2af82b3b79ec8b6d61d44ffba424b11e2e7c63cc20ddad",
+      "size_bytes": 357434,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/plumes/page_000200.json",
+      "sha256": "326c836a2f610d9cddd70b9514e4dfc7c8a5de9322e6f94fad5f6029ed469a43",
+      "size_bytes": 393296,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/plumes/page_000300.json",
+      "sha256": "e69da441c463f8315a96221aaf1f5e651549a6c321e66c5f0a4d649a2c19da83",
+      "size_bytes": 424158,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/plumes/page_000400.json",
+      "sha256": "5fb08772bd2468637d45bb602f11a0269b9d03f0be80d0287ab596fe369dcb6b",
+      "size_bytes": 230725,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t162446p0000-H.png",
+      "sha256": "661108cafdd2d43afd4b43984264df19ece362592cc5b222453d8c19f73dd991",
+      "size_bytes": 29306,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t162446p0000-I.png",
+      "sha256": "b8e9790177fcf6b14a67162ccca15552d75357187b671325c5a3e733aa0d14ab",
+      "size_bytes": 35248,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t162446p0000-L.png",
+      "sha256": "d91383a73ff60ad1b6d40b56d6019ac2328b65edc8e9d0cc5eda5dc5db56ea3c",
+      "size_bytes": 25655,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t162446p0000-M.png",
+      "sha256": "b731d5b00a0d07cbbdec38d2245ba6746fa3802bef6f5712530460a471762ff2",
+      "size_bytes": 35269,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t162446p0000-N.png",
+      "sha256": "663f85482d3b35ce660b3e748504f608a50d0061fb67ba1f0d940771c2da07a1",
+      "size_bytes": 44030,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t163411p0000-D.png",
+      "sha256": "98742f5784fb59f171f049960003f209cb0cda2de41bba24ed50e8824b79a157",
+      "size_bytes": 117478,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t163411p0000-E.png",
+      "sha256": "f2a132cbe46d32b86e813e472e512f0db9d84b006638acb854f84926041dffe0",
+      "size_bytes": 50942,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t163411p0000-F.png",
+      "sha256": "114ea04df3f12b922111f10532600be7a4e59bbedef3c6e530cdc1d6f3636c73",
+      "size_bytes": 31470,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t163411p0000-G.png",
+      "sha256": "7aecdece3f21da35542862fc0552d15b93066040d8607c23addb515390c31d47",
+      "size_bytes": 25288,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t163411p0000-H.png",
+      "sha256": "582b347bfbd65ace9fc60827d002b6f28bcc685b847a90eac6bc3688aa40308f",
+      "size_bytes": 30111,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t163411p0000-I.png",
+      "sha256": "df33d576d8acc3e30c25f7d6072469f4fc8a4366a1045c0462be0299a54813fd",
+      "size_bytes": 33968,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t164236p0000-C.png",
+      "sha256": "300fca47dd99b8b2bc9509486cb796bf05b6517233e89bea8b72e607fbd4e0c9",
+      "size_bytes": 26501,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t164236p0000-D.png",
+      "sha256": "1804e8b33e5e5ad3560d922e3cb6b8073010f9d3db2a91c1277a7d4d25ae401a",
+      "size_bytes": 121186,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t164236p0000-E.png",
+      "sha256": "a191e2f6993578c2b1a25a547fc57ec00a1057234d053293eb768660fb2feecb",
+      "size_bytes": 151812,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/GAO20240517t164236p0000-F.png",
+      "sha256": "a8782823891c2a01e55336e1fd46c40cdc795d218bde90b6b745c0a4ec5b7d35",
+      "size_bytes": 33965,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t163726-D.png",
+      "sha256": "7d7f6322ca7961864f8a5d46960dca4df531f0e782b4be1037f70e52784965f3",
+      "size_bytes": 63421,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-A.png",
+      "sha256": "7befc23f05a133c127586d0835c17da440829946ea1387825a42ae4da77a6fd3",
+      "size_bytes": 45444,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-B.png",
+      "sha256": "4c2a16db0d9a51a780249b90f3afb8f3cf14769ef588e8ba9c2ad76cdad96946",
+      "size_bytes": 32877,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-C.png",
+      "sha256": "2c77b62a132cc9db8b66fad024f6b69aa438501a2a1b39497b399b69affe994f",
+      "size_bytes": 38198,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-D.png",
+      "sha256": "c2aef0f973f882b355866a7c4e83708d8bbc08c7d3cac37febdd99ee6aaa8e7d",
+      "size_bytes": 32866,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-E.png",
+      "sha256": "6d8574ab1f1dacb80bf152731aa7f2adfe77adfc507d799092b6385970e06d95",
+      "size_bytes": 33317,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-F.png",
+      "sha256": "5945d031fb5f9696eddecba8c4b096d6edc59e9f1fdaced4207bc0b86c6f99be",
+      "size_bytes": 33815,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-G.png",
+      "sha256": "6316aa42cbd78ac6ef6d8db3184e6b42173f4449f986e338b11057fab9ac8862",
+      "size_bytes": 48056,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-H.png",
+      "sha256": "a1fabf2af3ed01fbd6e1ee11d301be868b41ca6c75b1ca021cdacc281158a96c",
+      "size_bytes": 32939,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-M.png",
+      "sha256": "e6fea075c1225dc236932ece7d251d0088b2ad9f23d35fa69380412b02ef588c",
+      "size_bytes": 31615,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-N.png",
+      "sha256": "a7b10c947928ea887ef817d0096514d9bce54191c8d097bb21864795f429f960",
+      "size_bytes": 24391,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t165526-P.png",
+      "sha256": "b7980b7b804d5b33694b06312093ea62be9461800ac21fa7a3eca7629348c90b",
+      "size_bytes": 33473,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t171236-B.png",
+      "sha256": "c8b70078fd61d1085641563ec7eb96bb7ba69479ab638e300abb0a94611908d3",
+      "size_bytes": 37080,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t171236-C.png",
+      "sha256": "ff04e41beae05efbc140699acacb939e5cb87a3295032063eb2a7f93bc8708ce",
+      "size_bytes": 31459,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t171236-D.png",
+      "sha256": "26042a1c9068336387e5843b53e651ec230c7b266671b8c33f752f055c3b3c04",
+      "size_bytes": 34239,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t171236-G.png",
+      "sha256": "1b4dfd2a09c487587650170db12656befdd821001c35359a6f0f1558afc2708f",
+      "size_bytes": 61497,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t191201-C.png",
+      "sha256": "02a287ed31ab8e3d5fbdb2d2c0ac5ae133c909f76e0e558c97f2c6129713bbc7",
+      "size_bytes": 31133,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t191201-D.png",
+      "sha256": "98b88b634f7be947fbf832dc9bb61cf6db751323c7a1fab2c9e28d8f4cd3c290",
+      "size_bytes": 31161,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t191201-G.png",
+      "sha256": "c8c3130acdec1756019ea6798a54f67ab5dec8961eeece557069096501a00fc2",
+      "size_bytes": 29931,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-A.png",
+      "sha256": "248eef48425e38ba1d0c40cf65961ceba1b3b15cd16f5502db5634d6c8cef9df",
+      "size_bytes": 75169,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-B.png",
+      "sha256": "499ee3f0e1510e3e24b3638ee530dc5176c2ed7be91d63dd3a9b50c25697e025",
+      "size_bytes": 31914,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-E.png",
+      "sha256": "a6abc860211f4fa786d4328b76f12020ed9404dca096507d10e7d0c22b312aac",
+      "size_bytes": 32425,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-G.png",
+      "sha256": "d2cb513db0b9b6e480bb879c239e178b117677812b293b99202130847febc0b0",
+      "size_bytes": 32220,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-H.png",
+      "sha256": "e1646c17f0267d22c280c029f5b61804d7d20a2ddc979656bc352c24f2f694b3",
+      "size_bytes": 31159,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-I.png",
+      "sha256": "e611c5ad6dc6a73ee7acc5668aadab4818b5eb724e98bd751c6c792412dc784e",
+      "size_bytes": 32734,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241007t192824-J.png",
+      "sha256": "fb83cd8585c9194798de07459aaa80ea1f6532955fd3573ddb1cafe32436bf2f",
+      "size_bytes": 33381,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t165930-A.png",
+      "sha256": "1aafd257d4e68cd7486d8c17e8e482a67c0a822b7dabbcc8dfe601ad7e7846c3",
+      "size_bytes": 36750,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t171624-E.png",
+      "sha256": "12b2811dc0cc5ecef0358856b0781e744caf14dab92170767f7cd12fd07a0330",
+      "size_bytes": 34105,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t171624-F.png",
+      "sha256": "1f808de66c04fa3e84d2bd4768b5f2ffd87d1658638b2de8891dc8eab29a66cd",
+      "size_bytes": 32923,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-E.png",
+      "sha256": "fb0048c5c9aa40e99830b6ab6a018c855356dccee76496ee59fc62990afdd3e3",
+      "size_bytes": 32682,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-F.png",
+      "sha256": "07f1ee561d814d3b87af4a6305f18c283e500a271d173e0503add6cefa064c7d",
+      "size_bytes": 32499,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-G.png",
+      "sha256": "6681633df6e5c3cfe04eabcc8062bae9dcab78d32c43c7ea386a2d26e0a8fba6",
+      "size_bytes": 32053,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-H.png",
+      "sha256": "a916f53caf04ce3f1909ab3f878aa929ef7d66abf94d0a755e6907b321776b8b",
+      "size_bytes": 33462,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-I.png",
+      "sha256": "e926c73c4b28be4d5d04a5ec791666a70a489f3d6879cc395b5d887989e02ec5",
+      "size_bytes": 32649,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-J.png",
+      "sha256": "0a01c08d1af5503d25f77ce5fe569786bc92d67aa86ca1ce6509cbf134a5c0a1",
+      "size_bytes": 58789,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-K.png",
+      "sha256": "8ef11381a7620718d402b5eef625e1b82e817ab741318258a36e8d5c916108f1",
+      "size_bytes": 33151,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-P.png",
+      "sha256": "5dda365c661adddf7ca8744ef391362c0e8ea0b4224dc22f69a80c2de053383b",
+      "size_bytes": 31790,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-Q.png",
+      "sha256": "a7ae5b2ab77411a539e318b33ec6f756f7abdfd600230e161676b6cf17788819",
+      "size_bytes": 31247,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t173230-R.png",
+      "sha256": "a7ae5b2ab77411a539e318b33ec6f756f7abdfd600230e161676b6cf17788819",
+      "size_bytes": 31247,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t174947-G.png",
+      "sha256": "3cc1e4d46f78119189499ff904639b9cb9f7c48f1905765845fb23deb33405c1",
+      "size_bytes": 20021,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t174947-H.png",
+      "sha256": "2430cad7748ef1cafbc3d027407f445a2662f37981e81969cff98d2c7441f89b",
+      "size_bytes": 33433,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t174947-L.png",
+      "sha256": "78638412fe4373dbe5dfc3bf4163abb4094e839eba1ea9df1d719fc35934ae7f",
+      "size_bytes": 20004,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-C.png",
+      "sha256": "8e698cc2bab67dedd7aac07fb8dc5b7381ed9c3a9b421ad725f551f8fe01ae6d",
+      "size_bytes": 115207,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-D.png",
+      "sha256": "d6f20b78e31f5064a30370ff5febcac8256ac96badd34946087a0674afacca72",
+      "size_bytes": 49535,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-E.png",
+      "sha256": "ee7e5cc4983e6aaa4d60e0a0abe8ebc0549051111f3751eb6329a493ccba9caa",
+      "size_bytes": 34701,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-F.png",
+      "sha256": "0955192f91ddd2276ad190938e51d0bba819c63a3d4177606f5f0a2086f2a303",
+      "size_bytes": 31976,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-G.png",
+      "sha256": "108c69a1f7ba3e0ccf375b117b96214c4ce70bcdca572de3f77b9703e2f1be1a",
+      "size_bytes": 32329,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-H.png",
+      "sha256": "63823160f8c75136f0242a64d145f8161b616c88f75883afb36c1c7ff9b8b3db",
+      "size_bytes": 32231,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-I.png",
+      "sha256": "d66d4f1b505eb75a61ade52bc66a1e7a5b6fd3965b02dabdc0ddbe4cdc935d67",
+      "size_bytes": 37682,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-J.png",
+      "sha256": "6dc06b4cf89b107e9d2a702465b3e5eff0b3545afa35e6e4c9ca6717d99ab4ed",
+      "size_bytes": 40222,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t180535-M.png",
+      "sha256": "6dc06b4cf89b107e9d2a702465b3e5eff0b3545afa35e6e4c9ca6717d99ab4ed",
+      "size_bytes": 40222,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t182224-B.png",
+      "sha256": "7f3244fce18109e7807a56a2c3bff68dc4e59b5613c99a40a82051c37de8c6d7",
+      "size_bytes": 34971,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t182224-C.png",
+      "sha256": "86353e9abb5ce661204e2385d8c7d8caccc40d20984fe1cbd0ef8eaa05deaef1",
+      "size_bytes": 31069,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/av320241008t183811-B.png",
+      "sha256": "3f31486e02da43e891bf0bde7e16a364e912c5bbc1ca6953ecc1314f62f06c10",
+      "size_bytes": 27642,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-E.png",
+      "sha256": "0e23c4a9c114404e863106d0ff865bced96e59c03e4cdd7013e94d5980c32a76",
+      "size_bytes": 28287,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-F.png",
+      "sha256": "cb84ffcca4cd0ca95c712c6fdea4693638827083692bd5996e0db37ad8466737",
+      "size_bytes": 28559,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-G.png",
+      "sha256": "8351706ca165b56fe4f38517f76e0f422d452ca1360c89aa2c92d1c6eee81c2e",
+      "size_bytes": 29156,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-I.png",
+      "sha256": "3795769738ba964c3adaad7fc8c897dbb1aab08778419a3e67cac629a66587b7",
+      "size_bytes": 26901,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-N.png",
+      "sha256": "6a8aea948ce0788886f552ee226a45371d05e839e4816139fc4a19203743f90e",
+      "size_bytes": 26785,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-O.png",
+      "sha256": "8caa1f73ffb84a29e535a9a94ec3eb8f3e9177491b51cd1a182f3242cb7724ff",
+      "size_bytes": 29307,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-Q.png",
+      "sha256": "15e380d54bc144c19f574188e11901302dd9caa7e9b7621f335db892587311b3",
+      "size_bytes": 27405,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20241008t180556c00s4001-R.png",
+      "sha256": "e900602e5e420040dca70fca0304daebafbe755150191a8773451c4d8c69bd7b",
+      "size_bytes": 24251,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250131t181317c00s4001-G.png",
+      "sha256": "6280f4471dcd1ae47466e470b85da1f041e66f21d66d4d762c6b269cc4225fc3",
+      "size_bytes": 29122,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250131t181317c00s4001-H.png",
+      "sha256": "f0561ff6d837722e30dd2a2259df47a01f858e8833f8c707dd769448614609bb",
+      "size_bytes": 29129,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250131t181317c00s4001-L.png",
+      "sha256": "3b5f366f84e3ffc25a37c0e0a6489ea357d1350a2f69e859a8b28efdc79f3b4b",
+      "size_bytes": 27945,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250131t181317c00s4001-O.png",
+      "sha256": "43b4ebcdae6acd265b54171a8a5bab6bcdd2b9d4b9e2d652adac45a537df8089",
+      "size_bytes": 29062,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-D.png",
+      "sha256": "444fef97b45ae1489df3c3dbf1d7a751c2ef3d8ba7685b6372a15d7be9e99fe9",
+      "size_bytes": 30112,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-E.png",
+      "sha256": "da913c5158ceaac359f5d6b67e6e35818c8377693cd4634343ad5db9a80a5250",
+      "size_bytes": 29613,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-F.png",
+      "sha256": "f37ec5804b54fd4294bfa9eefd7f31832cef415ee0c9b9ffa8190e29977ee2de",
+      "size_bytes": 30261,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-H.png",
+      "sha256": "c1c2ac281d3b42b31b8192df3addf4b1ba9557c2d28372e2d80964699db5a4e8",
+      "size_bytes": 28793,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-I.png",
+      "sha256": "0b339ce7ae9b3af7916ae2be281078b4585d6c75be79d558453f70801f97e7e9",
+      "size_bytes": 29967,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-J.png",
+      "sha256": "43f8efef5f2de78400ce7d1c5cfd4418ab64f5b571aafdd781c9e813fd5259a9",
+      "size_bytes": 29497,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-N.png",
+      "sha256": "c79ff1b5e88f1f06b81452e32a7a256b7fcc2f7b74d0a7aafd4af4b2e542e478",
+      "size_bytes": 30532,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-S.png",
+      "sha256": "54f230bb5b295ba963983a0cecf444265eb0c5e1902f4834830fd95c63207c3b",
+      "size_bytes": 30645,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250205t175845c00s4001-U.png",
+      "sha256": "bc1120e22ad8369398b1065cfa0309831cf1e18a8fabacc9576317fb4be987b5",
+      "size_bytes": 29598,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250207t181204c00s4001-B.png",
+      "sha256": "feb19a1e23ede730d6f68d5a4edf0c0124407f920c5458e17fd7a1e17f6ceabf",
+      "size_bytes": 29015,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250207t181204c00s4001-C.png",
+      "sha256": "27d49c53f39bda6ee5d3c7889564c826fe29f929b0d554421a3f677280f3ae9a",
+      "size_bytes": 25320,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250207t181204c00s4001-F.png",
+      "sha256": "65d37e1f0c68116bd13daa3e929b30290e2dfaa15644284e3ed78c4232db7b88",
+      "size_bytes": 28093,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250207t181204c00s4001-G.png",
+      "sha256": "0b0d737a64ed4823eb83fa2665a958dd8ef651ad8407340bf304827187ac7d44",
+      "size_bytes": 28583,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250704t182747c89s4001-D.png",
+      "sha256": "732d628b230018c43241533dbc5f7533c55554f9b6358795e2bed392791bf8b3",
+      "size_bytes": 31296,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250704t182747c89s4001-F.png",
+      "sha256": "ba065d3c59e8ec3675c0f74070ae66cec53ee210cbc95a2d9fb7301465f2dc1b",
+      "size_bytes": 32894,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250704t182747c89s4001-K.png",
+      "sha256": "14f9a1128b1fb9c44f5bfda2f409bf9d2bd45a7978607be36a3c71941b7d557f",
+      "size_bytes": 31421,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-A.png",
+      "sha256": "fb2716d1721888d289c3c2c6293a91b7dd9f468f11c1720a71db79870913e3c1",
+      "size_bytes": 31893,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-B.png",
+      "sha256": "94656cc7cb08fcba417a174946688cd8f4dd3dec0546c80fcdb1b3385c416add",
+      "size_bytes": 31903,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-C.png",
+      "sha256": "d13ede03fc131da78f343567e9d0c748111603b2b800e2ae63142f45b5b431cc",
+      "size_bytes": 33076,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-D.png",
+      "sha256": "49cee39b8b8935d752b4fddce92a01f4c0c5bb0aa74a9bad418d0b698ce08ec6",
+      "size_bytes": 33449,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-F.png",
+      "sha256": "9e3629ee595506dadae65992e911236ce46c97c98a890f87cbe576ca2cffbcb5",
+      "size_bytes": 32591,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-G.png",
+      "sha256": "2686b21f8cbc3d78b7ecff846062d22cceb045da959b9fad22f9f2afc8f8db7e",
+      "size_bytes": 32443,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20250725t183110c58s4001-H.png",
+      "sha256": "7accc6452007f4f847ee5a93d1b8b5f06fece5b7f542348c17a297dc7516ad2a",
+      "size_bytes": 32586,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20251205t184948c79s4001-AC.png",
+      "sha256": "7d316a7e4f95eba40a31d403b241c5aaf3cd8520371fcd42e0aa77a20b07d26c",
+      "size_bytes": 30284,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20251205t184948c79s4001-V.png",
+      "sha256": "63f5c37e2d47bff4f70411f575430cba86d893eef00cde0cfc6b529eff40c4c6",
+      "size_bytes": 30474,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20251212t185057c20s4001-G.png",
+      "sha256": "7b499cb9b749d04ca5c298513cc24bf3e28fc643bb4d5ec6dda76ed1584e39f7",
+      "size_bytes": 23031,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260623t190139c75s4001-K.png",
+      "sha256": "f56bd1b0255a8036ede8c41c9d4c21eb8d71556d729ecc58710826e301027e63",
+      "size_bytes": 22076,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260623t190139c75s4001-L.png",
+      "sha256": "81ea0d9ba885ece0cbd166df6aad78e4de6edace8ae15c4788baa9727b3e13f5",
+      "size_bytes": 27913,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260623t190139c75s4001-Q.png",
+      "sha256": "93b66ad09e8e88a63d897c3e71b424cda159f9bf9ae931c4de4e18b166a05ea1",
+      "size_bytes": 18055,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260716t190601c74s4001-B.png",
+      "sha256": "fa18ad44daffa87f8671eb65d5ab772b3f24e426c3ddbc7d620e5ddaa9c69314",
+      "size_bytes": 24473,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260723t190537c71s4001-I.png",
+      "sha256": "1c2093cab971ce7b53401a6884e9ea5ac65b1f779e46c9d7c1e2321cb9893413",
+      "size_bytes": 28438,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260730t190444c80s4001-H.png",
+      "sha256": "cd1466f5ad62549bb57e2a5f75caf78dc709c2bab1438b33032ff9a6a88eb573",
+      "size_bytes": 23118,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260730t190444c80s4001-I.png",
+      "sha256": "f640b2bb16041811624fc719ec7a19caf0201dfe1947db33a1c466a22668f76a",
+      "size_bytes": 21376,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260730t190444c80s4001-J.png",
+      "sha256": "e4ceb4959b484c74f63039d0d8d12ed4f287b7a9eea74c167475b536c36e2df2",
+      "size_bytes": 20430,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260905t191545c93s4001-AC.png",
+      "sha256": "03fc1e0b2145786425a309932e99f7cdec507a71e71997c9cb0f7859789932ce",
+      "size_bytes": 28253,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260905t191545c93s4001-D.png",
+      "sha256": "d2020e6c72563305930af5811aea2096f04b859b1fcec18122c57fc88dfc0ff5",
+      "size_bytes": 26707,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260905t191545c93s4001-O.png",
+      "sha256": "79db0e649ed4e98aa3153d67dcb04cc611f3bb1f4bba4d24db8598577b42b25c",
+      "size_bytes": 26168,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260905t191545c93s4001-P.png",
+      "sha256": "03fc1e0b2145786425a309932e99f7cdec507a71e71997c9cb0f7859789932ce",
+      "size_bytes": 28253,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/quicklooks/tan20260905t191545c93s4001-Q.png",
+      "sha256": "3d0ca0140b66e8532b39558393be3f381d16e18fbf0343be2ee9dc470ec2addb",
+      "size_bytes": 27918,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/scenes/page_000000.json",
+      "sha256": "ef0e605c4559ac26a8d0f0ae91fd093b0051547f50ec2f657a357c75a2b45a3b",
+      "size_bytes": 72072,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/scenes/page_000100.json",
+      "sha256": "a56e0c12390d5b2254ec8e28811fde2a0af6a701f3840d12cadaa9b4e6d53d14",
+      "size_bytes": 68457,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/scenes/page_000200.json",
+      "sha256": "ea8b0e9f9dcddebbaf98de595ecc20a84da4c6956ceefc45c9d21b131de43208",
+      "size_bytes": 29631,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_862_1658.mvt",
+      "sha256": "f9f133c5dd968289b70b0ef816ad323db5aa65781e1f0627dcb645cfd0418770",
+      "size_bytes": 12711,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_862_1659.mvt",
+      "sha256": "eabc9bab4be083ee0b436fbe1ead365384527623cb409eedc81b1a9d4ba00ed4",
+      "size_bytes": 15637,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_862_1660.mvt",
+      "sha256": "d92c531bf9471556288168f597a53dc01008103349be5d68ed531ff59d2e557a",
+      "size_bytes": 20350,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_862_1661.mvt",
+      "sha256": "fa5c60c250916a6ee2bc220ef85082f02aa11fa24b62b50e9d31af4b221c05f7",
+      "size_bytes": 23364,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_863_1658.mvt",
+      "sha256": "e4a569a4fe0f033ac3d026bf6fd8d5f2fba5f641a44898138bd7cc6dde1322f9",
+      "size_bytes": 16734,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_863_1659.mvt",
+      "sha256": "4f36c6374184b848dd45b3b83ad878b31cac57ed015cc9237723eb8352b97d0f",
+      "size_bytes": 19845,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_863_1660.mvt",
+      "sha256": "3d92aa5b945f77802d032f4e04c6031c88216e033b0623cfdafb4072ef7f2a49",
+      "size_bytes": 22816,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_863_1661.mvt",
+      "sha256": "6eb5518fc0ab9bba7833cfcb34bca04036ca8689c42904cee08b937efa273436",
+      "size_bytes": 29549,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_864_1658.mvt",
+      "sha256": "fd813c955813c5c33172cbc9a7ed91363c7e7fe4e51c09ed1e5eacdc52a8aadd",
+      "size_bytes": 18713,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_864_1659.mvt",
+      "sha256": "87049dc2f192e3e09d4a4a93366e7424e053b6f5cbb0b5a499052ccbb5235e15",
+      "size_bytes": 19562,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_864_1660.mvt",
+      "sha256": "79d4ff35bf38ac9a6a2b1305f7f26e485f7b30dedefab8e942ada96b20575c4a",
+      "size_bytes": 25696,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/carbon_mapper/20261110/carbon_mapper-20261110-7e46740d69/tiles/12_864_1661.mvt",
+      "sha256": "79f33f42a4c8051e4dc9e4cc5782768229987f4314a32ad538a8e50452f507e5",
+      "size_bytes": 32060,
+      "source_url": "https://api.carbonmapper.org/api/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    }
+  ],
+  "datasets": {
+    "plumes": {
+      "source_records": 455,
+      "accepted": 455
+    },
+    "scenes": {
+      "source_records": 243,
+      "accepted": 243,
+      "with_footprint": 243
+    },
+    "footprint_tiles": {
+      "tiles": 12,
+      "zoom": 12,
+      "scenes_in_tiles": 394,
+      "tile_scenes_not_in_scene_list": 151
+    },
+    "quicklooks": 120,
+    "quarantine_reasons": {}
+  },
+  "notes": [
+    "The catalog is a live service with no version. Records reflect the retrieval date.",
+    "Carbon Mapper publishes no checksums, so SHA-256 values prove only that files are unchanged since receipt.",
+    "Signed asset links are stored without their signatures and expire upstream.",
+    "Scene footprints come from public vector tiles, quantized to the tile grid.",
+    "Emission rates are kg/h as published. The uncertainty field's statistical meaning is not stated in the API schema and is recorded as UNKNOWN."
+  ]
+}

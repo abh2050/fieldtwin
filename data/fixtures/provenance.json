@@ -15,6 +15,26 @@
       "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
       "cut_from_sha256": "320cf64fdff616ce2aa7f4e497007f8860e81a2dfd2db74bd016d99e6b473995",
       "rows": 300
+    },
+    "carbon_mapper/plumes_page.json": {
+      "batch_id": "carbon_mapper-20261110-7e46740d69",
+      "cut_from_sha256": "6889ebb5c8108d04f40e241f5ed0e8b429bfd084bc4c1b5709ec08c826e05e99",
+      "rows": 5
+    },
+    "carbon_mapper/scenes_page.json": {
+      "batch_id": "carbon_mapper-20261110-7e46740d69",
+      "cut_from_sha256": "ef0e605c4559ac26a8d0f0ae91fd093b0051547f50ec2f657a357c75a2b45a3b",
+      "rows": 3
+    },
+    "carbon_mapper/12_862_1658.mvt": {
+      "batch_id": "carbon_mapper-20261110-7e46740d69",
+      "cut_from_sha256": "f9f133c5dd968289b70b0ef816ad323db5aa65781e1f0627dcb645cfd0418770",
+      "rows": null
+    },
+    "naip/stac_item.json": {
+      "batch_id": "naip-20261110-85d5424734",
+      "cut_from_sha256": "d5192507bf656ea3f93a05885244fd48400106892f113f129a4d3a2399aaa435",
+      "rows": 1
     }
   }
 }

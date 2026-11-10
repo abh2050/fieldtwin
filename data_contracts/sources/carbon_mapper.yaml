@@ -1,0 +1,30 @@
+# Source contract, written from the API's OpenAPI schema, the Carbon Mapper Product Guide (v1.1.3),
+# and inspection of real records retrieved 2026-11-10.
+source_system_id: carbon_mapper
+api: https://api.carbonmapper.org/api/v1 (OpenAPI 1.0.0). Plume and scene listings answer without credentials.
+
+datasets:
+  plumes:
+    endpoint: catalog/plumes/annotated
+    grain: one plume detection in one scene
+    identity: plume_id ("{scene_name}-{letter}"), with a UUID in `id`
+    required_fields: [id, plume_id, gas, geometry_json, scene_id, scene_timestamp, instrument, platform, emission_auto, emission_uncertainty_auto, gsd, status]
+    location: geometry_json is a Point at the estimated plume origin, WGS84 longitude and latitude
+    emission_auto: kg/h, an instantaneous emission rate for the plume (Product Guide)
+    emission_uncertainty_auto: kg/h. The API schema doesn't say whether this is one standard deviation or another measure. Recorded as UNKNOWN.
+    hide_emission: when true, Carbon Mapper withholds the estimate and emission_auto is null
+    sector: Carbon Mapper's IPCC sector code (1B2 is oil and gas). Not a facility attribution.
+    asset_links: signed URLs that expire. Stored without signatures.
+  scenes:
+    endpoint: catalog/scenes/annotated
+    grain: one acquisition scene with plume counts and cloud cover
+    required_fields: [id, name, bounds, timestamp, instrument, cloud_cover_pct]
+    bounds: a bounding box only. Footprint polygons come from layers/scenes/public/{z}/{x}/{y}.mvt, joined on scene_uuid.
+    excluded_by_source: controlled-release scenes and scenes without a shape
+
+semantics:
+  null_detect: Carbon Mapper treats a scene as a candidate null detect when cloud cover is under 25% and the scene intersects the location. Absence then means nothing exceeded the detection limit, not zero emission.
+  rules:
+    - Do not infer that a plume was caused by the nearest well (specification, Source 3).
+    - Do not describe airborne or satellite observations as drone measurements.
+    - Plume origins may not precisely match infrastructure locations (Product Guide).

@@ -47,6 +47,18 @@ def test_required_paths_exist():
         "reports/experiments/inference_performance.md",
         "reports/experiments/detection_evaluation.png",
         "reports/simulation/reliability_stress.md",
+        "config/sources/carbon_mapper.yaml",
+        "config/sources/naip.yaml",
+        "config/inspection/gate6_association.yaml",
+        "data_contracts/sources/carbon_mapper.yaml",
+        "data_contracts/sources/naip.yaml",
+        "db/migrations/0014_aerial_evidence.sql",
+        "docs/adr/0018-aerial-evidence-as-proximity.md",
+        "reports/gates/gate_6.md",
+        "reports/ingestion/aerial_sources.md",
+        "reports/inspection/spatial_association.md",
+        "reports/inspection/coverage_and_review.md",
+        "reports/inspection/results/gate6_summary.json",
         ".github/workflows/ci.yml",
     ]  # fmt: skip
     missing = [path for path in required if not (REPO_ROOT / path).exists()]

@@ -1,4 +1,4 @@
-.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy
+.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy acquire-carbon-mapper acquire-naip inspection-associate inspection-evidence inspection-load inspection-reports inspection-review gate6
 
 bootstrap:
 	bash scripts/bootstrap.sh
@@ -110,6 +110,33 @@ acquire-ocd:
 
 acquire-3w:
 	uv run python -m pipelines.acquire.cli petrobras_3w $(if $(REFRESH),--refresh)
+
+# Gate 6 aerial sources. NAIP chip selection depends on the plume association, so order matters.
+acquire-carbon-mapper:
+	uv run python -m pipelines.acquire.cli carbon_mapper $(if $(REFRESH),--refresh)
+
+acquire-naip: inspection-associate
+	uv run python -m pipelines.acquire.cli naip $(if $(REFRESH),--refresh)
+
+inspection-associate:
+	uv run python -m pipelines.inspection.associate
+
+inspection-evidence:
+	uv run python -m pipelines.inspection.requests
+	uv run python -m pipelines.inspection.evidence
+
+inspection-load:
+	uv run python -m pipelines.inspection.load
+
+inspection-reports:
+	uv run python -m pipelines.inspection.reports
+
+# Lists unreviewed chips. Record one with:
+# uv run python -m pipelines.inspection.review_cli record CHIP-... OUTCOME --reviewer NAME --note "..."
+inspection-review:
+	uv run python -m pipelines.inspection.review_cli pending
+
+gate6: acquire-carbon-mapper acquire-naip inspection-evidence inspection-reports
 
 profile:
 	uv run python -m pipelines.profile.cli

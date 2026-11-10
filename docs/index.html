@@ -49,8 +49,9 @@
     <tr><td>2</td><td>Canonical data model and semantic contracts</td><td>Passed (see <code>reports/gates/gate_2.md</code>)</td></tr>
     <tr><td>3</td><td>Reconciliation and experimental scenario contracts</td><td>Merged (see <code>reports/gates/gate_3.md</code>)</td></tr>
     <tr><td>4</td><td>AETHER Field multi-asset simulation</td><td>Merged (see <code>reports/gates/gate_4.md</code>)</td></tr>
-    <tr><td>5</td><td>Anomaly detection, benchmark evaluation, and uncertainty</td><td>On a branch, awaiting technical review (see <code>reports/gates/gate_5.md</code>)</td></tr>
-    <tr><td>6-10</td><td>Drone imagery through portfolio demonstration</td><td>Not started</td></tr>
+    <tr><td>5</td><td>Anomaly detection, benchmark evaluation, and uncertainty</td><td>Merged (see <code>reports/gates/gate_5.md</code>)</td></tr>
+    <tr><td>6</td><td>Aerial evidence: imagery ingestion, coverage, plume associations, inspection review</td><td>On a branch, awaiting technical review (see <code>reports/gates/gate_6.md</code>)</td></tr>
+    <tr><td>7-10</td><td>Decision support through portfolio demonstration</td><td>Not started</td></tr>
   </tbody>
 </table></div>
 
@@ -61,7 +62,8 @@
   <tbody>
     <tr><td>New Mexico Oil Conservation Division</td><td>681 gas wells, 1,098 well-history rows, 36,754 production rows (2023-12 to 2026-09)</td><td>No explicit license published</td></tr>
     <tr><td>Petrobras 3W, dataset 2.0.0</td><td>498 instances (342 real, 136 simulated, 20 hand-drawn), 28.2 million observations</td><td>CC BY 4.0</td></tr>
-    <tr><td>Carbon Mapper, USDA NAIP</td><td>Deferred to Gate 6</td><td>Not yet inspected</td></tr>
+    <tr><td>Carbon Mapper</td><td>455 methane plumes and 243 scenes over the Gate 1 townships (retrieved 2026-11-10)</td><td>Non-commercial, attribution required</td></tr>
+    <tr><td>USDA NAIP</td><td>60 image windows of 300&nbsp;m around registry wells, 2022, 0.6&nbsp;m</td><td>Not confirmed for 2022 imagery; not redistributed</td></tr>
   </tbody>
 </table></div>
 
@@ -83,6 +85,9 @@
 <h2>Field simulation</h2>
 <p>A coupled steady-state model of 12 fictional wells, 2 pads, a shared manifold, and 4 compressors, with six scenarios. One well-flow solve per state means wells can't disagree about a shared pressure. All of it is synthetic. It is a simplified model, not a validated engineering simulator, and it isn't real operating data.</p>
 
+<h2>Aerial evidence</h2>
+<p>Real methane plume detections and aerial photographs are related to real registry wells by proximity and coverage only. A plume within 250&nbsp;m of a well is recorded as near it, never as coming from it: most such plumes have two or more candidate wells, the registry lists gas wells only, and a random point in the area is within 250&nbsp;m of some well 16% of the time. Every displayed sentence passes a claim guard, image review is blinded and append-only, and inspection requests are generated only for fictional AETHER assets from synthetic scenario events. No human review has been recorded yet.</p>
+
 <h2>Test results</h2>
 <p>See <code>reports/gates/gate_3.md</code> for executed results. CI runs on committed fixtures only.</p>
 
@@ -97,7 +102,7 @@
 </ul>
 
 <h2>Sections not yet available</h2>
-<p>These have no results, because the work has not been done: anomaly detection and model evaluation, decision engine, AWS infrastructure, actual deployment cost, and demo walkthrough.</p>
+<p>These have no results, because the work has not been done: decision engine, application UI, AWS infrastructure, actual deployment cost, and demo walkthrough. Anomaly-detection results are in <code>reports/experiments/</code>.</p>
 </main>
 </body>
 </html>

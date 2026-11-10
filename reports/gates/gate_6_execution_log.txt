@@ -1,0 +1,889 @@
+Gate 6 execution log
+started=2026-11-10T17:55:38Z
+
+=== Fresh database
+$ docker compose down -v
+ Container fieldtwin-postgres-1 Stopping 
+ Container fieldtwin-postgres-1 Stopped 
+ Container fieldtwin-postgres-1 Removing 
+ Container fieldtwin-postgres-1 Removed 
+ Network fieldtwin_default Removing 
+ Volume fieldtwin_pgdata Removing 
+ Volume fieldtwin_pgdata Removed 
+ Network fieldtwin_default Removed 
+exit=0
+
+=== Start PostGIS
+$ docker compose up -d --wait postgres
+ Network fieldtwin_default Creating 
+ Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Creating 
+ Volume fieldtwin_pgdata Creating 
+ Volume fieldtwin_pgdata Created 
+ Volume fieldtwin_pgdata Created 
+ Network fieldtwin_default Created 
+ Network fieldtwin_default Created 
+ Container fieldtwin-postgres-1 Creating 
+ Container fieldtwin-postgres-1 Created 
+ Container fieldtwin-postgres-1 Starting 
+ Container fieldtwin-postgres-1 Started 
+ Container fieldtwin-postgres-1 Waiting 
+ Container fieldtwin-postgres-1 Healthy 
+exit=0
+
+=== Migrate
+$ uv run python -m packages.repositories.database
+server_version=16.4 (Debian 16.4-1.pgdg110+2)
+postgis_version=3.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+applied 0001_foundation.sql
+applied 0002_assets.sql
+applied 0003_measurement_semantics.sql
+applied 0004_records.sql
+applied 0005_compatibility_scenarios.sql
+applied 0006_quality_reconciliation.sql
+applied 0007_operations.sql
+applied 0008_views.sql
+applied 0009_reconciliation_decisions.sql
+applied 0010_scenario_runs_and_events.sql
+applied 0011_domain_boundaries.sql
+applied 0012_application_role_and_provenance_chain.sql
+applied 0013_physical_network.sql
+applied 0014_aerial_evidence.sql
+migrations_applied=14
+tables_in_public=46
+exit=0
+
+=== Seed
+$ uv run python -m pipelines.normalize.seed
+seeded source_systems: 5
+seeded units: 13
+seeded unit_conversions: 11
+seeded equipment_classes: 7
+seeded transformations: 22
+seeded physical_nodes: 32
+seeded physical_edges: 36
+seeded measurement_definitions: 41
+seeded equipment_measurement_capabilities: 41
+seeded sensor_tags: 68
+seeded sensor_tag_mappings: 68
+seeded production_unit_rules: 3
+seeded source_event_classes: 10
+seeded domain_compatibility_requirements: 7
+seeded domain_compatibility_assessments: 40
+seeded domain_boundaries: 4
+seeded assets: 47
+seeded asset_relationships: 21
+exit=0
+
+=== Load real batches
+$ uv run python -m pipelines.normalize.load
+{
+  "nm_ocd": {
+    "batch_id": "nm_ocd-20261105-15ddeb88ae",
+    "wells": 681,
+    "completions": 441,
+    "history": 1098,
+    "production": 36754,
+    "reconciliation_evidence": 2724,
+    "exceptions": 40
+  },
+  "petrobras_3w": {
+    "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+    "wells": 40,
+    "events": 498,
+    "observations": 13446,
+    "exceptions": 10
+  }
+}
+exit=0
+
+=== 3W benchmark events
+$ uv run python -m pipelines.normalize.petrobras_3w_events
+benchmark_events=498
+exit=0
+
+=== AETHER-FAULT-001
+$ uv run python -m pipelines.synthetic.aether_fault_001
+nominal: sha256=d36fdd5afba2677cc9d5c6eb523e3659f9402b8fc657c9e78148a40f8811cd13 invariants=12 events=0
+fault: sha256=a365b1e3321c523e1ad84ddc15b693c581c3837b6fd6aecab50a258c03658403 invariants=12 events=2
+{"runs": 2, "series": 8, "links": 8, "events": 2, "assignments": 2}
+exit=0
+
+=== AETHER Field, six scenarios
+$ uv run python -m pipelines.synthetic.aether_field
+AETHER-NET-NORMAL: sha256=80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1 checks=16 rows=78624
+AETHER-FAULT-001-NET: sha256=54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8 checks=17 rows=78624
+AETHER-NET-COMPRESSOR-DERATE: sha256=718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab checks=17 rows=78624
+AETHER-NET-SENSOR-DRIFT: sha256=4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6 checks=16 rows=78624
+AETHER-NET-COMM-DROPOUT: sha256=59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7 checks=16 rows=78624
+AETHER-NET-PLANNED-SHUTDOWN: sha256=35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc checks=17 rows=78624
+{"runs": 6, "series": 234, "links": 234, "events": 9}
+exit=0
+
+=== Reconciliation engine
+$ uv run python -m pipelines.reconcile.run
+{
+  "identity": 1123,
+  "semantic": 164,
+  "geospatial": 711,
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+exit=0
+
+=== Reconciliation again (expect already_run)
+$ uv run python -m pipelines.reconcile.run
+{
+  "identity": "already_run",
+  "semantic": "already_run",
+  "geospatial": "already_run",
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+exit=0
+
+=== Canonical validation
+$ uv run python -m pipelines.normalize.validate_canonical
+PASS wells_match_bronze: 681 vs 681
+PASS history_matches_bronze: 1098 vs 1098
+PASS production_matches_bronze: 36754 vs 36754
+PASS completions_match_bronze: 441 vs 441
+PASS instances_match_bronze: 498 vs 498
+PASS volume_total_G_matches_bronze: 234786955 vs 234786955
+PASS volume_total_O_matches_bronze: 28360084 vs 28360084
+PASS volume_total_W_matches_bronze: 170361799 vs 170361799
+PASS usable_wells_outside_county_box: 0
+PASS non_usable_assets_with_geometry: 0
+PASS quarantined_without_exception: 0
+PASS quarantined_without_reported_coordinates: 0
+PASS production_lineage_complete: 36754 vs 36754
+PASS telemetry_lineage_complete: 498 vs 498
+PASS ocd_channels_marked_independent: 0
+PASS scenario_mappings_present: 0
+PASS real_observations_linked_to_fictional_assets: 0
+PASS non_synthetic_fictional_assets: 0
+PASS generated_instances_marked_observed: 0
+PASS pressure_tags_with_assumed_reference: 0
+PASS cross_domain_tag_mappings: 0
+checks=21 failed=0
+exit=0
+
+=== Carbon Mapper (reuses the completed batch)
+$ uv run python -m pipelines.acquire.cli carbon_mapper
+{"ts": "2026-11-10T17:56:07Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "reusing completed batch", "batch_id": "carbon_mapper-20261110-7e46740d69"}
+{
+  "batch_id": "carbon_mapper-20261110-7e46740d69",
+  "processing_status": "COMPLETE",
+  "accepted_count": 698,
+  "rejected_count": 0,
+  "reused": true
+}
+exit=0
+
+=== Remove derived Gate 6 data
+$ rm -rf data/silver/inspection data/gold/inspection/evidence.html data/gold/inspection/review_queue.html data/gold/inspection/chips data/gold/inspection/evidence_cards.json data/gold/inspection/inspection_requests.json
+exit=0
+
+=== Plume association and coverage
+$ uv run python -m pipelines.inspection.associate
+{
+  "rules_version": 1,
+  "inputs": {
+    "nm_ocd_batch": "nm_ocd-20261105-15ddeb88ae",
+    "carbon_mapper_batch": "carbon_mapper-20261110-7e46740d69"
+  },
+  "wells": {
+    "registry": 681,
+    "by_spatial_status": {
+      "QUARANTINED": 1,
+      "UNRESOLVED_DATUM": 35,
+      "USABLE": 645
+    },
+    "used": 645
+  },
+  "plumes": 455,
+  "scenes": 243,
+  "scenes_with_footprint": 243,
+  "primary_radius_m": 250.0,
+  "links": 536,
+  "plumes_with_any_well_within_radius": 158,
+  "wells_with_any_plume_within_radius": 205,
+  "candidate_wells_per_linked_plume": {
+    "one": 45,
+    "two_to_four": 72,
+    "five_or_more": 41
+  },
+  "sensitivity_links": {
+    "100": 141,
+    "500": 1534,
+    "1000": 4485
+  },
+  "proximity_vs_chance": [
+    {
+      "radius_m": 100.0,
+      "plumes": 455,
+      "plumes_within": 65,
+      "plume_share": 0.14285714285714285,
+      "chance_share": 0.03235,
+      "share_above_chance": 0.11050714285714286
+    },
+    {
+      "radius_m": 250.0,
+      "plumes": 455,
+      "plumes_within": 158,
+      "plume_share": 0.34725274725274724,
+      "chance_share": 0.1592,
+      "share_above_chance": 0.18805274725274723
+    },
+    {
+      "radius_m": 500.0,
+      "plumes": 455,
+      "plumes_within": 275,
+      "plume_share": 0.6043956043956044,
+      "chance_share": 0.4195,
+      "share_above_chance": 0.18489560439560437
+    },
+    {
+      "radius_m": 1000.0,
+      "plumes": 455,
+      "plumes_within": 339,
+      "plume_share": 0.7450549450549451,
+      "chance_share": 0.69455,
+      "share_above_chance": 0.05050494505494507
+    }
+  ],
+  "coverage_status": {
+    "IMAGED_NO_PLUME_NEARBY": 439,
+    "NOT_IMAGED": 1,
+    "PLUME_NEARBY": 205
+  }
+}
+exit=0
+
+=== NAIP (reuses the completed batch for the same selection)
+$ uv run python -m pipelines.acquire.cli naip
+{
+  "batch_id": "naip-20261110-231dde276e",
+  "processing_status": "COMPLETE",
+  "accepted_count": 60,
+  "rejected_count": 0,
+  "reused": true
+}
+exit=0
+
+=== Raw integrity of the aerial batches
+$ uv run python -m pipelines.inspection.verify
+{
+  "validated_at": "2026-11-10T17:56:09Z",
+  "passed": true,
+  "sources": {
+    "carbon_mapper": {
+      "batch_id": "carbon_mapper-20261110-7e46740d69",
+      "files_verified": 140,
+      "original_checksum": "cfdf3f735e0eb9bb594a2390730161e5bcfa80bc39cc89c8a647c3f34e2db9a3",
+      "integrity_problems": [],
+      "passed": true
+    },
+    "naip": {
+      "batch_id": "naip-20261110-231dde276e",
+      "files_verified": 70,
+      "original_checksum": "671e11d172094eefc498ba4b73d1d0261a318fdb7796299db57551ef318082e2",
+      "integrity_problems": [],
+      "passed": true
+    }
+  }
+}
+exit=0
+
+=== Raw integrity of the Gate 1 batches
+$ uv run python -m pipelines.profile.validate
+{
+  "validated_at": "2026-11-10T17:56:10Z",
+  "passed": true,
+  "sources": {
+    "nm_ocd": {
+      "batch_id": "nm_ocd-20261105-15ddeb88ae",
+      "files_verified": 5,
+      "files_verified_against_upstream_hash": 0,
+      "original_checksum": "b9c20868ea5f5a051619cc2301f422f2b7ff904402b592bd61f7f49193ccc90b",
+      "accepted_count": 38533,
+      "rejected_count": 4,
+      "integrity_problems": [],
+      "failed_quality_checks": [],
+      "passed": true
+    },
+    "petrobras_3w": {
+      "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+      "files_verified": 504,
+      "files_verified_against_upstream_hash": 503,
+      "original_checksum": "d3f2463e3aa75eda128b0e355902fd62203b6b37ddfbefbc4e8b5069f3fb1fa2",
+      "accepted_count": 498,
+      "rejected_count": 0,
+      "integrity_problems": [],
+      "failed_quality_checks": [],
+      "passed": true
+    }
+  }
+}
+exit=0
+
+=== Inspection requests for fictional assets
+$ uv run python -m pipelines.inspection.requests
+{
+  "prioritization_inputs": 1,
+  "requests": 1
+}
+exit=0
+
+=== Evidence cards and review pages
+$ uv run python -m pipelines.inspection.evidence
+{
+  "cards": 60,
+  "chips_by_group": {
+    "NEAR_PLUME": 40,
+    "CONTROL": 20
+  },
+  "card_coverage_status": {
+    "PLUME_NEARBY": 40,
+    "IMAGED_NO_PLUME_NEARBY": 20
+  },
+  "cards_with_plume_quicklook": 17,
+  "rendered_lines_checked": 880,
+  "claim_violations": 0,
+  "pages": {
+    "review_queue": "data/gold/inspection/review_queue.html",
+    "evidence": "data/gold/inspection/evidence.html"
+  },
+  "coverage_status_values": [
+    "NOT_IMAGED",
+    "IMAGED_CLOUDY_ONLY",
+    "IMAGED_NO_PLUME_NEARBY",
+    "PLUME_NEARBY"
+  ]
+}
+exit=0
+
+=== Load aerial evidence
+$ uv run python -m pipelines.inspection.load
+{
+  "links": 596,
+  "links_skipped_unknown_well": 0,
+  "reviews": 0,
+  "inspection_requests": 1,
+  "inspection_requests_without_loaded_event": 0,
+  "plume_observations": 455,
+  "image_observations": 60
+}
+exit=0
+
+=== Load again (expect no new rows)
+$ uv run python -m pipelines.inspection.load
+{
+  "links": 596,
+  "links_skipped_unknown_well": 0,
+  "reviews": 0,
+  "inspection_requests": 1,
+  "inspection_requests_without_loaded_event": 0,
+  "plume_observations": 455,
+  "image_observations": 60
+}
+exit=0
+
+=== Database row counts
+$ bash -c docker compose exec -T postgres psql -U fieldtwin -d fieldtwin -At -c "SELECT relationship_type, verification_status, count(*) FROM asset_observation_links WHERE method_version LIKE 'gate6%' GROUP BY 1, 2 ORDER BY 1" -c "SELECT source_system_id, observation_type, count(*) FROM observations WHERE source_system_id IN ('carbon_mapper', 'naip') GROUP BY 1, 2 ORDER BY 1" -c 'SELECT count(*) AS inspection_requests FROM inspection_requests' -c 'SELECT count(*) AS reviews FROM inspection_review_events'
+EMISSION_NEAR|UNVERIFIED|536
+IMAGE_COVERS|UNVERIFIED|60
+carbon_mapper|REMOTE_SENSING|455
+naip|IMAGE|60
+1
+0
+exit=0
+
+=== Gate 6 reports
+$ uv run python -m pipelines.inspection.reports
+[
+  "reports/inspection/results/gate6_summary.json",
+  "reports/ingestion/aerial_sources.md",
+  "reports/inspection/spatial_association.md",
+  "reports/inspection/coverage_and_review.md"
+]
+exit=0
+
+=== Diagrams
+$ env PYTHONPATH=. uv run python scripts/build_field_diagrams.py
+pages: ['logical', 'aws', 'boundaries', 'scenario', 'aether-topology', 'aether-network', 'simulation-sequence', 'detection-evaluation', 'aerial-evidence']
+exit=0
+
+=== Schema document
+$ uv run python -m pipelines.normalize.schema_docs
+wrote reports/data_quality/canonical_schema.md
+exit=0
+
+=== Dump schema
+$ bash -c docker compose exec -T postgres pg_dump -U fieldtwin -d fieldtwin --schema-only --no-owner --no-privileges | grep -v "^\\\\\(un\)\?restrict" > db/ddl/schema.sql && wc -l db/ddl/schema.sql
+    4172 db/ddl/schema.sql
+exit=0
+
+=== Ruff lint
+$ uv run ruff check .
+All checks passed!
+exit=0
+
+=== Ruff format
+$ uv run ruff format --check .
+258 files already formatted
+exit=0
+
+=== Mypy
+$ uv run mypy
+Success: no issues found in 111 source files
+exit=0
+
+=== Offline tests
+$ uv run pytest -q
+........................................................................ [ 12%]
+........................................................................ [ 24%]
+........................................................................ [ 36%]
+........................................................................ [ 48%]
+........................................................................ [ 61%]
+........................................................................ [ 73%]
+........................................................................ [ 85%]
+........................................................................ [ 97%]
+............                                                             [100%]
+=============================== warnings summary ===============================
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+  .venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [4 5 6 7]. At least one non-missing value is needed for imputation with strategy='median'.
+    warnings.warn(
+
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+  .venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+    return fnb._ureduce(a,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+588 passed, 280 deselected, 2 warnings in 32.90s
+exit=0
+
+=== Database tests on fixtures
+$ uv run pytest -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 30%]
+........................................................................ [ 61%]
+........................................................................ [ 91%]
+....................                                                     [100%]
+236 passed, 632 deselected in 49.85s
+exit=0
+
+=== Tests on real data
+$ uv run pytest -m acquired -o addopts=--strict-markers -q
+.....................................                                    [100%]
+=============================== warnings summary ===============================
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+  .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 4 members, which is less than n_splits=5.
+    warnings.warn(
+
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+  .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 3 members, which is less than n_splits=4.
+    warnings.warn(
+
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+tests/integration/test_experiments_real.py::test_splits_keep_every_well_on_one_side
+  .venv/lib/python3.12/site-packages/sklearn/model_selection/_split.py:1036: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=4.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+37 passed, 831 deselected, 7 warnings in 11.63s
+exit=0
+
+=== Live endpoint checks
+$ uv run pytest -m live -o addopts=--strict-markers -q
+.FFF...                                                                  [100%]
+=================================== FAILURES ===================================
+____________________ test_ftp_files_exist[data_dictionary] _____________________
+
+self = <pipelines.acquire.common.transport.Ftp object at 0x1223a56d0>
+path = '/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx'
+
+    def stat(self, path: str) -> tuple[int, str]:
+        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
+        try:
+>           return self._stat(path)
+                   ^^^^^^^^^^^^^^^^
+
+pipelines/acquire/common/transport.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:404: in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:550: in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:440: in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:482: in exc_check
+    retry_exc.reraise()
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:216: in reraise
+    raise self.last_attempt.result()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:553: in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+pipelines/acquire/common/transport.py:71: in _stat
+    with self._connect() as connection:
+         ^^^^^^^^^^^^^^^
+pipelines/acquire/common/transport.py:64: in _connect
+    connection = ftplib.FTP(self.host, timeout=self.timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:121: in __init__
+    self.connect(host)
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:158: in connect
+    self.sock = socket.create_connection((self.host, self.port), self.timeout,
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:865: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+address = ('ftp.emnrd.nm.gov', 21), timeout = 120.0, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               ConnectionRefusedError: [Errno 61] Connection refused
+
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:850: ConnectionRefusedError
+
+The above exception was the direct cause of the following exception:
+
+name = 'data_dictionary'
+
+    @pytest.mark.parametrize("name", list(OCD["ftp"]["files"]))
+    def test_ftp_files_exist(name):
+        path = f"{OCD['ftp']['base_path']}/{OCD['ftp']['files'][name]}"
+>       size, modified = Ftp(OCD["ftp"]["host"]).stat(path)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_live_endpoints.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pipelines.acquire.common.transport.Ftp object at 0x1223a56d0>
+path = '/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx'
+
+    def stat(self, path: str) -> tuple[int, str]:
+        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
+        try:
+            return self._stat(path)
+        except _TRANSIENT as exc:
+>           raise SourceUnavailable(f"FTP stat of {path} failed: {exc}") from exc
+E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx failed: [Errno 61] Connection refused
+
+pipelines/acquire/common/transport.py:83: SourceUnavailable
+______________________ test_ftp_files_exist[wellhistory] _______________________
+
+self = <pipelines.acquire.common.transport.Ftp object at 0x1211362d0>
+path = '/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip'
+
+    def stat(self, path: str) -> tuple[int, str]:
+        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
+        try:
+>           return self._stat(path)
+                   ^^^^^^^^^^^^^^^^
+
+pipelines/acquire/common/transport.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:404: in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:550: in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:440: in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:482: in exc_check
+    retry_exc.reraise()
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:216: in reraise
+    raise self.last_attempt.result()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:553: in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+pipelines/acquire/common/transport.py:71: in _stat
+    with self._connect() as connection:
+         ^^^^^^^^^^^^^^^
+pipelines/acquire/common/transport.py:64: in _connect
+    connection = ftplib.FTP(self.host, timeout=self.timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:121: in __init__
+    self.connect(host)
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:158: in connect
+    self.sock = socket.create_connection((self.host, self.port), self.timeout,
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:865: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+address = ('ftp.emnrd.nm.gov', 21), timeout = 120.0, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               ConnectionRefusedError: [Errno 61] Connection refused
+
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:850: ConnectionRefusedError
+
+The above exception was the direct cause of the following exception:
+
+name = 'wellhistory'
+
+    @pytest.mark.parametrize("name", list(OCD["ftp"]["files"]))
+    def test_ftp_files_exist(name):
+        path = f"{OCD['ftp']['base_path']}/{OCD['ftp']['files'][name]}"
+>       size, modified = Ftp(OCD["ftp"]["host"]).stat(path)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_live_endpoints.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pipelines.acquire.common.transport.Ftp object at 0x1211362d0>
+path = '/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip'
+
+    def stat(self, path: str) -> tuple[int, str]:
+        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
+        try:
+            return self._stat(path)
+        except _TRANSIENT as exc:
+>           raise SourceUnavailable(f"FTP stat of {path} failed: {exc}") from exc
+E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip failed: [Errno 61] Connection refused
+
+pipelines/acquire/common/transport.py:83: SourceUnavailable
+______________________ test_ftp_files_exist[wcproduction] ______________________
+
+self = <pipelines.acquire.common.transport.Ftp object at 0x122b30530>
+path = '/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip'
+
+    def stat(self, path: str) -> tuple[int, str]:
+        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
+        try:
+>           return self._stat(path)
+                   ^^^^^^^^^^^^^^^^
+
+pipelines/acquire/common/transport.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:404: in wrapped_f
+    return copy(f, *args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:550: in __call__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:440: in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:482: in exc_check
+    retry_exc.reraise()
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:216: in reraise
+    raise self.last_attempt.result()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.12/site-packages/tenacity/__init__.py:553: in __call__
+    result = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+pipelines/acquire/common/transport.py:71: in _stat
+    with self._connect() as connection:
+         ^^^^^^^^^^^^^^^
+pipelines/acquire/common/transport.py:64: in _connect
+    connection = ftplib.FTP(self.host, timeout=self.timeout)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:121: in __init__
+    self.connect(host)
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/ftplib.py:158: in connect
+    self.sock = socket.create_connection((self.host, self.port), self.timeout,
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:865: in create_connection
+    raise exceptions[0]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+address = ('ftp.emnrd.nm.gov', 21), timeout = 120.0, source_address = None
+all_errors = False
+
+    def create_connection(address, timeout=_GLOBAL_DEFAULT_TIMEOUT,
+                          source_address=None, *, all_errors=False):
+        """Connect to *address* and return the socket object.
+    
+        Convenience function.  Connect to *address* (a 2-tuple ``(host,
+        port)``) and return the socket object.  Passing the optional
+        *timeout* parameter will set the timeout on the socket instance
+        before attempting to connect.  If no *timeout* is supplied, the
+        global default timeout setting returned by :func:`getdefaulttimeout`
+        is used.  If *source_address* is set it must be a tuple of (host, port)
+        for the socket to bind as a source address before making the connection.
+        A host of '' or port 0 tells the OS to use the default. When a connection
+        cannot be created, raises the last error if *all_errors* is False,
+        and an ExceptionGroup of all errors if *all_errors* is True.
+        """
+    
+        host, port = address
+        exceptions = []
+        for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+            af, socktype, proto, canonname, sa = res
+            sock = None
+            try:
+                sock = socket(af, socktype, proto)
+                if timeout is not _GLOBAL_DEFAULT_TIMEOUT:
+                    sock.settimeout(timeout)
+                if source_address:
+                    sock.bind(source_address)
+>               sock.connect(sa)
+E               ConnectionRefusedError: [Errno 61] Connection refused
+
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socket.py:850: ConnectionRefusedError
+
+The above exception was the direct cause of the following exception:
+
+name = 'wcproduction'
+
+    @pytest.mark.parametrize("name", list(OCD["ftp"]["files"]))
+    def test_ftp_files_exist(name):
+        path = f"{OCD['ftp']['base_path']}/{OCD['ftp']['files'][name]}"
+>       size, modified = Ftp(OCD["ftp"]["host"]).stat(path)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_live_endpoints.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <pipelines.acquire.common.transport.Ftp object at 0x122b30530>
+path = '/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip'
+
+    def stat(self, path: str) -> tuple[int, str]:
+        """Return (size in bytes, modified timestamp as YYYYMMDDHHMMSS)."""
+        try:
+            return self._stat(path)
+        except _TRANSIENT as exc:
+>           raise SourceUnavailable(f"FTP stat of {path} failed: {exc}") from exc
+E           pipelines.acquire.common.errors.SourceUnavailable: FTP stat of /Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip failed: [Errno 61] Connection refused
+
+pipelines/acquire/common/transport.py:83: SourceUnavailable
+=========================== short test summary info ============================
+FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[data_dictionary]
+FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[wellhistory]
+FAILED tests/integration/test_live_endpoints.py::test_ftp_files_exist[wcproduction]
+3 failed, 4 passed, 861 deselected in 97.40s (0:01:37)
+exit=1
+
+=== Every CI command in a clean copy
+$ bash scripts/ci_local.sh
+clean_copy_files=394
+raw_or_bronze_parquet_outside_fixtures=0
+--- uv sync --frozen
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + zipp==4.1.2
+exit=0
+--- uv run ruff check .
+All checks passed!
+exit=0
+--- uv run ruff format --check .
+258 files already formatted
+exit=0
+--- uv run mypy
+Success: no issues found in 111 source files
+exit=0
+--- uv run pytest tests/unit tests/integration/test_acquisition.py -q
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+580 passed, 1 skipped, 2 warnings in 81.72s (0:01:21)
+exit=0
+--- uv run pytest tests/contract -q
+.......                                                                  [100%]
+7 passed, 3 deselected in 0.77s
+exit=0
+--- uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 91%]
+.......                                                                  [100%]
+79 passed in 34.10s
+exit=0
+--- uv run pytest tests/provenance -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 91%]
+.............                                                            [100%]
+157 passed, 5 deselected in 16.75s
+exit=0
+--- uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found
+exit=0
+--- docker run --rm -v <temp-dir>:/repo zricethezav/gitleaks:v8.30.1 detect --source /repo --no-git --redact --no-banner
+[90m6:02PM[0m [32mINF[0m [1mscanned ~5268206 bytes (5.27 MB) in 656ms[0m
+[90m6:02PM[0m [32mINF[0m [1mno leaks found[0m
+exit=0
+--- docker run --rm -v <temp-dir>:/repo -w /repo rhysd/actionlint:1.7.7 -color=false
+exit=0
+failed_ci_commands=0
+exit=0
+
+failed_steps=1
+finished=2026-11-10T18:02:03Z

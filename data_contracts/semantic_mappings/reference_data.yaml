@@ -11,6 +11,7 @@ units:
   - {unit_id: sm3_per_s, physical_quantity: standard_volume_flow, description: Standard cubic metres per second at 101325 Pa and 288.15 K}
   - {unit_id: ksm3_per_d, physical_quantity: standard_volume_flow, description: Thousand standard cubic metres per day. Display unit.}
   - {unit_id: state_code, physical_quantity: discrete_state, description: "Compressor state: 0 stopped, 1 derated, 2 running"}
+  - {unit_id: kg_per_h, physical_quantity: mass_flow, description: Kilograms per hour. Carbon Mapper methane emission rates.}
   - {unit_id: BBL_60F, physical_quantity: liquid_volume, description: 42 US gallons at 60 degrees F and sea-level atmospheric pressure}
 
 unit_conversions:
@@ -87,11 +88,16 @@ transformations:
   - {id: "aether.field_simulator.to_run@1", name: aether.field_simulator.to_run, version: 1, code: pipelines/synthetic/aether_field.py, description: One coupled simulation of the whole fictional field., inputs: [SYNTHETIC], output: SYNTHETIC, alters: true}
   - {id: "aether.field_simulator.to_series@1", name: aether.field_simulator.to_series, version: 1, code: pipelines/synthetic/aether_field.py, description: Per-sensor metadata for a field series. Values stay in Parquet., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
   - {id: "aether.field_simulator.to_event@1", name: aether.field_simulator.to_event, version: 1, code: packages/scenario_engine/field_events.py, description: Known event declared by the scenario configuration., inputs: [SYNTHETIC], output: SYNTHETIC, alters: false}
+  - {id: "carbon_mapper.plume.to_observation@1", name: carbon_mapper.plume.to_observation, version: 1, code: pipelines/inspection/load.py, description: One plume as a remote-sensing observation at its published origin. Values unchanged., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "naip.chip.to_observation@1", name: naip.chip.to_observation, version: 1, code: pipelines/inspection/load.py, description: One NAIP window as an image observation. Pixels unchanged., inputs: [OBSERVED], output: OBSERVED, alters: false}
+  - {id: "inspection.proximity.to_link@1", name: inspection.proximity.to_link, version: 1, code: packages/inspection/association.py, description: Plume origin within the declared radius of a registry well. Proximity only., inputs: [OBSERVED], output: DERIVED, alters: true}
 
 # Enforced by the domain boundary trigger. A missing row also means refused.
 domain_boundaries:
   - {source: petrobras_3w, target_domain: FICTIONAL_ONSHORE, allowed: false, rationale: "3W is an independent offshore benchmark. It is never mapped onto AETHER assets (ADR 0014)."}
   - {source: nm_ocd, target_domain: FICTIONAL_ONSHORE, allowed: false, rationale: "Real New Mexico wells are not AETHER assets."}
+  - {source: carbon_mapper, target_domain: FICTIONAL_ONSHORE, allowed: false, rationale: "Real plume observations never describe AETHER assets (ADR 0018)."}
+  - {source: naip, target_domain: FICTIONAL_ONSHORE, allowed: false, rationale: "Real aerial imagery never shows AETHER assets (ADR 0018)."}
 
 # Sensors on the fictional model. Declared by design, so they're labeled synthetic.
 aether_tags_from: config/scenarios/aether_fault_001.yaml

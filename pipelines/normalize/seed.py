@@ -50,7 +50,7 @@ def _insert(conn: psycopg.Connection, table: str, rows: list[dict[str, Any]], ke
 
 def _source_systems(root: Path) -> list[dict[str, Any]]:
     rows = []
-    for name in ("nm_ocd", "petrobras_3w"):
+    for name in ("nm_ocd", "petrobras_3w", "carbon_mapper", "naip"):
         config = yaml.safe_load((root / "config" / "sources" / f"{name}.yaml").read_text())
         rows.append(
             {

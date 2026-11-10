@@ -1,0 +1,20 @@
+{
+  "validated_at": "2026-11-10T17:56:09Z",
+  "passed": true,
+  "sources": {
+    "carbon_mapper": {
+      "batch_id": "carbon_mapper-20261110-7e46740d69",
+      "files_verified": 140,
+      "original_checksum": "cfdf3f735e0eb9bb594a2390730161e5bcfa80bc39cc89c8a647c3f34e2db9a3",
+      "integrity_problems": [],
+      "passed": true
+    },
+    "naip": {
+      "batch_id": "naip-20261110-231dde276e",
+      "files_verified": 70,
+      "original_checksum": "671e11d172094eefc498ba4b73d1d0261a318fdb7796299db57551ef318082e2",
+      "integrity_problems": [],
+      "passed": true
+    }
+  }
+}

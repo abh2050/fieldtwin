@@ -1,0 +1,31 @@
+# Rules for associating real aerial evidence with real registry wells. Version 1, 2026-11-10.
+#
+# Disclosure: the plume-to-nearest-well distance distribution and a random-point baseline were
+# looked at once, during source inspection, before this radius was fixed.
+version: 1
+
+wells:
+  source_system_id: nm_ocd
+  # Only coordinates Gate 2 accepts for spatial analysis.
+  spatial_status: USABLE
+  # Everything in the registry selection is a gas well. Oil wells, tanks, compressors, and
+  # pipelines are absent, so the nearest registered well is not the nearest infrastructure.
+  registry_scope: Eddy County gas wells in townships 23S-28E and 24S-28E
+
+association:
+  relationship_type: EMISSION_NEAR
+  primary_radius_m: 250
+  sensitivity_radii_m: [100, 500, 1000]
+  verification_status: UNVERIFIED
+  # Proximity carries no probability of source attribution, so no confidence value is stored.
+  confidence: null
+
+chance_baseline:
+  # Uniform random points over the study area show how often proximity happens by chance.
+  points: 20000
+  seed: 20261110
+
+coverage:
+  # A well inside a scene footprint was in the field of view. That isn't a clean bill of health:
+  # detection depends on sensitivity, wind, cloud, and emission rate.
+  max_cloud_cover_pct: 25

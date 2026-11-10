@@ -333,4 +333,46 @@
       </root>
     </mxGraphModel>
   </diagram>
+  <diagram id="aerial-evidence" name="Aerial evidence (Gate 6)">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1500" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="note" value="Real aerial evidence relates to real registry wells by proximity and coverage only. Nothing reaches AETHER assets, and no step attributes a source (ADR 0018)." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="20" y="10" width="1400" height="26" as="geometry"/></mxCell>
+        <mxCell id="cm" value="Carbon Mapper&#10;plumes, scenes, footprints&#10;OBSERVED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="20" y="70" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="ocd" value="OCD registry wells&#10;Gate 2 usable coordinates&#10;OBSERVED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="20" y="200" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="naip" value="USDA NAIP windows&#10;300 m around chosen wells&#10;OBSERVED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="20" y="330" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="prox" value="Proximity links&#10;EMISSION_NEAR, 250 m&#10;UNVERIFIED, no confidence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="280" y="70" width="210" height="60" as="geometry"/></mxCell>
+        <mxCell id="chance" value="Chance baseline&#10;random points, same wells" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="280" y="160" width="210" height="50" as="geometry"/></mxCell>
+        <mxCell id="cov" value="Coverage grade&#10;scene footprints, cloud limit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="280" y="240" width="210" height="50" as="geometry"/></mxCell>
+        <mxCell id="covers" value="IMAGE_COVERS&#10;chip to its well" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="280" y="330" width="210" height="60" as="geometry"/></mxCell>
+        <mxCell id="guard" value="Claim guard&#10;every displayed sentence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="160" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="cards" value="Evidence cards&#10;attribution + fixed limits" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="560" y="250" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="queue" value="Blinded review queue&#10;opaque chip IDs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="830" y="250" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="ledger" value="Review ledger&#10;append-only, supersede only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="1100" y="250" width="210" height="60" as="geometry"/></mxCell>
+        <mxCell id="attr" value="SOURCE_ATTRIBUTED_TO&#10;not produced; needs verified evidence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;" vertex="1" parent="1"><mxGeometry x="560" y="70" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="aether" value="AETHER assets&#10;no real evidence reaches them" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;" vertex="1" parent="1"><mxGeometry x="830" y="70" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="event" value="AETHER prioritization input&#10;SYNTHETIC scenario event" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="560" y="480" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="request" value="Inspection request&#10;fictional asset only, no score" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="830" y="480" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="gate7" value="Gate 7&#10;prioritization and work orders" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="1100" y="480" width="210" height="60" as="geometry"/></mxCell>
+        <mxCell id="e1" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="cm" target="prox" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e2" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="ocd" target="prox" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e3" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="ocd" target="chance" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e4" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="cm" target="cov" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e5" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="ocd" target="cov" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e6" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="naip" target="covers" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e7" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="prox" target="cards" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e8" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="cov" target="cards" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e9" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="covers" target="cards" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e10" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="guard" target="cards" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e11" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="cards" target="queue" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e12" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="queue" target="ledger" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e13" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="event" target="request" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e14" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="request" target="gate7" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e15" value="refused" style="dashed=1;endArrow=cross;html=1;strokeColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="prox" target="attr" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e16" value="" style="dashed=1;endArrow=none;html=1;strokeColor=#ffffff;" edge="1" source="attr" target="aether" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="legend" value="Blue: OBSERVED real records. Green: DERIVED. Purple: human review. Yellow: SYNTHETIC AETHER. Red dashed: what the design refuses." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="20" y="640" width="1400" height="26" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

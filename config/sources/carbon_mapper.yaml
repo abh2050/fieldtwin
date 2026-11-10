@@ -1,0 +1,45 @@
+# Carbon Mapper methane plume catalog. Endpoints and terms were checked 2026-11-10.
+source_system_id: carbon_mapper
+provider: Carbon Mapper, Inc.
+source_url: https://api.carbonmapper.org/api/v1/docs
+api_base: https://api.carbonmapper.org/api/v1
+license:
+  explicit_license: Carbon Mapper Terms of Use, effective 2026-01-13
+  terms_url: https://carbonmapper.org/terms
+  note: >-
+    A limited, non-exclusive, revocable license for non-commercial use. Attribution is required in any use,
+    reproduction, or distribution, and redistribution must carry the same non-commercial and attribution terms.
+    Copies must be deleted if the license ends. No Creative Commons license is referenced.
+  attribution: "Data by Carbon Mapper®. Source: Carbon Mapper (data.carbonmapper.org)"
+  usage_constraints: Non-commercial research and demonstration only. Not for commercial use.
+
+# The two Gate 1 townships (23S-28E and 24S-28E), taken as the 1st to 99th percentile of the
+# registry's well coordinates, widened by about 2 km on each side. Order: west, south, east, north.
+study_area:
+  bbox: [-104.155, 32.149, -104.012, 32.360]
+
+plumes:
+  endpoint: catalog/plumes/annotated
+  gas: CH4
+  page_size: 100
+  min_records: 50
+  max_records: 3000
+
+scenes:
+  endpoint: catalog/scenes/annotated
+  page_size: 100
+  min_records: 20
+  max_records: 3000
+
+# Scene polygons come from the public vector tiles. The scene list itself gives only bounding boxes.
+footprints:
+  tile_url: layers/scenes/public/{z}/{x}/{y}.mvt
+  zoom: 12
+
+# Plume quicklook images for the review queue, limited to plumes inside the primary association radius.
+quicklooks:
+  asset_field: plume_rgb_png
+  max_files: 120
+
+request_interval_s: 1.0
+disk_floor_bytes: 5368709120

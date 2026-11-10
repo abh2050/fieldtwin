@@ -14,7 +14,10 @@ import zipfile
 from pathlib import Path
 
 import pyarrow.parquet as pq
+import rasterio
+from rasterio.windows import Window
 
+from pipelines.acquire.carbon_mapper.adapter import ASSET_FIELDS, strip_signature
 from pipelines.acquire.common.core import REPO_ROOT, sha256_file
 from pipelines.profile.common import latest_complete
 
@@ -75,8 +78,81 @@ def main() -> None:
         (raw_3w / "dataset/dataset.ini").read_bytes()
     )
 
+    provenance["sources"].update(cut_gate6(root))
     (FIXTURES / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n")
     print(json.dumps(provenance, indent=2))
+
+
+GATE6_PLUMES = 5
+GATE6_SCENES = 3
+CHIP_PX = 48
+
+
+def _strip_links(item: dict) -> dict:
+    return {k: strip_signature(v) if k in ASSET_FIELDS else v for k, v in item.items()}
+
+
+def cut_gate6(root: Path) -> dict[str, dict]:
+    """Real Carbon Mapper records (non-commercial terms, attribution kept) and one cropped NAIP chip."""
+    sources: dict[str, dict] = {}
+    cm = latest_complete(root, "carbon_mapper")
+    raw = root / "data/raw/carbon_mapper" / cm["source_version"] / cm["batch_id"]
+    out = FIXTURES / "carbon_mapper"
+    out.mkdir(parents=True, exist_ok=True)
+    for name, keep in (("plumes", GATE6_PLUMES), ("scenes", GATE6_SCENES)):
+        source = sorted((raw / name).glob("page_*.json"))[0]
+        page = json.loads(source.read_text())
+        page["items"] = [_strip_links(i) for i in page["items"][:keep]]
+        relative = f"carbon_mapper/{name}_page.json"
+        (FIXTURES / relative).write_text(json.dumps(page, indent=1) + "\n")
+        sources[relative] = {
+            "batch_id": cm["batch_id"],
+            "cut_from_sha256": sha256_file(source),
+            "rows": keep,
+        }
+    tile = sorted((raw / "tiles").glob("*.mvt"))[0]
+    relative = f"carbon_mapper/{tile.name}"
+    (FIXTURES / relative).write_bytes(tile.read_bytes())
+    sources[relative] = {
+        "batch_id": cm["batch_id"],
+        "cut_from_sha256": sha256_file(tile),
+        "rows": None,
+    }
+
+    naip = latest_complete(root, "naip")
+    chips = pq.read_table(
+        root / "data/bronze/naip" / naip["batch_id"] / "chips.parquet"
+    ).to_pandas()
+    control = chips[chips["selection_group"] == "CONTROL"].sort_values("chip_id").iloc[0]
+    source = root / control["path"]
+    # NAIP licensing for 2022 imagery is unconfirmed, so the pixel crop stays local and uncommitted.
+    relative = "naip/chip.tif"
+    (FIXTURES / "naip").mkdir(parents=True, exist_ok=True)
+    (LOCAL_FIXTURES / "naip").mkdir(parents=True, exist_ok=True)
+    with rasterio.open(source) as src:
+        window = Window(0, 0, CHIP_PX, CHIP_PX)
+        profile = {
+            **src.profile,
+            "width": CHIP_PX,
+            "height": CHIP_PX,
+            "transform": src.window_transform(window),
+        }
+        with rasterio.open(LOCAL_FIXTURES / relative, "w", **profile) as dst:
+            dst.write(src.read(window=window))
+    sources[relative] = {
+        "batch_id": naip["batch_id"],
+        "cut_from_sha256": sha256_file(source),
+        "rows": None,
+    }
+    raw_naip = root / "data/raw/naip" / naip["batch_id"].split("-")[1] / naip["batch_id"]
+    item = raw_naip / "stac" / f"{control['stac_item_id']}.json"
+    (FIXTURES / "naip" / "stac_item.json").write_bytes(item.read_bytes())
+    sources["naip/stac_item.json"] = {
+        "batch_id": naip["batch_id"],
+        "cut_from_sha256": sha256_file(item),
+        "rows": 1,
+    }
+    return sources
 
 
 if __name__ == "__main__":
