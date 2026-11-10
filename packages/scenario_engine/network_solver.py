@@ -75,6 +75,9 @@ COMPRESSOR_STATE_CODE = {
 }
 
 
+RESTRICTABLE_EDGES = frozenset({EdgeType.GATHERING_SEGMENT, EdgeType.FLOWLINE})
+
+
 @dataclass(frozen=True)
 class NetworkState:
     """What is true at one instant. Every field is an operating condition, not a measurement."""
@@ -393,11 +396,10 @@ def solve_network(model: NetworkModel, state: NetworkState) -> NetworkSolution:
     severity = dict(state.severity)
     fractions = dict(state.compressor_fraction)
     for edge_id in severity:
-        if (
-            edge_id not in graph.edges
-            or graph.edges[edge_id].edge_type is not EdgeType.GATHERING_SEGMENT
-        ):
-            raise InfeasibleNetworkState(f"{edge_id} is not a gathering segment")
+        # Any pipe can hold a restriction: a gathering segment or, since D1 (ADR 0020), a flowline.
+        # The restriction law in segment_resistance is the same for both.
+        if edge_id not in graph.edges or graph.edges[edge_id].edge_type not in RESTRICTABLE_EDGES:
+            raise InfeasibleNetworkState(f"{edge_id} is not a gathering segment or flowline")
     unknown_wells = state.shut_in_wells - set(model.wells)
     if unknown_wells:
         raise InfeasibleNetworkState(f"unknown wells: {sorted(unknown_wells)}")

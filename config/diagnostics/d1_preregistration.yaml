@@ -2,15 +2,16 @@
 #
 # Version 1, 2026-11-10. Committed before any D1 case was generated, any diagnostic method was written,
 # or any D1 result was seen. Version 2, 2026-11-10, after technical review and still before any case,
-# method, or result (see `changes`). Everything here is SYNTHETIC: a fictional field and an
-# uncalibrated model.
+# method, or result. Version 3, 2026-11-10, still before any case, method, or result: the simulator
+# is extended so flowlines can hold a restriction (see `changes`). Everything here is SYNTHETIC: a
+# fictional field and an uncalibrated model.
 #
 # Rules for this file:
 # - Any change after this commit gets a new version and an entry in `changes`, with its date, reason,
 #   and timing (see `change_timing`). Nothing is edited silently.
 # - Final evaluation cases are never generated until a freeze record exists (see `protection`).
 # - Thresholds are judgments made now, without data. They are not tuned later.
-version: 2
+version: 3
 provenance_class: SYNTHETIC
 spec: docs/product/d1_diagnostic_spec.md
 
@@ -40,7 +41,10 @@ inputs:
 
 # Case generation. Seeds are disjoint from every earlier gate (Gate 5 used 500000 to 899999).
 generator:
-  simulator: aether-field-network v1 (packages/scenario_engine), unmodified
+  simulator: >-
+    aether-field-network v1 (packages/scenario_engine), with one change for D1 (ADR 0020): the solver
+    accepts a restriction on a flowline as well as on a gathering segment, using the same restriction
+    law. Nothing else is changed, and runs without flowline restrictions are unchanged.
   interval_s: 300
   duration_s: 259200          # 3 days
   restriction_share: 0.85     # the rest have no restriction
@@ -268,3 +272,16 @@ changes:
       - The random-measurement comparator draws uniformly from the 55 enumerated valid actions (type plus target), seeded per case. Duration and operational burden are declared per type and reported separately; a same-type random comparator is added as a secondary result.
       - A joint diagnostic-success rate (true pipe first, severity within 0.10, impact within tolerance) becomes an acceptance line at 0.55 or more. Conditional severity error becomes a secondary diagnostic.
       - Minimum sample support is frozen for primary cases overall, no-restriction cases, primary cases per held-out regime and pooled, and per pipe. Results below a minimum are INCONCLUSIVE and never count toward MET.
+  - version: 3
+    date: 2026-11-10
+    timing: BEFORE_DEVELOPMENT_RESULTS
+    reason: >-
+      Versions 1 and 2 assumed every pipe could hold a restriction, but the accepted Gate 4 solver
+      refused a restriction anywhere except the three gathering segments. Found by a single solver call
+      while checking solver speed, before any case was generated or method written. Without a fix, 12 of
+      the 15 hypotheses (every flowline) could never be generated.
+    what:
+      - The solver accepts restrictions on flowlines, with the same restriction law as segments. Other edges are still refused.
+      - A run's truth table gains a severity column for a flowline only when that run restricts it, so every earlier run keeps its accepted truth table.
+      - Regression evidence, recorded in ADR 0020: the six Gate 4 scenario hashes match their recorded values, the Gate 3 golden values pass, and five regenerated Gate 5 benchmark cases (four restriction cases, including a held-out GS-TRUNK case, and one normal case) are identical to the stored files.
+      - Nothing else in the preregistration changes.

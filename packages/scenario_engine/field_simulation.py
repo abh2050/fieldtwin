@@ -171,9 +171,17 @@ def _truth_frame(
     columns["truth_fault_active"] = [
         scenario.first_onset_s is not None and int(o) >= scenario.first_onset_s for o in offsets
     ]
-    for segment in (s.id for s in model.config.segments):
-        columns[f"truth_severity_{segment}"] = [
-            dict(scenario.state_at(int(o)).severity).get(segment, 0.0) for o in offsets
+    # Segments always have a severity column. Another pipe gets one only when this run restricts it,
+    # so runs without flowline restrictions keep exactly the truth table Gate 4 accepted.
+    restricted = {
+        f.asset_id
+        for f in getattr(scenario, "physical_faults", ())
+        if f.kind == "SEGMENT_RESTRICTION"
+    }
+    segments = [s.id for s in model.config.segments]
+    for pipe in segments + sorted(restricted - set(segments)):
+        columns[f"truth_severity_{pipe}"] = [
+            dict(scenario.state_at(int(o)).severity).get(pipe, 0.0) for o in offsets
         ]
     for unit in model.capacity:
         columns[f"truth_capacity_fraction_{unit}"] = [

@@ -107,3 +107,7 @@ One seed and one parameter set give identical output. Each sensor's noise stream
 - Compressor sizing, pipeline design, or production forecasts.
 - Claims about detection performance on real data.
 - Transient analysis of any kind.
+
+## Change for D1
+
+Since 2026-11-10 ([ADR 0020](../adr/0020-diagnostic-reset.md)), a restriction may sit on a flowline as well as a gathering segment, under the same restriction law. Runs without flowline restrictions are unchanged, and all six scenario hashes still match their recorded values.

@@ -297,7 +297,9 @@ def test_setpoint_above_every_shut_in_pressure_gives_no_flow():
     [
         NetworkState((("GS-A", 0.71),)),
         NetworkState((("GS-A", -0.1),)),
-        NetworkState((("FL-A-01", 0.1),)),
+        NetworkState((("FL-A-01", 0.71),)),
+        NetworkState((("INFLOW:A-01", 0.1),)),
+        NetworkState((("C-01", 0.1),)),
         NetworkState((("NOT-A-PIPE", 0.1),)),
         NetworkState(closed_valves=frozenset({"IV-Z"})),
         NetworkState(shut_in_wells=frozenset({"Z-01"})),
@@ -309,6 +311,31 @@ def test_setpoint_above_every_shut_in_pressure_gives_no_flow():
 def test_infeasible_or_unknown_states_are_refused(state):
     with pytest.raises(InfeasibleNetworkState):
         solve_network(MODEL, state)
+
+
+def test_a_flowline_restriction_acts_on_its_own_well(  # D1, ADR 0020
+):
+    base = solve_network(MODEL, NetworkState())
+    restricted = solve_network(MODEL, NetworkState((("FL-A-03", 0.6),)))
+    lost = {w: base.edge_flow_sm3_per_s[f"INFLOW:{w}"] - restricted.edge_flow_sm3_per_s[f"INFLOW:{w}"]
+            for w in MODEL.wells}  # fmt: skip
+    assert lost["A-03"] > 0
+    assert lost["A-03"] == max(lost.values())
+    assert restricted.pressure_pa_abs["WH:A-03"] > base.pressure_pa_abs["WH:A-03"]
+    assert restricted.total_flow < base.total_flow
+    # Pad B shares only the trunk with Pad A, so its wells barely move.
+    assert max(abs(lost[w]) for w in MODEL.wells if w.startswith("B")) < 0.05 * lost["A-03"]
+
+
+def test_flowline_and_segment_restrictions_use_the_same_law():
+    flowline = MODEL.graph.edges["FL-A-03"]
+    segment = MODEL.graph.edges["GS-A"]
+    for edge in (flowline, segment):
+        k0 = MODEL.segment_resistance(edge, 0.0)
+        k = MODEL.segment_resistance(edge, 0.5)
+        restricted = MODEL.config.pipes.restricted_length_m
+        expected = ((edge.length_m - restricted) + restricted / 0.5**5) / edge.length_m
+        assert k / k0 == pytest.approx(expected)
 
 
 def test_discharge_at_or_below_setpoint_is_infeasible():
