@@ -451,3 +451,48 @@ def test_derate_reaches_every_well():
     results = compare(DERATE)
     wells = [r for r in results if r.effect.quantity == "Gas flow"]
     assert len(wells) == 12 and all(r.change < 0 for r in wells)
+
+
+# Flowline restrictions (D1, ADR 0020)
+
+
+def test_a_flowline_restriction_gets_its_own_truth_column_and_obeys_the_pipe_law():
+    from packages.scenario_engine.field_simulation import _truth_frame, default_setup
+    from packages.scenario_engine.network_solver import NetworkModel
+
+    config, graph, *_ = default_setup()
+    model = NetworkModel(config, graph)
+    flowline = {
+        **PHYSICAL,
+        "asset_id": "FL-B-02",
+        "onset_s": 300,
+        "full_s": 900,
+        "max_severity": 0.55,
+    }
+    case = scenario(
+        category="PHYSICAL_FAULT",
+        target_asset_id="B-02",
+        affected_asset_id="FL-B-02",
+        physical_faults=[flowline],
+    )
+    truth, solutions = _truth_frame(model, case, np.array([0, 600, 1200]))
+    assert list(truth["truth_severity_FL-B-02"]) == pytest.approx([0.0, 0.275, 0.55])
+    k = model.segment_resistance(graph.edges["FL-B-02"], 0.55)
+    drop = (
+        solutions[-1].pressure_pa_abs["WH:B-02"] ** 2 - solutions[-1].pressure_pa_abs["HDR-B"] ** 2
+    )
+    assert drop == pytest.approx(k * solutions[-1].edge_flow_sm3_per_s["FL-B-02"] ** 2, rel=1e-6)
+
+
+def test_runs_without_flowline_restrictions_keep_the_accepted_truth_columns():
+    from packages.scenario_engine.field_simulation import _truth_frame, default_setup
+    from packages.scenario_engine.network_solver import NetworkModel
+
+    config, graph, *_ = default_setup()
+    truth, _ = _truth_frame(NetworkModel(config, graph), scenario(), np.array([0]))
+    severity_columns = sorted(c for c in truth.columns if c.startswith("truth_severity_"))
+    assert severity_columns == [
+        "truth_severity_GS-A",
+        "truth_severity_GS-B",
+        "truth_severity_GS-TRUNK",
+    ]

@@ -1,6 +1,6 @@
 # Diagnostic Milestone D1: gathering-line restriction diagnosis
 
-Status: **preregistered, not started.** No case has been generated, no method written, and no result seen. Frozen plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 2. Why: [diagnostic reset](diagnostic_reset.md) and [ADR 0020](../adr/0020-diagnostic-reset.md).
+Status: **preregistered, not started.** No case has been generated, no method written, and no result seen. Frozen plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 3. Why: [diagnostic reset](diagnostic_reset.md) and [ADR 0020](../adr/0020-diagnostic-reset.md).
 
 Everything in D1 is SYNTHETIC: fictional AETHER Field and its uncalibrated Gate 4 model. A D1 result says what a model-based diagnosis can do inside that model, not what it would do on a real field.
 
@@ -24,7 +24,7 @@ After the recommended measurement's reading arrives, the diagnosis is updated an
 
 ## Scope
 
-**In:** restrictions in one pipe (any of the 12 flowlines or 3 gathering segments), or none. Quasi-steady telemetry from the Gate 4 simulator, unmodified. Unknown well deliverability, sensor noise, compressor setpoint, and declared planned operations as nuisances.
+**In:** restrictions in one pipe (any of the 12 flowlines or 3 gathering segments), or none. Quasi-steady telemetry from the Gate 4 simulator, unmodified except that its solver now accepts flowline restrictions (preregistration version 3). Unknown well deliverability, sensor noise, compressor setpoint, and declared planned operations as nuisances.
 
 **Excluded from D1:** work-order generation, approvals, routing, aerial evidence, cloud deployment, and frontend work. Also excluded: compressor faults, sensor faults as diagnosis targets, multiple simultaneous restrictions, and any real-field data.
 
@@ -106,6 +106,7 @@ A result below its minimum is INCONCLUSIVE and never counts toward MET.
 |---:|---|---|---|
 | 1 | 2026-11-10 | Before any case, method, or result | Initial preregistration |
 | 2 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS`, after technical review | Brier baseline is now the generator-matched climatology, not a uniform prior. The random comparator is defined over 55 enumerated actions, with burden reported separately. A joint success rate is an acceptance line, and conditional severity error is secondary. Minimum sample support is frozen, with INCONCLUSIVE below it. |
+| 3 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS` | The Gate 4 solver refused flowline restrictions, so 12 of 15 hypotheses couldn't be generated. The solver now accepts them under the same restriction law. Gate 3, Gate 4, and sampled Gate 5 outputs are unchanged. |
 
 ## Not decided yet
 

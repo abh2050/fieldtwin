@@ -26,6 +26,15 @@ Gate 5's holdouts were read several times while defects were being fixed, and Ga
 |---:|---|---|---|
 | 1 | 2026-11-10 | Before any case, method, or result | Initial preregistration. |
 | 2 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS` | Technical review found four gaps. A uniform 16-way Brier baseline was too easy to beat given the generator's frequencies, so it was replaced with a generator-matched climatology. The random-measurement comparator was ambiguous about targets, so it now samples from 55 enumerated valid actions, with duration and burden reported separately. Severity error ignored mislocalized cases, so a joint success rate became an acceptance line. The material-impact filter could leave too few cases, so minimum support was frozen, with INCONCLUSIVE below it. Still no case generated and no method written. |
+| 3 | 2026-11-10 | `BEFORE_DEVELOPMENT_RESULTS` | The accepted Gate 4 solver refused a restriction anywhere but the three gathering segments, so the flowline hypotheses (12 of 15) could never be generated. This was found by one solver call while checking solver speed, before any case or method existed. See the physics change below. |
+
+## Physics change for D1: flowline restrictions
+
+This changes an accepted Gate 4 physics contract, so it is justified and evidenced here.
+
+- **Change.** `solve_network` accepts a restriction on a flowline as well as a gathering segment. Both use the same restriction law, an equivalent length `(L - l) + l / (1 - s)^5` over the 50 m restricted length. Other edges, such as well inflow and compression, are still refused. A run's truth table gains a severity column for a flowline only when that run restricts it.
+- **Why.** D1's hypotheses include every pipe. Without flowlines, D1 would reduce to choosing among three segments that each carry their own differential-pressure sensor, which would test very little.
+- **Regression evidence.** All six Gate 4 scenario hashes match `config/scenarios/aether_field_expected_hashes.yaml`. The Gate 3 golden values in `test_physics.py` pass. Five Gate 5 benchmark cases regenerated after the change, including a held-out GS-TRUNK restriction, are identical to the stored files. The offline suite passes (625 tests). New tests check that a flowline restriction acts mainly on its own well, obeys the pipe law, and uses the same law as a segment. A further test checks that runs without flowline restrictions keep the accepted truth columns.
 
 ## Consequences
 
