@@ -5,10 +5,14 @@
 # Version 2, 2026-11-10, still before any recommendation was generated: version 1 named sensor
 #   statuses (STALE, MISSING, OUT_OF_RANGE) that the simulator never emits, so the data-quality rule
 #   could never fire. Version 2 uses the quality values the streaming contract actually carries.
+# Version 3, 2026-11-10, after the six scenarios' alarms and their evidence sensors were seen but
+#   before any recommendation was generated: version 2 didn't say which candidate a work order
+#   targets, and code took the first evidence sensor's asset. Version 3 targets the candidate with
+#   the largest consequence share, the same quantity the consequence term already uses.
 #
 # Every value is a declared design assumption about a fictional facility, not a calibrated figure.
 # Detector scores are never read as failure probabilities: they enter only as "an alarm started".
-version: 2
+version: 3
 provenance_class: SYNTHETIC
 
 detector:
@@ -60,6 +64,8 @@ actions:
   NEEDS_EVIDENCE: An alarm with no localizable evidence; gather more data before acting.
 
 work_orders:
+  # The work order targets the candidate with the largest consequence share; ties keep evidence order.
+  target: largest_consequence_share
   # Only a person may approve, reject, or request evidence. The engine may only recommend.
   system_actor: decision-engine
   approver_roles: [MAINTENANCE_SUPERVISOR]
