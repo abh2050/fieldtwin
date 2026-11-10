@@ -1,0 +1,56 @@
+# D1 freeze record. Written by pipelines/diagnostics/freeze.py; never edited by hand.
+# Any change to a protected file, the preregistration, or this record after the freeze is a
+# protocol change, logged in the preregistration with its timing.
+method_commit: e9f8c008e23c70cd75333edc6edbf9ae2d56511d
+preregistration_version: 4
+preregistration_sha256: c175b9d972b5ce80f76d72ba4f181f09bb7be14d27c324ecb6e083ee6f9bcffb
+method_config_sha256: beb06e4802b5253740f8a264b23d6f13f1f4956aa6b42e2c5cb9e53941fd6b38
+date: '2026-11-10'
+approval: Final splits unlock only when this record and every protected file match origin/main.
+open_questions_for_review:
+- In-regime cases come from the same model the method inverts, so the held-out regimes are the meaningful test.
+- The two in-regime measurement lines stay as preregistered; the method needs no further measurement on these matched-model
+  cases, so they may report NOT MET.
+protected_files:
+  config/diagnostics/d1_method.yaml: beb06e4802b5253740f8a264b23d6f13f1f4956aa6b42e2c5cb9e53941fd6b38
+  config/diagnostics/d1_preregistration.yaml: c175b9d972b5ce80f76d72ba4f181f09bb7be14d27c324ecb6e083ee6f9bcffb
+  config/experiments/aether_benchmark.yaml: 661e5f79253d258f22a303b6f1eff920cf23d0dce08a522ca19978d1a60610ba
+  config/facility/aether_field.yaml: 30afee2b54a7ab2d8d136e5ae9b56dce6950abdca020ab2a4be7e4a769f82742
+  config/facility/aether_network.yaml: 03d3cf15d35bc2a172ed118ea980609e879874b32679123315335369f0713866
+  config/scenarios/aether_fault_001.yaml: bfa80083177163dd6d521b008fd6291c43f15a1263f9e735e051839a34a6f13d
+  config/scenarios/aether_field_expected_hashes.yaml: 46d532a7d872ca121e3f9d6d2e0c98d112f0ed3f445cd5ee507729d3a2a2e2d7
+  config/scenarios/aether_field_scenarios.yaml: b036bfad4d14c1fd0a4c91f6bfbb07539718b9297409d36162a671c0dbf5d3d4
+  packages/diagnostics/__init__.py: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  packages/diagnostics/baselines.py: af062039f816fa109cf7f81056a8e66cd27dd8b12010151e3ef0b4f071b6185d
+  packages/diagnostics/diagnose.py: 7766779e6f52748a9a3773bd714966a701667a61891e4d10cbd7b761f0080f31
+  packages/diagnostics/forward.py: 65467d2f602cb8b6b3314ba8d250b8f5549ad4ddb6dee619c0124f10b982471f
+  packages/domain/__init__.py: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  packages/domain/events.py: ea7603d098871f22b8a9b5413a440b2a0da9dbfc41d9508e2cfec6d150978205
+  packages/domain/models.py: ddfba71bd0ec58994b589b2df6be7a1b7ae2d9e0ac4bc5b032583fcd9f198d1f
+  packages/domain/reconciliation.py: d932f7385e4e98a5bb15e173ef5b802afcdb9c5e3767441412535e9a1a933d45
+  packages/domain/semantics.py: 8198d47e75080fe33bdf3baf642927a056598b5615787f04fc1696f4daeb80de
+  packages/scenario_engine/__init__.py: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  packages/scenario_engine/benchmark_runs.py: 30a6de7921555863695174268000d1272d1b9807c27b38cba2ac49d3652b376d
+  packages/scenario_engine/config.py: 70e3be60eba9c1d1733230beb26dbbdc4d576926d25c6c3de486bb14ca9d5fed
+  packages/scenario_engine/events.py: 8267c7c499681dcc732b5008543bbc988cc4b7d2977f038675acd32fb0029734
+  packages/scenario_engine/execution.py: 61397c5c93aefa72a51dc7c38c05ccfd77fed7a60b5f42ac23a0ecf526ea9999
+  packages/scenario_engine/field_events.py: d7cdd7f5737c1793e1fbefa0e11ec82623e3603a83135e20f1f16497c1d6cd49
+  packages/scenario_engine/field_invariants.py: 75fd6b49570b1aada1a0366953d0beab50633ae1f1d593e4521f6efeb6e10cf9
+  packages/scenario_engine/field_scenarios.py: e58a1f866a8d622bf9a9f7b3339be4d8268a3f0d98f5f6fbc422d04c37ee8479
+  packages/scenario_engine/field_simulation.py: 112e96e33885701d73541176c80d32ddff1de5c6a3cb2ea05bb23f531351aa30
+  packages/scenario_engine/invariants.py: 40df6ffbb94111989951fc150160189564ea1dfc623d71cd941271912f22a9ea
+  packages/scenario_engine/network_graph.py: 68db2d02c637de7251f7774ec895d31e733c16bc95015f0d41cd2901f9eaf6f2
+  packages/scenario_engine/network_solver.py: 74804e5d1f844ab1ea925d45d491937f5082a950ae8bf1875f4fb9d144083cf0
+  packages/scenario_engine/physics.py: fe90f7d2bb6cc39db59f527b3a7b41d84c503d3461fea03162e509a2f90f9f20
+  packages/scenario_engine/propagation.py: 2a635c19225a9aefa0b66dc948af5b047728bcfc4e379532f9e0b56b39cd0dd6
+  packages/scenario_engine/reference_solver.py: 231a6cb97a7a0998b8b1c53d276271447b6d7980046599666bce893bf8f1589c
+  packages/scenario_engine/simulate.py: ed727f88da7d287a21db433f3436b935ffb6309d27fe31698d59b20456c0a44e
+  pipelines/diagnostics/__init__.py: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  pipelines/diagnostics/cases.py: 2ff27afc9c9449a188b1d25cd9ecf0acead0683b90b883e99fff642cc56c79b3
+  pipelines/diagnostics/evaluate.py: ccc96f784191a587f624fa88a4ff291d932de552b368fb7b23519dc216cf2323
+  pipelines/diagnostics/freeze.py: ecbe7d65f16a04f6cfc861f64206d88d3f0300eceabf20b08da084b30ba6b95f
+  pipelines/diagnostics/port.py: 5d7576c4f53e2123850235d139778309539a9391368549310dafdcf23afb3393
+  pipelines/diagnostics/scoring.py: afbe6a804bc35eda47c904f9d3ea1d10261d605057e24fe5c7b3df3cbfdb69e7
+  pyproject.toml: 1327679e0da5a8fb0b1648721d89994f75b179f56c2a86f30497ec12870b2574
+  uv.lock: 3ffca4a66da89809de7f853671f2cf067c0677ec555ad556b014c8a9954e4e41
+record_sha256: da6a97de265ffaf22a0478fd3ab4248754c1f08d3a12b01377328b2269803f74

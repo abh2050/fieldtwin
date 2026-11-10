@@ -1,0 +1,97 @@
+{
+ "split": "development",
+ "method": {
+  "name": "M1_nominal_inversion",
+  "calibrate_wells": false,
+  "baseline_hours": 6.0,
+  "current_hours": 2.0,
+  "severity_step": 0.01,
+  "severity_max": 0.69,
+  "prior_none": 0.15,
+  "model_error": {
+   "PRESSURE": 0.0,
+   "DP": 0.0,
+   "FLOW": 0.0
+  },
+  "temperature": 1.0,
+  "support_mass": 0.999,
+  "support_cap": 120,
+  "shut_in_support_cap": 40,
+  "eig_draws": 48,
+  "seed": 20261112
+ },
+ "seconds": 161.5,
+ "metrics": {
+  "cases": 300,
+  "primary_cases": 255,
+  "no_restriction_cases": 45,
+  "material_subset_cases": 9,
+  "top1": 0.6039215686274509,
+  "top1_interval": [
+   0.5411764705882353,
+   0.6588235294117647
+  ],
+  "top3": 0.6862745098039216,
+  "mean_reciprocal_rank": 0.6796434611140494,
+  "miss_rate": 0.0,
+  "severity_conditional_mae": 0.0351324208966149,
+  "joint_success_rate": 0.3843137254901961,
+  "joint_success_interval": [
+   0.3254901960784314,
+   0.4392156862745098
+  ],
+  "impact_within_tolerance": 0.5607843137254902,
+  "impact_relative_error_cases": 119,
+  "impact_median_relative_error": 0.1473373514378043,
+  "coverage_80": {
+   "severity": 0.023529411764705882,
+   "impact": 0.01568627450980392
+  },
+  "coverage_95": {
+   "severity": 0.027450980392156862,
+   "impact": 0.023529411764705882
+  },
+  "b1_top1": 0.6431372549019608,
+  "top1_minus_b1_interval": [
+   -0.10196078431372549,
+   0.01568627450980392
+  ],
+  "specificity": 0.0,
+  "brier_skill_score_vs_climatology": -0.061083043590150155,
+  "brier_skill_score_vs_uniform": -0.038210809094984644,
+  "expected_calibration_error": 0.48666059096671654,
+  "mean_entropy_before_nats": 4.7714653497394705e-05,
+  "measurement_entropy_reduction": 0.21703814444227917,
+  "measurement_against_random_mean": -3.734711419289049e-05,
+  "measurement_against_random_interval": [
+   -0.00010910134688757454,
+   3.88876778001368e-15
+  ],
+  "measurement_top1_gain": 0.0,
+  "measurement_top1_gain_interval": [
+   0.0,
+   0.0
+  ],
+  "recommended_types": {
+   "PORTABLE_DP": 300
+  },
+  "recommended_mean_duration_h": 1.0,
+  "recommended_share_production_interrupting": 0.0,
+  "random_types": {
+   "PORTABLE_DP": 83,
+   "PRECISION_PT": 94,
+   "SHUT_IN_TEST": 66,
+   "WELL_TEST": 57
+  },
+  "random_mean_duration_h": 1.79,
+  "random_share_production_interrupting": 0.22,
+  "recommended_mean_deferred_sm3": 0.0,
+  "random_mean_deferred_sm3": 939.0477437267662,
+  "recommended_entropy_reduction_per_hour_nats": 1.0355899857780848e-05,
+  "measurement_against_same_type_mean": 5.419543032158056e-06,
+  "measurement_against_same_type_interval": [
+   -0.00010322026797407922,
+   0.00011950290098426916
+  ]
+ }
+}
