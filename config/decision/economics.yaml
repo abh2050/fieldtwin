@@ -1,7 +1,10 @@
 # Modeled economic comparison of inspection scheduling strategies on fictional AETHER Field.
-# Version 1, 2026-11-10. EVERY number here is a declared assumption for a fictional facility.
+# EVERY number here is a declared assumption for a fictional facility.
+# Version 1, 2026-11-10. Version 2, 2026-11-10, before any economic result was produced: adds the
+#   fault-category mapping, alarm localization, delay sampling, and the source of nominal flows, which
+#   version 1 left undefined.
 # Outputs are modeled scenario estimates, never realized or expected savings for any real operator.
-version: 1
+version: 2
 provenance_class: SYNTHETIC
 
 horizon_days: 365
@@ -20,6 +23,20 @@ sensor_fault_share: 0.25
 # Detector behaviour comes from the Gate 5 held-out AETHER results for the selected method:
 # per-category detection share and delays, and false-alarm starts per hour of normal operation.
 detector_results: reports/experiments/results/aether_held_out.json
+detector_method: hist_gradient_boosting
+# Which Gate 5 category stands for a fault on each asset class. Gate 5 has no well-specific category,
+# so well and flowline faults borrow the restriction results. An assumption, not a measurement.
+category_for:
+  well: RESTRICTION
+  flowline: RESTRICTION
+  gathering_segment: RESTRICTION
+  compressor: DERATE
+  sensor: SENSOR
+# A detection delay is drawn uniformly between the Gate 5 lower and upper quartiles for its category.
+delay_sampling: uniform_interquartile
+# Share of alarms on a real fault whose work order targets the faulted asset. The others go to another
+# asset sharing its pad or the station. Gate 7's demonstration gives 2 of 2, far too few to estimate.
+localization_correct: 0.80
 
 inspection:
   # Probability that a site inspection finds a physical fault present at the visited asset.
@@ -41,7 +58,8 @@ labor:
   hours_per_day: 10.0
 
 production:
-  # Gate 4 normal run: field flow is the sum of well flows. Converted to thousand cubic feet a day.
+  # Nominal flow through each asset is its median in the Gate 4 normal run, converted from standard
+  # cubic metres per second to thousand cubic feet a day (35.3147 cubic feet per cubic metre).
   # A physical fault defers this share of the flow through the affected asset until repaired.
   deferred_share_while_faulted: 0.20
   gas_price_per_mcf: 2.50
@@ -70,3 +88,4 @@ sensitivity:
     - travel.cost_per_km
     - labor.cost_per_hour
     - inspection.finds_physical_fault
+    - localization_correct
