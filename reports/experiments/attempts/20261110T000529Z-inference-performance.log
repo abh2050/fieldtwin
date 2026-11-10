@@ -1,0 +1,10 @@
+hist_gradient_boosting 4.1602002 True
+isolation_forest 4.223657799999999 True
+logistic_regression 0.39933379999999985 True
+rolling_deviation 0.835808 True
+static_threshold 0.150034 True
+aether:hist_gradient_boosting 1.7202412 True
+aether:isolation_forest 4.4075922 True
+aether:logistic_regression 0.4461998 True
+aether:rolling_deviation 1.2237418 True
+aether:static_threshold 0.060208 True

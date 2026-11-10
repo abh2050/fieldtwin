@@ -15,20 +15,20 @@ Perturbations: a quarter of present sensors removed from each instance; 20% of r
 | Method | Unperturbed | rows_20pct_missing | sensors_25pct_removed | ten_minute_outage_each_hour |
 |---|---|---|---|---|
 | Static limits | 0.03, 0.000/h | 0.03, 0.000/h | 0.03, 0.000/h | 0.03, 0.000/h |
-| Rolling deviation | 0.35, 0.047/h | 0.35, 0.042/h | 0.33, 0.033/h | 0.38, 0.028/h |
-| Logistic regression | 0.23, 0.005/h | 0.17, 0.005/h | 0.15, 0.000/h | 0.25, 0.009/h |
-| Isolation forest | 0.17, 0.009/h | 0.45, 0.066/h | 0.20, 0.000/h | 0.82, 0.722/h |
-| Gradient boosting | 0.03, 0.009/h | 0.03, 0.014/h | 0.10, 0.000/h | 0.05, 0.000/h |
+| Rolling deviation | 0.35, 0.028/h | 0.35, 0.028/h | 0.33, 0.023/h | 0.38, 0.028/h |
+| Logistic regression | 0.20, 0.000/h | 0.17, 0.000/h | 0.15, 0.000/h | 0.20, 0.014/h |
+| Isolation forest | 0.17, 0.009/h | 0.50, 0.084/h | 0.20, 0.000/h | 0.82, 0.722/h |
+| Gradient boosting | 0.07, 0.009/h | 0.07, 0.009/h | 0.12, 0.000/h | 0.82, 1.050/h |
 
 ### AETHER in-regime test (SYNTHETIC)
 
 | Method | Unperturbed | rows_20pct_missing | sensors_25pct_removed | ten_percent_of_time_lost |
 |---|---|---|---|---|
-| Static limits | 0.55, 0.003/h | 0.55, 0.003/h | 0.55, 0.002/h | 0.55, 0.003/h |
-| Rolling deviation | 0.75, 0.008/h | 0.80, 0.008/h | 0.75, 0.008/h | 0.80, 0.008/h |
-| Logistic regression | 0.90, 0.004/h | 0.20, 0.001/h | 0.10, 0.001/h | 0.90, 0.003/h |
-| Isolation forest | 0.55, 0.009/h | 0.90, 0.019/h | 0.80, 0.015/h | 1.00, 0.100/h |
-| Gradient boosting | 0.45, 0.000/h | 0.50, 0.000/h | 0.35, 0.000/h | 0.55, 0.000/h |
+| Static limits | 0.60, 0.003/h | 0.60, 0.003/h | 0.60, 0.002/h | 0.60, 0.003/h |
+| Rolling deviation | 0.85, 0.009/h | 0.85, 0.008/h | 0.85, 0.008/h | 0.85, 0.009/h |
+| Logistic regression | 0.85, 0.003/h | 0.20, 0.001/h | 0.20, 0.003/h | 0.85, 0.003/h |
+| Isolation forest | 0.55, 0.009/h | 0.90, 0.019/h | 0.80, 0.014/h | 1.00, 0.100/h |
+| Gradient boosting | 0.50, 0.000/h | 0.55, 0.001/h | 0.35, 0.000/h | 0.60, 0.000/h |
 
 ## Ambiguous class-9 instances (OBSERVED)
 
@@ -39,9 +39,9 @@ Primary results exclude the 43 ambiguous instances. Here they are scored both wa
 | Method | Excluded (primary) | Counted as events | Counted as normal |
 |---|---|---|---|
 | Static limits | 5 of 159, 0.002/h | 5 of 192, 0.002/h | 5 of 159, 0.001/h |
-| Rolling deviation | 71 of 159, 0.053/h | 88 of 192, 0.053/h | 71 of 159, 0.061/h |
-| Logistic regression | 46 of 159, 0.022/h | 49 of 192, 0.022/h | 46 of 159, 0.017/h |
-| Isolation forest | 22 of 159, 0.037/h | 26 of 192, 0.037/h | 22 of 159, 0.027/h |
+| Rolling deviation | 71 of 159, 0.067/h | 89 of 192, 0.067/h | 71 of 159, 0.075/h |
+| Logistic regression | 46 of 159, 0.013/h | 48 of 192, 0.013/h | 46 of 159, 0.010/h |
+| Isolation forest | 22 of 159, 0.035/h | 28 of 192, 0.035/h | 22 of 159, 0.027/h |
 | Gradient boosting | 19 of 159, 0.019/h | 23 of 192, 0.019/h | 19 of 159, 0.016/h |
 
 ### Holdout
@@ -49,10 +49,10 @@ Primary results exclude the 43 ambiguous instances. Here they are scored both wa
 | Method | Excluded (primary) | Counted as events | Counted as normal |
 |---|---|---|---|
 | Static limits | 1 of 40, 0.000/h | 3 of 50, 0.000/h | 1 of 40, 0.007/h |
-| Rolling deviation | 14 of 40, 0.047/h | 19 of 50, 0.047/h | 14 of 40, 0.071/h |
-| Logistic regression | 9 of 40, 0.005/h | 11 of 50, 0.005/h | 9 of 40, 0.013/h |
+| Rolling deviation | 14 of 40, 0.028/h | 19 of 50, 0.028/h | 14 of 40, 0.054/h |
+| Logistic regression | 8 of 40, 0.000/h | 10 of 50, 0.000/h | 8 of 40, 0.010/h |
 | Isolation forest | 7 of 40, 0.009/h | 8 of 50, 0.009/h | 7 of 40, 0.010/h |
-| Gradient boosting | 1 of 40, 0.009/h | 1 of 50, 0.009/h | 1 of 40, 0.007/h |
+| Gradient boosting | 3 of 40, 0.009/h | 3 of 50, 0.009/h | 3 of 40, 0.007/h |
 
 ## AETHER held-out regimes (SYNTHETIC)
 

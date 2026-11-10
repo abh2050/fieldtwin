@@ -89,7 +89,11 @@ def development() -> None:
     sensitivity: dict = {}
     for method in config["methods"]:
         parts, ap, thresholds, fit_s, hashes = [], [], {}, 0.0, {}
-        policy_parts: dict[str, list] = {"count_as_positive": [], "count_as_normal": []}
+        policy_parts: dict[str, list] = {
+            "count_as_positive": [],
+            "count_as_normal": [],
+            "leading_unlabeled_as_normal": [],
+        }
         for fold in folds:
             train, validation, test = (
                 _rows(table, w) for w in (fold.train_wells, fold.validation_wells, fold.test_wells)
@@ -332,7 +336,7 @@ def holdout() -> None:
                 score_windows(with_policy(table, p).iloc[test], scores, fitted.threshold, rule),
                 config,
             )["summary"]
-            for p in ("count_as_positive", "count_as_normal")
+            for p in ("count_as_positive", "count_as_normal", "leading_unlabeled_as_normal")
         }
         robustness[method] = {}
         seqs = table["seq"].to_numpy()[test]

@@ -31,6 +31,16 @@ Development results exposed two flaws in version 1:
 
 Version 2 was committed before either holdout was opened. The version 1 development numbers are superseded and aren't cited.
 
+## Revision after technical review
+
+Review found three defects after both holdouts had been read. Version 3 fixes them, and every result was regenerated. **The regenerated holdout results therefore don't come from an unread holdout.**
+
+1. An event ended at the last scored row instead of the last event-labeled row, contrary to the matching rule. No event in the current data is followed by normal rows, so no number changed, and a test now covers the case.
+2. Logistic regression stopped at its 500-iteration limit in four of six fits. The limit is now 5,000, all fits converge within 640 iterations, and reaching the limit is an error. Classifier scores now come from decision values, because the log of `predict_proba` still gave minus infinity.
+3. The threshold search stopped at the median. It now covers the whole score range.
+
+These fixes changed the AETHER selection: three methods are now statistically tied there, and the rule picks the simplest, static limits. Every experiment stage now runs through `pipelines/experiments/run_stage.py`, which keeps each attempt, including failures, with result hashes before and after.
+
 ## Consequences
 
 - 3W classes with few wells can't support credible per-class numbers, and they're reported as unsupported.

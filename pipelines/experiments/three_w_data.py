@@ -162,6 +162,10 @@ def with_policy(table: pd.DataFrame, policy: str) -> pd.DataFrame:
         y[ambiguous & known] = output["filed_class"].to_numpy(dtype=np.int16)[ambiguous & known]
     elif policy == "count_as_normal":
         y[ambiguous & known] = 0
+    elif policy == "leading_unlabeled_as_normal":
+        # Primary rules leave unlabeled rows unscored, so an alarm starting there is never a false alarm,
+        # even when it runs on into normal operation. This counts it as one.
+        y[~ambiguous & ~known] = 0
     elif policy != "excluded":
         raise ValueError(policy)
     output["y"] = y

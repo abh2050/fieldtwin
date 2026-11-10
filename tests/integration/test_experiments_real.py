@@ -107,3 +107,16 @@ def test_generated_instances_sharing_a_name_stay_separate(audits):
     )  # The source reuses names across classes.
     assert meta.loc[meta["origin"] != "REAL", "seq"].nunique() == len(generated)
     assert meta.groupby("seq")["filed_class"].nunique().max() == 1
+
+
+def test_leading_unlabeled_policy_changes_only_unlabeled_rows_of_usable_instances():
+    from pipelines.experiments.three_w_data import load_track, with_policy
+
+    track, _, _ = load_track()
+    table = track.table
+    altered = with_policy(table, "leading_unlabeled_as_normal")
+    changed = altered["y"] != table["y"]
+    assert changed.any()
+    assert (table.loc[changed, "source_y"] == -1).all()
+    assert (table.loc[changed, "evaluability"] != "AMBIGUOUS_OR_INCONSISTENT").all()
+    assert (altered.loc[changed, "y"] == 0).all()

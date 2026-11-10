@@ -21,9 +21,9 @@ Each development well is tested once, by a model that never saw it.
 | Method | Events detected | Event recall | Chance level | Skill (95% interval) | False alarms per hour (95% interval) | Time in alarm | Alarm running at onset |
 |---|---:|---:|---:|---|---|---:|---:|
 | Static limits | 5 of 159 | 0.031 | 0.032 | -0.001 (-0.046 to 0.032) | 0.002 (0.000 to 0.006) | 0.001 | 40 |
-| Rolling deviation | 71 of 159 | 0.447 | 0.287 | 0.160 (-0.127 to 0.361) | 0.053 (0.017 to 0.103) | 0.038 | 19 |
-| Logistic regression | 46 of 159 | 0.289 | 0.185 | 0.104 (-0.163 to 0.343) | 0.022 (0.000 to 0.058) | 0.074 | 12 |
-| Isolation forest | 22 of 159 | 0.138 | 0.241 | -0.103 (-0.317 to 0.207) | 0.037 (0.000 to 0.089) | 0.149 | 50 |
+| Rolling deviation | 71 of 159 | 0.447 | 0.320 | 0.127 (-0.160 to 0.341) | 0.067 (0.021 to 0.123) | 0.048 | 21 |
+| Logistic regression | 46 of 159 | 0.289 | 0.133 | 0.156 (-0.077 to 0.341) | 0.013 (0.000 to 0.033) | 0.062 | 13 |
+| Isolation forest | 22 of 159 | 0.138 | 0.235 | -0.096 (-0.310 to 0.207) | 0.035 (0.000 to 0.085) | 0.161 | 50 |
 | Gradient boosting | 19 of 159 | 0.119 | 0.170 | -0.051 (-0.174 to 0.065) | 0.019 (0.004 to 0.035) | 0.056 | 14 |
 
 Sample level, at the same thresholds. These count windows, not events.
@@ -31,12 +31,12 @@ Sample level, at the same thresholds. These count windows, not events.
 | Method | Precision | Recall | F1 | False-positive rate | Average precision |
 |---|---:|---:|---:|---:|---:|
 | Static limits | 0.999 | 0.066 | 0.124 | 0.0002 | 0.736 |
-| Rolling deviation | 0.861 | 0.022 | 0.042 | 0.0098 | 0.778 |
-| Logistic regression | 0.874 | 0.101 | 0.181 | 0.0409 | 0.736 |
-| Isolation forest | 0.896 | 0.356 | 0.509 | 0.1159 | 0.787 |
-| Gradient boosting | 0.940 | 0.223 | 0.360 | 0.0397 | 0.808 |
+| Rolling deviation | 0.848 | 0.024 | 0.047 | 0.0122 | 0.778 |
+| Logistic regression | 0.892 | 0.096 | 0.173 | 0.0324 | 0.736 |
+| Isolation forest | 0.894 | 0.360 | 0.513 | 0.1198 | 0.787 |
+| Gradient boosting | 0.940 | 0.223 | 0.360 | 0.0399 | 0.808 |
 
-**Preferred under the declared rule: Logistic regression.** logistic_regression had the best event skill within budget (0.104). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.
+**Preferred under the declared rule: Logistic regression.** logistic_regression had the best event skill within budget (0.156). 2 method(s) have skill intervals including it, and logistic_regression is the simplest of them.
 
 Tied methods: Logistic regression, Isolation forest.
 
@@ -47,20 +47,20 @@ Opened once, after the development selection was committed. Test wells: WELL-000
 | Method | Events detected | Event recall | Chance level | Skill (95% interval) | False alarms per hour (95% interval) | Time in alarm | Alarm running at onset |
 |---|---:|---:|---:|---|---|---:|---:|
 | Static limits | 1 of 40 | 0.025 | 0.000 | 0.025 (0.000 to 0.182) | 0.000 (0.000 to 0.000) | 0.079 | 5 |
-| Rolling deviation | 14 of 40 | 0.350 | 0.398 | -0.048 (-0.320 to 0.777) | 0.047 (0.023 to 0.108) | 0.027 | 7 |
-| Logistic regression | 9 of 40 | 0.225 | 0.079 | 0.146 (-0.026 to 0.769) | 0.005 (0.000 to 0.010) | 0.108 | 3 |
+| Rolling deviation | 14 of 40 | 0.350 | 0.308 | 0.042 (-0.187 to 0.860) | 0.028 (0.013 to 0.054) | 0.019 | 6 |
+| Logistic regression | 8 of 40 | 0.200 | 0.000 | 0.200 (0.079 to 0.769) | 0.000 (0.000 to 0.000) | 0.075 | 2 |
 | Isolation forest | 7 of 40 | 0.175 | 0.142 | 0.033 (-0.153 to 0.631) | 0.009 (0.000 to 0.042) | 0.331 | 2 |
-| Gradient boosting | 1 of 40 | 0.025 | 0.142 | -0.117 (-0.323 to 0.143) | 0.009 (0.000 to 0.082) | 0.002 | 2 |
+| Gradient boosting | 3 of 40 | 0.075 | 0.142 | -0.067 (-0.162 to 0.282) | 0.009 (0.000 to 0.045) | 0.008 | 2 |
 
 Sample level, at the same thresholds. These count windows, not events.
 
 | Method | Precision | Recall | F1 | False-positive rate | Average precision |
 |---|---:|---:|---:|---:|---:|
 | Static limits | 0.785 | 0.083 | 0.150 | 0.0795 | 0.767 |
-| Rolling deviation | 0.902 | 0.015 | 0.030 | 0.0058 | 0.829 |
-| Logistic regression | 0.707 | 0.062 | 0.114 | 0.0897 | 0.802 |
-| Isolation forest | 0.067 | 0.007 | 0.012 | 0.3243 | 0.707 |
-| Gradient boosting | 0.993 | 0.027 | 0.052 | 0.0006 | 0.703 |
+| Rolling deviation | 0.911 | 0.014 | 0.028 | 0.0049 | 0.829 |
+| Logistic regression | 0.558 | 0.027 | 0.051 | 0.0744 | 0.828 |
+| Isolation forest | 0.070 | 0.007 | 0.013 | 0.3247 | 0.707 |
+| Gradient boosting | 0.982 | 0.031 | 0.060 | 0.0020 | 0.703 |
 
 The method preferred in development was Logistic regression.
 
@@ -86,7 +86,7 @@ The method preferred in development was Logistic regression.
 | Logistic regression | 4 | 9 | 1 | 0 | withheld: too few events or wells |
 | Logistic regression | 5 | 4 | 1 | 2 | withheld: too few events or wells |
 | Logistic regression | 6 | 3 | 1 | 0 | withheld: too few events or wells |
-| Logistic regression | 7 | 19 | 1 | 3 | withheld: too few events or wells |
+| Logistic regression | 7 | 19 | 1 | 2 | withheld: too few events or wells |
 | Logistic regression | 8 | 2 | 2 | 2 | withheld: too few events or wells |
 | Logistic regression | 9 | 1 | 1 | 0 | withheld: too few events or wells |
 | Isolation forest | 2 | 2 | 1 | 2 | withheld: too few events or wells |
@@ -98,7 +98,7 @@ The method preferred in development was Logistic regression.
 | Isolation forest | 9 | 1 | 1 | 0 | withheld: too few events or wells |
 | Gradient boosting | 2 | 2 | 1 | 0 | withheld: too few events or wells |
 | Gradient boosting | 4 | 9 | 1 | 0 | withheld: too few events or wells |
-| Gradient boosting | 5 | 4 | 1 | 0 | withheld: too few events or wells |
+| Gradient boosting | 5 | 4 | 1 | 2 | withheld: too few events or wells |
 | Gradient boosting | 6 | 3 | 1 | 0 | withheld: too few events or wells |
 | Gradient boosting | 7 | 19 | 1 | 0 | withheld: too few events or wells |
 | Gradient boosting | 8 | 2 | 2 | 1 | withheld: too few events or wells |
@@ -114,14 +114,14 @@ Rows are the source class and columns the predicted class, counting each well an
 
 | Source / predicted | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 0 | 2159 | 3 | 0 | 1 | 6307 | 25 | 0 | 4114 | 185 | 12 |
-| 2 | 0 | 0 | 47 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 2142 | 8 | 0 | 1 | 6321 | 17 | 0 | 4111 | 185 | 21 |
+| 2 | 0 | 1 | 46 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 4 | 1079 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 5 | 207 | 0 | 29 | 0 | 0 | 10 | 0 | 0 | 0 | 33 |
+| 5 | 114 | 0 | 35 | 0 | 0 | 10 | 0 | 0 | 0 | 120 |
 | 6 | 41 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 7 | 2459 | 16 | 0 | 0 | 37329 | 0 | 0 | 0 | 0 | 0 |
-| 8 | 1965 | 38 | 5 | 7 | 476 | 83 | 0 | 0 | 956 | 21 |
-| 9 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 137 |
+| 7 | 2451 | 14 | 0 | 0 | 37339 | 0 | 0 | 0 | 0 | 0 |
+| 8 | 1958 | 49 | 4 | 7 | 582 | 82 | 0 | 0 | 851 | 18 |
+| 9 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 139 |
 
 **Gradient boosting**
 
@@ -151,7 +151,7 @@ Gradient boosting's sample-level average precision on the same development wells
 | Variant | Event recall | Skill | False alarms per hour | Average precision |
 |---|---:|---:|---:|---:|
 | As compared above | 0.119 | -0.051 | 0.019 | 0.808 |
-| Without level features | 0.151 | 0.033 | 0.011 | 0.830 |
+| Without level features | 0.151 | 0.018 | 0.013 | 0.830 |
 | Without missingness features | 0.119 | -0.020 | 0.014 | 0.809 |
 | Adding simulated and hand-drawn training data | 0.182 | 0.024 | 0.017 | 0.840 |
 

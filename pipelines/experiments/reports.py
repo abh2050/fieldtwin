@@ -623,6 +623,32 @@ def robustness() -> None:
                 f"{neg['events_detected']} of {neg['events']}, {_f(neg['false_alarms_per_hour'], 3)}/h |"
             )
         lines.append("")
+    lines += [
+        "## Unlabeled leading rows (OBSERVED)",
+        "",
+        "Every real 3W instance begins with unlabeled rows. Primary rules leave them unscored, so an alarm that starts there and runs on into normal operation is never counted as a false alarm, "
+        "though it does count toward time in alarm. Here those rows are scored as normal instead, with no change to any model or threshold.",
+        "",
+    ]
+    for title, source, primary in (
+        ("Development folds", development["ambiguous_sensitivity"], development["methods"]),
+        ("Holdout", holdout and holdout["ambiguous_sensitivity"], holdout and holdout["methods"]),
+    ):
+        if not source or not primary:
+            continue
+        lines += [
+            f"### {title}",
+            "",
+            "| Method | Primary: false alarms, skill (95% interval) | Leading rows as normal: false alarms, skill |",
+            "|---|---|---|",
+        ]
+        for method in METHODS:
+            p, s = primary[method], source[method]["leading_unlabeled_as_normal"]
+            lines.append(
+                f"| {LABEL[method]} | {p['summary']['false_alarms']}, {_f(p['summary'].get('event_skill'))} ({_interval(p, 'event_skill')}) | "
+                f"{s['false_alarms']}, {_f(s.get('event_skill'))} |"
+            )
+        lines.append("")
     if held:
         lines += [
             "## AETHER held-out regimes (SYNTHETIC)",
