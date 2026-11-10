@@ -54,6 +54,30 @@ Primary results exclude the 43 ambiguous instances. Here they are scored both wa
 | Isolation forest | 7 of 40, 0.009/h | 8 of 50, 0.009/h | 7 of 40, 0.010/h |
 | Gradient boosting | 3 of 40, 0.009/h | 3 of 50, 0.009/h | 3 of 40, 0.007/h |
 
+## Unlabeled leading rows (OBSERVED)
+
+Every real 3W instance begins with unlabeled rows. Primary rules leave them unscored, so an alarm that starts there and runs on into normal operation is never counted as a false alarm, though it does count toward time in alarm. Here those rows are scored as normal instead, with no change to any model or threshold.
+
+### Development folds
+
+| Method | Primary: false alarms, skill (95% interval) | Leading rows as normal: false alarms, skill |
+|---|---|---|
+| Static limits | 2, -0.001 (-0.046 to 0.032) | 41, -0.217 |
+| Rolling deviation | 63, 0.127 (-0.160 to 0.341) | 87, 0.091 |
+| Logistic regression | 12, 0.156 (-0.077 to 0.341) | 28, 0.084 |
+| Isolation forest | 33, -0.096 (-0.310 to 0.207) | 88, -0.219 |
+| Gradient boosting | 18, -0.051 (-0.174 to 0.065) | 33, -0.104 |
+
+### Holdout
+
+| Method | Primary: false alarms, skill (95% interval) | Leading rows as normal: false alarms, skill |
+|---|---|---|
+| Static limits | 0, 0.025 (0.000 to 0.182) | 5, -0.229 |
+| Rolling deviation | 6, 0.042 (-0.187 to 0.860) | 9, -0.006 |
+| Logistic regression | 0, 0.200 (0.079 to 0.769) | 2, 0.072 |
+| Isolation forest | 2, 0.033 (-0.153 to 0.631) | 18, -0.299 |
+| Gradient boosting | 2, -0.067 (-0.162 to 0.282) | 3, -0.102 |
+
 ## AETHER held-out regimes (SYNTHETIC)
 
 See [the AETHER benchmark](aether_synthetic_benchmark.md#held-out-regimes) for each regime against the in-regime baseline.
