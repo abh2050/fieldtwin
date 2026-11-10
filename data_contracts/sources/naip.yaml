@@ -1,0 +1,13 @@
+# Source contract, written from the Planetary Computer STAC collection and real items retrieved 2026-11-10.
+source_system_id: naip
+stac_collection: https://planetarycomputer.microsoft.com/api/stac/v1/collections/naip
+grain: one quarter-quad image per acquisition; FieldTwin stores a window around a registry well
+identity: STAC item ID, for example nm_m_<quad>_<quarter>_13_060_<YYYYMMDD>
+fields_preserved: [acquisition date (properties.datetime), ground sample distance (gsd, metres), CRS (proj:epsg), footprint (proj:bbox and the window bounds), source asset URL without token]
+bands: 4 (red, green, blue, near infrared), uint8
+crs_in_study_area: EPSG:26913 (NAD83 / UTM zone 13N)
+latest_year_in_study_area: 2022 (0.6 m)
+semantics:
+  rules:
+    - Imagery is facility context only. It carries no leak, emission, or equipment-defect labels.
+    - A chip shows a registry coordinate, which OCD describes as approximate. It does not identify a well.

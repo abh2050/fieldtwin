@@ -383,9 +383,100 @@ def detection_page() -> Page:
     return page
 
 
+def aerial_page() -> Page:
+    page = Page("aerial-evidence", "Aerial evidence (Gate 6)", 1500, 700)
+    page.box(
+        "note",
+        "Real aerial evidence relates to real registry wells by proximity and coverage only. Nothing reaches AETHER assets, and no step attributes a source (ADR 0018).",
+        20,
+        10,
+        1400,
+        26,
+        NOTE,
+    )
+    observed = "rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+    derived = "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+    human = "rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;"
+    blocked = "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;"
+    page.box("cm", "Carbon Mapper\nplumes, scenes, footprints\nOBSERVED", 20, 70, 190, 60, observed)
+    page.box(
+        "ocd", "OCD registry wells\nGate 2 usable coordinates\nOBSERVED", 20, 200, 190, 60, observed
+    )
+    page.box(
+        "naip", "USDA NAIP windows\n300 m around chosen wells\nOBSERVED", 20, 330, 190, 60, observed
+    )
+    page.box(
+        "prox",
+        "Proximity links\nEMISSION_NEAR, 250 m\nUNVERIFIED, no confidence",
+        280,
+        70,
+        210,
+        60,
+        derived,
+    )
+    page.box("chance", "Chance baseline\nrandom points, same wells", 280, 160, 210, 50, derived)
+    page.box("cov", "Coverage grade\nscene footprints, cloud limit", 280, 240, 210, 50, derived)
+    page.box("covers", "IMAGE_COVERS\nchip to its well", 280, 330, 210, 60, derived)
+    page.box("guard", "Claim guard\nevery displayed sentence", 560, 160, 200, 50, derived)
+    page.box("cards", "Evidence cards\nattribution + fixed limits", 560, 250, 200, 60, derived)
+    page.box("queue", "Blinded review queue\nopaque chip IDs", 830, 250, 200, 60, human)
+    page.box("ledger", "Review ledger\nappend-only, supersede only", 1100, 250, 210, 60, human)
+    page.box(
+        "attr",
+        "SOURCE_ATTRIBUTED_TO\nnot produced; needs verified evidence",
+        560,
+        70,
+        200,
+        60,
+        blocked,
+    )
+    page.box("aether", "AETHER assets\nno real evidence reaches them", 830, 70, 200, 60, blocked)
+    page.box(
+        "event", "AETHER prioritization input\nSYNTHETIC scenario event", 560, 480, 220, 60, SYN
+    )
+    page.box(
+        "request", "Inspection request\nfictional asset only, no score", 830, 480, 220, 60, SYN
+    )
+    page.box("gate7", "Gate 7\nprioritization and work orders", 1100, 480, 210, 60, BOX)
+    for source, target in (
+        ("cm", "prox"),
+        ("ocd", "prox"),
+        ("ocd", "chance"),
+        ("cm", "cov"),
+        ("ocd", "cov"),
+        ("naip", "covers"),
+        ("prox", "cards"),
+        ("cov", "cards"),
+        ("covers", "cards"),
+        ("guard", "cards"),
+        ("cards", "queue"),
+        ("queue", "ledger"),
+        ("event", "request"),
+        ("request", "gate7"),
+    ):
+        page.edge(source, target)
+    page.edge(
+        "prox",
+        "attr",
+        "refused",
+        "dashed=1;endArrow=cross;html=1;strokeColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;",
+    )
+    page.edge("attr", "aether", "", "dashed=1;endArrow=none;html=1;strokeColor=#ffffff;")
+    page.box(
+        "legend",
+        "Blue: OBSERVED real records. Green: DERIVED. Purple: human review. Yellow: SYNTHETIC AETHER. Red dashed: what the design refuses.",
+        20,
+        640,
+        1400,
+        26,
+        NOTE,
+    )
+    return page
+
+
 def main() -> int:
     text = DRAWIO.read_text()
-    pages = [topology_page(), network_page(), sequence_page(), detection_page()]
+    pages = [topology_page(), network_page(), sequence_page(), detection_page(), aerial_page()]
     for page in pages:
         text = re.sub(rf'  <diagram id="{page.page_id}".*?</diagram>\n', "", text, flags=re.S)
     text = text.replace("</mxfile>", "".join(p.xml() for p in pages) + "</mxfile>")

@@ -1,0 +1,31 @@
+# USDA NAIP imagery through the Microsoft Planetary Computer STAC API. Checked 2026-11-10.
+source_system_id: naip
+provider: USDA Farm Production and Conservation Business Center, Aerial Field Photography Office
+distributor: Microsoft Planetary Computer
+source_url: https://planetarycomputer.microsoft.com/dataset/naip
+stac_api: https://planetarycomputer.microsoft.com/api/stac/v1
+collection: naip
+sas_token_url: https://planetarycomputer.microsoft.com/api/sas/v1/token/naipeuwest/naip
+license:
+  explicit_license: Not confirmed for 2022 imagery. Access is subject to the Microsoft Planetary Computer terms of use.
+  terms_url: https://planetarycomputer.microsoft.com/terms
+  note: >-
+    The STAC collection reports its license as "other" and names USDA FSA as licensor. NAIP is widely documented
+    as public domain for imagery acquired through 2019; FSA considered a licensing model after that, and no
+    primary USDA statement covering 2022 imagery was retrieved (the USDA NAIP page timed out on 2026-11-10).
+    Until confirmed, chips are not committed or redistributed.
+  attribution: "Imagery: USDA NAIP, accessed through Microsoft Planetary Computer"
+  usage_constraints: Context imagery only. It carries no leak, emission, or equipment-defect labels.
+
+# Chips are read from cloud-optimized GeoTIFFs. Whole tiles are never downloaded.
+chip_half_width_m: 150
+latest_year_only: true
+
+# Which wells get a chip. Wells with a plume inside the primary radius come first, then a fixed
+# number of control wells with none, chosen by hash so the reviewer can be blinded to the group.
+selection:
+  max_near_plume: 40
+  controls: 20
+  control_seed: gate6-naip-controls-v1
+
+disk_floor_bytes: 5368709120

@@ -360,6 +360,63 @@ END $$;
 
 
 --
+-- Name: enforce_request_trigger(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_request_trigger() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  event_domain text;
+  event_run text;
+BEGIN
+  SELECT domain, scenario_run_id INTO event_domain, event_run FROM shared_events WHERE event_id = NEW.trigger_event_id;
+  IF event_domain IS DISTINCT FROM 'AETHER_SYNTHETIC' OR event_run IS DISTINCT FROM NEW.scenario_run_id THEN
+    RAISE EXCEPTION 'inspection requests come only from synthetic AETHER events of the same run'
+      USING ERRCODE = 'check_violation';
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
+-- Name: enforce_review_chain(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.enforce_review_chain() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  observation_system text;
+  observation_record text;
+  previous_evidence text;
+BEGIN
+  SELECT source_system_id, source_record_id INTO observation_system, observation_record
+    FROM observations WHERE observation_id = NEW.observation_id;
+  -- The kind, the identifier, and the observation must all name the same piece of evidence.
+  IF NOT ((NEW.evidence_kind = 'PLUME' AND observation_system = 'carbon_mapper')
+       OR (NEW.evidence_kind = 'NAIP_CHIP' AND observation_system = 'naip')) THEN
+    RAISE EXCEPTION 'evidence kind % does not match an observation from %', NEW.evidence_kind, observation_system
+      USING ERRCODE = 'check_violation';
+  END IF;
+  IF NEW.evidence_id IS DISTINCT FROM observation_record THEN
+    RAISE EXCEPTION 'evidence_id % is not the identifier of observation % (%)',
+      NEW.evidence_id, NEW.observation_id, observation_record USING ERRCODE = 'check_violation';
+  END IF;
+  IF cardinality(NEW.visible_features) <> (SELECT count(DISTINCT f) FROM unnest(NEW.visible_features) AS f) THEN
+    RAISE EXCEPTION 'each visible feature is recorded once' USING ERRCODE = 'check_violation';
+  END IF;
+  IF NEW.supersedes IS NOT NULL THEN
+    SELECT evidence_id INTO previous_evidence FROM inspection_review_events WHERE review_id = NEW.supersedes;
+    IF previous_evidence IS DISTINCT FROM NEW.evidence_id THEN
+      RAISE EXCEPTION 'a review can only supersede a review of the same evidence' USING ERRCODE = 'check_violation';
+    END IF;
+  END IF;
+  RETURN NEW;
+END $$;
+
+
+--
 -- Name: enforce_scenario_mapping(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -940,6 +997,67 @@ CREATE SEQUENCE public.inspection_observations_inspection_id_seq
 --
 
 ALTER SEQUENCE public.inspection_observations_inspection_id_seq OWNED BY public.inspection_observations.inspection_id;
+
+
+--
+-- Name: inspection_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.inspection_requests (
+    request_id text NOT NULL,
+    asset_id text NOT NULL,
+    affected_asset_id text NOT NULL,
+    scenario_id text NOT NULL,
+    scenario_run_id text NOT NULL,
+    trigger_event_id text NOT NULL,
+    inspection_type text NOT NULL,
+    reason text NOT NULL,
+    status text NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT inspection_requests_inspection_type_check CHECK ((inspection_type = ANY (ARRAY['GROUND_INSPECTION'::text, 'AERIAL_SURVEY'::text]))),
+    CONSTRAINT inspection_requests_provenance_class_check CHECK ((provenance_class = 'SYNTHETIC'::public.provenance_class)),
+    CONSTRAINT inspection_requests_status_check CHECK ((status = ANY (ARRAY['REQUESTED'::text, 'CANCELLED'::text, 'COMPLETED'::text])))
+);
+
+
+--
+-- Name: TABLE inspection_requests; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.inspection_requests IS 'Simulated inspection requests on fictional assets. No priority score; Gate 7 owns prioritization.';
+
+
+--
+-- Name: inspection_review_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.inspection_review_events (
+    review_id text NOT NULL,
+    evidence_id text NOT NULL,
+    evidence_kind text NOT NULL,
+    observation_id bigint NOT NULL,
+    reviewer text NOT NULL,
+    outcome text NOT NULL,
+    visible_features text[] DEFAULT '{}'::text[] NOT NULL,
+    blinded_to_plume_status boolean NOT NULL,
+    supersedes text,
+    recorded_at timestamp with time zone NOT NULL,
+    provenance_class public.provenance_class NOT NULL,
+    CONSTRAINT inspection_review_events_blinded_to_plume_status_check CHECK (blinded_to_plume_status),
+    CONSTRAINT inspection_review_events_evidence_kind_check CHECK ((evidence_kind = ANY (ARRAY['NAIP_CHIP'::text, 'PLUME'::text]))),
+    CONSTRAINT inspection_review_events_outcome_check CHECK ((outcome = ANY (ARRAY['NO_FEATURE_OF_NOTE'::text, 'INFRASTRUCTURE_VISIBLE'::text, 'IMAGE_UNUSABLE'::text, 'FIELD_VERIFICATION_SUGGESTED'::text]))),
+    CONSTRAINT inspection_review_events_provenance_class_check CHECK ((provenance_class = 'OBSERVED'::public.provenance_class)),
+    CONSTRAINT inspection_review_events_reviewer_check CHECK ((length(btrim(reviewer)) > 0)),
+    CONSTRAINT inspection_review_events_visible_features_check CHECK ((visible_features <@ ARRAY['WELL_PAD'::text, 'WELLHEAD_EQUIPMENT'::text, 'TANK_BATTERY'::text, 'COMPRESSION_EQUIPMENT'::text, 'FLARE_STACK'::text, 'PIT_OR_POND'::text, 'PIPELINE_CORRIDOR'::text, 'OTHER_STRUCTURE'::text, 'CLOUD_OR_SHADOW'::text, 'IMAGE_ARTIFACT'::text]))
+);
+
+
+--
+-- Name: TABLE inspection_review_events; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.inspection_review_events IS 'Reviewer findings on real aerial evidence. No outcome confirms a leak or names a source.';
 
 
 --
@@ -2511,6 +2629,22 @@ ALTER TABLE ONLY public.inspection_observations
 
 
 --
+-- Name: inspection_requests inspection_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_requests
+    ADD CONSTRAINT inspection_requests_pkey PRIMARY KEY (request_id);
+
+
+--
+-- Name: inspection_review_events inspection_review_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_review_events
+    ADD CONSTRAINT inspection_review_events_pkey PRIMARY KEY (review_id);
+
+
+--
 -- Name: measurement_definitions measurement_definitions_measurement_definition_id_equipment_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3007,6 +3141,20 @@ CREATE INDEX reconciliation_subject_idx ON public.reconciliation_decisions USING
 
 
 --
+-- Name: review_evidence_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX review_evidence_idx ON public.inspection_review_events USING btree (evidence_id);
+
+
+--
+-- Name: review_superseded_once; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX review_superseded_once ON public.inspection_review_events USING btree (supersedes) WHERE (supersedes IS NOT NULL);
+
+
+--
 -- Name: shared_events_domain_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3060,6 +3208,27 @@ CREATE TRIGGER audit_events_append_only BEFORE DELETE OR UPDATE ON public.audit_
 --
 
 CREATE TRIGGER fictional_link_chain_guard BEFORE INSERT OR UPDATE ON public.asset_observation_links FOR EACH ROW EXECUTE FUNCTION public.enforce_fictional_link_chain();
+
+
+--
+-- Name: inspection_requests inspection_request_trigger_guard; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER inspection_request_trigger_guard BEFORE INSERT OR UPDATE ON public.inspection_requests FOR EACH ROW EXECUTE FUNCTION public.enforce_request_trigger();
+
+
+--
+-- Name: inspection_review_events inspection_review_chain; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER inspection_review_chain BEFORE INSERT ON public.inspection_review_events FOR EACH ROW EXECUTE FUNCTION public.enforce_review_chain();
+
+
+--
+-- Name: inspection_review_events inspection_review_events_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER inspection_review_events_append_only BEFORE DELETE OR UPDATE ON public.inspection_review_events FOR EACH ROW EXECUTE FUNCTION public.reject_change();
 
 
 --
@@ -3361,6 +3530,62 @@ ALTER TABLE ONLY public.inspection_observations
 
 ALTER TABLE ONLY public.inspection_observations
     ADD CONSTRAINT inspection_observations_source_asset_candidate_id_fkey FOREIGN KEY (source_asset_candidate_id) REFERENCES public.source_assets(source_asset_id);
+
+
+--
+-- Name: inspection_requests inspection_requests_affected_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_requests
+    ADD CONSTRAINT inspection_requests_affected_asset_id_fkey FOREIGN KEY (affected_asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: inspection_requests inspection_requests_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_requests
+    ADD CONSTRAINT inspection_requests_asset_id_fkey FOREIGN KEY (asset_id) REFERENCES public.assets(asset_id);
+
+
+--
+-- Name: inspection_requests inspection_requests_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_requests
+    ADD CONSTRAINT inspection_requests_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: inspection_requests inspection_requests_scenario_run_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_requests
+    ADD CONSTRAINT inspection_requests_scenario_run_id_fkey FOREIGN KEY (scenario_run_id) REFERENCES public.scenario_runs(scenario_run_id);
+
+
+--
+-- Name: inspection_requests inspection_requests_trigger_event_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_requests
+    ADD CONSTRAINT inspection_requests_trigger_event_id_fkey FOREIGN KEY (trigger_event_id) REFERENCES public.shared_events(event_id);
+
+
+--
+-- Name: inspection_review_events inspection_review_events_observation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_review_events
+    ADD CONSTRAINT inspection_review_events_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES public.observations(observation_id);
+
+
+--
+-- Name: inspection_review_events inspection_review_events_supersedes_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.inspection_review_events
+    ADD CONSTRAINT inspection_review_events_supersedes_fkey FOREIGN KEY (supersedes) REFERENCES public.inspection_review_events(review_id);
 
 
 --

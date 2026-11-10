@@ -19,7 +19,10 @@ bash scripts/gate3_evidence.sh            # rebuild from nothing and record evid
 make scenario reconcile gate3-reports     # simulator, reconciliation, and generated reports
 make field field-reports                  # all six field scenarios and their reports
 make gate5-development gate5-holdout gate5-reports  # detection experiments; development before holdout
-bash scripts/gate5_evidence.sh            # the latest full rebuild, with evidence
+bash scripts/gate5_evidence.sh            # the Gate 5 rebuild, with evidence
+make gate6 inspection-load                # aerial sources, association, evidence pages, reports
+make inspection-review                    # list chips awaiting human review
+bash scripts/gate6_evidence.sh            # the latest full rebuild, with evidence
 ```
 
 ## Cost

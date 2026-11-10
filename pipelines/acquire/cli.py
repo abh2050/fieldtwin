@@ -8,12 +8,16 @@ import sys
 from collections.abc import Callable
 from typing import Any
 
+from pipelines.acquire.carbon_mapper import adapter as carbon_mapper
 from pipelines.acquire.common import core
 from pipelines.acquire.common.errors import AcquisitionError
+from pipelines.acquire.naip import adapter as naip
 from pipelines.acquire.nm_ocd import adapter as nm_ocd
 from pipelines.acquire.petrobras_3w import adapter as petrobras_3w
 
 ADAPTERS: dict[str, Callable[..., dict[str, Any]]] = {
+    "carbon_mapper": carbon_mapper.run,
+    "naip": naip.run,
     "nm_ocd": nm_ocd.run,
     "petrobras_3w": petrobras_3w.run,
 }

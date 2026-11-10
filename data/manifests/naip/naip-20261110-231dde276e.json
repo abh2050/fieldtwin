@@ -1,0 +1,603 @@
+{
+  "batch_id": "naip-20261110-231dde276e",
+  "source_system_id": "naip",
+  "source_version": "2022",
+  "config_sha256": "231dde276e9f636e34a40ba1f79f8e689d10f44f6da7457d0a8dfd6319fa4abd",
+  "ingestion_timestamp": "2026-11-10T17:46:57Z",
+  "original_checksum": "671e11d172094eefc498ba4b73d1d0261a318fdb7796299db57551ef318082e2",
+  "source_record_count": 60,
+  "accepted_count": 60,
+  "rejected_count": 0,
+  "processing_status": "COMPLETE",
+  "manifest_uri": "data/manifests/naip/naip-20261110-231dde276e.json",
+  "license": {
+    "explicit_license": "Not confirmed for 2022 imagery. Access is subject to the Microsoft Planetary Computer terms of use.",
+    "terms_url": "https://planetarycomputer.microsoft.com/terms",
+    "note": "The STAC collection reports its license as \"other\" and names USDA FSA as licensor. NAIP is widely documented as public domain for imagery acquired through 2019; FSA considered a licensing model after that, and no primary USDA statement covering 2022 imagery was retrieved (the USDA NAIP page timed out on 2026-11-10). Until confirmed, chips are not committed or redistributed.",
+    "attribution": "Imagery: USDA NAIP, accessed through Microsoft Planetary Computer",
+    "usage_constraints": "Context imagery only. It carries no leak, emission, or equipment-defect labels."
+  },
+  "files": [
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-0128696d08b7.tif",
+      "sha256": "041d311eed1883a448536ba8e3993b16abb006fc2face2dd9b950fee5c288fe4",
+      "size_bytes": 810146,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-02e7e93556d5.tif",
+      "sha256": "804ffbc380e1caebaf416beddee41db831b86bec4b4c80aebac9fea60fdeea03",
+      "size_bytes": 814612,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-06fc294af96a.tif",
+      "sha256": "d15d86e94c8538501d8dc2876a4e27ceabf43c5a48fa6ef2df783b2253e1f3c2",
+      "size_bytes": 794572,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-0a36b4df213e.tif",
+      "sha256": "6b44e1fdd0b73f92fffb040624e3ad8ef4f75b53680a99a711deaec5ab508129",
+      "size_bytes": 803720,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-0dd9b79d80ad.tif",
+      "sha256": "fb23c2b10a4819fa0efabc14f2b04512d33d895c7cdd5127dab891c910e7e75b",
+      "size_bytes": 787534,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-147b705973df.tif",
+      "sha256": "2e86a2dd24edc90b2e318406f8089f5bd53f7124d2df1708007c13051a1b77d0",
+      "size_bytes": 825812,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-169e59110210.tif",
+      "sha256": "4dcce769c977409d966089e135a61e98e65110a3d3918e5b92c1af770aac864f",
+      "size_bytes": 786106,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-1dd5466e6166.tif",
+      "sha256": "8dc82367600a09cae0544532fae4a397c4522daaf154d501bdd939ded447491d",
+      "size_bytes": 805700,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-2ec8645cdc63.tif",
+      "sha256": "9aaec8030a5541e1b0663e69a1fa863a25119c9df61a236b8906a61b95baf2c5",
+      "size_bytes": 774714,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-310761e6594c.tif",
+      "sha256": "f511ed2d13dd37d742aba5b6c184c8a02a993dc62e2605819154faccaf8d4e30",
+      "size_bytes": 807282,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-346cf949386d.tif",
+      "sha256": "34ed4104b0ef6a169bffb3e2fdb98aec8cdd58a49407270b0fdb2175224f9627",
+      "size_bytes": 846490,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-3487fd8a5604.tif",
+      "sha256": "e1e48281f2e2bca606891e4c4272adbd0a4318c4465131e1ade96dbe50018a5a",
+      "size_bytes": 805908,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-35ad7c93633e.tif",
+      "sha256": "a746b3299a67e03ecfef31defd9bb4bd154ed8cb176c556367855d5037e81e31",
+      "size_bytes": 805244,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-3a2bd06bb920.tif",
+      "sha256": "ce174757e514e07027afd60acf68ad0bd07220b4a181ec28126692bf6ff3b242",
+      "size_bytes": 809626,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-3cc4603fcee1.tif",
+      "sha256": "8d1743f80cc7c1507bc5f818e4c64530722921dd631967ecddb539472aa93581",
+      "size_bytes": 713746,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-3d1d9b82ae27.tif",
+      "sha256": "bdb4ca9cac9838c68b563e54d4e69717a1de981a5dd79288b2cb97153a1edaef",
+      "size_bytes": 791736,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-3eb7836500ad.tif",
+      "sha256": "fc14a45234d9208828e47ffaaf79fba23cf711cd6171281a9fc6e338e33cf5fb",
+      "size_bytes": 787466,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-43562fb96640.tif",
+      "sha256": "6c7ed468a7f63956abbc77507fb993b77b92e0fad73ec2b07412c740c3976518",
+      "size_bytes": 784572,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-464d75a86825.tif",
+      "sha256": "56b5aed119f43b33b47ba3bb67c1e5b1541af18e2cfc8c0b5ed8d1e2ff0b70af",
+      "size_bytes": 806150,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-47adec177beb.tif",
+      "sha256": "c71aca1fce192c1ae2f90a9d10c6cfde99746cd2b255718816a5514a236d8670",
+      "size_bytes": 778286,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-4f8c53be94ea.tif",
+      "sha256": "e7e8ab6b06d08b90c74fbe1a3fead53d324b52d3dd5773fa2308c38b606906e4",
+      "size_bytes": 815142,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-50555e25ef2d.tif",
+      "sha256": "74a7ba2df20fadbd75b39ecb9abab02f332354b8c654ac0ec96294e539860d23",
+      "size_bytes": 771482,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-5a91162da570.tif",
+      "sha256": "2832da604ac93158dd100ca248e49c63b420ea12b9aae3186f8e95cb355a2f20",
+      "size_bytes": 811032,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-5b30b5acc00d.tif",
+      "sha256": "e6bc3f458464e143711c51639787e9d140f61d95c7fb7658c56d7882ed16233f",
+      "size_bytes": 827354,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-65a6b8ea2308.tif",
+      "sha256": "1ea83808c79513f5076fc8173e8b6b9183090c1aeb0cf3372a9c235419a97ddf",
+      "size_bytes": 833900,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-67832908725f.tif",
+      "sha256": "f020d051492dc605d9b79b5ca90cdc4954715a5b6d2016e13612d910ee546930",
+      "size_bytes": 759506,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-72545de05ea8.tif",
+      "sha256": "c45cadd5aa62579d5e1c2741bee56a004c8ff210b6d5552cd0fdb69039ca845d",
+      "size_bytes": 796354,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-74012e108540.tif",
+      "sha256": "53eeaaef220851e173ef97c2e1c032478ba669deedee160d67bb39b85a17f5f9",
+      "size_bytes": 813168,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-74bdfa918c43.tif",
+      "sha256": "96aa676a06a70ed987e40c543f9e2568edd6895d055cf66215c80a6693aeb3da",
+      "size_bytes": 846560,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-763e3449e059.tif",
+      "sha256": "ddb61b4f253870cb0141e028205f4b2fc607aea533c6f98445b070218dd29ef9",
+      "size_bytes": 798150,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-7f6c2b36373a.tif",
+      "sha256": "29676dbcb949f7f5e2dbd4b5efbfbd459ad2ce015342a344d6c187a029082803",
+      "size_bytes": 757636,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-82713e8b15e2.tif",
+      "sha256": "9aaec8030a5541e1b0663e69a1fa863a25119c9df61a236b8906a61b95baf2c5",
+      "size_bytes": 774714,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-8391232c731e.tif",
+      "sha256": "45e26da3e804623d4107ab3613fcd41f9f72b2ee550a9c2db48e047dc53d8a9e",
+      "size_bytes": 720358,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-855fac105714.tif",
+      "sha256": "861b96769925bd037abb373e5f6f5c07f531f3081a1e88cb546f2e0f62a34a55",
+      "size_bytes": 743360,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-8f69527594c2.tif",
+      "sha256": "970ac803dfb54e4f429155e2d4aa7b7868a7a0b6a41ca72b7ccbda6bd44f4fd2",
+      "size_bytes": 784260,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-9115d199cb23.tif",
+      "sha256": "3cedf1d49e9e2cb22212228e915ed59d8e5f0790ab211cc2203fc93491c6eaf5",
+      "size_bytes": 748438,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-913fb581b8d5.tif",
+      "sha256": "353e2a32bc23af179ae95f51bcf69f6247ec787004774dd79057320d1d65fc83",
+      "size_bytes": 810468,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-962968afb519.tif",
+      "sha256": "848db6e90eb4920ad430f1c09e72c8e092f28615f40560d25cec84e064781f4b",
+      "size_bytes": 776222,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-972b98a7525f.tif",
+      "sha256": "5f5cf150847405b694b1c401b71a7a4163a9be31c43f409cc8a1d82f722c9509",
+      "size_bytes": 800362,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-9a7fa4c1fd12.tif",
+      "sha256": "0e886a33b3b80b667dacc960e11a0f126722d31bfd535da15e978324b3f4141c",
+      "size_bytes": 827748,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-9ac9eb66f38b.tif",
+      "sha256": "a0fe09bdbd7a3dad6b1406636efc8fb918cc378128136bacc755be1403e92dae",
+      "size_bytes": 801116,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-9e70e3fc350e.tif",
+      "sha256": "1706876a40c7672c9fa28c60b642ccb6281b018735fddd9a03e0d619cfece04b",
+      "size_bytes": 790426,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-9f37a5338012.tif",
+      "sha256": "31cb9ca757a4890d0dbfcddd151a478e2b4071663bb7eda6faeb5ae8953147d1",
+      "size_bytes": 790746,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-a10ea03062c9.tif",
+      "sha256": "1548214c4e4a3151a44c06c6c7d07120ed388f53981d0577be6f266e11e101a8",
+      "size_bytes": 735642,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-a1f3ade8e198.tif",
+      "sha256": "e13da2ea774718070248fc7873fad1a5b764aa519e2197901b32f507a6ed0627",
+      "size_bytes": 818048,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-a79e8822da94.tif",
+      "sha256": "7206cfce64cd03593665b56ccbd48178688eb4f78d27459d09f27e2fa9f34ba7",
+      "size_bytes": 798834,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-acce8675a187.tif",
+      "sha256": "a6b4736c43553b4e7a3b720c7c2c3d3ebbc4fb74c16493059c90df5948f0429b",
+      "size_bytes": 787040,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-aee1cfa90d03.tif",
+      "sha256": "f66b526606cf4ddeb1dcade63b5acb326c0d23ebf7ef0088f04006e50887267e",
+      "size_bytes": 691340,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-b287643f98fb.tif",
+      "sha256": "ff0e4b7624b52dd5505df68d4e25f7a43c1ed6731fd1e42fa5b812803badd6c0",
+      "size_bytes": 824862,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-c1987de08174.tif",
+      "sha256": "fbf78d75e541e715aab994e767025d44803374fbfc9803911f16d1ecfada4b41",
+      "size_bytes": 819484,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-c25aa78b9ea9.tif",
+      "sha256": "6f682382442b9bc742728981261d4837e743ab81d707fac9bf13df4e98e55991",
+      "size_bytes": 772682,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-cbcbaa24e130.tif",
+      "sha256": "9031332a967d571acaf4d5f4c46a39e2b95b401591ab40cbd5f6c6492a647a49",
+      "size_bytes": 841982,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-d6e8d7bed920.tif",
+      "sha256": "544a5f4cd9b2d7634628bde46657641533b70f9a7675bc0b58ccceeb7a95ffe4",
+      "size_bytes": 782702,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-e3bb6174261e.tif",
+      "sha256": "8e2fedf37e086b4bd92ddd595590c8d8114cd0d98aaf4c1a9154a07d380626fa",
+      "size_bytes": 830908,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-e61a8fc267c0.tif",
+      "sha256": "f0510b866534cb4dcd1daa211963d9aef15a1eb347e4a2e9c867691765134f1a",
+      "size_bytes": 705694,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-e84b0fa5ce33.tif",
+      "sha256": "11aefe47c61d35e7c6676e5282776eb7bdbc26ec3c20366fc5722246da779516",
+      "size_bytes": 820132,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-e9930d07ab7b.tif",
+      "sha256": "b207d0b2d4495292c394a167e03921512dace97ae34a980c65adaad5e74c65d2",
+      "size_bytes": 794950,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-f16f65e18ed7.tif",
+      "sha256": "5fcb9a3a09bc8a085bc3dc6c5da895cb1d5ac1af8a178286283c40920947b102",
+      "size_bytes": 828688,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-f7954ee8ba7c.tif",
+      "sha256": "b813f7f895943278a96561edac02e05fc82c8568fd94b26c97c998de209d95b7",
+      "size_bytes": 791908,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/chips/CHIP-f7c00fc98454.tif",
+      "sha256": "a3fd33686bbe0ef89b687f4192c9f8cae9587148515da70c210cdda2fd7bc912",
+      "size_bytes": 811994,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210447_se_13_060_20220530.json",
+      "sha256": "706bb17a9f8ecd89aed730fa5a5aca4f5f6b5627e73cd588769a840e3bf8fd8c",
+      "size_bytes": 3499,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210448_ne_13_060_20220530.json",
+      "sha256": "58d503b1c34b4e27ca02e07edff71b6fc4cc0b819a0ce48e4c83511e6d0b3487",
+      "size_bytes": 3495,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210448_nw_13_060_20220530.json",
+      "sha256": "709645b47cb6a7b78d1bc99d9fc78852da7482d5419903adbf25593fe709a0d6",
+      "size_bytes": 3487,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210448_se_13_060_20220530.json",
+      "sha256": "d5192507bf656ea3f93a05885244fd48400106892f113f129a4d3a2399aaa435",
+      "size_bytes": 3497,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210448_sw_13_060_20220530.json",
+      "sha256": "a7ce3cc7fa200cf8c04b4ffb0d329981b882498ad4288d7e9d7514b2780a798f",
+      "size_bytes": 3490,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210455_ne_13_060_20220519.json",
+      "sha256": "7bcdf66e44afa736c014dc757761fdba5cd524faf22d7e9ae7736ac32ab71b1a",
+      "size_bytes": 3496,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210456_ne_13_060_20220530.json",
+      "sha256": "d9ff62ba137305c42f03d9fd4f1c1f8b5902eabceab981f557f2d08c8823f513",
+      "size_bytes": 3489,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210456_nw_13_060_20220530.json",
+      "sha256": "46219d6fe074a6f850560ff0e194abb069fd76720123b51970a40111249fe108",
+      "size_bytes": 3489,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210456_se_13_060_20220530.json",
+      "sha256": "44766f1e017d08cc186d4ee3aa76c5598b8409577689c35d0c2ad5cf9140e949",
+      "size_bytes": 3490,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    },
+    {
+      "path": "data/raw/naip/20261110/naip-20261110-231dde276e/stac/nm_m_3210456_sw_13_060_20220530.json",
+      "sha256": "d53b8eab39b7a6040cf8ae894aab0f9bd9bd5d35aa2771a57339f4058a400201",
+      "size_bytes": 3488,
+      "source_url": "https://planetarycomputer.microsoft.com/api/stac/v1",
+      "source_modified": null,
+      "upstream_checksum": null
+    }
+  ],
+  "datasets": {
+    "chips": {
+      "wells_selected": 60,
+      "accepted": 60,
+      "by_group": {
+        "NEAR_PLUME": 40,
+        "CONTROL": 20
+      },
+      "stac_items": 10,
+      "naip_years": [
+        "2022"
+      ]
+    },
+    "selection_sha256": "47ded53d1b2017627cf09e2dc859d042168c530560d446bac4f3225f4476acef",
+    "quarantine_reasons": {}
+  },
+  "notes": [
+    "Chips are windows read from cloud-optimized GeoTIFFs. Access tokens are never stored.",
+    "Planetary Computer publishes no checksums for windows, so SHA-256 values prove only that chips are unchanged since they were written.",
+    "Imagery is context only. It carries no emission, leak, or equipment-condition labels."
+  ]
+}

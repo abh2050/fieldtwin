@@ -2,7 +2,7 @@
 
 Generated from the PostgreSQL catalog by `make schema-docs`. A test fails if this file differs from a freshly migrated database.
 
-43 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
+45 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
 
 AETHER Field is fictional. Real source entities live in `source_assets` and fictional ones in `assets`, and no foreign key lets one stand in for the other.
 
@@ -314,6 +314,48 @@ Keys: 1 primary key, 1 foreign key, 1 unique.
 
 Check constraints: `candidate_is_real_or_fictional`, `inspection_observations_confidence_check`, `inspection_observations_review_status_check`, `reviewed_has_reviewer`.
 Keys: 1 primary key, 3 foreign key, 0 unique.
+
+### `inspection_requests`
+
+Simulated inspection requests on fictional assets. No priority score; Gate 7 owns prioritization.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `request_id` | text | no |  |
+| `asset_id` | text | no |  |
+| `affected_asset_id` | text | no |  |
+| `scenario_id` | text | no |  |
+| `scenario_run_id` | text | no |  |
+| `trigger_event_id` | text | no |  |
+| `inspection_type` | text | no |  |
+| `reason` | text | no |  |
+| `status` | text | no |  |
+| `created_at` | timestamp with time zone | no |  |
+| `provenance_class` | provenance_class | no |  |
+
+Check constraints: `inspection_requests_inspection_type_check`, `inspection_requests_provenance_class_check`, `inspection_requests_status_check`.
+Keys: 1 primary key, 5 foreign key, 0 unique.
+
+### `inspection_review_events`
+
+Reviewer findings on real aerial evidence. No outcome confirms a leak or names a source.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `review_id` | text | no |  |
+| `evidence_id` | text | no |  |
+| `evidence_kind` | text | no |  |
+| `observation_id` | bigint | no |  |
+| `reviewer` | text | no |  |
+| `outcome` | text | no |  |
+| `visible_features` | text[] | no |  |
+| `blinded_to_plume_status` | boolean | no |  |
+| `supersedes` | text | yes |  |
+| `recorded_at` | timestamp with time zone | no |  |
+| `provenance_class` | provenance_class | no |  |
+
+Check constraints: `inspection_review_events_blinded_to_plume_status_check`, `inspection_review_events_evidence_kind_check`, `inspection_review_events_outcome_check`, `inspection_review_events_provenance_class_check`, `inspection_review_events_reviewer_check`, `inspection_review_events_visible_features_check`.
+Keys: 1 primary key, 2 foreign key, 0 unique.
 
 ### `measurement_definitions`
 
@@ -864,6 +906,9 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 | `asset_observation_links` | `observation_link_guard` |
 | `asset_relationships` | `asset_relationship_rule_guard` |
 | `audit_events` | `audit_events_append_only` |
+| `inspection_requests` | `inspection_request_trigger_guard` |
+| `inspection_review_events` | `inspection_review_chain` |
+| `inspection_review_events` | `inspection_review_events_append_only` |
 | `observations` | `observation_sensor_source_guard` |
 | `physical_edges` | `physical_edge_rule_guard` |
 | `reconciliation_decisions` | `reconciliation_decisions_append_only` |
