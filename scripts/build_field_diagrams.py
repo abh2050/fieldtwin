@@ -474,9 +474,86 @@ def aerial_page() -> Page:
     return page
 
 
+def decision_page() -> Page:
+    page = Page("decision-support", "Decision support (Gate 7)", 1500, 700)
+    page.box(
+        "note",
+        "Decisions use only what an operator would know. Simulator truth is read afterwards, only to grade outcomes. Nothing actuates equipment (ADR 0019).",
+        20,
+        10,
+        1400,
+        26,
+        NOTE,
+    )
+    inferred = "rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;"
+    rule = "rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;"
+    human = "rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;"
+    truth = "rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;"
+    page.box("tele", "Scenario telemetry\nSYNTHETIC, with quality flags", 20, 80, 200, 60, SYN)
+    page.box(
+        "engine", "Gate 5 streaming engine\nselected model, checksum", 270, 80, 200, 60, inferred
+    )
+    page.box("alarm", "Detector alarm\nINFERRED, top evidence sensors", 520, 80, 210, 60, inferred)
+    page.box("calendar", "Planned operations\ncalendar", 270, 200, 200, 50, SYN)
+    page.box("requests", "Open inspection\nrequests (Gate 6)", 270, 270, 200, 50, SYN)
+    page.box("network", "Gate 4 network\nconsequence shares", 270, 340, 200, 50, SYN)
+    page.box("rules", "Rule engine, version 3\nscore = sum of named terms", 780, 80, 220, 60, rule)
+    page.box("rec", "Recommendation\naction, band, explanation", 1050, 80, 220, 60, rule)
+    page.box("wo", "Work order\nRECOMMENDED", 1050, 220, 220, 50, rule)
+    page.box(
+        "supervisor", "Maintenance supervisor\nHUMAN or SCRIPTED_DEMO", 1050, 330, 220, 60, human
+    )
+    page.box(
+        "transitions", "Transitions + audit events\nappend-only, enforced", 780, 330, 220, 60, human
+    )
+    page.box("audit", "Evidence audit\nsource to outcome", 780, 460, 220, 50, BOX)
+    page.box("truth", "Simulator truth\ngrading only", 1050, 460, 220, 50, truth)
+    page.box("econ", "Modeled economics\nfixed / risk / OR-Tools routes", 270, 460, 220, 60, BOX)
+    page.box("gate5", "Gate 5 held-out\ndetection and false alarms", 20, 460, 200, 60, inferred)
+    for source, target in (
+        ("tele", "engine"),
+        ("engine", "alarm"),
+        ("alarm", "rules"),
+        ("calendar", "rules"),
+        ("requests", "rules"),
+        ("network", "rules"),
+        ("rules", "rec"),
+        ("rec", "wo"),
+        ("wo", "supervisor"),
+        ("supervisor", "transitions"),
+        ("transitions", "audit"),
+        ("gate5", "econ"),
+        ("network", "econ"),
+    ):
+        page.edge(source, target)
+    page.edge(
+        "truth",
+        "audit",
+        "grading only",
+        "dashed=1;endArrow=block;html=1;strokeColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;",
+    )
+    page.box(
+        "legend",
+        "Yellow: SYNTHETIC inputs. Blue: INFERRED detection. Green: deterministic rules. Purple: decisions and audit. Red dashed: truth, never a decision input.",
+        20,
+        640,
+        1400,
+        26,
+        NOTE,
+    )
+    return page
+
+
 def main() -> int:
     text = DRAWIO.read_text()
-    pages = [topology_page(), network_page(), sequence_page(), detection_page(), aerial_page()]
+    pages = [
+        topology_page(),
+        network_page(),
+        sequence_page(),
+        detection_page(),
+        aerial_page(),
+        decision_page(),
+    ]
     for page in pages:
         text = re.sub(rf'  <diagram id="{page.page_id}".*?</diagram>\n', "", text, flags=re.S)
     text = text.replace("</mxfile>", "".join(p.xml() for p in pages) + "</mxfile>")

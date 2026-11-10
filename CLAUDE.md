@@ -22,7 +22,10 @@ make gate5-development gate5-holdout gate5-reports  # detection experiments; dev
 bash scripts/gate5_evidence.sh            # the Gate 5 rebuild, with evidence
 make gate6 inspection-load                # aerial sources, association, evidence pages, reports
 make inspection-review                    # list chips awaiting human review
-bash scripts/gate6_evidence.sh            # the latest full rebuild, with evidence
+bash scripts/gate6_evidence.sh            # the Gate 6 rebuild, with evidence
+make gate7 decision-load decision-reports  # decisions, work orders, modeled economics, reports
+make decision-list                        # simulated work orders; record a person's decision with pipelines.decision.decide
+bash scripts/gate7_evidence.sh            # the latest full rebuild, with evidence
 ```
 
 ## Cost

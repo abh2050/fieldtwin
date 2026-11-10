@@ -59,6 +59,17 @@ def test_required_paths_exist():
         "reports/inspection/spatial_association.md",
         "reports/inspection/coverage_and_review.md",
         "reports/inspection/results/gate6_summary.json",
+        "config/decision/gate7_rules.yaml",
+        "config/decision/economics.yaml",
+        "config/decision/demo_decisions.yaml",
+        "db/migrations/0015_decision_support.sql",
+        "docs/adr/0019-transparent-decisions-and-modeled-economics.md",
+        "reports/gates/gate_7.md",
+        "reports/decision/decision_engine.md",
+        "reports/decision/evidence_audit.md",
+        "reports/decision/results/decisions.json",
+        "reports/decision/results/economics.json",
+        "reports/economics/scheduling_comparison.md",
         ".github/workflows/ci.yml",
     ]  # fmt: skip
     missing = [path for path in required if not (REPO_ROOT / path).exists()]

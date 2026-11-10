@@ -50,8 +50,9 @@
     <tr><td>3</td><td>Reconciliation and experimental scenario contracts</td><td>Merged (see <code>reports/gates/gate_3.md</code>)</td></tr>
     <tr><td>4</td><td>AETHER Field multi-asset simulation</td><td>Merged (see <code>reports/gates/gate_4.md</code>)</td></tr>
     <tr><td>5</td><td>Anomaly detection, benchmark evaluation, and uncertainty</td><td>Merged (see <code>reports/gates/gate_5.md</code>)</td></tr>
-    <tr><td>6</td><td>Aerial evidence: imagery ingestion, coverage, plume associations, inspection review</td><td>On a branch, awaiting technical review (see <code>reports/gates/gate_6.md</code>)</td></tr>
-    <tr><td>7-10</td><td>Decision support through portfolio demonstration</td><td>Not started</td></tr>
+    <tr><td>6</td><td>Aerial evidence: imagery ingestion, coverage, plume associations, inspection review</td><td>Merged (see <code>reports/gates/gate_6.md</code>)</td></tr>
+    <tr><td>7</td><td>Decision support: prioritization, rule engine, work-order approval, audit, modeled economics</td><td>On a branch, awaiting technical review (see <code>reports/gates/gate_7.md</code>)</td></tr>
+    <tr><td>8-10</td><td>Application through portfolio demonstration</td><td>Not started</td></tr>
   </tbody>
 </table></div>
 
@@ -88,6 +89,10 @@
 <h2>Aerial evidence</h2>
 <p>Real methane plume detections and aerial photographs are related to real registry wells by proximity and coverage only. A plume within 250&nbsp;m of a well is recorded as near it, never as coming from it: most such plumes have two or more candidate wells, the registry lists gas wells only, and a point drawn inside the same scene footprints is within 250&nbsp;m of some well 17% of the time (against 35% for plumes). Displayed text comes from fixed templates with a pattern guard as a backstop, image review is blind, append-only, and holds no free text, and inspection requests are generated only for fictional AETHER assets from synthetic scenario events. No human review has been recorded yet.</p>
 
+<h2>Decision support</h2>
+<p>Detector alarms on the simulated field become recommendations through deterministic rules: every priority point comes from a named term, and no detector score is read as a failure probability. Work orders start as recommendations, and only a maintenance supervisor can approve them; the database refuses any status change without a valid transition and an audit event. In the demonstration, scripted actors stand in for people and are labelled as such. On six simulated scenarios, two of three dispatches reached the faulted asset, one was a false alarm after a planned shutdown, and one fault raised no alarm.</p>
+<p>A modeled comparison of inspection scheduling, under declared assumptions for this fictional field, found that fixed monthly rounds had the lowest mean cost and that route optimization saved almost nothing. These are modeled estimates, not savings.</p>
+
 <h2>Test results</h2>
 <p>See <code>reports/gates/gate_3.md</code> for executed results. CI runs on committed fixtures only.</p>
 
@@ -102,7 +107,7 @@
 </ul>
 
 <h2>Sections not yet available</h2>
-<p>These have no results, because the work has not been done: decision engine, application UI, AWS infrastructure, actual deployment cost, and demo walkthrough. Anomaly-detection results are in <code>reports/experiments/</code>.</p>
+<p>These have no results, because the work has not been done: application UI, AWS infrastructure, actual deployment cost, and demo walkthrough. Anomaly-detection results are in <code>reports/experiments/</code>.</p>
 </main>
 </body>
 </html>

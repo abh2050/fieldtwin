@@ -375,4 +375,43 @@
       </root>
     </mxGraphModel>
   </diagram>
+  <diagram id="decision-support" name="Decision support (Gate 7)">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" page="1" pageScale="1" pageWidth="1500" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="note" value="Decisions use only what an operator would know. Simulator truth is read afterwards, only to grade outcomes. Nothing actuates equipment (ADR 0019)." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="20" y="10" width="1400" height="26" as="geometry"/></mxCell>
+        <mxCell id="tele" value="Scenario telemetry&#10;SYNTHETIC, with quality flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="20" y="80" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="engine" value="Gate 5 streaming engine&#10;selected model, checksum" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="270" y="80" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="alarm" value="Detector alarm&#10;INFERRED, top evidence sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="520" y="80" width="210" height="60" as="geometry"/></mxCell>
+        <mxCell id="calendar" value="Planned operations&#10;calendar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="270" y="200" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="requests" value="Open inspection&#10;requests (Gate 6)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="270" y="270" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="network" value="Gate 4 network&#10;consequence shares" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1"><mxGeometry x="270" y="340" width="200" height="50" as="geometry"/></mxCell>
+        <mxCell id="rules" value="Rule engine, version 3&#10;score = sum of named terms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="780" y="80" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="rec" value="Recommendation&#10;action, band, explanation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="1050" y="80" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="wo" value="Work order&#10;RECOMMENDED" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="1050" y="220" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="supervisor" value="Maintenance supervisor&#10;HUMAN or SCRIPTED_DEMO" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="1050" y="330" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="transitions" value="Transitions + audit events&#10;append-only, enforced" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="780" y="330" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="audit" value="Evidence audit&#10;source to outcome" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="780" y="460" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="truth" value="Simulator truth&#10;grading only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;" vertex="1" parent="1"><mxGeometry x="1050" y="460" width="220" height="50" as="geometry"/></mxCell>
+        <mxCell id="econ" value="Modeled economics&#10;fixed / risk / OR-Tools routes" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="270" y="460" width="220" height="60" as="geometry"/></mxCell>
+        <mxCell id="gate5" value="Gate 5 held-out&#10;detection and false alarms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="20" y="460" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="e1" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="tele" target="engine" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e2" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="engine" target="alarm" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e3" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="alarm" target="rules" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e4" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="calendar" target="rules" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e5" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="requests" target="rules" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e6" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="network" target="rules" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e7" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="rules" target="rec" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e8" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="rec" target="wo" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e9" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="wo" target="supervisor" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e10" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="supervisor" target="transitions" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e11" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="transitions" target="audit" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e12" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="gate5" target="econ" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e13" value="" style="endArrow=block;html=1;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="network" target="econ" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e14" value="grading only" style="dashed=1;endArrow=block;html=1;strokeColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" source="truth" target="audit" parent="1"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="legend" value="Yellow: SYNTHETIC inputs. Blue: INFERRED detection. Green: deterministic rules. Purple: decisions and audit. Red dashed: truth, never a decision input." style="text;html=1;align=left;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="20" y="640" width="1400" height="26" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
 </mxfile>

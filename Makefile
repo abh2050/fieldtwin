@@ -1,4 +1,4 @@
-.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy acquire-carbon-mapper acquire-naip inspection-associate inspection-evidence inspection-load inspection-reports inspection-review gate6
+.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy acquire-carbon-mapper acquire-naip inspection-associate inspection-evidence inspection-load inspection-reports inspection-review gate6 decision-run decision-load decision-economics decision-reports decision-list gate7
 
 bootstrap:
 	bash scripts/bootstrap.sh
@@ -137,6 +137,27 @@ inspection-review:
 	uv run python -m pipelines.inspection.review_cli pending
 
 gate6: acquire-carbon-mapper acquire-naip inspection-evidence inspection-reports
+
+# Gate 7. The alarm replay takes a few minutes; it is cached by model checksum.
+decision-run:
+	uv run python -m pipelines.decision.run
+
+decision-load:
+	uv run python -m pipelines.decision.load
+
+decision-economics:
+	uv run python -m pipelines.decision.economics
+
+decision-reports:
+	uv run python -m pipelines.decision.audit
+	uv run python -m pipelines.decision.reports
+
+# List simulated work orders, or record a person's decision on one:
+# uv run python -m pipelines.decision.decide WO-... APPROVE --actor NAME --justification "..."
+decision-list:
+	uv run python -m pipelines.decision.decide list
+
+gate7: decision-run decision-economics
 
 profile:
 	uv run python -m pipelines.profile.cli

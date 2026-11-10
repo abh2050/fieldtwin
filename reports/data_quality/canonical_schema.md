@@ -2,7 +2,7 @@
 
 Generated from the PostgreSQL catalog by `make schema-docs`. A test fails if this file differs from a freshly migrated database.
 
-45 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
+48 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
 
 AETHER Field is fictional. Real source entities live in `source_assets` and fictional ones in `assets`, and no foreign key lets one stand in for the other.
 
@@ -45,8 +45,10 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 | `action` | text | no |  |
 | `justification` | text | no |  |
 | `timestamp` | timestamp with time zone | no |  |
+| `actor_kind` | text | yes |  |
+| `actor_role` | text | yes |  |
 
-Check constraints: `approval_events_action_check`.
+Check constraints: `approval_events_action_check`, `approval_events_actor_kind_check`.
 Keys: 1 primary key, 1 foreign key, 0 unique.
 
 ### `asset_observation_links`
@@ -168,6 +170,30 @@ Every known defect, with the original value, evidence, and decision. Exceptions 
 
 Check constraints: `data_quality_exceptions_disposition_check`, `data_quality_exceptions_severity_check`, `data_quality_exceptions_status_check`.
 Keys: 1 primary key, 3 foreign key, 1 unique.
+
+### `detector_alarms`
+
+Alarm starts from the Gate 5 detector on simulated telemetry. A score is never a failure probability.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `alarm_id` | text | no |  |
+| `scenario_id` | text | no |  |
+| `scenario_run_id` | text | no |  |
+| `started_at` | timestamp with time zone | no |  |
+| `score` | double precision | no |  |
+| `threshold` | double precision | no |  |
+| `model_id` | text | no |  |
+| `model_version` | text | no |  |
+| `model_sha256` | text | no |  |
+| `evidence` | jsonb | no |  |
+| `earlier_starts_in_lookback` | integer | no |  |
+| `first_alarm_at` | timestamp with time zone | no |  |
+| `provenance_class` | provenance_class | no |  |
+| `input_provenance` | provenance_class | no |  |
+
+Check constraints: `alarm_crossed_threshold`, `detector_alarms_check`, `detector_alarms_earlier_starts_in_lookback_check`, `detector_alarms_evidence_check`, `detector_alarms_input_provenance_check`, `detector_alarms_model_sha256_check`, `detector_alarms_provenance_class_check`.
+Keys: 1 primary key, 2 foreign key, 0 unique.
 
 ### `domain_boundaries`
 
@@ -502,6 +528,31 @@ Verified meaning of each product kind. A production row must match a rule, so am
 
 Check constraints: `unit_rule_has_evidence`.
 Keys: 1 primary key, 2 foreign key, 1 unique.
+
+### `recommendations`
+
+Deterministic, explained recommendations. Every score point comes from a stored term.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `recommendation_id` | text | no |  |
+| `alarm_id` | text | no |  |
+| `scenario_id` | text | no |  |
+| `scenario_run_id` | text | no |  |
+| `decided_at` | timestamp with time zone | no |  |
+| `action` | text | no |  |
+| `candidate_assets` | text[] | no |  |
+| `suppressed_assets` | text[] | no |  |
+| `priority_score` | integer | no |  |
+| `priority_band` | text | yes |  |
+| `respond_within_h` | integer | yes |  |
+| `terms` | jsonb | no |  |
+| `explanation` | jsonb | no |  |
+| `rules_version` | integer | no |  |
+| `provenance_class` | provenance_class | no |  |
+
+Check constraints: `dispatch_has_band_and_candidate`, `recommendations_action_check`, `recommendations_explanation_check`, `recommendations_priority_band_check`, `recommendations_priority_score_check`, `recommendations_provenance_class_check`, `recommendations_respond_within_h_check`, `recommendations_rules_version_check`, `recommendations_terms_check`.
+Keys: 1 primary key, 3 foreign key, 0 unique.
 
 ### `reconciliation_decisions`
 
@@ -877,6 +928,28 @@ Keys: 1 primary key, 2 foreign key, 1 unique.
 
 Keys: 1 primary key, 0 foreign key, 1 unique.
 
+### `work_order_transitions`
+
+Authoritative work-order history. SCRIPTED_DEMO actors stand in for people in demonstration runs and are never human decisions.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `transition_id` | bigint | no |  |
+| `work_order_id` | bigint | no |  |
+| `sequence` | integer | no |  |
+| `decision` | text | no |  |
+| `from_status` | text | yes |  |
+| `to_status` | text | no |  |
+| `actor_id` | text | no |  |
+| `actor_kind` | text | no |  |
+| `actor_role` | text | no |  |
+| `justification` | text | no |  |
+| `decided_at` | timestamp with time zone | no |  |
+| `recorded_at` | timestamp with time zone | no |  |
+
+Check constraints: `allowed_transition`, `only_the_engine_creates`, `supervisor_decides`, `work_order_transitions_actor_id_check`, `work_order_transitions_actor_kind_check`, `work_order_transitions_decision_check`, `work_order_transitions_justification_check`, `work_order_transitions_sequence_check`.
+Keys: 1 primary key, 1 foreign key, 1 unique.
+
 ### `work_orders`
 
 Simulated work on fictional assets. A work order requires a scenario and cannot point at a real well.
@@ -893,9 +966,12 @@ Simulated work on fictional assets. A work order requires a scenario and cannot 
 | `estimated_cost` | numeric(12,2) | yes |  |
 | `evidence_reference` | text | no |  |
 | `created_at` | timestamp with time zone | no |  |
+| `external_id` | text | yes |  |
+| `recommendation_id` | text | yes |  |
+| `priority_band` | text | yes |  |
 
-Check constraints: `work_orders_status_check`.
-Keys: 1 primary key, 2 foreign key, 0 unique.
+Check constraints: `work_orders_priority_band_check`, `work_orders_status_check`.
+Keys: 1 primary key, 3 foreign key, 1 unique.
 
 ## Triggers
 
@@ -906,11 +982,14 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 | `asset_observation_links` | `observation_link_guard` |
 | `asset_relationships` | `asset_relationship_rule_guard` |
 | `audit_events` | `audit_events_append_only` |
+| `detector_alarms` | `detector_alarms_append_only` |
 | `inspection_requests` | `inspection_request_trigger_guard` |
 | `inspection_review_events` | `inspection_review_chain` |
 | `inspection_review_events` | `inspection_review_events_append_only` |
 | `observations` | `observation_sensor_source_guard` |
 | `physical_edges` | `physical_edge_rule_guard` |
+| `recommendations` | `recommendation_guard` |
+| `recommendations` | `recommendations_append_only` |
 | `reconciliation_decisions` | `reconciliation_decisions_append_only` |
 | `reconciliation_reviews` | `reconciliation_reviews_append_only` |
 | `scenario_mappings` | `scenario_mapping_guard` |
@@ -919,6 +998,10 @@ Keys: 1 primary key, 2 foreign key, 0 unique.
 | `scenario_runs` | `scenario_runs_immutable` |
 | `shared_events` | `shared_event_origin_guard` |
 | `shared_events` | `shared_events_immutable` |
+| `work_order_transitions` | `work_order_transition_order` |
+| `work_order_transitions` | `work_order_transitions_append_only` |
+| `work_orders` | `work_order_creation_guard` |
+| `work_orders` | `work_order_status_guard` |
 
 ## Views
 

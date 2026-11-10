@@ -8,9 +8,9 @@ These datasets do not describe one facility. Petrobras 3W was not measured at a 
 
 ## Status
 
-Gates 0 to 6 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, a coupled simulation of the whole fictional field, an anomaly-detection evaluation on two separate tracks, and an aerial evidence workflow that relates real methane plumes and imagery to real registry wells by proximity only. There is no application UI or AWS deployment yet, no detection result is field-validated, and no plume is attributed to any well.
+Gates 0 to 7 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, a coupled simulation of the whole fictional field, an anomaly-detection evaluation on two separate tracks, an aerial evidence workflow that relates real methane plumes and imagery to real registry wells by proximity only, and a transparent decision engine with human-gated simulated work orders and a modeled scheduling comparison. There is no application UI or AWS deployment yet, no detection result is field-validated, no plume is attributed to any well, and every economic figure is a modeled estimate for a fictional facility.
 
-Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [Gate 4](reports/gates/gate_4.md), [Gate 5](reports/gates/gate_5.md), [Gate 6](reports/gates/gate_6.md), [detection experiments](reports/experiments/), [aerial evidence](reports/inspection/), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
+Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [Gate 4](reports/gates/gate_4.md), [Gate 5](reports/gates/gate_5.md), [Gate 6](reports/gates/gate_6.md), [Gate 7](reports/gates/gate_7.md), [decision support](reports/decision/), [modeled economics](reports/economics/), [detection experiments](reports/experiments/), [aerial evidence](reports/inspection/), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
 
 ## Quick start
 
@@ -39,6 +39,10 @@ make gate5-audit gate5-data gate5-development gate5-holdout gate5-reports
 # Aerial evidence: Carbon Mapper plumes and NAIP chips near registry wells, proximity only
 make gate6 inspection-load
 make inspection-review   # chips awaiting blinded human review
+
+# Decision support: recommendations, simulated work orders, modeled economics
+make gate7 decision-load decision-reports
+make decision-list       # then record a person's decision with pipelines.decision.decide
 ```
 
 `make acquire` reuses a completed batch. `make acquire REFRESH=1` checks upstream for a new version. A first run took about 11 minutes on the development machine, mostly scanning 48 million OCD production rows.

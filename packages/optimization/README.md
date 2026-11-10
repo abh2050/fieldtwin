@@ -1,3 +1,3 @@
 # packages/optimization
 
-OR-Tools route comparison. Filled in Gate 7.
+`routing.py`: shortest closed tours from the maintenance base, solved with OR-Tools and cached by site set. The tests compare OR-Tools with exhaustive search on small sets.

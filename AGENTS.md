@@ -19,6 +19,7 @@ AETHER Field does not exist. Its operational relationships are fictional, while 
 12. An application connects as `fieldtwin_app`, never as the owner or a superuser (ADR 0015).
 13. Aerial evidence is proximity and coverage only. Displayed text comes from fixed templates checked by `packages/inspection/claims.py`, a pattern backstop rather than a semantic check, so never display free text as evidence. Compare plumes with a null drawn inside their own scene footprints, not with the whole map. Reviews are blind and hold vocabulary values only. Real evidence never names an AETHER asset, inspection requests target fictional assets only, and no review is ever invented (ADR 0018).
 14. Carbon Mapper data is non-commercial with attribution, and NAIP licensing for 2022 imagery is unconfirmed. Don't commit raw aerial data or NAIP pixels, and keep per-well evidence pages under `data/`.
+15. Decisions use only operator-visible inputs, never simulator truth. A score is a sum of named terms and never a failure probability. Only a person approves; scripted demonstration actors are labelled `SCRIPTED_DEMO` and never counted as human. Economic outputs are modeled estimates for a fictional facility (ADR 0019).
 
 Detection rules are fixed in `config/experiments/` before fitting. Read a holdout only after committing the development selection, and never pool 3W and AETHER results (ADR 0017).
 
