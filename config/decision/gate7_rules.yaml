@@ -1,9 +1,14 @@
-# Gate 7 decision rules for fictional AETHER Field. Version 1, written 2026-11-10 before any
-# recommendation was generated. A change needs a new version and a disclosure in the gate report.
+# Gate 7 decision rules for fictional AETHER Field. A change needs a new version and a disclosure
+# in the gate report.
+#
+# Version 1, 2026-11-10: committed before any recommendation was generated.
+# Version 2, 2026-11-10, still before any recommendation was generated: version 1 named sensor
+#   statuses (STALE, MISSING, OUT_OF_RANGE) that the simulator never emits, so the data-quality rule
+#   could never fire. Version 2 uses the quality values the streaming contract actually carries.
 #
 # Every value is a declared design assumption about a fictional facility, not a calibrated figure.
 # Detector scores are never read as failure probabilities: they enter only as "an alarm started".
-version: 1
+version: 2
 provenance_class: SYNTHETIC
 
 detector:
@@ -32,7 +37,8 @@ evidence:
 
 # An alarm whose evidence sensors have degraded quality is sent to an instrumentation check first.
 data_quality:
-  degraded_statuses: [STALE, MISSING, OUT_OF_RANGE]
+  # SensorQuality values in packages/anomaly_detection/contracts.py other than GOOD.
+  degraded_qualities: [BAD_COMM_LOST, BAD_NOT_MEASURABLE, UNKNOWN]
   min_degraded_evidence_sensors: 1
 
 # Alarms on assets inside a declared planned operation are recorded and suppressed, never dispatched.
