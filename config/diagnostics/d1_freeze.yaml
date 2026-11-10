@@ -1,0 +1,14 @@
+# D1 freeze record. Once this file is committed, the final splits may be generated and scored once.
+# The method below is fixed: any change to it, its configuration, or the preregistration after this
+# record is a protocol change, logged in the preregistration with timing AFTER_FREEZE_BEFORE_FINAL_RESULTS
+# or later.
+method_commit: 91ceb00a1ca80d12b28d997ec84c2497fd0f4ff2
+preregistration_version: 4
+preregistration_sha256: c175b9d972b5ce80f76d72ba4f181f09bb7be14d27c324ecb6e083ee6f9bcffb
+method_config: config/diagnostics/d1_method.yaml
+method_config_sha256: beb06e4802b5253740f8a264b23d6f13f1f4956aa6b42e2c5cb9e53941fd6b38
+date: 2026-11-10
+development_report: reports/diagnostics/development_report.md
+open_questions_for_review:
+  - Two in-regime measurement lines (top-1 gain at least 0.08, relative entropy reduction at least 0.25) can't be met when top-1 is already 1.0 before measuring; see the development report.
+  - In-regime cases come from the same model the method inverts, so the held-out regimes are the meaningful test.
