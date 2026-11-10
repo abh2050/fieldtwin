@@ -1,0 +1,59 @@
+# Gate 7 decision rules for fictional AETHER Field. Version 1, written 2026-11-10 before any
+# recommendation was generated. A change needs a new version and a disclosure in the gate report.
+#
+# Every value is a declared design assumption about a fictional facility, not a calibrated figure.
+# Detector scores are never read as failure probabilities: they enter only as "an alarm started".
+version: 1
+provenance_class: SYNTHETIC
+
+detector:
+  # Gate 5 selected this method for AETHER (rules version 4). Its bundle checksum is verified on load.
+  model_file: data/gold/experiments/models/aether_hist_gradient_boosting.joblib
+  results_file: reports/experiments/results/aether_held_out.json
+  # Evidence sensors per window, ranked by distance from training normal. A pointer to data, not a cause.
+  evidence_sensors: 3
+
+# Consequence comes from the Gate 4 network: the share of the field's wells whose gas passes through
+# an asset. A compressor is one of four parallel units, so it carries a quarter of the field.
+consequence:
+  points_max: 40
+  parallel_compressor_share: 0.25
+
+evidence:
+  alarm_started: 30
+  # Repeated alarm starts within the lookback add weight, up to the cap.
+  repeat_alarm_points: 5
+  repeat_alarm_cap: 10
+  lookback_h: 24
+  # Hours since the first alarm, one point per step, capped. Unattended evidence gains urgency.
+  age_step_h: 6
+  age_cap: 10
+  open_inspection_request: 10
+
+# An alarm whose evidence sensors have degraded quality is sent to an instrumentation check first.
+data_quality:
+  degraded_statuses: [STALE, MISSING, OUT_OF_RANGE]
+  min_degraded_evidence_sensors: 1
+
+# Alarms on assets inside a declared planned operation are recorded and suppressed, never dispatched.
+operating_context:
+  suppress_during_planned_operations: true
+  # A planned operation on a pad or segment covers the assets upstream of it.
+  include_upstream_assets: true
+
+priority_bands:
+  # Score at or above the floor. Response targets are simulated-time targets for the scenario.
+  - {band: P1, floor: 60, respond_within_h: 24}
+  - {band: P2, floor: 40, respond_within_h: 72}
+  - {band: P3, floor: 0, respond_within_h: null}  # next scheduled visit
+
+actions:
+  FIELD_INSPECTION: Send a technician to inspect the candidate assets.
+  CHECK_INSTRUMENTATION: Check the evidence sensors and their communication before any field visit.
+  NO_ACTION_PLANNED_OPERATION: The alarm falls inside a declared planned operation; it is recorded only.
+  NEEDS_EVIDENCE: An alarm with no localizable evidence; gather more data before acting.
+
+work_orders:
+  # Only a person may approve, reject, or request evidence. The engine may only recommend.
+  system_actor: decision-engine
+  approver_roles: [MAINTENANCE_SUPERVISOR]

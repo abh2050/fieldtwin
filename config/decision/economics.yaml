@@ -1,0 +1,72 @@
+# Modeled economic comparison of inspection scheduling strategies on fictional AETHER Field.
+# Version 1, 2026-11-10. EVERY number here is a declared assumption for a fictional facility.
+# Outputs are modeled scenario estimates, never realized or expected savings for any real operator.
+version: 1
+provenance_class: SYNTHETIC
+
+horizon_days: 365
+replicates: 200
+seed: 20261110
+
+# Fault arrivals per asset per year, by asset class. Assumed, not measured.
+fault_rate_per_asset_year:
+  well: 0.30
+  flowline: 0.15
+  gathering_segment: 0.20
+  compressor: 0.60
+# Share of arriving faults that are sensor faults (no physical loss) rather than physical faults.
+sensor_fault_share: 0.25
+
+# Detector behaviour comes from the Gate 5 held-out AETHER results for the selected method:
+# per-category detection share and delays, and false-alarm starts per hour of normal operation.
+detector_results: reports/experiments/results/aether_held_out.json
+
+inspection:
+  # Probability that a site inspection finds a physical fault present at the visited asset.
+  finds_physical_fault: 0.90
+  on_site_hours: 2.0
+  repair_days: 1
+  # A remote instrumentation check resolves a sensor fault without a site visit.
+  instrumentation_check_hours: 1.0
+
+travel:
+  # Lease roads are not straight: distance is straight-line times this factor.
+  road_factor: 1.3
+  speed_km_per_h: 30.0
+  cost_per_km: 1.20
+
+labor:
+  cost_per_hour: 120.0
+  crews: 1
+  hours_per_day: 10.0
+
+production:
+  # Gate 4 normal run: field flow is the sum of well flows. Converted to thousand cubic feet a day.
+  # A physical fault defers this share of the flow through the affected asset until repaired.
+  deferred_share_while_faulted: 0.20
+  gas_price_per_mcf: 2.50
+
+strategies:
+  FIXED:
+    # Visit every inspectable asset on a fixed cycle, in a fixed geographic order.
+    cycle_days: 30
+  RISK_BASED:
+    # Dispatch on each approved alarm, one out-and-back trip each, plus a slower fixed sweep.
+    fallback_cycle_days: 90
+    approval_delay_h: 2.0
+  ROUTE_OPTIMIZED:
+    # As risk-based, but each day's dispatches and the sweep are routed together with OR-Tools.
+    fallback_cycle_days: 90
+    approval_delay_h: 2.0
+    solver_time_limit_s: 2
+
+# One-at-a-time sensitivity: each listed assumption is scaled by these factors, all else fixed.
+sensitivity:
+  factors: [0.5, 2.0]
+  assumptions:
+    - fault_rate_per_asset_year
+    - production.deferred_share_while_faulted
+    - production.gas_price_per_mcf
+    - travel.cost_per_km
+    - labor.cost_per_hour
+    - inspection.finds_physical_fault
