@@ -55,7 +55,7 @@ Excluded from D1: work-order generation, approvals, routing, aerial evidence, cl
 |---|---|---|
 | Gates 0 to 4 | Foundation: acquisition, canonical model, reconciliation, field simulator | Complete. Kept and maintained |
 | Gates 5 to 7 | Detection, aerial evidence, decision support | Complete. Kept unchanged as experimental evidence, including negative results |
-| **D1** | **Gathering-line restriction diagnosis** | **Next. Preregistered; no case generated** |
+| **D1** | **Gathering-line restriction diagnosis** | **Evaluated 2026-11-11: NOT MET** ([final report](../../reports/diagnostics/final_report.md)) |
 | Gate 8 | Application | Paused |
 | Gate 9 | AWS deployment | Paused |
 | Gate 10 | Portfolio demonstration | Paused |

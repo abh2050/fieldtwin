@@ -1,0 +1,1233 @@
+{
+ "split": "final_held_out",
+ "attempt_id": "final_held_out-score-001",
+ "freeze_method_commit": "fb38a97a69c4b3f182d0e7c16cfe0a94a11b082e",
+ "preregistration_version": 4,
+ "cases_in_manifest": 240,
+ "cases_refused_by_simulator": [],
+ "cases_failed_in_diagnosis": [],
+ "seconds": 151.2,
+ "metrics_by_regime": {
+  "severity_high": {
+   "cases": 40,
+   "primary_cases": 34,
+   "no_restriction_cases": 6,
+   "material_subset_cases": 30,
+   "top1": 1.0,
+   "top1_interval": [
+    1.0,
+    1.0
+   ],
+   "top3": 1.0,
+   "mean_reciprocal_rank": 1.0,
+   "miss_rate": 0.0,
+   "severity_conditional_mae": 8.854116129320182e-05,
+   "joint_success_rate": 1.0,
+   "joint_success_interval": [
+    1.0,
+    1.0
+   ],
+   "impact_within_tolerance": 1.0,
+   "impact_relative_error_cases": 34,
+   "impact_median_relative_error": 0.0014327105216419777,
+   "coverage_80": {
+    "severity": 0.5294117647058824,
+    "impact": 0.5
+   },
+   "coverage_95": {
+    "severity": 0.6764705882352942,
+    "impact": 0.6470588235294118
+   },
+   "b1_top1": 1.0,
+   "top1_minus_b1_interval": [
+    0.0,
+    0.0
+   ],
+   "specificity": 1.0,
+   "brier_skill_score_vs_climatology": 0.9864656007704402,
+   "brier_skill_score_vs_uniform": 0.986757342264944,
+   "regime_climatology": {
+    "NONE": 0.15000000000000002,
+    "FL-A-01": 0.07083333333333333,
+    "FL-A-02": 0.07083333333333333,
+    "FL-A-03": 0.07083333333333333,
+    "FL-A-04": 0.07083333333333333,
+    "FL-A-05": 0.07083333333333333,
+    "FL-A-06": 0.0,
+    "FL-B-01": 0.07083333333333333,
+    "FL-B-02": 0.07083333333333333,
+    "FL-B-03": 0.0,
+    "FL-B-04": 0.07083333333333333,
+    "FL-B-05": 0.07083333333333333,
+    "FL-B-06": 0.07083333333333333,
+    "GS-A": 0.07083333333333333,
+    "GS-B": 0.07083333333333333,
+    "GS-TRUNK": 0.0
+   },
+   "brier_skill_score_vs_regime_climatology": 0.9864656007704402,
+   "per_pipe": {
+    "FL-A-01": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-02": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-03": {
+     "primary_cases": 8,
+     "status": "REPORTED",
+     "top1": 1.0,
+     "severity_conditional_mae": 9.502645312130242e-05
+    },
+    "FL-A-04": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-05": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-01": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-02": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-03": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-04": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-05": {
+     "primary_cases": 5,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-A": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-B": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-TRUNK": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    }
+   },
+   "expected_calibration_error": 0.03965889048838316,
+   "mean_entropy_before_nats": 0.18295523717848594,
+   "measurement_entropy_reduction": 0.1327967675161285,
+   "measurement_against_random_mean": 0.017461592423034848,
+   "measurement_against_random_interval": [
+    -0.005990038702007139,
+    0.04230992251560171
+   ],
+   "measurement_top1_gain": 0.0,
+   "measurement_top1_gain_interval": [
+    0.0,
+    0.0
+   ],
+   "recommended_types": {
+    "PORTABLE_DP": 36,
+    "SHUT_IN_TEST": 4
+   },
+   "recommended_mean_duration_h": 1.1,
+   "recommended_share_production_interrupting": 0.1,
+   "random_types": {
+    "PORTABLE_DP": 11,
+    "PRECISION_PT": 10,
+    "SHUT_IN_TEST": 14,
+    "WELL_TEST": 5
+   },
+   "random_mean_duration_h": 1.725,
+   "random_share_production_interrupting": 0.35,
+   "recommended_mean_deferred_sm3": 434.0313169973665,
+   "random_mean_deferred_sm3": 1431.9162494252425,
+   "recommended_entropy_reduction_per_hour_nats": 0.013477907460266517,
+   "measurement_against_same_type_mean": 0.0009229353991352371,
+   "measurement_against_same_type_interval": [
+    -0.005699139158018152,
+    0.0072314865325490835
+   ]
+  },
+  "unseen_pipes": {
+   "cases": 40,
+   "primary_cases": 34,
+   "no_restriction_cases": 6,
+   "material_subset_cases": 11,
+   "top1": 0.9705882352941176,
+   "top1_interval": [
+    0.9117647058823529,
+    1.0
+   ],
+   "top3": 1.0,
+   "mean_reciprocal_rank": 0.9852941176470589,
+   "miss_rate": 0.029411764705882353,
+   "severity_conditional_mae": 0.0011999352218481224,
+   "joint_success_rate": 0.9705882352941176,
+   "joint_success_interval": [
+    0.9117647058823529,
+    1.0
+   ],
+   "impact_within_tolerance": 1.0,
+   "impact_relative_error_cases": 22,
+   "impact_median_relative_error": 0.0017294091244385021,
+   "coverage_80": {
+    "severity": 0.7352941176470589,
+    "impact": 0.7058823529411765
+   },
+   "coverage_95": {
+    "severity": 0.8235294117647058,
+    "impact": 0.8235294117647058
+   },
+   "b1_top1": 0.8235294117647058,
+   "top1_minus_b1_interval": [
+    0.029411764705882353,
+    0.2647058823529412
+   ],
+   "specificity": 1.0,
+   "brier_skill_score_vs_climatology": 0.9529580207957628,
+   "brier_skill_score_vs_uniform": 0.9479297559074876,
+   "regime_climatology": {
+    "NONE": 0.15000000000000002,
+    "FL-A-01": 0.0,
+    "FL-A-02": 0.0,
+    "FL-A-03": 0.0,
+    "FL-A-04": 0.0,
+    "FL-A-05": 0.0,
+    "FL-A-06": 0.2833333333333333,
+    "FL-B-01": 0.0,
+    "FL-B-02": 0.0,
+    "FL-B-03": 0.2833333333333333,
+    "FL-B-04": 0.0,
+    "FL-B-05": 0.0,
+    "FL-B-06": 0.0,
+    "GS-A": 0.0,
+    "GS-B": 0.0,
+    "GS-TRUNK": 0.2833333333333333
+   },
+   "brier_skill_score_vs_regime_climatology": 0.933734135063262,
+   "per_pipe": {
+    "FL-A-01": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-02": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-03": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-04": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-05": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-06": {
+     "primary_cases": 7,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-01": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-02": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-03": {
+     "primary_cases": 11,
+     "status": "REPORTED",
+     "top1": 1.0,
+     "severity_conditional_mae": 0.0026493352389955357
+    },
+    "FL-B-04": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-05": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-A": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-B": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-TRUNK": {
+     "primary_cases": 16,
+     "status": "REPORTED",
+     "top1": 1.0,
+     "severity_conditional_mae": 0.0002638723673949765
+    }
+   },
+   "expected_calibration_error": 0.03226935458565147,
+   "mean_entropy_before_nats": 0.22549995157674213,
+   "measurement_entropy_reduction": 0.2291720847229424,
+   "measurement_against_random_mean": 0.04865743379815237,
+   "measurement_against_random_interval": [
+    0.008560167575638607,
+    0.11457250811683223
+   ],
+   "measurement_top1_gain": 0.029411764705882353,
+   "measurement_top1_gain_interval": [
+    0.0,
+    0.08823529411764706
+   ],
+   "recommended_types": {
+    "PORTABLE_DP": 37,
+    "SHUT_IN_TEST": 3
+   },
+   "recommended_mean_duration_h": 1.075,
+   "recommended_share_production_interrupting": 0.075,
+   "random_types": {
+    "PORTABLE_DP": 16,
+    "PRECISION_PT": 10,
+    "SHUT_IN_TEST": 8,
+    "WELL_TEST": 6
+   },
+   "random_mean_duration_h": 1.65,
+   "random_share_production_interrupting": 0.2,
+   "recommended_mean_deferred_sm3": 298.9398779286745,
+   "random_mean_deferred_sm3": 846.9774458653521,
+   "recommended_entropy_reduction_per_hour_nats": 0.042707320523819446,
+   "measurement_against_same_type_mean": 0.03377673879618396,
+   "measurement_against_same_type_interval": [
+    0.0009438557356970453,
+    0.09457125007835437
+   ]
+  },
+  "noise_high": {
+   "cases": 40,
+   "primary_cases": 34,
+   "no_restriction_cases": 6,
+   "material_subset_cases": 2,
+   "top1": 1.0,
+   "top1_interval": [
+    1.0,
+    1.0
+   ],
+   "top3": 1.0,
+   "mean_reciprocal_rank": 1.0,
+   "miss_rate": 0.0,
+   "severity_conditional_mae": 0.0060374761280543405,
+   "joint_success_rate": 1.0,
+   "joint_success_interval": [
+    1.0,
+    1.0
+   ],
+   "impact_within_tolerance": 1.0,
+   "impact_relative_error_cases": 17,
+   "impact_median_relative_error": 0.00866674767213462,
+   "coverage_80": {
+    "severity": 0.8235294117647058,
+    "impact": 0.8529411764705882
+   },
+   "coverage_95": {
+    "severity": 0.9705882352941176,
+    "impact": 1.0
+   },
+   "b1_top1": 0.6764705882352942,
+   "top1_minus_b1_interval": [
+    0.17647058823529413,
+    0.47058823529411764
+   ],
+   "specificity": 1.0,
+   "brier_skill_score_vs_climatology": 0.9719467466281821,
+   "brier_skill_score_vs_uniform": 0.9725514500897524,
+   "regime_climatology": {
+    "NONE": 0.15000000000000002,
+    "FL-A-01": 0.07083333333333333,
+    "FL-A-02": 0.07083333333333333,
+    "FL-A-03": 0.07083333333333333,
+    "FL-A-04": 0.07083333333333333,
+    "FL-A-05": 0.07083333333333333,
+    "FL-A-06": 0.0,
+    "FL-B-01": 0.07083333333333333,
+    "FL-B-02": 0.07083333333333333,
+    "FL-B-03": 0.0,
+    "FL-B-04": 0.07083333333333333,
+    "FL-B-05": 0.07083333333333333,
+    "FL-B-06": 0.07083333333333333,
+    "GS-A": 0.07083333333333333,
+    "GS-B": 0.07083333333333333,
+    "GS-TRUNK": 0.0
+   },
+   "brier_skill_score_vs_regime_climatology": 0.9719467466281821,
+   "per_pipe": {
+    "FL-A-01": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-02": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-03": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-04": {
+     "primary_cases": 5,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-05": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-01": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-02": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-03": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-04": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-05": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-06": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-A": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-B": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-TRUNK": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    }
+   },
+   "expected_calibration_error": 0.06179782137136874,
+   "mean_entropy_before_nats": 0.2689766090570703,
+   "measurement_entropy_reduction": 0.16160279468246655,
+   "measurement_against_random_mean": 0.008628481078043886,
+   "measurement_against_random_interval": [
+    -0.018647864660850742,
+    0.03802165550526405
+   ],
+   "measurement_top1_gain": 0.0,
+   "measurement_top1_gain_interval": [
+    0.0,
+    0.0
+   ],
+   "recommended_types": {
+    "PORTABLE_DP": 33,
+    "PRECISION_PT": 6,
+    "SHUT_IN_TEST": 1
+   },
+   "recommended_mean_duration_h": 1.025,
+   "recommended_share_production_interrupting": 0.025,
+   "random_types": {
+    "PORTABLE_DP": 12,
+    "PRECISION_PT": 12,
+    "SHUT_IN_TEST": 10,
+    "WELL_TEST": 6
+   },
+   "random_mean_duration_h": 1.7,
+   "random_share_production_interrupting": 0.25,
+   "recommended_mean_deferred_sm3": 112.27318786919197,
+   "random_mean_deferred_sm3": 1096.305933192916,
+   "recommended_entropy_reduction_per_hour_nats": 0.040532304600044616,
+   "measurement_against_same_type_mean": 0.04024295469924167,
+   "measurement_against_same_type_interval": [
+    0.013486820979133743,
+    0.07637290134146855
+   ]
+  },
+  "deliverability_outside": {
+   "cases": 40,
+   "primary_cases": 34,
+   "no_restriction_cases": 6,
+   "material_subset_cases": 3,
+   "top1": 0.9705882352941176,
+   "top1_interval": [
+    0.9117647058823529,
+    1.0
+   ],
+   "top3": 1.0,
+   "mean_reciprocal_rank": 0.9852941176470589,
+   "miss_rate": 0.029411764705882353,
+   "severity_conditional_mae": 0.0019602095895782045,
+   "joint_success_rate": 0.9705882352941176,
+   "joint_success_interval": [
+    0.9117647058823529,
+    1.0
+   ],
+   "impact_within_tolerance": 1.0,
+   "impact_relative_error_cases": 18,
+   "impact_median_relative_error": 0.004609249005439965,
+   "coverage_80": {
+    "severity": 0.8235294117647058,
+    "impact": 0.8529411764705882
+   },
+   "coverage_95": {
+    "severity": 0.9705882352941176,
+    "impact": 0.9705882352941176
+   },
+   "b1_top1": 0.3235294117647059,
+   "top1_minus_b1_interval": [
+    0.5,
+    0.7941176470588235
+   ],
+   "specificity": 1.0,
+   "brier_skill_score_vs_climatology": 0.967300951809265,
+   "brier_skill_score_vs_uniform": 0.9680057979591542,
+   "regime_climatology": {
+    "NONE": 0.15000000000000002,
+    "FL-A-01": 0.07083333333333333,
+    "FL-A-02": 0.07083333333333333,
+    "FL-A-03": 0.07083333333333333,
+    "FL-A-04": 0.07083333333333333,
+    "FL-A-05": 0.07083333333333333,
+    "FL-A-06": 0.0,
+    "FL-B-01": 0.07083333333333333,
+    "FL-B-02": 0.07083333333333333,
+    "FL-B-03": 0.0,
+    "FL-B-04": 0.07083333333333333,
+    "FL-B-05": 0.07083333333333333,
+    "FL-B-06": 0.07083333333333333,
+    "GS-A": 0.07083333333333333,
+    "GS-B": 0.07083333333333333,
+    "GS-TRUNK": 0.0
+   },
+   "brier_skill_score_vs_regime_climatology": 0.967300951809265,
+   "per_pipe": {
+    "FL-A-01": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-02": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-03": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-04": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-05": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-01": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-02": {
+     "primary_cases": 7,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-03": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-04": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-05": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-06": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-A": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-B": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-TRUNK": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    }
+   },
+   "expected_calibration_error": 0.056375681900721175,
+   "mean_entropy_before_nats": 0.22818568653494334,
+   "measurement_entropy_reduction": 0.21708842730476646,
+   "measurement_against_random_mean": 0.048152990722604795,
+   "measurement_against_random_interval": [
+    0.004722224234817243,
+    0.12220291279617816
+   ],
+   "measurement_top1_gain": 0.029411764705882353,
+   "measurement_top1_gain_interval": [
+    0.0,
+    0.08823529411764706
+   ],
+   "recommended_types": {
+    "PORTABLE_DP": 35,
+    "SHUT_IN_TEST": 5
+   },
+   "recommended_mean_duration_h": 1.125,
+   "recommended_share_production_interrupting": 0.125,
+   "random_types": {
+    "PORTABLE_DP": 6,
+    "PRECISION_PT": 11,
+    "SHUT_IN_TEST": 8,
+    "WELL_TEST": 15
+   },
+   "random_mean_duration_h": 2.325,
+   "random_share_production_interrupting": 0.2,
+   "recommended_mean_deferred_sm3": 530.4173101473922,
+   "random_mean_deferred_sm3": 861.1708804283184,
+   "recommended_entropy_reduction_per_hour_nats": 0.04091322831774141,
+   "measurement_against_same_type_mean": 0.028850751912450272,
+   "measurement_against_same_type_interval": [
+    -0.008617348151400162,
+    0.09705714933361975
+   ]
+  },
+  "compressor_outside": {
+   "cases": 40,
+   "primary_cases": 34,
+   "no_restriction_cases": 6,
+   "material_subset_cases": 5,
+   "top1": 1.0,
+   "top1_interval": [
+    1.0,
+    1.0
+   ],
+   "top3": 1.0,
+   "mean_reciprocal_rank": 1.0,
+   "miss_rate": 0.0,
+   "severity_conditional_mae": 0.003977150511558578,
+   "joint_success_rate": 0.5,
+   "joint_success_interval": [
+    0.3235294117647059,
+    0.6764705882352942
+   ],
+   "impact_within_tolerance": 0.5,
+   "impact_relative_error_cases": 16,
+   "impact_median_relative_error": 0.6222763006709355,
+   "coverage_80": {
+    "severity": 0.8823529411764706,
+    "impact": 0.029411764705882353
+   },
+   "coverage_95": {
+    "severity": 0.9411764705882353,
+    "impact": 0.029411764705882353
+   },
+   "b1_top1": 0.6470588235294118,
+   "top1_minus_b1_interval": [
+    0.20588235294117646,
+    0.5
+   ],
+   "specificity": 1.0,
+   "brier_skill_score_vs_climatology": 0.9784010464464747,
+   "brier_skill_score_vs_uniform": 0.9788666238897397,
+   "regime_climatology": {
+    "NONE": 0.15000000000000002,
+    "FL-A-01": 0.07083333333333333,
+    "FL-A-02": 0.07083333333333333,
+    "FL-A-03": 0.07083333333333333,
+    "FL-A-04": 0.07083333333333333,
+    "FL-A-05": 0.07083333333333333,
+    "FL-A-06": 0.0,
+    "FL-B-01": 0.07083333333333333,
+    "FL-B-02": 0.07083333333333333,
+    "FL-B-03": 0.0,
+    "FL-B-04": 0.07083333333333333,
+    "FL-B-05": 0.07083333333333333,
+    "FL-B-06": 0.07083333333333333,
+    "GS-A": 0.07083333333333333,
+    "GS-B": 0.07083333333333333,
+    "GS-TRUNK": 0.0
+   },
+   "brier_skill_score_vs_regime_climatology": 0.9784010464464747,
+   "per_pipe": {
+    "FL-A-01": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-02": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-03": {
+     "primary_cases": 5,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-04": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-05": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-01": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-02": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-03": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-04": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-05": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-06": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-A": {
+     "primary_cases": 5,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-B": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-TRUNK": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    }
+   },
+   "expected_calibration_error": 0.050206541697982145,
+   "mean_entropy_before_nats": 0.2155957733535218,
+   "measurement_entropy_reduction": 0.6300307595761216,
+   "measurement_against_random_mean": 0.09648999955335204,
+   "measurement_against_random_interval": [
+    0.008546067583451264,
+    0.19535928812403894
+   ],
+   "measurement_top1_gain": -0.029411764705882353,
+   "measurement_top1_gain_interval": [
+    -0.08823529411764706,
+    0.0
+   ],
+   "recommended_types": {
+    "PORTABLE_DP": 35,
+    "SHUT_IN_TEST": 5
+   },
+   "recommended_mean_duration_h": 1.125,
+   "recommended_share_production_interrupting": 0.125,
+   "random_types": {
+    "PORTABLE_DP": 13,
+    "PRECISION_PT": 13,
+    "SHUT_IN_TEST": 5,
+    "WELL_TEST": 9
+   },
+   "random_mean_duration_h": 1.8,
+   "random_share_production_interrupting": 0.125,
+   "recommended_mean_deferred_sm3": 511.47387930573893,
+   "random_mean_deferred_sm3": 539.214725014745,
+   "recommended_entropy_reduction_per_hour_nats": 0.07131786836748186,
+   "measurement_against_same_type_mean": 0.004043089592540909,
+   "measurement_against_same_type_interval": [
+    -0.0015512243500181377,
+    0.011487997352529256
+   ]
+  },
+  "degraded_operations": {
+   "cases": 40,
+   "primary_cases": 34,
+   "no_restriction_cases": 6,
+   "material_subset_cases": 3,
+   "top1": 0.4117647058823529,
+   "top1_interval": [
+    0.23529411764705882,
+    0.5882352941176471
+   ],
+   "top3": 0.6176470588235294,
+   "mean_reciprocal_rank": 0.5689892623716153,
+   "miss_rate": 0.20588235294117646,
+   "severity_conditional_mae": 0.012457567847133325,
+   "joint_success_rate": 0.38235294117647056,
+   "joint_success_interval": [
+    0.23529411764705882,
+    0.5588235294117647
+   ],
+   "impact_within_tolerance": 0.9705882352941176,
+   "impact_relative_error_cases": 17,
+   "impact_median_relative_error": 0.009976149490879983,
+   "coverage_80": {
+    "severity": 0.4411764705882353,
+    "impact": 0.5882352941176471
+   },
+   "coverage_95": {
+    "severity": 0.47058823529411764,
+    "impact": 0.7941176470588235
+   },
+   "b1_top1": 0.058823529411764705,
+   "top1_minus_b1_interval": [
+    0.20514705882352943,
+    0.5294117647058824
+   ],
+   "specificity": 1.0,
+   "brier_skill_score_vs_climatology": 0.32295644127473166,
+   "brier_skill_score_vs_uniform": 0.33755049131836534,
+   "regime_climatology": {
+    "NONE": 0.15000000000000002,
+    "FL-A-01": 0.07083333333333333,
+    "FL-A-02": 0.07083333333333333,
+    "FL-A-03": 0.07083333333333333,
+    "FL-A-04": 0.07083333333333333,
+    "FL-A-05": 0.07083333333333333,
+    "FL-A-06": 0.0,
+    "FL-B-01": 0.07083333333333333,
+    "FL-B-02": 0.07083333333333333,
+    "FL-B-03": 0.0,
+    "FL-B-04": 0.07083333333333333,
+    "FL-B-05": 0.07083333333333333,
+    "FL-B-06": 0.07083333333333333,
+    "GS-A": 0.07083333333333333,
+    "GS-B": 0.07083333333333333,
+    "GS-TRUNK": 0.0
+   },
+   "brier_skill_score_vs_regime_climatology": 0.32295644127473166,
+   "per_pipe": {
+    "FL-A-01": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-02": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-03": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-04": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-05": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-A-06": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-01": {
+     "primary_cases": 2,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-02": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-03": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-04": {
+     "primary_cases": 1,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-05": {
+     "primary_cases": 3,
+     "status": "INCONCLUSIVE"
+    },
+    "FL-B-06": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-A": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-B": {
+     "primary_cases": 4,
+     "status": "INCONCLUSIVE"
+    },
+    "GS-TRUNK": {
+     "primary_cases": 0,
+     "status": "INCONCLUSIVE"
+    }
+   },
+   "expected_calibration_error": 0.13558077583219239,
+   "mean_entropy_before_nats": 1.368659412811049,
+   "measurement_entropy_reduction": 0.32655781900832825,
+   "measurement_against_random_mean": 0.3714347186666002,
+   "measurement_against_random_interval": [
+    0.17674759873329335,
+    0.5970334192666137
+   ],
+   "measurement_top1_gain": 0.17647058823529413,
+   "measurement_top1_gain_interval": [
+    0.058823529411764705,
+    0.3235294117647059
+   ],
+   "recommended_types": {
+    "PORTABLE_DP": 18,
+    "PRECISION_PT": 10,
+    "SHUT_IN_TEST": 11,
+    "WELL_TEST": 1
+   },
+   "recommended_mean_duration_h": 1.35,
+   "recommended_share_production_interrupting": 0.275,
+   "random_types": {
+    "PORTABLE_DP": 10,
+    "PRECISION_PT": 18,
+    "SHUT_IN_TEST": 6,
+    "WELL_TEST": 6
+   },
+   "random_mean_duration_h": 1.6,
+   "random_share_production_interrupting": 0.15,
+   "recommended_mean_deferred_sm3": 1205.1500080059984,
+   "random_mean_deferred_sm3": 658.0130684771117,
+   "recommended_entropy_reduction_per_hour_nats": 0.32474990028381956,
+   "measurement_against_same_type_mean": 0.13154529431242593,
+   "measurement_against_same_type_interval": [
+    -0.006379221854948896,
+    0.2852089053085567
+   ]
+  }
+ },
+ "metrics_pooled": {
+  "cases": 240,
+  "primary_cases": 204,
+  "no_restriction_cases": 36,
+  "material_subset_cases": 54,
+  "top1": 0.8921568627450981,
+  "top1_interval": [
+   0.8480392156862745,
+   0.9313725490196079
+  ],
+  "top3": 0.9362745098039216,
+  "mean_reciprocal_rank": 0.9232629162776221,
+  "miss_rate": 0.04411764705882353,
+  "severity_conditional_mae": 0.0034186727135590293,
+  "joint_success_rate": 0.803921568627451,
+  "joint_success_interval": [
+   0.7450980392156863,
+   0.8530637254901954
+  ],
+  "impact_within_tolerance": 0.9117647058823529,
+  "impact_relative_error_cases": 124,
+  "impact_median_relative_error": 0.0039059097817183922,
+  "coverage_80": {
+   "severity": 0.7058823529411765,
+   "impact": 0.5882352941176471
+  },
+  "coverage_95": {
+   "severity": 0.8088235294117647,
+   "impact": 0.7107843137254902
+  },
+  "b1_top1": 0.5882352941176471,
+  "top1_minus_b1_interval": [
+   0.24509803921568626,
+   0.36764705882352944
+  ],
+  "specificity": 1.0,
+  "brier_skill_score_vs_climatology": 0.865256948304656,
+  "brier_skill_score_vs_uniform": 0.8652769102382405,
+  "per_pipe": {
+   "FL-A-01": {
+    "primary_cases": 11,
+    "status": "REPORTED",
+    "top1": 0.8181818181818182,
+    "severity_conditional_mae": 0.0023343326148679783
+   },
+   "FL-A-02": {
+    "primary_cases": 10,
+    "status": "REPORTED",
+    "top1": 0.8,
+    "severity_conditional_mae": 0.008561473933563565
+   },
+   "FL-A-03": {
+    "primary_cases": 18,
+    "status": "REPORTED",
+    "top1": 0.8333333333333334,
+    "severity_conditional_mae": 0.0016434679566554996
+   },
+   "FL-A-04": {
+    "primary_cases": 17,
+    "status": "REPORTED",
+    "top1": 0.8235294117647058,
+    "severity_conditional_mae": 0.002189089821523662
+   },
+   "FL-A-05": {
+    "primary_cases": 10,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.015788269281078123
+   },
+   "FL-A-06": {
+    "primary_cases": 7,
+    "status": "INCONCLUSIVE"
+   },
+   "FL-B-01": {
+    "primary_cases": 12,
+    "status": "REPORTED",
+    "top1": 0.9166666666666666,
+    "severity_conditional_mae": 0.006040864686249029
+   },
+   "FL-B-02": {
+    "primary_cases": 18,
+    "status": "REPORTED",
+    "top1": 0.9444444444444444,
+    "severity_conditional_mae": 0.004796956164391186
+   },
+   "FL-B-03": {
+    "primary_cases": 11,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0026493352389955357
+   },
+   "FL-B-04": {
+    "primary_cases": 13,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0031002941297094497
+   },
+   "FL-B-05": {
+    "primary_cases": 15,
+    "status": "REPORTED",
+    "top1": 0.8666666666666667,
+    "severity_conditional_mae": 0.0008503412221459066
+   },
+   "FL-B-06": {
+    "primary_cases": 13,
+    "status": "REPORTED",
+    "top1": 0.7692307692307693,
+    "severity_conditional_mae": 0.004583778147026987
+   },
+   "GS-A": {
+    "primary_cases": 16,
+    "status": "REPORTED",
+    "top1": 0.875,
+    "severity_conditional_mae": 0.001273533743679084
+   },
+   "GS-B": {
+    "primary_cases": 17,
+    "status": "REPORTED",
+    "top1": 0.8823529411764706,
+    "severity_conditional_mae": 0.0011263024722135944
+   },
+   "GS-TRUNK": {
+    "primary_cases": 16,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0002638723673949765
+   }
+  },
+  "expected_calibration_error": 0.05174274983330959,
+  "mean_entropy_before_nats": 0.41497877841863545,
+  "measurement_entropy_reduction": 0.30192564150758994,
+  "measurement_against_random_mean": 0.09847086937363135,
+  "measurement_against_random_interval": [
+   0.057541155295419824,
+   0.14688469262243764
+  ],
+  "measurement_top1_gain": 0.03431372549019608,
+  "measurement_top1_gain_interval": [
+   0.004901960784313725,
+   0.06372549019607843
+  ],
+  "recommended_types": {
+   "PORTABLE_DP": 194,
+   "PRECISION_PT": 16,
+   "SHUT_IN_TEST": 29,
+   "WELL_TEST": 1
+  },
+  "recommended_mean_duration_h": 1.1333333333333333,
+  "recommended_share_production_interrupting": 0.12083333333333333,
+  "random_types": {
+   "PORTABLE_DP": 68,
+   "PRECISION_PT": 74,
+   "SHUT_IN_TEST": 51,
+   "WELL_TEST": 47
+  },
+  "random_mean_duration_h": 1.8,
+  "random_share_production_interrupting": 0.2125,
+  "recommended_mean_deferred_sm3": 515.3809300423939,
+  "random_mean_deferred_sm3": 905.5997170672811,
+  "recommended_entropy_reduction_per_hour_nats": 0.0889497549255289,
+  "measurement_against_same_type_mean": 0.03989696078532966,
+  "measurement_against_same_type_interval": [
+   0.013794312846585508,
+   0.06998598156385878
+  ]
+ },
+ "acceptance": [
+  {
+   "line": "pooled_top1",
+   "value": 0.8921568627450981,
+   "rule": ">= 0.6",
+   "status": "PASS"
+  },
+  {
+   "line": "severity_high_top1",
+   "value": 1.0,
+   "rule": ">= 0.55",
+   "status": "PASS"
+  },
+  {
+   "line": "severity_high_coverage_80_severity",
+   "value": 0.5294117647058824,
+   "rule": "in [0.65, 0.92]",
+   "status": "FAIL"
+  },
+  {
+   "line": "severity_high_coverage_80_impact",
+   "value": 0.5,
+   "rule": "in [0.65, 0.92]",
+   "status": "FAIL"
+  },
+  {
+   "line": "unseen_pipes_top1",
+   "value": 0.9705882352941176,
+   "rule": ">= 0.55",
+   "status": "PASS"
+  },
+  {
+   "line": "unseen_pipes_coverage_80_severity",
+   "value": 0.7352941176470589,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "unseen_pipes_coverage_80_impact",
+   "value": 0.7058823529411765,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "noise_high_top1",
+   "value": 1.0,
+   "rule": ">= 0.55",
+   "status": "PASS"
+  },
+  {
+   "line": "noise_high_coverage_80_severity",
+   "value": 0.8235294117647058,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "noise_high_coverage_80_impact",
+   "value": 0.8529411764705882,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "deliverability_outside_top1",
+   "value": 0.9705882352941176,
+   "rule": ">= 0.55",
+   "status": "PASS"
+  },
+  {
+   "line": "deliverability_outside_coverage_80_severity",
+   "value": 0.8235294117647058,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "deliverability_outside_coverage_80_impact",
+   "value": 0.8529411764705882,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "compressor_outside_top1",
+   "value": 1.0,
+   "rule": ">= 0.55",
+   "status": "PASS"
+  },
+  {
+   "line": "compressor_outside_coverage_80_severity",
+   "value": 0.8823529411764706,
+   "rule": "in [0.65, 0.92]",
+   "status": "PASS"
+  },
+  {
+   "line": "compressor_outside_coverage_80_impact",
+   "value": 0.029411764705882353,
+   "rule": "in [0.65, 0.92]",
+   "status": "FAIL"
+  },
+  {
+   "line": "degraded_operations_top1",
+   "value": 0.4117647058823529,
+   "rule": ">= 0.55",
+   "status": "FAIL"
+  },
+  {
+   "line": "degraded_operations_coverage_80_severity",
+   "value": 0.4411764705882353,
+   "rule": "in [0.65, 0.92]",
+   "status": "FAIL"
+  },
+  {
+   "line": "degraded_operations_coverage_80_impact",
+   "value": 0.5882352941176471,
+   "rule": "in [0.65, 0.92]",
+   "status": "FAIL"
+  }
+ ]
+}
