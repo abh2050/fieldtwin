@@ -26,7 +26,11 @@ REGIME = "degraded_operations"
 def recorded_hash() -> str:
     for line in LEDGER.read_text().splitlines():
         event = json.loads(line)
-        if event["event"] == "END" and event["attempt_id"] == ATTEMPT and event["status"] == "COMPLETED":
+        if (
+            event["event"] == "END"
+            and event["attempt_id"] == ATTEMPT
+            and event["status"] == "COMPLETED"
+        ):
             return event["outputs"][ROWS]
     raise SystemExit(f"no completed {ATTEMPT} in the ledger")
 
@@ -48,7 +52,9 @@ def main() -> int:
     cases = []
     for row in rows:
         truth = json.loads((TRUTH / f"{row['case_id']}.json").read_text())
-        dropout = re.search(r"group='(PAD-\w)'", " ".join(truth["parameters"]["communication_faults"]))
+        dropout = re.search(
+            r"group='(PAD-\w)'", " ".join(truth["parameters"]["communication_faults"])
+        )
         pipe = truth["faulted_pipe"]
         shut = truth["true_state"]["shut_in_wells"]
         top = row["diagnosis"]["ranking"][0]
@@ -58,21 +64,27 @@ def main() -> int:
         elif pad_of(pipe) is None:
             relation = "fault on no pad"
         else:
-            relation = "fault on the dropped pad" if pad_of(pipe) == (dropout.group(1) if dropout else None) else "fault on the other pad"
+            relation = (
+                "fault on the dropped pad"
+                if pad_of(pipe) == (dropout.group(1) if dropout else None)
+                else "fault on the other pad"
+            )
             if pipe.startswith("FL-") and pipe[3:] in shut:
                 relation += ", own well shut in"
-        cases.append({
-            "case_id": row["case_id"],
-            "faulted_pipe": pipe,
-            "fault_pad": pad_of(pipe),
-            "dropout_pad": dropout.group(1) if dropout else None,
-            "shut_in_wells": shut,
-            "relation": relation,
-            "top_ranked": top,
-            "correct": top == pipe,
-            "probability_of_top": round(probabilities[top], 6),
-            "probability_of_true": round(probabilities.get(pipe, 0.0), 6),
-        })
+        cases.append(
+            {
+                "case_id": row["case_id"],
+                "faulted_pipe": pipe,
+                "fault_pad": pad_of(pipe),
+                "dropout_pad": dropout.group(1) if dropout else None,
+                "shut_in_wells": shut,
+                "relation": relation,
+                "top_ranked": top,
+                "correct": top == pipe,
+                "probability_of_top": round(probabilities[top], 6),
+                "probability_of_true": round(probabilities.get(pipe, 0.0), 6),
+            }
+        )
     summary: dict[str, dict[str, int]] = {}
     for case in cases:
         entry = summary.setdefault(case["relation"], {"cases": 0, "correct": 0})
@@ -88,7 +100,11 @@ def main() -> int:
         "ledger_recorded_sha256": expected,
         "summary_by_relation": summary,
         "restriction_cases_top1": f"{len(restriction) - len(wrong)} of {len(restriction)}",
-        "mean_probability_of_top_when_wrong": round(sum(c["probability_of_top"] for c in wrong) / len(wrong), 4) if wrong else None,
+        "mean_probability_of_top_when_wrong": round(
+            sum(c["probability_of_top"] for c in wrong) / len(wrong), 4
+        )
+        if wrong
+        else None,
         "cases": cases,
     }
     OUT.write_text(json.dumps(output, indent=1) + "\n")
