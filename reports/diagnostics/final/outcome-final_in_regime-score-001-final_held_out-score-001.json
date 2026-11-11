@@ -1,0 +1,10 @@
+{
+ "outcome": "NOT_MET",
+ "failed_in_regime_lines": [
+  "measurement_top1_gain"
+ ],
+ "attempts": {
+  "final_held_out": "final_held_out-score-001",
+  "final_in_regime": "final_in_regime-score-001"
+ }
+}

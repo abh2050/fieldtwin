@@ -1,0 +1,285 @@
+{
+ "split": "final_in_regime",
+ "attempt_id": "final_in_regime-score-001",
+ "freeze_method_commit": "fb38a97a69c4b3f182d0e7c16cfe0a94a11b082e",
+ "preregistration_version": 4,
+ "cases_in_manifest": 150,
+ "cases_refused_by_simulator": [],
+ "cases_failed_in_diagnosis": [],
+ "seconds": 93.2,
+ "metrics": {
+  "cases": 150,
+  "primary_cases": 128,
+  "no_restriction_cases": 22,
+  "material_subset_cases": 8,
+  "top1": 0.9921875,
+  "top1_interval": [
+   0.9765625,
+   1.0
+  ],
+  "top3": 1.0,
+  "mean_reciprocal_rank": 0.99609375,
+  "miss_rate": 0.0078125,
+  "severity_conditional_mae": 0.003466828711551972,
+  "joint_success_rate": 0.9921875,
+  "joint_success_interval": [
+   0.9765625,
+   1.0
+  ],
+  "impact_within_tolerance": 1.0,
+  "impact_relative_error_cases": 63,
+  "impact_median_relative_error": 0.004188226851934114,
+  "coverage_80": {
+   "severity": 0.859375,
+   "impact": 0.8359375
+  },
+  "coverage_95": {
+   "severity": 0.9765625,
+   "impact": 0.96875
+  },
+  "b1_top1": 0.578125,
+  "top1_minus_b1_interval": [
+   0.328125,
+   0.5
+  ],
+  "specificity": 1.0,
+  "brier_skill_score_vs_climatology": 0.9711308015994636,
+  "brier_skill_score_vs_uniform": 0.9717368409199608,
+  "per_pipe": {
+   "FL-A-01": {
+    "primary_cases": 18,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0021125940524661904
+   },
+   "FL-A-02": {
+    "primary_cases": 10,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.005787182749646817
+   },
+   "FL-A-03": {
+    "primary_cases": 11,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0036373189467875226
+   },
+   "FL-A-04": {
+    "primary_cases": 10,
+    "status": "REPORTED",
+    "top1": 0.9,
+    "severity_conditional_mae": 0.004711604994188807
+   },
+   "FL-A-05": {
+    "primary_cases": 7,
+    "status": "INCONCLUSIVE"
+   },
+   "FL-A-06": {
+    "primary_cases": 0,
+    "status": "INCONCLUSIVE"
+   },
+   "FL-B-01": {
+    "primary_cases": 9,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.002277346875478598
+   },
+   "FL-B-02": {
+    "primary_cases": 10,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0016087631683710801
+   },
+   "FL-B-03": {
+    "primary_cases": 0,
+    "status": "INCONCLUSIVE"
+   },
+   "FL-B-04": {
+    "primary_cases": 14,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.006324215759427723
+   },
+   "FL-B-05": {
+    "primary_cases": 9,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.003473420759838333
+   },
+   "FL-B-06": {
+    "primary_cases": 8,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.007780992779667824
+   },
+   "GS-A": {
+    "primary_cases": 12,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0006616107015650722
+   },
+   "GS-B": {
+    "primary_cases": 10,
+    "status": "REPORTED",
+    "top1": 1.0,
+    "severity_conditional_mae": 0.0006683545868030646
+   },
+   "GS-TRUNK": {
+    "primary_cases": 0,
+    "status": "INCONCLUSIVE"
+   }
+  },
+  "expected_calibration_error": 0.04443031457586382,
+  "mean_entropy_before_nats": 0.2136642204153081,
+  "measurement_entropy_reduction": 0.2842153779114688,
+  "measurement_against_random_mean": 0.04363935271030321,
+  "measurement_against_random_interval": [
+   0.01912336727297371,
+   0.07633388358984391
+  ],
+  "measurement_top1_gain": 0.0078125,
+  "measurement_top1_gain_interval": [
+   0.0,
+   0.0234375
+  ],
+  "recommended_types": {
+   "PORTABLE_DP": 130,
+   "SHUT_IN_TEST": 20
+  },
+  "recommended_mean_duration_h": 1.1333333333333333,
+  "recommended_share_production_interrupting": 0.13333333333333333,
+  "random_types": {
+   "PORTABLE_DP": 43,
+   "PRECISION_PT": 40,
+   "SHUT_IN_TEST": 37,
+   "WELL_TEST": 30
+  },
+  "random_mean_duration_h": 1.8466666666666667,
+  "random_share_production_interrupting": 0.24666666666666667,
+  "recommended_mean_deferred_sm3": 575.7293815480986,
+  "random_mean_deferred_sm3": 1053.538411757514,
+  "recommended_entropy_reduction_per_hour_nats": 0.04496425437577037,
+  "measurement_against_same_type_mean": 0.024166929834926326,
+  "measurement_against_same_type_interval": [
+   0.00047766345474643595,
+   0.055808800063928875
+  ]
+ },
+ "acceptance": [
+  {
+   "line": "top1",
+   "value": 0.9921875,
+   "rule": ">= 0.7",
+   "status": "PASS"
+  },
+  {
+   "line": "top1_beats_B1",
+   "value": [
+    0.328125,
+    0.5
+   ],
+   "rule": "interval lower end > 0",
+   "status": "PASS"
+  },
+  {
+   "line": "top3",
+   "value": 1.0,
+   "rule": ">= 0.9",
+   "status": "PASS"
+  },
+  {
+   "line": "specificity",
+   "value": 1.0,
+   "rule": ">= 0.8",
+   "status": "PASS"
+  },
+  {
+   "line": "miss_rate",
+   "value": 0.0078125,
+   "rule": "<= 0.1",
+   "status": "PASS"
+  },
+  {
+   "line": "joint_success_rate",
+   "value": 0.9921875,
+   "rule": ">= 0.55",
+   "status": "PASS"
+  },
+  {
+   "line": "impact_within_tolerance",
+   "value": 1.0,
+   "rule": ">= 0.8",
+   "status": "PASS"
+  },
+  {
+   "line": "impact_median_relative_error",
+   "value": 0.004188226851934114,
+   "rule": "<= 0.15",
+   "status": "PASS"
+  },
+  {
+   "line": "brier_skill_score_vs_climatology",
+   "value": 0.9711308015994636,
+   "rule": ">= 0.5",
+   "status": "PASS"
+  },
+  {
+   "line": "expected_calibration_error",
+   "value": 0.04443031457586382,
+   "rule": "<= 0.1",
+   "status": "PASS"
+  },
+  {
+   "line": "coverage_80_severity",
+   "value": 0.859375,
+   "rule": "in [0.72, 0.88]",
+   "status": "PASS"
+  },
+  {
+   "line": "coverage_95_severity",
+   "value": 0.9765625,
+   "rule": "in [0.9, 0.98]",
+   "status": "PASS"
+  },
+  {
+   "line": "coverage_80_impact",
+   "value": 0.8359375,
+   "rule": "in [0.72, 0.88]",
+   "status": "PASS"
+  },
+  {
+   "line": "coverage_95_impact",
+   "value": 0.96875,
+   "rule": "in [0.9, 0.98]",
+   "status": "PASS"
+  },
+  {
+   "line": "measurement_entropy_reduction",
+   "value": 0.2842153779114688,
+   "rule": ">= 0.25",
+   "status": "PASS"
+  },
+  {
+   "line": "measurement_top1_gain",
+   "value": [
+    0.0078125,
+    [
+     0.0,
+     0.0234375
+    ]
+   ],
+   "rule": ">= 0.08 and interval lower end > 0",
+   "status": "FAIL"
+  },
+  {
+   "line": "measurement_against_random",
+   "value": [
+    0.01912336727297371,
+    0.07633388358984391
+   ],
+   "rule": "interval lower end > 0",
+   "status": "PASS"
+  }
+ ],
+ "support_met": true
+}

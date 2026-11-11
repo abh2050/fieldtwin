@@ -1,6 +1,6 @@
 # Diagnostic Milestone D1: gathering-line restriction diagnosis
 
-Status: **preregistered, not started.** No case has been generated, no method written, and no result seen. Frozen plan: [`config/diagnostics/d1_preregistration.yaml`](../../config/diagnostics/d1_preregistration.yaml), version 4. Why: [diagnostic reset](diagnostic_reset.md) and [ADR 0020](../adr/0020-diagnostic-reset.md).
+Status: **evaluated, NOT MET** (2026-11-11). The final result is in the [final report](../../reports/diagnostics/final_report.md): every in-regime line passed except measurement top-1 gain, and the degraded-operations, compressor-outside, and severity-high regimes failed lines.
 
 Everything in D1 is SYNTHETIC: fictional AETHER Field and its uncalibrated Gate 4 model. A D1 result says what a model-based diagnosis can do inside that model, not what it would do on a real field.
 
