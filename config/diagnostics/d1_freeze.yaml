@@ -1,16 +1,17 @@
 # D1 freeze record. Written by pipelines/diagnostics/freeze.py; never edited by hand.
 # Any change to a protected file, the preregistration, or this record after the freeze is a
 # protocol change, logged in the preregistration with its timing.
-method_commit: e9f8c008e23c70cd75333edc6edbf9ae2d56511d
+method_commit: fb38a97a69c4b3f182d0e7c16cfe0a94a11b082e
 preregistration_version: 4
 preregistration_sha256: c175b9d972b5ce80f76d72ba4f181f09bb7be14d27c324ecb6e083ee6f9bcffb
 method_config_sha256: beb06e4802b5253740f8a264b23d6f13f1f4956aa6b42e2c5cb9e53941fd6b38
-date: '2026-11-10'
+date: '2026-11-11'
 approval: Final splits unlock only when this record and every protected file match origin/main.
 open_questions_for_review:
 - In-regime cases come from the same model the method inverts, so the held-out regimes are the meaningful test.
-- The two in-regime measurement lines stay as preregistered; the method needs no further measurement on these matched-model
-  cases, so they may report NOT MET.
+- The two in-regime measurement lines stay as preregistered and may report NOT MET.
+- Degraded-operations timing (shut-ins from 24-4 h before diagnosis; a 6-18 h pad dropout ending at diagnosis) was
+  set after the first freeze, before any final case.
 protected_files:
   config/diagnostics/d1_method.yaml: beb06e4802b5253740f8a264b23d6f13f1f4956aa6b42e2c5cb9e53941fd6b38
   config/diagnostics/d1_preregistration.yaml: c175b9d972b5ce80f76d72ba4f181f09bb7be14d27c324ecb6e083ee6f9bcffb
@@ -46,11 +47,13 @@ protected_files:
   packages/scenario_engine/reference_solver.py: 231a6cb97a7a0998b8b1c53d276271447b6d7980046599666bce893bf8f1589c
   packages/scenario_engine/simulate.py: ed727f88da7d287a21db433f3436b935ffb6309d27fe31698d59b20456c0a44e
   pipelines/diagnostics/__init__.py: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  pipelines/diagnostics/cases.py: 2ff27afc9c9449a188b1d25cd9ecf0acead0683b90b883e99fff642cc56c79b3
+  pipelines/diagnostics/attempts.py: ad26be71e87b676b76f4205e453cabdb7b853326b3371ca17fe3d0687af09082
+  pipelines/diagnostics/cases.py: 69bd02fa18655bd46ae0cc8eee15843fa1ef4544719f91fe2168a92ef4b1ae4b
   pipelines/diagnostics/evaluate.py: ccc96f784191a587f624fa88a4ff291d932de552b368fb7b23519dc216cf2323
+  pipelines/diagnostics/final.py: cc365539f446214075ac5159c50c07004ec039a5a6cf5806cf280f0c5c80c9fd
   pipelines/diagnostics/freeze.py: ecbe7d65f16a04f6cfc861f64206d88d3f0300eceabf20b08da084b30ba6b95f
   pipelines/diagnostics/port.py: 5d7576c4f53e2123850235d139778309539a9391368549310dafdcf23afb3393
-  pipelines/diagnostics/scoring.py: afbe6a804bc35eda47c904f9d3ea1d10261d605057e24fe5c7b3df3cbfdb69e7
+  pipelines/diagnostics/scoring.py: 4cc64453dd1030096407f83e712013d57f4887fd95389e319b2137087243fa4b
   pyproject.toml: 1327679e0da5a8fb0b1648721d89994f75b179f56c2a86f30497ec12870b2574
   uv.lock: 3ffca4a66da89809de7f853671f2cf067c0677ec555ad556b014c8a9954e4e41
-record_sha256: da6a97de265ffaf22a0478fd3ab4248754c1f08d3a12b01377328b2269803f74
+record_sha256: 52e4e6d2099e48fadb238eebbdf912c6d187961717a660af5f56bc4b43386544
