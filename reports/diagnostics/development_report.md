@@ -86,6 +86,13 @@ After the first freeze was merged, a check before generation found that the gene
 
 On the development split, that would be NOT MET.
 
+A further review made final generation and scoring attempt-controlled and append-only. All six held-out regimes are now evaluated by name, with INCONCLUSIVE lines where support is missing, and pipe-level and regime-climatology reporting was added. Tests cover:
+- a rerun of a completed split
+- an interruption followed by a named resume, and a hard kill
+- an entirely failed regime
+- output files that already exist
+- preservation of earlier attempt records
+
 ## Process notes
 
 - Per-case rows are kept in `data/gold/diagnostics/results/`, which isn't committed. Metrics are committed here. The three temperature runs were trimmed to their metrics.

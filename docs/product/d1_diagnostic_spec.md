@@ -117,7 +117,13 @@ The preregistration itself is unchanged (version 4). These are implementation fi
    - These draws come after every other draw, and 24 regenerated development and calibration cases are byte-identical to the stored ones.
 2. **The calendar writer would have crashed** on any non-empty calendar. No development case had one. Found by the new degraded-operations test and fixed.
 3. **No runner applied the acceptance rules to the final splits.** `pipelines/diagnostics/final.py` now applies every preregistered line, the support minimums, and the outcome labels. Every case failure is kept and reported. Tests cover each outcome label.
-4. **Disclosure.** While checking fix 1, I built the parameters of one final held-out case in memory: degraded-operations case 0, which revealed its shut-in well and dropout pad. No telemetry or truth was simulated, and nothing was written. The tests use development-split seeds instead.
+4. **Attempt control** (after review of fixes 1 to 3). Final generation and scoring go through an append-only ledger, `reports/diagnostics/final/attempts.jsonl`. Each attempt records a START before any work and an END afterwards, with its commit, freeze-record hash, status, errors, and output hashes.
+   - A second completed attempt of the same kind for a split is refused.
+   - An incomplete attempt can only be continued by a resume that names it. Resumed generation checks that every case file already written matches its regeneration.
+   - Outputs are created exclusively and named by attempt, so no earlier report, result set, or outcome is overwritten.
+   - All six held-out regimes are evaluated by name. A regime with no successful rows, or too few, is INCONCLUSIVE and can't permit MET.
+   - Pipe-level results are reported only where support reaches 8. The unseen-pipes regime reports its own generator frequencies beside the fixed in-regime climatology.
+5. **Disclosure.** While checking fix 1, I built the parameters of one final held-out case in memory: degraded-operations case 0, which revealed its shut-in well and dropout pad. No telemetry or truth was simulated, and nothing was written. The tests use development-split seeds instead.
 
 ## Change log
 

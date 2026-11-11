@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import hashlib
+import io
 import json
 import zlib
 from pathlib import Path
@@ -40,6 +41,7 @@ from packages.scenario_engine.field_simulation import GOOD, _telemetry, _truth_f
 from packages.scenario_engine.network_graph import REPO_ROOT
 from packages.scenario_engine.network_solver import NetworkModel, solve_network
 
+from .attempts import COMPLETED, FAILED, AttemptRefused, begin, end, write_new
 from .freeze import FinalSplitLocked, check_freeze
 
 PREREGISTRATION = REPO_ROOT / "config" / "diagnostics" / "d1_preregistration.yaml"
@@ -230,17 +232,36 @@ def _sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def generate(split: str, root: Path = REPO_ROOT) -> dict[str, Any]:
-    if split in FINAL_SPLITS:
-        check_freeze(root)
-    elif split not in DEVELOPMENT_SPLITS:
-        raise ValueError(f"unknown split {split}")
+def ledger_path(root: Path) -> Path:
+    return root / "reports" / "diagnostics" / "final" / "attempts.jsonl"
+
+
+def _put(path: Path, data: bytes, final: bool, resuming: bool) -> str:
+    """Write a case file. A final file is created once; on a recorded resume an existing file must match."""
+    digest = hashlib.sha256(data).hexdigest()
+    if not final:
+        path.write_bytes(data)
+        return digest
+    if path.exists():
+        if not resuming:
+            raise FileExistsError(f"{path} already exists")
+        if _sha(path) != digest:
+            raise RuntimeError(f"{path} differs from its regeneration; refusing to continue")
+        return digest
+    with open(path, "xb") as handle:
+        handle.write(data)
+    return digest
+
+
+def _generate(split: str, root: Path, final: bool, resuming: bool) -> dict[str, Any]:
     g = prereg()["generator"]
     regimes = list(g["held_out_regimes"]) if split == "final_held_out" else ["in_regime"]
     count = (
         g["cases"]["final_held_out_per_regime"] if split == "final_held_out" else g["cases"][split]
     )
     folder = root / "data" / "gold" / "diagnostics" / split
+    if final and (folder / "manifest.json").exists():
+        raise FileExistsError(f"{folder / 'manifest.json'} already exists")
     for sub in ("telemetry", "calendar", "truth"):
         (folder / sub).mkdir(parents=True, exist_ok=True)
     entries, refused = [], []
@@ -250,21 +271,32 @@ def generate(split: str, root: Path = REPO_ROOT) -> dict[str, Any]:
             try:
                 wide, truth = simulate(case)
             except CaseRefused as error:
-                refused.append({"case_id": case.case_id, "reason": str(error)})
+                refused.append({"case_id": case.case_id, "regime": regime, "reason": str(error)})
                 continue
-            telemetry_path = folder / "telemetry" / f"{case.case_id}.parquet"
-            calendar_path = folder / "calendar" / f"{case.case_id}.json"
-            truth_path = folder / "truth" / f"{case.case_id}.json"
-            wide.to_parquet(telemetry_path, index=False)
-            calendar_path.write_text(json.dumps(calendar(case), indent=1) + "\n")
-            truth_path.write_text(json.dumps(truth, indent=1) + "\n")
+            buffer = io.BytesIO()
+            wide.to_parquet(buffer, index=False)
             entries.append(
                 {
                     "case_id": case.case_id,
                     "regime": regime,
-                    "telemetry_sha256": _sha(telemetry_path),
-                    "calendar_sha256": _sha(calendar_path),
-                    "truth_sha256": _sha(truth_path),
+                    "telemetry_sha256": _put(
+                        folder / "telemetry" / f"{case.case_id}.parquet",
+                        buffer.getvalue(),
+                        final,
+                        resuming,
+                    ),
+                    "calendar_sha256": _put(
+                        folder / "calendar" / f"{case.case_id}.json",
+                        (json.dumps(calendar(case), indent=1) + "\n").encode(),
+                        final,
+                        resuming,
+                    ),
+                    "truth_sha256": _put(
+                        folder / "truth" / f"{case.case_id}.json",
+                        (json.dumps(truth, indent=1) + "\n").encode(),
+                        final,
+                        resuming,
+                    ),
                 }
             )
     manifest = {
@@ -274,17 +306,55 @@ def generate(split: str, root: Path = REPO_ROOT) -> dict[str, Any]:
         "cases": entries,
         "refused": refused,
     }
-    (folder / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
-    return {"split": split, "cases": len(entries), "refused": len(refused)}
+    text = json.dumps(manifest, indent=1) + "\n"
+    if final:
+        digest = write_new(folder / "manifest.json", text)
+    else:
+        (folder / "manifest.json").write_text(text)
+        digest = hashlib.sha256(text.encode()).hexdigest()
+    return {
+        "split": split,
+        "cases": len(entries),
+        "refused": len(refused),
+        "manifest_sha256": digest,
+    }
+
+
+def generate(split: str, root: Path = REPO_ROOT, resume_of: str | None = None) -> dict[str, Any]:
+    """Development splits regenerate freely. A final split needs the approved freeze and a ledger attempt."""
+    if split in DEVELOPMENT_SPLITS:
+        return _generate(split, root, final=False, resuming=False)
+    if split not in FINAL_SPLITS:
+        raise ValueError(f"unknown split {split}")
+    check_freeze(root)
+    ledger = ledger_path(root)
+    start = begin(ledger, split, "GENERATE", root, resume_of)
+    try:
+        result = _generate(split, root, final=True, resuming=resume_of is not None)
+    except BaseException as error:
+        end(ledger, start, FAILED, {}, [f"{type(error).__name__}: {error}"])
+        raise
+    end(
+        ledger,
+        start,
+        COMPLETED,
+        {f"data/gold/diagnostics/{split}/manifest.json": result["manifest_sha256"]},
+        [],
+        {"cases": result["cases"], "refused": result["refused"]},
+    )
+    return {**result, "attempt_id": start["attempt_id"]}
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("split", choices=DEVELOPMENT_SPLITS + FINAL_SPLITS)
+    parser.add_argument(
+        "--resume", help="the incomplete final attempt to continue, as recorded in the ledger"
+    )
     args = parser.parse_args(argv)
     try:
-        print(json.dumps(generate(args.split), indent=2))
-    except FinalSplitLocked as error:
+        print(json.dumps(generate(args.split, resume_of=args.resume), indent=2))
+    except (FinalSplitLocked, AttemptRefused, FileExistsError) as error:
         print(f"Refused: {error}")
         return 2
     return 0

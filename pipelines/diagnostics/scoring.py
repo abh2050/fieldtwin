@@ -41,8 +41,21 @@ def bootstrap(
     return float(np.percentile(stats, 2.5)), float(np.percentile(stats, 97.5))
 
 
-def score(rows: list[dict[str, Any]], prereg: dict[str, Any]) -> dict[str, Any]:
-    """Rows hold per-case results: truth, diagnosis, after-measurement diagnosis, and comparators."""
+def score(
+    rows: list[dict[str, Any]], prereg: dict[str, Any], regime: str | None = None
+) -> dict[str, Any]:
+    """Rows hold per-case results: truth, diagnosis, after-measurement diagnosis, and comparators.
+
+    With a held-out `regime`, Brier skill is also reported against that regime's own generator
+    frequencies, alongside the fixed in-regime climatology that stays the acceptance comparator.
+    """
+    if not rows:
+        return {
+            "cases": 0,
+            "primary_cases": 0,
+            "no_restriction_cases": 0,
+            "material_subset_cases": 0,
+        }
     s = prereg["scoring"]
     seed = s["intervals"].split("seed ")[-1] if isinstance(s["intervals"], str) else 20261111
     seed = int(str(seed).strip()) if str(seed).strip().isdigit() else 20261111
@@ -182,6 +195,38 @@ def score(rows: list[dict[str, Any]], prereg: dict[str, Any]) -> dict[str, Any]:
     uni_brier = np.array([brier(uniform, r["truth"]["faulted_pipe"], labels) for r in rows])
     out["brier_skill_score_vs_climatology"] = float(1 - model_brier.mean() / clim_brier.mean())
     out["brier_skill_score_vs_uniform"] = float(1 - model_brier.mean() / uni_brier.mean())
+    if regime is not None:
+        own = climatology(prereg, regime)
+        own_brier = np.array([brier(own, r["truth"]["faulted_pipe"], labels) for r in rows])
+        out["regime_climatology"] = own
+        out["brier_skill_score_vs_regime_climatology"] = float(
+            1 - model_brier.mean() / own_brier.mean()
+        )
+    # Pipe-level results only where support reaches the frozen minimum; the rest are INCONCLUSIVE.
+    minimum = prereg["minimum_support"]["per_pipe"]["primary_cases"]
+    per_pipe: dict[str, Any] = {}
+    for pipe in prereg["hypotheses"]["candidate_pipes"]:
+        mine = [r for r in primary if r["truth"]["faulted_pipe"] == pipe]
+        if len(mine) < minimum:
+            per_pipe[pipe] = {"primary_cases": len(mine), "status": "INCONCLUSIVE"}
+            continue
+        hits = [r for r in mine if r["diagnosis"]["ranking"][0] == pipe]
+        per_pipe[pipe] = {
+            "primary_cases": len(mine),
+            "status": "REPORTED",
+            "top1": len(hits) / len(mine),
+            "severity_conditional_mae": float(
+                np.mean(
+                    [
+                        abs(r["diagnosis"]["severity"]["point"] - r["truth"]["severity"])
+                        for r in hits
+                    ]
+                )
+            )
+            if hits
+            else None,
+        }
+    out["per_pipe"] = per_pipe
     top_p = np.array([r["diagnosis"]["probabilities"][r["diagnosis"]["ranking"][0]] for r in rows])
     hit = np.array(
         [r["diagnosis"]["ranking"][0] == r["truth"]["faulted_pipe"] for r in rows], dtype=float
