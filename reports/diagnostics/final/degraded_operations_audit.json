@@ -1,0 +1,615 @@
+{
+ "purpose": "Evidence for the degraded-operations finding in reports/diagnostics/final_report.md. Read-only extract; nothing was rescored.",
+ "source_results": "data/gold/diagnostics/results/final_held_out-score-001.json",
+ "source_results_sha256": "fc8f221e0b0145d251231918cf35611bc51ebaf47d07f5636517fc7832a49c7f",
+ "ledger_attempt": "final_held_out-score-001",
+ "ledger_recorded_sha256": "fc8f221e0b0145d251231918cf35611bc51ebaf47d07f5636517fc7832a49c7f",
+ "summary_by_relation": {
+  "fault on the other pad": {
+   "cases": 11,
+   "correct": 11
+  },
+  "fault on the dropped pad": {
+   "cases": 21,
+   "correct": 3
+  },
+  "fault on the dropped pad, own well shut in": {
+   "cases": 1,
+   "correct": 0
+  },
+  "no restriction": {
+   "cases": 6,
+   "correct": 6
+  },
+  "fault on the other pad, own well shut in": {
+   "cases": 1,
+   "correct": 0
+  }
+ },
+ "restriction_cases_top1": "14 of 34",
+ "mean_probability_of_top_when_wrong": 0.2886,
+ "cases": [
+  {
+   "case_id": "d1-final_held_out-degraded_operations-000",
+   "faulted_pipe": "FL-A-05",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-01"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-A-05",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-001",
+   "faulted_pipe": "FL-B-01",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-05"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-B-03",
+   "correct": false,
+   "probability_of_top": 0.130797,
+   "probability_of_true": 0.127947
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-002",
+   "faulted_pipe": "GS-A",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-01",
+   "correct": false,
+   "probability_of_top": 0.999979,
+   "probability_of_true": 0.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-003",
+   "faulted_pipe": "FL-A-02",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-01",
+    "B-02"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-06",
+   "correct": false,
+   "probability_of_top": 0.149657,
+   "probability_of_true": 0.149375
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-004",
+   "faulted_pipe": "GS-B",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-02",
+    "A-04"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-B-03",
+   "correct": false,
+   "probability_of_top": 0.195317,
+   "probability_of_true": 0.149175
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-005",
+   "faulted_pipe": "GS-A",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-04",
+    "B-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "GS-A",
+   "correct": true,
+   "probability_of_top": 0.19015,
+   "probability_of_true": 0.19015
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-006",
+   "faulted_pipe": "FL-B-02",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-05",
+    "B-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.394968,
+   "probability_of_true": 0.052095
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-007",
+   "faulted_pipe": "FL-A-02",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-02",
+    "A-05"
+   ],
+   "relation": "fault on the dropped pad, own well shut in",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.396043,
+   "probability_of_true": 0.149616
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-008",
+   "faulted_pipe": "FL-A-03",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-04"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-05",
+   "correct": false,
+   "probability_of_top": 0.148227,
+   "probability_of_true": 0.145244
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-009",
+   "faulted_pipe": "FL-B-06",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-01",
+    "A-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.421383,
+   "probability_of_true": 0.029795
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-010",
+   "faulted_pipe": "FL-A-04",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-06",
+    "B-05"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-A-04",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-011",
+   "faulted_pipe": "FL-B-05",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-05",
+    "A-06"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-B-05",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-012",
+   "faulted_pipe": "FL-B-01",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-05"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-B-01",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-013",
+   "faulted_pipe": "FL-A-01",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-05",
+    "B-02"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-06",
+   "correct": false,
+   "probability_of_top": 0.152569,
+   "probability_of_true": 0.144779
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-014",
+   "faulted_pipe": "NONE",
+   "fault_pad": null,
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-02",
+    "B-05"
+   ],
+   "relation": "no restriction",
+   "top_ranked": "NONE",
+   "correct": true,
+   "probability_of_top": 0.393577,
+   "probability_of_true": 0.393577
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-015",
+   "faulted_pipe": "FL-B-06",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "B-01",
+    "B-03"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "GS-B",
+   "correct": false,
+   "probability_of_top": 0.206828,
+   "probability_of_true": 0.200098
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-016",
+   "faulted_pipe": "FL-A-01",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-05"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-04",
+   "correct": false,
+   "probability_of_top": 0.149873,
+   "probability_of_true": 0.148701
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-017",
+   "faulted_pipe": "NONE",
+   "fault_pad": null,
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-04",
+    "B-05"
+   ],
+   "relation": "no restriction",
+   "top_ranked": "NONE",
+   "correct": true,
+   "probability_of_top": 0.446781,
+   "probability_of_true": 0.446781
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-018",
+   "faulted_pipe": "NONE",
+   "fault_pad": null,
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-03"
+   ],
+   "relation": "no restriction",
+   "top_ranked": "NONE",
+   "correct": true,
+   "probability_of_top": 0.276851,
+   "probability_of_true": 0.276851
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-019",
+   "faulted_pipe": "GS-B",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-01",
+    "A-04"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-B-05",
+   "correct": false,
+   "probability_of_top": 0.33635,
+   "probability_of_true": 0.012522
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-020",
+   "faulted_pipe": "FL-B-05",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-02"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.465213,
+   "probability_of_true": 0.043128
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-021",
+   "faulted_pipe": "FL-A-04",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-02",
+    "B-05"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "GS-A",
+   "correct": false,
+   "probability_of_top": 0.171832,
+   "probability_of_true": 0.171319
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-022",
+   "faulted_pipe": "NONE",
+   "fault_pad": null,
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-05"
+   ],
+   "relation": "no restriction",
+   "top_ranked": "NONE",
+   "correct": true,
+   "probability_of_top": 0.554213,
+   "probability_of_true": 0.554213
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-023",
+   "faulted_pipe": "GS-A",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-04",
+    "B-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-01",
+   "correct": false,
+   "probability_of_top": 0.145146,
+   "probability_of_true": 0.141307
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-024",
+   "faulted_pipe": "FL-B-06",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-04",
+    "B-06"
+   ],
+   "relation": "fault on the other pad, own well shut in",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.434298,
+   "probability_of_true": 0.164068
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-025",
+   "faulted_pipe": "FL-A-05",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-04"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-05",
+   "correct": true,
+   "probability_of_top": 0.105366,
+   "probability_of_true": 0.105366
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-026",
+   "faulted_pipe": "FL-B-05",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-03",
+    "A-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.244419,
+   "probability_of_true": 0.071559
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-027",
+   "faulted_pipe": "FL-A-03",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-05"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-06",
+   "correct": false,
+   "probability_of_top": 0.146869,
+   "probability_of_true": 0.142838
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-028",
+   "faulted_pipe": "GS-A",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-05",
+    "A-06"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "GS-A",
+   "correct": true,
+   "probability_of_top": 0.209473,
+   "probability_of_true": 0.209473
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-029",
+   "faulted_pipe": "FL-B-06",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-02",
+    "B-04"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-B-06",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-030",
+   "faulted_pipe": "GS-B",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-03"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "GS-B",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-031",
+   "faulted_pipe": "FL-A-04",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-03",
+    "B-01"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "NONE",
+   "correct": false,
+   "probability_of_top": 0.310163,
+   "probability_of_true": 0.071455
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-032",
+   "faulted_pipe": "NONE",
+   "fault_pad": null,
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "A-02"
+   ],
+   "relation": "no restriction",
+   "top_ranked": "NONE",
+   "correct": true,
+   "probability_of_top": 0.196571,
+   "probability_of_true": 0.196571
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-033",
+   "faulted_pipe": "FL-A-02",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-B",
+   "shut_in_wells": [
+    "B-03"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-A-02",
+   "correct": true,
+   "probability_of_top": 0.912399,
+   "probability_of_true": 0.912399
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-034",
+   "faulted_pipe": "FL-B-04",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-05",
+    "B-06"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-B-04",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-035",
+   "faulted_pipe": "NONE",
+   "fault_pad": null,
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-05"
+   ],
+   "relation": "no restriction",
+   "top_ranked": "NONE",
+   "correct": true,
+   "probability_of_top": 0.537752,
+   "probability_of_true": 0.537752
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-036",
+   "faulted_pipe": "FL-B-02",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-01"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-B-02",
+   "correct": true,
+   "probability_of_top": 0.996008,
+   "probability_of_true": 0.996008
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-037",
+   "faulted_pipe": "GS-B",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "B-04"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "GS-B",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-038",
+   "faulted_pipe": "FL-A-04",
+   "fault_pad": "PAD-A",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-03"
+   ],
+   "relation": "fault on the dropped pad",
+   "top_ranked": "FL-A-02",
+   "correct": false,
+   "probability_of_top": 0.172021,
+   "probability_of_true": 0.168884
+  },
+  {
+   "case_id": "d1-final_held_out-degraded_operations-039",
+   "faulted_pipe": "FL-B-02",
+   "fault_pad": "PAD-B",
+   "dropout_pad": "PAD-A",
+   "shut_in_wells": [
+    "A-02",
+    "A-05"
+   ],
+   "relation": "fault on the other pad",
+   "top_ranked": "FL-B-02",
+   "correct": true,
+   "probability_of_top": 1.0,
+   "probability_of_true": 1.0
+  }
+ ]
+}

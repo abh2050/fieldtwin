@@ -61,7 +61,10 @@ The unseen-pipes regime scored a Brier skill of 0.953 against the fixed in-regim
 
 What failed, examined after the fact without changing anything:
 
-- **Degraded operations: the method can't localize where it has no data, and doesn't say so.** When the faulted pipe was on the pad whose telemetry was lost before diagnosis, it was ranked first in 3 of 22 cases. When the fault was on the other pad, it was ranked first in 11 of 11 cases. Two cases where the faulted flowline's own well was shut in were both missed. The method drops sensors with no data, but its probabilities and intervals stay confident instead of widening: coverage was 0.44 and 0.59. This is the most important finding.
+- **Degraded operations: the method can't localize where it has no data.** When the faulted pipe was on the pad whose telemetry was lost before diagnosis, it was ranked first in 3 of 22 cases. When the fault was on the other pad, it was ranked first in 11 of 11 cases. Two cases where the faulted flowline's own well was shut in were both missed.
+  - **The pipe ranking mostly signalled its uncertainty.** In 12 of the 20 misses, the top pipe got 0.3 or less, with probability spread across the dropped pad's indistinguishable candidates. In 7, it got between 0.3 and 0.9, mostly favouring "no restriction". One miss was confidently wrong: case 002 gave 0.99998 to FL-A-01 when the fault was in GS-A. Correct answers got 0.82 on average.
+  - **The severity and impact intervals didn't widen** with the missing data. Their 80% coverage was 0.44 and 0.59.
+  - This is the most important finding. The case-by-case evidence is in [`final/degraded_operations_audit.json`](final/degraded_operations_audit.json), extracted read-only from the results file whose SHA-256 the attempt ledger records.
 - **Compressor outside the trained range: localization holds, impact doesn't.** Every faulted pipe was ranked first, but impact was overestimated by a median factor of 1.6 (range 0.18 to 2.7), so impact coverage was 0.03. With a unit offline and the setpoint outside the trained range, the station's response no longer matches the method's assumption that all compressors are available at the measured suction pressure.
 - **Severity high: accurate, but overconfident.** The severity mean absolute error was 0.0001, while the median 80% interval was only 0.0005 wide, so the intervals missed the truth about half the time. Accuracy isn't the problem here; the uncertainty is understated at the top of the severity range.
 
@@ -71,7 +74,7 @@ Three regimes passed outright: unseen pipes, high noise, and deliverability outs
 
 - Inside the model it was built on, inverse diagnosis localizes and sizes restrictions almost perfectly, with calibrated uncertainty. It beats the residual baseline by 33 to 50 points of top-1, and it recommends measurements that are more informative and less burdensome than random ones.
 - It does not yet earn the measurement step: when the diagnosis is already certain, no measurement can improve it, and the preregistered gain wasn't reached.
-- It is brittle exactly where real fields are hard: missing telemetry, equipment states outside its assumptions, and extreme severities. There its confidence doesn't fall with its accuracy.
+- It is brittle exactly where real fields are hard: missing telemetry, equipment states outside its assumptions, and extreme severities. There its intervals don't widen as its accuracy falls, although its pipe ranking mostly does show the uncertainty when telemetry is missing.
 - None of this is evidence about a real field. The cases are synthetic, the model is uncalibrated, and in-regime cases share the method's model structure.
 
 ## Disclosures
@@ -80,3 +83,4 @@ Three regimes passed outright: unseen pipes, high noise, and deliverability outs
 - One final held-out case's parameters were built in memory before the final freeze, while checking the degraded-operations fix. No telemetry or truth was produced.
 - The degraded-operations timing was set after the first freeze and before any final case.
 - Per-case rows are kept in `data/gold/diagnostics/results/`, which isn't committed. Metrics and acceptance lines are in `final/`.
+- **Correction after review.** The first version of this report said the degraded-operations "probabilities and intervals stay confident instead of widening". The audit extract, produced after review from the recorded results and changing nothing, shows that was wrong about the pipe probabilities, which mostly did spread out. It was right about the intervals. The wording above was corrected. No number, line, or outcome changed.
