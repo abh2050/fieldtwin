@@ -346,3 +346,99 @@ def test_degraded_inputs_still_give_a_valid_diagnosis(case):
     assert rec is not None and not (
         rec["kind"] in ("WELL_TEST", "SHUT_IN_TEST") and rec["target"] == "A-02"
     )
+
+
+# Degraded operations and the final acceptance rules (both fixed before any final case existed)
+
+
+def test_degraded_operations_regime_creates_shut_ins_and_a_dropout():
+    """Built from the development split's seeds, so no final case is drawn."""
+    case = build_case("development", 3, regime="degraded_operations")
+    shut = case.planned_operations
+    assert 1 <= len(shut) <= 2 and all(op.kind == "SHUT_IN_WELL" for op in shut)
+    diagnosis_offset = PREREG["generator"]["duration_s"] - PREREG["generator"]["interval_s"]
+    for op in shut:
+        assert (
+            diagnosis_offset - 24 * 3600 <= op.start_s <= diagnosis_offset - 4 * 3600
+            and op.active(diagnosis_offset)
+        )
+    [drop] = case.communication_faults
+    assert drop.group in ("PAD-A", "PAD-B")
+    assert 6 * 3600 - 300 <= PREREG["generator"]["duration_s"] - drop.onset_s <= 18 * 3600
+    telemetry, truth = simulate(case)
+    lost = [c for c in telemetry.columns if c.startswith(drop.group[-1] + "-")]
+    assert telemetry.loc[telemetry["offset_s"] >= drop.onset_s, lost].isna().all().all()
+    assert set(truth["true_state"]["shut_in_wells"]) == {op.asset_id for op in shut}
+    assert cases.calendar(case)["planned_operations"]
+
+
+def test_other_regimes_and_splits_draw_no_degradation():
+    for regime in ("in_regime", "noise_high", "unseen_pipes"):
+        case = build_case("development", 3, regime=regime)
+        assert not case.planned_operations and not case.communication_faults
+
+
+def _metrics(**overrides):
+    base = {
+        "primary_cases": 120,
+        "no_restriction_cases": 20,
+        "impact_relative_error_cases": 60,
+        "top1": 0.9,
+        "top1_minus_b1_interval": [0.1, 0.3],
+        "top3": 0.95,
+        "specificity": 0.9,
+        "miss_rate": 0.0,
+        "joint_success_rate": 0.8,
+        "impact_within_tolerance": 0.9,
+        "impact_median_relative_error": 0.05,
+        "brier_skill_score_vs_climatology": 0.8,
+        "expected_calibration_error": 0.05,
+        "coverage_80": {"severity": 0.8, "impact": 0.8},
+        "coverage_95": {"severity": 0.95, "impact": 0.95},
+        "measurement_entropy_reduction": 0.3,
+        "measurement_top1_gain": 0.1,
+        "measurement_top1_gain_interval": [0.02, 0.2],
+        "measurement_against_random_interval": [0.01, 0.05],
+    }
+    return {**base, **overrides}
+
+
+def test_acceptance_rules_follow_the_preregistration():
+    from pipelines.diagnostics.final import held_out_lines, in_regime_lines, outcome
+
+    lines, supported = in_regime_lines(_metrics(), PREREG)
+    assert supported and all(line["status"] == "PASS" for line in lines)
+    assert outcome(lines, supported, None) == {"outcome": "PENDING_HELD_OUT"}
+    held = held_out_lines({"noise_high": _metrics(top1=0.5)}, _metrics(primary_cases=150), PREREG)
+    assert outcome(lines, supported, held)["outcome"] == "MET_IN_REGIME_ONLY"
+    held_ok = held_out_lines({"noise_high": _metrics()}, _metrics(primary_cases=150), PREREG)
+    assert outcome(lines, supported, held_ok) == {"outcome": "MET"}
+    failing, ok = in_regime_lines(
+        _metrics(measurement_top1_gain=0.0, measurement_top1_gain_interval=[0.0, 0.0]), PREREG
+    )
+    assert outcome(failing, ok, held_ok)["failed_in_regime_lines"] == ["measurement_top1_gain"]
+    short, short_ok = in_regime_lines(_metrics(primary_cases=50), PREREG)
+    assert not short_ok and outcome(short, short_ok, held_ok)["outcome"] == "INCONCLUSIVE"
+    sparse = held_out_lines(
+        {"noise_high": _metrics(primary_cases=10)}, _metrics(primary_cases=150), PREREG
+    )
+    assert any(line["status"] == "INCONCLUSIVE" for line in sparse)
+    assert outcome(lines, supported, sparse)["outcome"] == "MET_IN_REGIME_ONLY"
+    few_big, few_ok = in_regime_lines(_metrics(impact_relative_error_cases=10), PREREG)
+    assert (
+        next(line for line in few_big if line["line"] == "impact_median_relative_error")["status"]
+        == "INCONCLUSIVE"
+    )
+    assert outcome(few_big, few_ok, held_ok)["outcome"] == "NOT_MET"
+
+
+def test_the_final_runner_refuses_without_an_approved_freeze(monkeypatch):
+    from pipelines.diagnostics import final
+
+    monkeypatch.setattr(
+        final, "check_freeze", lambda root: (_ for _ in ()).throw(FinalSplitLocked("locked"))
+    )
+    with pytest.raises(FinalSplitLocked):
+        final.run_split("final_in_regime")
+    with pytest.raises(ValueError):
+        final.run_split("development")

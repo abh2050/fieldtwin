@@ -30,7 +30,12 @@ from packages.scenario_engine.benchmark_runs import (
     _check_envelope,
     _config_for,
 )
-from packages.scenario_engine.field_scenarios import FieldScenario, PhysicalFault
+from packages.scenario_engine.field_scenarios import (
+    CommunicationFault,
+    FieldScenario,
+    PhysicalFault,
+    PlannedOperation,
+)
 from packages.scenario_engine.field_simulation import GOOD, _telemetry, _truth_frame, default_setup
 from packages.scenario_engine.network_graph import REPO_ROOT
 from packages.scenario_engine.network_solver import NetworkModel, solve_network
@@ -109,6 +114,36 @@ def build_case(split: str, index: int, regime: str = "in_regime") -> BenchmarkCa
                 max_severity=round(_uniform(rng, ranges["severity"]), 6),
             ),
         )
+    # Degraded operations. Drawn after every other value, so cases without them are unchanged.
+    # Timing (not fixed by the preregistration; set here before any final case existed):
+    # - shut-ins begin 24 to 4 hours before the diagnosis time and are still active at it;
+    # - the dropout covers one pad for the 6 to 18 hours immediately before the diagnosis time.
+    planned: tuple[PlannedOperation, ...] = ()
+    comms: tuple[CommunicationFault, ...] = ()
+    duration = g["duration_s"]
+    diagnosis = duration - interval
+    shut_in = ranges.get("shut_in_wells") or 0
+    if isinstance(shut_in, list):
+        count_shut = int(rng.integers(shut_in[0], shut_in[1] + 1))
+        chosen = rng.choice([w.id for w in config.wells], size=count_shut, replace=False)
+        planned = tuple(
+            PlannedOperation(
+                kind="SHUT_IN_WELL",
+                asset_id=str(well),
+                start_s=int(diagnosis - _uniform(rng, [4.0, 24.0]) * 3600) // interval * interval,
+                end_s=duration + 3600,
+            )
+            for well in sorted(chosen)
+        )
+    if ranges.get("dropout"):
+        hours = _uniform(rng, [6.0, 18.0])
+        comms = (
+            CommunicationFault(
+                group=str(rng.choice(["PAD-A", "PAD-B"])),
+                onset_s=int(duration - hours * 3600) // interval * interval,
+                end_s=duration + 3600,
+            ),
+        )
     return BenchmarkCase(
         case_id=f"d1-{split}-{regime}-{index:03d}",
         split=split,
@@ -121,6 +156,8 @@ def build_case(split: str, index: int, regime: str = "in_regime") -> BenchmarkCa
         units_offline=offline,
         setpoint_steps=((0, round(setpoint, 1)),),
         physical_faults=physical,
+        communication_faults=comms,
+        planned_operations=planned,
     )
 
 
@@ -185,7 +222,7 @@ def calendar(case: BenchmarkCase) -> dict[str, Any]:
     """What an operator knows in advance. Empty for every development and calibration case."""
     return {
         "case_id": case.case_id,
-        "planned_operations": [dataclasses.asdict(op) for op in case.planned_operations],
+        "planned_operations": [op.model_dump() for op in case.planned_operations],
     }
 
 

@@ -107,6 +107,18 @@ A result below its minimum is INCONCLUSIVE and never counts toward MET.
 3. **One final run.** The final evaluation runs once through the attempt recorder, which keeps every attempt. A rerun is allowed only after a crash, with the cause stated.
 4. **Logged changes.** Any change to the preregistration gets a new version and an entry with date, reason, and timing: before development results, after development results but before the freeze, after the freeze but before final results, or after final results.
 
+## Fixes after the first freeze, before any final case
+
+The preregistration itself is unchanged (version 4). These are implementation fixes, timed `AFTER_FREEZE_BEFORE_FINAL_RESULTS`, made under a new freeze record and review:
+
+1. **The degraded-operations regime wasn't implemented.** The frozen generator ignored the regime's shut-in wells and telemetry dropout, so its 40 cases would have been in-regime cases with a different label. The generator now creates them. The preregistration doesn't fix the timing, so it was set here:
+   - One or two wells, listed in the planned-operations calendar, shut in from between 24 and 4 hours before the diagnosis time and still shut in at it.
+   - One pad's telemetry lost for the 6 to 18 hours immediately before the diagnosis time.
+   - These draws come after every other draw, and 24 regenerated development and calibration cases are byte-identical to the stored ones.
+2. **The calendar writer would have crashed** on any non-empty calendar. No development case had one. Found by the new degraded-operations test and fixed.
+3. **No runner applied the acceptance rules to the final splits.** `pipelines/diagnostics/final.py` now applies every preregistered line, the support minimums, and the outcome labels. Every case failure is kept and reported. Tests cover each outcome label.
+4. **Disclosure.** While checking fix 1, I built the parameters of one final held-out case in memory: degraded-operations case 0, which revealed its shut-in well and dropout pad. No telemetry or truth was simulated, and nothing was written. The tests use development-split seeds instead.
+
 ## Change log
 
 | Version | Date | Timing | Change |

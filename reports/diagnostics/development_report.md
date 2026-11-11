@@ -78,6 +78,14 @@ The first freeze guard checked only the freeze record's preregistration hash. Re
 
 The guard was strengthened after the development results; it changes no computed value. Neither final split has been generated.
 
+## Fixes before the final run
+
+After the first freeze was merged, a check before generation found that the generator ignored the degraded-operations regime's shut-ins and dropout. Fixing it exposed a crash in the calendar writer, and also showed that no runner applied the acceptance rules to final splits. All three were fixed under a new freeze; see the [D1 specification](../../docs/product/d1_diagnostic_spec.md). Applied as a dry run to the development metrics above, the acceptance rules pass every line except four:
+- the two 80% coverage lines, at 0.90 and 0.89 against an upper edge of 0.88
+- the two measurement lines
+
+On the development split, that would be NOT MET.
+
 ## Process notes
 
 - Per-case rows are kept in `data/gold/diagnostics/results/`, which isn't committed. Metrics are committed here. The three temperature runs were trimmed to their metrics.
