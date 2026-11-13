@@ -32,3 +32,5 @@ data/fixtures_local/
 # MLflow stores, kept local
 mlruns/
 mlflow.db
+apps/web/dist/
+*.tsbuildinfo
