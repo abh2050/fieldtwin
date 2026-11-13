@@ -1,7 +1,9 @@
 {
   "name": "fieldtwin",
   "private": true,
-  "version": "0.0.0",
-  "description": "Root placeholder. The web app is added under apps/web in Gate 8.",
-  "workspaces": []
+  "version": "0.8.0",
+  "description": "FieldTwin JavaScript workspaces. The operations dashboard is apps/web (Gate 8).",
+  "workspaces": [
+    "apps/web"
+  ]
 }

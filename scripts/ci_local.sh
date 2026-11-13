@@ -25,10 +25,15 @@ run uv sync --frozen
 run uv run ruff check .
 run uv run ruff format --check .
 run uv run mypy
-run uv run pytest tests/unit tests/integration/test_acquisition.py -q
+run uv run pytest tests/unit tests/integration/test_acquisition.py apps/api/tests/test_api_offline.py -q
 run uv run pytest tests/contract -q
-run uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py -m "db and not acquired" -o addopts=--strict-markers -q
+run uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py apps/api/tests/test_api_db.py -m "db and not acquired" -o addopts=--strict-markers -q
 run uv run pytest tests/provenance -m "db and not acquired" -o addopts=--strict-markers -q
+run npm ci
+run npm audit --omit=dev --audit-level=high
+run npm --workspace apps/web run typecheck
+run npm --workspace apps/web run test
+run npm --workspace apps/web run build
 uv export --frozen --no-hashes --no-emit-project --format requirements-txt > requirements.txt 2>/dev/null
 run uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
 rm -f requirements.txt

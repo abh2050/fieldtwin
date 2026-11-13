@@ -1,0 +1,615 @@
+Gate 8 execution log
+started=2026-11-13T04:06:37Z
+
+=== Demo database
+$ bash scripts/app_db.sh
+ Container fieldtwin-postgres-1 Stopping 
+ Container fieldtwin-postgres-1 Stopped 
+ Container fieldtwin-postgres-1 Removing 
+ Container fieldtwin-postgres-1 Removed 
+ Volume fieldtwin_pgdata Removing 
+ Network fieldtwin_default Removing 
+ Volume fieldtwin_pgdata Removed 
+ Network fieldtwin_default Removed 
+ Network fieldtwin_default Creating 
+ Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Creating 
+ Volume fieldtwin_pgdata Creating 
+ Volume fieldtwin_pgdata Created 
+ Volume fieldtwin_pgdata Created 
+ Network fieldtwin_default Created 
+ Network fieldtwin_default Created 
+ Container fieldtwin-postgres-1 Creating 
+ Container fieldtwin-postgres-1 Created 
+ Container fieldtwin-postgres-1 Starting 
+ Container fieldtwin-postgres-1 Started 
+ Container fieldtwin-postgres-1 Waiting 
+ Container fieldtwin-postgres-1 Healthy 
+server_version=16.4 (Debian 16.4-1.pgdg110+2)
+postgis_version=3.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+applied 0001_foundation.sql
+applied 0002_assets.sql
+applied 0003_measurement_semantics.sql
+applied 0004_records.sql
+applied 0005_compatibility_scenarios.sql
+applied 0006_quality_reconciliation.sql
+applied 0007_operations.sql
+applied 0008_views.sql
+applied 0009_reconciliation_decisions.sql
+applied 0010_scenario_runs_and_events.sql
+applied 0011_domain_boundaries.sql
+applied 0012_application_role_and_provenance_chain.sql
+applied 0013_physical_network.sql
+applied 0014_aerial_evidence.sql
+applied 0015_decision_support.sql
+applied 0016_application_state.sql
+migrations_applied=16
+tables_in_public=51
+seeded source_systems: 5
+seeded units: 13
+seeded unit_conversions: 11
+seeded equipment_classes: 7
+seeded transformations: 22
+seeded physical_nodes: 32
+seeded physical_edges: 36
+seeded measurement_definitions: 41
+seeded equipment_measurement_capabilities: 41
+seeded sensor_tags: 68
+seeded sensor_tag_mappings: 68
+seeded production_unit_rules: 3
+seeded source_event_classes: 10
+seeded domain_compatibility_requirements: 7
+seeded domain_compatibility_assessments: 40
+seeded domain_boundaries: 4
+seeded assets: 47
+seeded asset_relationships: 21
+{
+  "nm_ocd": {
+    "batch_id": "nm_ocd-20261105-15ddeb88ae",
+    "wells": 681,
+    "completions": 441,
+    "history": 1098,
+    "production": 36754,
+    "reconciliation_evidence": 2724,
+    "exceptions": 40
+  },
+  "petrobras_3w": {
+    "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+    "wells": 40,
+    "events": 498,
+    "observations": 13446,
+    "exceptions": 10
+  }
+}
+benchmark_events=498
+nominal: sha256=d36fdd5afba2677cc9d5c6eb523e3659f9402b8fc657c9e78148a40f8811cd13 invariants=12 events=0
+fault: sha256=a365b1e3321c523e1ad84ddc15b693c581c3837b6fd6aecab50a258c03658403 invariants=12 events=2
+{"runs": 2, "series": 8, "links": 8, "events": 2, "assignments": 2}
+AETHER-NET-NORMAL: sha256=80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1 checks=16 rows=78624
+AETHER-FAULT-001-NET: sha256=54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8 checks=17 rows=78624
+AETHER-NET-COMPRESSOR-DERATE: sha256=718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab checks=17 rows=78624
+AETHER-NET-SENSOR-DRIFT: sha256=4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6 checks=16 rows=78624
+AETHER-NET-COMM-DROPOUT: sha256=59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7 checks=16 rows=78624
+AETHER-NET-PLANNED-SHUTDOWN: sha256=35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc checks=17 rows=78624
+{"runs": 6, "series": 234, "links": 234, "events": 9}
+{
+  "identity": 1123,
+  "semantic": 164,
+  "geospatial": 711,
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+{
+  "links": 596,
+  "links_skipped_unknown_well": 0,
+  "reviews": 0,
+  "inspection_requests": 1,
+  "inspection_requests_without_loaded_event": 0,
+  "plume_observations": 455,
+  "image_observations": 60
+}
+{
+  "alarms": 4,
+  "recommendations": 4,
+  "work_orders": 0,
+  "transitions": 0
+}
+alarms|4
+recommendations|4
+work_orders|0
+inspection_requests|1
+Application database ready. Next: make app-tokens, then make app-api and make app-web.
+exit=0
+
+=== Live API smoke test
+$ uv run python scripts/gate8_smoke.py http://127.0.0.1:8765
+{
+ "reads": {
+  "/health": 200,
+  "/api/v1/facilities": 200,
+  "/api/v1/assets?limit=5": 200,
+  "/api/v1/assets/GS-A": 200,
+  "/api/v1/assets/GS-A/relationships": 200,
+  "/api/v1/assets/A-01/observations?limit=5": 200,
+  "/api/v1/network": 200,
+  "/api/v1/data-sources": 200,
+  "/api/v1/ingestion-runs": 200,
+  "/api/v1/data-quality?limit=5": 200,
+  "/api/v1/lineage/observation:1": 200,
+  "/api/v1/scenarios": 200,
+  "/api/v1/scenarios/AETHER-FAULT-001-NET/runs/AETHER-FAULT-001-NET:v1:fault/tags": 200,
+  "/api/v1/scenarios/AETHER-FAULT-001-NET/runs/AETHER-FAULT-001-NET:v1:fault/telemetry?tag=GS-A.DPT-NET": 200,
+  "/api/v1/anomalies": 200,
+  "/api/v1/model-evaluations": 200,
+  "/api/v1/inspections?limit=5": 200,
+  "/api/v1/recommendations": 200,
+  "/api/v1/work-orders": 200,
+  "/api/v1/economics/comparison": 200,
+  "/api/v1/audit-events": 200,
+  "/api/v1/reports": 200,
+  "/api/v1/reports/d1": 200,
+  "/api/v1/diagnostics/d1": 200,
+  "/api/v1/overview": 200,
+  "/api/v1/anomalies/{id}": 200,
+  "/api/v1/inspection-evidence/{id}": 200,
+  "/api/v1/inspection-evidence/{chip}/chip.png": 200
+ },
+ "workflow": [
+  {
+   "step": "create without a token",
+   "status": 401,
+   "expected": 401
+  },
+  {
+   "step": "create as viewer",
+   "status": 403,
+   "expected": 403
+  },
+  {
+   "step": "create as operator",
+   "status": 201,
+   "expected": 201
+  },
+  {
+   "step": "same key again",
+   "status": 201,
+   "expected": 201
+  },
+  {
+   "step": "duplicate order",
+   "status": 409,
+   "expected": 409
+  },
+  {
+   "step": "approve as operator",
+   "status": 403,
+   "expected": 403
+  },
+  {
+   "step": "approve as supervisor",
+   "status": 200,
+   "expected": 200
+  },
+  {
+   "step": "approve twice",
+   "status": 409,
+   "expected": 409
+  },
+  {
+   "step": "complete",
+   "status": 200,
+   "expected": 200
+  },
+  {
+   "step": "replay",
+   "status": 200,
+   "expected": 200
+  },
+  {
+   "step": "replay while playing",
+   "status": 409,
+   "expected": 409
+  },
+  {
+   "step": "pause",
+   "status": 200,
+   "expected": 200
+  },
+  {
+   "step": "reset",
+   "status": 200,
+   "expected": 200
+  }
+ ],
+ "approved_transition_kinds": [
+  "SYSTEM",
+  "HUMAN"
+ ],
+ "audit_events_for_work_order": [
+  [
+   "WORK_ORDER_COMPLETE",
+   "smoke-operator"
+  ],
+  [
+   "WORK_ORDER_APPROVE",
+   "smoke-supervisor"
+  ],
+  [
+   "WORK_ORDER_CREATE",
+   "smoke-operator"
+  ]
+ ],
+ "failures": []
+}
+exit=0
+
+=== Clean demo database again
+$ bash scripts/app_db.sh
+ Container fieldtwin-postgres-1 Stopping 
+ Container fieldtwin-postgres-1 Stopped 
+ Container fieldtwin-postgres-1 Removing 
+ Container fieldtwin-postgres-1 Removed 
+ Volume fieldtwin_pgdata Removing 
+ Network fieldtwin_default Removing 
+ Volume fieldtwin_pgdata Removed 
+ Network fieldtwin_default Removed 
+ Volume fieldtwin_pgdata Creating 
+ Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Creating 
+ Network fieldtwin_default Creating 
+ Volume fieldtwin_pgdata Created 
+ Volume fieldtwin_pgdata Created 
+ Network fieldtwin_default Created 
+ Network fieldtwin_default Created 
+ Container fieldtwin-postgres-1 Creating 
+ Container fieldtwin-postgres-1 Created 
+ Container fieldtwin-postgres-1 Starting 
+ Container fieldtwin-postgres-1 Started 
+ Container fieldtwin-postgres-1 Waiting 
+ Container fieldtwin-postgres-1 Healthy 
+server_version=16.4 (Debian 16.4-1.pgdg110+2)
+postgis_version=3.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+applied 0001_foundation.sql
+applied 0002_assets.sql
+applied 0003_measurement_semantics.sql
+applied 0004_records.sql
+applied 0005_compatibility_scenarios.sql
+applied 0006_quality_reconciliation.sql
+applied 0007_operations.sql
+applied 0008_views.sql
+applied 0009_reconciliation_decisions.sql
+applied 0010_scenario_runs_and_events.sql
+applied 0011_domain_boundaries.sql
+applied 0012_application_role_and_provenance_chain.sql
+applied 0013_physical_network.sql
+applied 0014_aerial_evidence.sql
+applied 0015_decision_support.sql
+applied 0016_application_state.sql
+migrations_applied=16
+tables_in_public=51
+seeded source_systems: 5
+seeded units: 13
+seeded unit_conversions: 11
+seeded equipment_classes: 7
+seeded transformations: 22
+seeded physical_nodes: 32
+seeded physical_edges: 36
+seeded measurement_definitions: 41
+seeded equipment_measurement_capabilities: 41
+seeded sensor_tags: 68
+seeded sensor_tag_mappings: 68
+seeded production_unit_rules: 3
+seeded source_event_classes: 10
+seeded domain_compatibility_requirements: 7
+seeded domain_compatibility_assessments: 40
+seeded domain_boundaries: 4
+seeded assets: 47
+seeded asset_relationships: 21
+{
+  "nm_ocd": {
+    "batch_id": "nm_ocd-20261105-15ddeb88ae",
+    "wells": 681,
+    "completions": 441,
+    "history": 1098,
+    "production": 36754,
+    "reconciliation_evidence": 2724,
+    "exceptions": 40
+  },
+  "petrobras_3w": {
+    "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+    "wells": 40,
+    "events": 498,
+    "observations": 13446,
+    "exceptions": 10
+  }
+}
+benchmark_events=498
+nominal: sha256=d36fdd5afba2677cc9d5c6eb523e3659f9402b8fc657c9e78148a40f8811cd13 invariants=12 events=0
+fault: sha256=a365b1e3321c523e1ad84ddc15b693c581c3837b6fd6aecab50a258c03658403 invariants=12 events=2
+{"runs": 2, "series": 8, "links": 8, "events": 2, "assignments": 2}
+AETHER-NET-NORMAL: sha256=80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1 checks=16 rows=78624
+AETHER-FAULT-001-NET: sha256=54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8 checks=17 rows=78624
+AETHER-NET-COMPRESSOR-DERATE: sha256=718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab checks=17 rows=78624
+AETHER-NET-SENSOR-DRIFT: sha256=4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6 checks=16 rows=78624
+AETHER-NET-COMM-DROPOUT: sha256=59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7 checks=16 rows=78624
+AETHER-NET-PLANNED-SHUTDOWN: sha256=35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc checks=17 rows=78624
+{"runs": 6, "series": 234, "links": 234, "events": 9}
+{
+  "identity": 1123,
+  "semantic": 164,
+  "geospatial": 711,
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+{
+  "links": 596,
+  "links_skipped_unknown_well": 0,
+  "reviews": 0,
+  "inspection_requests": 1,
+  "inspection_requests_without_loaded_event": 0,
+  "plume_observations": 455,
+  "image_observations": 60
+}
+{
+  "alarms": 4,
+  "recommendations": 4,
+  "work_orders": 0,
+  "transitions": 0
+}
+alarms|4
+recommendations|4
+work_orders|0
+inspection_requests|1
+Application database ready. Next: make app-tokens, then make app-api and make app-web.
+exit=0
+
+=== Ruff lint
+$ uv run ruff check .
+All checks passed!
+exit=0
+
+=== Ruff format
+$ uv run ruff format --check .
+324 files already formatted
+exit=0
+
+=== Mypy
+$ uv run mypy
+Success: no issues found in 155 source files
+exit=0
+
+=== API tests, offline
+$ uv run pytest apps/api/tests -q
+..................                                                       [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  .venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+18 passed, 13 deselected, 1 warning in 0.91s
+exit=0
+
+=== API tests, database
+$ uv run pytest apps/api/tests -m db -o addopts=--strict-markers -q
+.............                                                            [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  .venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+13 passed, 18 deselected, 1 warning in 9.68s
+exit=0
+
+=== Install web dependencies
+$ npm ci --no-audit --no-fund
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+added 382 packages in 5s
+exit=0
+
+=== Audit production web dependencies
+$ npm audit --omit=dev --audit-level=high
+found 0 vulnerabilities
+exit=0
+
+=== Web type check
+$ npm --workspace apps/web run typecheck
+
+> @fieldtwin/web@0.8.0 typecheck
+> tsc -b
+
+exit=0
+
+=== Web tests
+$ npm --workspace apps/web run test
+
+> @fieldtwin/web@0.8.0 test
+> vitest run
+
+
+ RUN  v2.1.9 apps/web
+
+ ✓ tests/app.test.tsx (17 tests) 182ms
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  20:08:14
+   Duration  1.21s (transform 65ms, setup 158ms, collect 187ms, tests 182ms, environment 260ms, prepare 39ms)
+
+exit=0
+
+=== Web build
+$ npm --workspace apps/web run build
+
+> @fieldtwin/web@0.8.0 build
+> tsc -b && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 2510 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                0.53 kB │ gzip:   0.33 kB
+dist/assets/index-CWcRBFm7.css                90.39 kB │ gzip:  14.56 kB
+dist/assets/NotFound-Ca1Zxhl6.js               0.31 kB │ gzip:   0.24 kB
+dist/assets/format-c1WbPcXD.js                 0.71 kB │ gzip:   0.42 kB
+dist/assets/table-C-TjCaiL.js                  0.78 kB │ gzip:   0.38 kB
+dist/assets/card-wKPvr0MU.js                   1.25 kB │ gzip:   0.51 kB
+dist/assets/badges-CFp8rWqr.js                 1.51 kB │ gzip:   0.75 kB
+dist/assets/Page-Bb3uHpwW.js                   1.73 kB │ gzip:   0.73 kB
+dist/assets/useMutation-B6mrKjIL.js            3.16 kB │ gzip:   1.28 kB
+dist/assets/Overview-iQXnJK5Z.js               5.02 kB │ gzip:   2.09 kB
+dist/assets/DecisionCenter-lajZ2I9I.js         5.28 kB │ gzip:   2.11 kB
+dist/assets/FieldMap-18gxqeb7.js               6.96 kB │ gzip:   2.92 kB
+dist/assets/AssetExplorer-KjbJ4Itj.js          8.29 kB │ gzip:   2.81 kB
+dist/assets/Maintenance-CD1g71-H.js            8.61 kB │ gzip:   3.47 kB
+dist/assets/DataLineage-DpZO1uev.js            9.28 kB │ gzip:   2.77 kB
+dist/assets/AerialInspection-DQqvhmf-.js       9.41 kB │ gzip:   3.59 kB
+dist/assets/TelemetryLab-CP68l7s7.js          10.48 kB │ gzip:   3.92 kB
+dist/assets/ExperimentReports-DuXT1eR8.js    175.78 kB │ gzip:  53.49 kB
+dist/assets/index-byh6050S.js                264.56 kB │ gzip:  85.67 kB
+dist/assets/maplibre-gl-bhDH6jK-.js        1,072.28 kB │ gzip: 293.79 kB
+dist/assets/EChart-DoxX1QFI.js             1,126.98 kB │ gzip: 378.27 kB
+✓ built in 4.02s
+exit=0
+
+=== Offline tests
+$ uv run pytest -q
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 31%]
+........................................................................ [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 63%]
+........................................................................ [ 74%]
+........................................................................ [ 84%]
+........................................................................ [ 95%]
+...............................                                          [100%]
+=============================== warnings summary ===============================
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  .venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+  .venv/lib/python3.12/site-packages/sklearn/impute/_base.py:647: UserWarning: Skipping features without any observed values: [4 5 6 7]. At least one non-missing value is needed for imputation with strategy='median'.
+    warnings.warn(
+
+tests/unit/test_anomaly_detection.py::test_missing_sensor_keeps_gradient_boosting_and_imputers_working
+  .venv/lib/python3.12/site-packages/numpy/lib/_nanfunctions_impl.py:1593: RuntimeWarning: All-NaN slice encountered
+    return fnb._ureduce(a,
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+679 passed, 313 deselected, 6 warnings in 97.11s (0:01:37)
+exit=0
+
+=== Database tests on fixtures
+$ uv run pytest -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 80%]
+.....................................................                    [100%]
+=============================== warnings summary ===============================
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyPacked has no __module__ attribute
+
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type SwigPyObject has no __module__ attribute
+
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  .venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+269 passed, 723 deselected, 4 warnings in 115.06s (0:01:55)
+exit=0
+
+=== Every CI command in a clean copy
+$ bash scripts/ci_local.sh
+clean_copy_files=527
+raw_or_bronze_parquet_outside_fixtures=0
+--- uv sync --frozen
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + zipp==4.1.2
+exit=0
+--- uv run ruff check .
+All checks passed!
+exit=0
+--- uv run ruff format --check .
+324 files already formatted
+exit=0
+--- uv run mypy
+Success: no issues found in 155 source files
+exit=0
+--- uv run pytest tests/unit tests/integration/test_acquisition.py apps/api/tests/test_api_offline.py -q
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+671 passed, 1 skipped, 6 warnings in 100.49s (0:01:40)
+exit=0
+--- uv run pytest tests/contract -q
+.......                                                                  [100%]
+7 passed, 3 deselected in 0.79s
+exit=0
+--- uv run pytest tests/integration/test_database.py tests/integration/test_reconciliation_db.py tests/integration/test_field_db.py apps/api/tests/test_api_db.py -m db and not acquired -o addopts=--strict-markers -q
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+92 passed, 1 warning in 46.10s
+exit=0
+--- uv run pytest tests/provenance -m db and not acquired -o addopts=--strict-markers -q
+........................................................................ [ 81%]
+.................................                                        [100%]
+177 passed, 5 deselected in 63.68s (0:01:03)
+exit=0
+--- npm ci
+  npm audit fix --force
+
+Run `npm audit` for details.
+exit=0
+--- npm audit --omit=dev --audit-level=high
+found 0 vulnerabilities
+exit=0
+--- npm --workspace apps/web run typecheck
+> @fieldtwin/web@0.8.0 typecheck
+> tsc -b
+
+exit=0
+--- npm --workspace apps/web run test
+   Start at  20:15:53
+   Duration  1.14s (transform 59ms, setup 100ms, collect 187ms, tests 182ms, environment 237ms, prepare 193ms)
+
+exit=0
+--- npm --workspace apps/web run build
+dist/assets/maplibre-gl-bhDH6jK-.js        1,072.28 kB │ gzip: 293.79 kB
+dist/assets/EChart-DoxX1QFI.js             1,126.98 kB │ gzip: 378.27 kB
+✓ built in 4.50s
+exit=0
+--- uvx pip-audit==2.9.0 --strict --disable-pip --no-deps -r requirements.txt
+WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies
+WARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes
+No known vulnerabilities found
+exit=0
+--- docker run --rm -v <temp-dir>:/repo zricethezav/gitleaks:v8.30.1 detect --source /repo --no-git --redact --no-banner
+[90m4:16AM[0m [32mINF[0m [1mscanned ~9694684 bytes (9.69 MB) in 1.62s[0m
+[90m4:16AM[0m [32mINF[0m [1mno leaks found[0m
+exit=0
+--- docker run --rm -v <temp-dir>:/repo -w /repo rhysd/actionlint:1.7.7 -color=false
+exit=0
+failed_ci_commands=0
+exit=0
+
+failed_steps=0
+finished=2026-11-13T04:16:17Z

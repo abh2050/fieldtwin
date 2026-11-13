@@ -2,7 +2,7 @@
 
 Generated from the PostgreSQL catalog by `make schema-docs`. A test fails if this file differs from a freshly migrated database.
 
-48 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
+50 tables and 9 views. DDL lives in [`db/migrations/`](../../db/migrations/), with a full dump in [`db/ddl/schema.sql`](../../db/ddl/schema.sql).
 
 AETHER Field is fictional. Real source entities live in `source_assets` and fictional ones in `assets`, and no foreign key lets one stand in for the other.
 
@@ -34,6 +34,24 @@ AETHER Field is fictional. Real source entities live in `source_assets` and fict
 
 Check constraints: `anomaly_predictions_provenance_class_check`.
 Keys: 1 primary key, 2 foreign key, 0 unique.
+
+### `api_idempotency_keys`
+
+Successful responses to state-changing requests, keyed by caller and Idempotency-Key.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `actor_id` | text | no |  |
+| `idempotency_key` | text | no |  |
+| `method` | text | no |  |
+| `path` | text | no |  |
+| `request_sha256` | text | no |  |
+| `status_code` | integer | no |  |
+| `response` | jsonb | no |  |
+| `created_at` | timestamp with time zone | no |  |
+
+Check constraints: `api_idempotency_keys_idempotency_key_check`, `api_idempotency_keys_request_sha256_check`, `api_idempotency_keys_status_code_check`.
+Keys: 1 primary key, 0 foreign key, 0 unique.
 
 ### `approval_events`
 
@@ -619,6 +637,23 @@ Explicit, immutable experimental association. Never OBSERVED, and a new version 
 Check constraints: `scenario_mappings_mapping_provenance_check`.
 Keys: 1 primary key, 4 foreign key, 1 unique.
 
+### `scenario_replays`
+
+Replay cursor over stored simulator output. Replaying generates no data.
+
+| Column | Type | Null | Description |
+|---|---|---|---|
+| `scenario_id` | text | no |  |
+| `scenario_run_id` | text | no |  |
+| `state` | text | no |  |
+| `position_s` | integer | no |  |
+| `speed` | double precision | no |  |
+| `anchored_at` | timestamp with time zone | no |  |
+| `updated_by` | text | no |  |
+
+Check constraints: `replay_run_belongs_to_scenario`, `scenario_replays_position_s_check`, `scenario_replays_speed_check`, `scenario_replays_state_check`, `scenario_replays_updated_by_check`.
+Keys: 1 primary key, 2 foreign key, 0 unique.
+
 ### `scenario_runs`
 
 One simulator run on fictional assets, with its parameters, seed, and output checksum. Always SYNTHETIC, and immutable.
@@ -977,6 +1012,7 @@ Keys: 1 primary key, 3 foreign key, 1 unique.
 
 | Table | Trigger |
 |---|---|
+| `api_idempotency_keys` | `api_idempotency_keys_append_only` |
 | `approval_events` | `approval_events_append_only` |
 | `asset_observation_links` | `fictional_link_chain_guard` |
 | `asset_observation_links` | `observation_link_guard` |
