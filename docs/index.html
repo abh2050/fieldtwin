@@ -120,9 +120,9 @@ footer a{color:var(--mute);text-decoration:underline}
 <h1>Industrial decision support, built end to end, <em>and honest about what didn't work.</em></h1>
 <p class="lede">FieldTwin takes four real public datasets, a physics-based simulation of a fictional gas field, and five anomaly detectors, and turns them into explained recommendations and human-approved work orders, in a working application. Every record knows where it came from, every decision knows who made it, and every result is reported as it came out, including the ones that failed.</p>
 <div class="cta">
-<a class="btn primary" href="demos/walkthrough.md">▶ Run the demo</a>
-<a class="btn" href="../reports/portfolio/evaluation_summary.md">Results</a>
-<a class="btn" href="technical_overview.md">Architecture</a>
+<a class="btn primary" href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md">▶ Run the demo</a>
+<a class="btn" href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/evaluation_summary.md">Results</a>
+<a class="btn" href="https://github.com/abh2050/fieldtwin/blob/main/docs/technical_overview.md">Architecture</a>
 <a class="btn" href="https://github.com/abh2050/fieldtwin">Source on GitHub</a>
 </div>
 <div class="stats" aria-label="Project at a glance">
@@ -213,7 +213,7 @@ footer a{color:var(--mute);text-decoration:underline}
 <tr><td>Compressor outside range</td><td class="num">1.000</td><td class="num">0.882 / <span class="fail">0.029</span></td><td class="fail">Impact wrong</td></tr>
 <tr><td>Degraded operations</td><td class="num"><span class="fail">0.412</span></td><td class="num"><span class="fail">0.441 / 0.588</span></td><td class="fail">Can't see the fault</td></tr>
 </tbody></table>
-<p class="vs" style="margin-top:10px">Full tables and source hashes: <a href="../reports/portfolio/evaluation_summary.md">evaluation summary</a> · <a href="../reports/diagnostics/final_report.md">D1 final report</a> · <a href="limitations.md">known limitations</a>.</p>
+<p class="vs" style="margin-top:10px">Full tables and source hashes: <a href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/evaluation_summary.md">evaluation summary</a> · <a href="https://github.com/abh2050/fieldtwin/blob/main/reports/diagnostics/final_report.md">D1 final report</a> · <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/limitations.md">known limitations</a>.</p>
 </div>
 </div></section>
 
@@ -230,7 +230,7 @@ footer a{color:var(--mute);text-decoration:underline}
 <ul class="checks">
 <li><b>Preregistration with teeth.</b> D1's method was frozen by a checksum guard over 43 files, and its final runs went through an append-only attempt ledger that refuses a second try.</li>
 <li><b>Reproducible from nothing.</b> One script rebuilds the system in a clean copy, retrains the detector, checks its hash against the committed results, and smoke-tests the app.</li>
-<li><b>Security checked, not asserted.</b> Bandit findings triaged, gitleaks, pip-audit, and npm audit clean, SQL-injection and path-traversal tests, and a critical frontend advisory fixed. <a href="security_review.md">Review</a></li>
+<li><b>Security checked, not asserted.</b> Bandit findings triaged, gitleaks, pip-audit, and npm audit clean, SQL-injection and path-traversal tests, and a critical frontend advisory fixed. <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/security_review.md">Review</a></li>
 <li><b>Mistakes are disclosed.</b> Every report has a disclosures section, including the overclaims caught in review and how they were corrected.</li>
 </ul>
 </div>
@@ -245,7 +245,7 @@ bash scripts/run_demo.sh
 
 <span class="c"># prove there are no hidden steps: rebuild in a clean copy and smoke-test it</span>
 bash scripts/clean_copy_demo.sh</pre>
-<p class="vs" style="margin-top:12px">Then sign in as an operator, open a work order from a recommendation, and approve it as a supervisor. The <a href="demos/walkthrough.md">walkthrough</a> has every step.</p>
+<p class="vs" style="margin-top:12px">Then sign in as an operator, open a work order from a recommendation, and approve it as a supervisor. The <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md">walkthrough</a> has every step.</p>
 </div></section>
 
 <section class="alt"><div class="wrap">
@@ -260,7 +260,7 @@ bash scripts/clean_copy_demo.sh</pre>
 <div class="gate neg"><b>Gate 7</b>Decisions: fixed rounds won</div>
 <div class="gate neg"><b>D1</b>Preregistered diagnosis: NOT MET</div>
 <div class="gate done"><b>Gate 8</b>API and nine-screen app</div>
-<div class="gate no"><b>Gate 9</b>Cloud deployment, removed from scope (<a href="adr/0022-no-cloud-deployment.md">ADR 0022</a>)</div>
+<div class="gate no"><b>Gate 9</b>Cloud deployment, removed from scope (<a href="https://github.com/abh2050/fieldtwin/blob/main/docs/adr/0022-no-cloud-deployment.md">ADR 0022</a>)</div>
 <div class="gate done"><b>Gate 10</b>Portfolio and reproducible demo</div>
 </div>
 </div></section>
@@ -268,22 +268,22 @@ bash scripts/clean_copy_demo.sh</pre>
 <section id="docs"><div class="wrap">
 <h2>Read further</h2>
 <div class="grid3">
-<a class="card" href="technical_overview.md"><h3>Technical overview →</h3><p>Layers, design rules, quality gates, and the ADRs that shape the system.</p></a>
-<a class="card" href="../reports/portfolio/evaluation_summary.md"><h3>Evaluation summary →</h3><p>Every result table, generated from the committed result files with their hashes.</p></a>
-<a class="card" href="demos/walkthrough.md"><h3>Walkthrough →</h3><p>From a clean checkout to an approved simulated work order.</p></a>
-<a class="card" href="security_review.md"><h3>Security review →</h3><p>Threat model, controls with evidence, and findings.</p></a>
-<a class="card" href="limitations.md"><h3>Known limitations →</h3><p>Everything this project does not show.</p></a>
-<a class="card" href="roadmap.md"><h3>Hardening roadmap →</h3><p>What it would take to run on a real field.</p></a>
-<a class="card" href="../reports/portfolio/costs.md"><h3>Costs and teardown →</h3><p>Measured compute, CI minutes, and disk; zero cloud and paid-API spend.</p></a>
-<a class="card" href="architecture.drawio"><h3>Architecture diagrams →</h3><p>Editable draw.io file with the system, runtime, network, and evaluation pages.</p></a>
-<a class="card" href="specification.md"><h3>Specification →</h3><p>The original brief, with dated notes where the scope changed.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/technical_overview.md"><h3>Technical overview →</h3><p>Layers, design rules, quality gates, and the ADRs that shape the system.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/evaluation_summary.md"><h3>Evaluation summary →</h3><p>Every result table, generated from the committed result files with their hashes.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md"><h3>Walkthrough →</h3><p>From a clean checkout to an approved simulated work order.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/security_review.md"><h3>Security review →</h3><p>Threat model, controls with evidence, and findings.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/limitations.md"><h3>Known limitations →</h3><p>Everything this project does not show.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/roadmap.md"><h3>Hardening roadmap →</h3><p>What it would take to run on a real field.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/costs.md"><h3>Costs and teardown →</h3><p>Measured compute, CI minutes, and disk; zero cloud and paid-API spend.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/architecture.drawio"><h3>Architecture diagrams →</h3><p>Editable draw.io file with the system, runtime, network, and evaluation pages.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/specification.md"><h3>Specification →</h3><p>The original brief, with dated notes where the scope changed.</p></a>
 </div>
 </div></section>
 </main>
 
 <footer><div class="wrap">
 <p><strong>AETHER Field is fictional.</strong> Synthetic results describe an uncalibrated model of it and are not evidence about any real field. Nothing here connects to or operates equipment.</p>
-<p>Data: Petrobras 3W (CC BY 4.0). New Mexico Oil Conservation Division (no stated licence; raw rows are not redistributed). Data by Carbon Mapper®, from data.carbonmapper.org (non-commercial use). Imagery: USDA NAIP, accessed through Microsoft Planetary Computer. <a href="datasets/license_inventory.md">Licence inventory</a>.</p>
+<p>Data: Petrobras 3W (CC BY 4.0). New Mexico Oil Conservation Division (no stated licence; raw rows are not redistributed). Data by Carbon Mapper®, from data.carbonmapper.org (non-commercial use). Imagery: USDA NAIP, accessed through Microsoft Planetary Computer. <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/datasets/license_inventory.md">Licence inventory</a>.</p>
 </div></footer>
 </body>
 </html>

@@ -28,7 +28,7 @@ These datasets do not describe one facility. Petrobras 3W was not measured at a 
 
 Nothing is field-validated, and every economic figure is a modeled estimate for a fictional facility.
 
-- **See it:** [project page](docs/index.html) · [walkthrough](docs/demos/walkthrough.md) · [evaluation summary](reports/portfolio/evaluation_summary.md) · [technical overview](docs/technical_overview.md)
+- **See it:** [project page](https://abh2050.github.io/fieldtwin/) ([source](docs/index.html)) · [walkthrough](docs/demos/walkthrough.md) · [evaluation summary](reports/portfolio/evaluation_summary.md) · [technical overview](docs/technical_overview.md)
 - **Trust it:** [security review](docs/security_review.md) · [known limitations](docs/limitations.md) · [costs and teardown](reports/portfolio/costs.md) · [hardening roadmap](docs/roadmap.md)
 - **Run it:** `bash scripts/run_demo.sh`, then open http://127.0.0.1:8000.
 

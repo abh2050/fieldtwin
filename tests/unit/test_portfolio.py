@@ -50,6 +50,11 @@ def test_project_page_links_resolve_inside_the_repository():
     assert local, "the page links to nothing local"
     missing = [link for link in local if link and not (INDEX.parent / link).resolve().exists()]
     assert missing == []
+    # Documents outside the Pages site link to GitHub's rendered view of this repository.
+    blob = "https://github.com/abh2050/fieldtwin/blob/main/"
+    in_repo = [link[len(blob) :].split("#")[0] for link in parser.links if link.startswith(blob)]
+    assert in_repo, "the page links to no repository document"
+    assert [p for p in in_repo if not (REPO_ROOT / p).exists()] == []
 
 
 def test_project_page_discloses_the_fiction_and_names_no_ocd_well():
