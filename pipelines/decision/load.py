@@ -1,5 +1,9 @@
 """Load Gate 7 alarms, recommendations, and work orders, replaying each transition through the
-database's guards: a status changes only after a valid transition and its audit event exist."""
+database's guards: a status changes only after a valid transition and its audit event exist.
+
+`--without-work-orders` loads alarms and recommendations only, for the Gate 8 application demo: every
+work order is then created and decided in the application by an authenticated person, and no scripted
+decision is loaded. The Gate 7 rebuild uses the default and loads everything."""
 
 from __future__ import annotations
 
@@ -22,10 +26,12 @@ def _alarm_rows(root: Path) -> list[dict[str, Any]]:
     return [alarm for scenario in stored.values() for alarm in scenario["alarms"]]
 
 
-def load_decisions(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str, int]:
+def load_decisions(
+    conn: psycopg.Connection, root: Path = REPO_ROOT, work_orders: bool = True
+) -> dict[str, int]:
     alarms = _alarm_rows(root)
     recommendations = json.loads((root / GOLD / "recommendations.json").read_text())
-    orders = json.loads((root / GOLD / "work_orders.json").read_text())
+    orders = json.loads((root / GOLD / "work_orders.json").read_text()) if work_orders else []
     counts = {"alarms": 0, "recommendations": 0, "work_orders": 0, "transitions": 0}
     with conn.transaction():
         for a in alarms:
@@ -157,9 +163,18 @@ def load_decisions(conn: psycopg.Connection, root: Path = REPO_ROOT) -> dict[str
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
+    parser.add_argument(
+        "--without-work-orders",
+        action="store_true",
+        help="load alarms and recommendations only (Gate 8 application demo)",
+    )
     args = parser.parse_args(argv)
     with connect() as conn:
-        print(json.dumps(load_decisions(conn, args.root), indent=2))
+        print(
+            json.dumps(
+                load_decisions(conn, args.root, work_orders=not args.without_work_orders), indent=2
+            )
+        )
     return 0
 
 

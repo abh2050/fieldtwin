@@ -1,0 +1,69 @@
+# Gate 8 report: the application
+
+**Status: implemented and stopped for technical review.** The work is on branch `gate-8` and isn't merged. The final local evidence run passed all 16 steps. Hosted CI passed on every job.
+
+Date: 2026-11-12. Branch: `gate-8`. Full output: [`gate_8_execution_log.txt`](gate_8_execution_log.txt). Decision: [ADR 0021](../../docs/adr/0021-resume-application-gates.md), which resumes Gates 8 to 10 after D1 concluded NOT MET.
+
+> **Everything the application shows is either fictional or a labelled real public record.** AETHER Field, its telemetry, alarms, recommendations, and work orders are synthetic. Every screen says so. Nothing actuates equipment.
+
+## Headline
+
+- **The full scenario runs locally from data the earlier gates built, with no hardcoded responses.** `make app-db`, `make app-api`, and `make app-web` give nine screens over the real database and committed result files. The live smoke test ran every read endpoint and the whole workflow over HTTP:
+  - An operator opened a work order from the GS-A recommendation, and a repeat with the same Idempotency-Key returned the first response.
+  - A viewer's and an operator's approval attempts were refused.
+  - A supervisor approved, a second approval was refused, and the operator recorded completion.
+  - A replay played, refused a second play, paused, and reset.
+  - The work order's history is `SYSTEM` creation, then `HUMAN` decisions, with three audit events.
+- **The application adds no new claim.** It presents what Gates 5 to 7 and D1 recorded, negative results included. The Overview and Experiment Reports lead with "detection is weak", "fixed rounds cost least in the model", and "D1: NOT MET", and each figure is read from the committed result file.
+- **The demo database holds no scripted decisions.** `decision.load --without-work-orders` loads alarms and recommendations only, so every work order in the demo is opened and decided in the app by a signed-in person and recorded as `HUMAN`. The Gate 7 rebuild is unchanged and still loads its `SCRIPTED_DEMO` history, which the app labels "not a person".
+
+## Acceptance
+
+Specification sections 14 and 15, and Gate 8's acceptance test: "the full scenario runs locally from a clean checkout, without hardcoded responses."
+
+| # | Criterion | Result | Evidence |
+|---:|---|---|---|
+| 1 | FastAPI with OpenAPI, every section 15 endpoint | **Met** | `apps/api`. All 26 endpoints in the section 15 list exist, plus supporting reads for the screens. The smoke test returned 200 for every read. OpenAPI is at `/docs`. |
+| 2 | Authorization on every state change | **Met, with local tokens** | Bearer tokens with roles VIEWER, OPERATOR, and MAINTENANCE_SUPERVISOR, checked before a database connection opens. The database enforces roles and transitions again. Gate 9 replaces local tokens with a managed identity provider. |
+| 3 | Validation, pagination, filters, structured errors, correlation IDs, idempotency | **Met** | Pydantic request models; `limit`/`offset` with totals; filters on list endpoints; one error shape carrying the correlation ID; `X-Request-ID` echoed or issued; `Idempotency-Key` stored in the same transaction as the change (migration 0016). |
+| 4 | No fabricated successful operations | **Met** | Writes go through the guarded database path from migration 0015. A refused transition returns 409 with the database's reason. A missing result returns `RESULT_NOT_BUILT` with its build command, never a substitute. |
+| 5 | Least-privilege connection | **Met** | Every request runs `SET ROLE fieldtwin_app`, and reads are READ ONLY. A test shows the role can't write alarms, recommendations, or audit history. |
+| 6 | Nine required screens | **Met** | Overview, Field Map, Asset Explorer, Telemetry Lab, Aerial Inspection, Decision Center, Maintenance, Data Lineage, and Experiment Reports, each checked in headless Chrome against the demo database. |
+| 7 | Fictional-facility disclosure on every screen | **Met** | The disclosure is in the layout and is announced as a note. A test checks it on all nine routes and on the not-found route, with the API down. |
+| 8 | Loading, empty, error, and degraded states | **Met** | Shared state components. An API outage is announced on every screen. An error boundary keeps the layout and disclosure up if a screen fails, which happened once during development and was fixed. |
+| 9 | No invented metrics or decorative gauges | **Met** | Every number comes from an API call. The Overview's findings take their numbers from `aether_held_out.json` and `economics.json`, not from screen text. |
+| 10 | Scripted approvals shown as scripted | **Met** | `SCRIPTED_DEMO` shows as "SCRIPTED DEMO · not a person". The Overview counts decisions by actor kind. |
+| 11 | Stack: React, TypeScript, Vite, Tailwind, shadcn/ui, MapLibre, ECharts | **Met, with one note** | The shadcn/ui components are written in-repo in that pattern (cva and tailwind-merge) rather than generated by its CLI. |
+| 12 | Tests and CI | **Met** | 31 API tests (18 offline, 13 on a migrated database) and 17 web tests. The offline suite passed (679 tests), as did the database tests (269), every CI command in a clean copy, gitleaks, pip-audit, and `npm audit` on production dependencies. A new `web` CI job type-checks, tests, and builds. |
+
+## Design decisions to review
+
+- **Work-order creation.** The database lets only the engine create (migration 0015). `POST /work-orders` therefore records the `CREATE` transition as `SYSTEM` and names the requesting person in its justification and audit event. It accepts only a dispatching recommendation without an existing order.
+- **Decision time.** Transitions keep two clocks: the scenario clock (`decided_at`) and real time (`recorded_at`). An app decision defaults its scenario time to the latest transition's, rather than inventing a delay. A caller can pass a later `decided_at`.
+- **Replay** is a cursor over a run's stored output (migration 0016), advanced by real time at a chosen speed. It simulates nothing.
+- **Telemetry** is served only after the API checks that the stored file matches its run's ID, parameter hash, and row count. Simulator truth files are never read. The Telemetry Lab's "fault onset" toggle is off by default and labelled as scenario truth.
+- **Real and fictional maps are separate.** AETHER is drawn in local metres with no basemap and no real location. Real NAIP chips are placed at their real footprints on the Aerial screen only.
+
+## What this gate didn't do, or did only partly
+
+- **Map rendering was verified only in part.** Headless Chrome here has no display link, so MapLibre never draws a frame. Verified: the map canvas mounts under software WebGL without error, and the SVG fallback (shown when WebGL is missing) draws the stored network. Not verified: the WebGL drawing itself, interactively in a real browser.
+- **No browser end-to-end test runs in CI.** The workflow is tested at the API and through HTTP; the screens are tested with Testing Library and were checked by screenshot.
+- **Technician assignment isn't modeled.** Work orders have no crew field, and the Maintenance screen says so.
+- **Blind review isn't taken in the app.** Gate 6 reviews must hide plume status from the reviewer, so they stay in `make inspection-review`.
+- **Gate 3 single-segment runs aren't served** in the Telemetry Lab, because their files mix sensor readings with truth. The screen labels them "not served".
+- **Dependencies were raised to major versions** to clear audit findings, one of them critical (MapLibre 6.18, ECharts 6.1, React Router 7.18). Screens were rechecked afterwards.
+- `docs/index.html` is still stale; Gate 10 refreshes it.
+
+## Files
+
+- API: `apps/api/src/fieldtwin_api/` and `apps/api/tests/`.
+- Web: `apps/web/`.
+- Migration: `db/migrations/0016_application_state.sql`.
+- Scripts: `scripts/app_db.sh`, `scripts/app_tokens.py`, `scripts/gate8_smoke.py`, and `scripts/gate8_evidence.sh`.
+- Loader option: `pipelines/decision/load.py --without-work-orders`.
+- Regenerated: `db/ddl/schema.sql` and `reports/data_quality/canonical_schema.md`.
+- Make targets: `app-db`, `app-tokens`, `app-api`, `app-web`, `app-build`, and `app-test`.
+
+## CI
+
+Hosted CI on PR #13 (commit 58aefe3): all 10 jobs passed on both the push and pull-request runs, including the new `web` job and the three simulation-reproducibility platforms.

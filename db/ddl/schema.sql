@@ -620,6 +620,32 @@ ALTER SEQUENCE public.anomaly_predictions_prediction_id_seq OWNED BY public.anom
 
 
 --
+-- Name: api_idempotency_keys; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.api_idempotency_keys (
+    actor_id text NOT NULL,
+    idempotency_key text NOT NULL,
+    method text NOT NULL,
+    path text NOT NULL,
+    request_sha256 text NOT NULL,
+    status_code integer NOT NULL,
+    response jsonb NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT api_idempotency_keys_idempotency_key_check CHECK ((idempotency_key ~ '^[A-Za-z0-9._:-]{8,128}$'::text)),
+    CONSTRAINT api_idempotency_keys_request_sha256_check CHECK ((request_sha256 ~ '^[0-9a-f]{64}$'::text)),
+    CONSTRAINT api_idempotency_keys_status_code_check CHECK (((status_code >= 200) AND (status_code <= 299)))
+);
+
+
+--
+-- Name: TABLE api_idempotency_keys; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.api_idempotency_keys IS 'Successful responses to state-changing requests, keyed by caller and Idempotency-Key.';
+
+
+--
 -- Name: approval_events; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1690,6 +1716,33 @@ ALTER SEQUENCE public.scenario_mappings_mapping_id_seq OWNED BY public.scenario_
 
 
 --
+-- Name: scenario_replays; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.scenario_replays (
+    scenario_id text NOT NULL,
+    scenario_run_id text NOT NULL,
+    state text NOT NULL,
+    position_s integer NOT NULL,
+    speed double precision NOT NULL,
+    anchored_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_by text NOT NULL,
+    CONSTRAINT replay_run_belongs_to_scenario CHECK ((split_part(scenario_run_id, ':'::text, 1) = scenario_id)),
+    CONSTRAINT scenario_replays_position_s_check CHECK ((position_s >= 0)),
+    CONSTRAINT scenario_replays_speed_check CHECK (((speed > (0)::double precision) AND (speed <= (3600)::double precision))),
+    CONSTRAINT scenario_replays_state_check CHECK ((state = ANY (ARRAY['PLAYING'::text, 'PAUSED'::text, 'STOPPED'::text]))),
+    CONSTRAINT scenario_replays_updated_by_check CHECK ((length(btrim(updated_by)) > 0))
+);
+
+
+--
+-- Name: TABLE scenario_replays; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.scenario_replays IS 'Replay cursor over stored simulator output. Replaying generates no data.';
+
+
+--
 -- Name: scenario_runs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2699,6 +2752,14 @@ ALTER TABLE ONLY public.anomaly_predictions
 
 
 --
+-- Name: api_idempotency_keys api_idempotency_keys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.api_idempotency_keys
+    ADD CONSTRAINT api_idempotency_keys_pkey PRIMARY KEY (actor_id, idempotency_key);
+
+
+--
 -- Name: approval_events approval_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3040,6 +3101,14 @@ ALTER TABLE ONLY public.scenario_mappings
 
 ALTER TABLE ONLY public.scenario_mappings
     ADD CONSTRAINT scenario_mappings_scenario_id_target_asset_id_telemetry_eve_key UNIQUE (scenario_id, target_asset_id, telemetry_event_id);
+
+
+--
+-- Name: scenario_replays scenario_replays_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_replays
+    ADD CONSTRAINT scenario_replays_pkey PRIMARY KEY (scenario_id);
 
 
 --
@@ -3474,6 +3543,13 @@ CREATE INDEX source_assets_parent_idx ON public.source_assets USING btree (paren
 --
 
 CREATE INDEX telemetry_class_origin_idx ON public.telemetry_events USING btree (source_event_label, real_or_simulated_source);
+
+
+--
+-- Name: api_idempotency_keys api_idempotency_keys_append_only; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER api_idempotency_keys_append_only BEFORE DELETE OR UPDATE ON public.api_idempotency_keys FOR EACH ROW EXECUTE FUNCTION public.reject_change();
 
 
 --
@@ -4249,6 +4325,22 @@ ALTER TABLE ONLY public.scenario_mappings
 
 ALTER TABLE ONLY public.scenario_mappings
     ADD CONSTRAINT scenario_mappings_telemetry_event_id_original_source_insta_fkey FOREIGN KEY (telemetry_event_id, original_source_instance_id) REFERENCES public.telemetry_events(event_id, source_instance_id);
+
+
+--
+-- Name: scenario_replays scenario_replays_scenario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_replays
+    ADD CONSTRAINT scenario_replays_scenario_id_fkey FOREIGN KEY (scenario_id) REFERENCES public.scenarios(scenario_id);
+
+
+--
+-- Name: scenario_replays scenario_replays_scenario_run_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.scenario_replays
+    ADD CONSTRAINT scenario_replays_scenario_run_id_fkey FOREIGN KEY (scenario_run_id) REFERENCES public.scenario_runs(scenario_run_id);
 
 
 --

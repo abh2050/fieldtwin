@@ -25,7 +25,10 @@ make inspection-review                    # list chips awaiting human review
 bash scripts/gate6_evidence.sh            # the Gate 6 rebuild, with evidence
 make gate7 decision-load decision-reports  # decisions, work orders, modeled economics, reports
 make decision-list                        # simulated work orders; record a person's decision with pipelines.decision.decide
-bash scripts/gate7_evidence.sh            # the latest full rebuild, with evidence
+bash scripts/gate7_evidence.sh            # the Gate 7 rebuild, with evidence
+make app-db app-tokens                    # Gate 8: demo database (no scripted decisions) and local tokens
+make app-api                              # API on :8000; then `make app-web` and open http://127.0.0.1:5173
+bash scripts/gate8_evidence.sh            # the latest rebuild: live API smoke test, web build, every CI command
 ```
 
 ## Cost

@@ -56,11 +56,11 @@ Excluded from D1: work-order generation, approvals, routing, aerial evidence, cl
 | Gates 0 to 4 | Foundation: acquisition, canonical model, reconciliation, field simulator | Complete. Kept and maintained |
 | Gates 5 to 7 | Detection, aerial evidence, decision support | Complete. Kept unchanged as experimental evidence, including negative results |
 | **D1** | **Gathering-line restriction diagnosis** | **Evaluated 2026-11-11: NOT MET** ([final report](../../reports/diagnostics/final_report.md)) |
-| Gate 8 | Application | Paused |
-| Gate 9 | AWS deployment | Paused |
-| Gate 10 | Portfolio demonstration | Paused |
+| Gate 8 | Application | Resumed 2026-11-12 ([ADR 0021](../adr/0021-resume-application-gates.md)) |
+| Gate 9 | AWS deployment | Resumed; needs explicit approval before any AWS resource |
+| Gate 10 | Portfolio demonstration | Resumed |
 
-Paused gates resume only by a later decision that cites D1's outcome.
+ADR 0021 resumed Gates 8 to 10 after D1 concluded NOT MET. No further research milestones are planned.
 
 ## Cross-cutting requirements
 
@@ -70,8 +70,8 @@ Paused gates resume only by a later decision that cites D1's outcome.
 | R-02 | A failed acquisition produces a failure report and no substitute data | Implemented and tested |
 | R-03 | Invalid records are quarantined with a reason | Implemented and tested |
 | R-04 | Raw batches are immutable and verifiable by checksum | Implemented and tested |
-| R-05 | Every screen discloses that AETHER Field is fictional | Planned; `docs/index.html` already does |
-| R-06 | State changes need authentication, server-side roles, and an audit event | Planned |
+| R-05 | Every screen discloses that AETHER Field is fictional | Implemented in the Gate 8 layout and tested on every route; `docs/index.html` also does |
+| R-06 | State changes need authentication, server-side roles, and an audit event | Implemented in the Gate 8 API with local bearer tokens; the database enforces roles and audit again. Gate 9 replaces local tokens with a managed identity provider |
 | R-07 | Nothing can actuate physical equipment | Enforced by design: no such integration exists |
 | R-08 | The product stays fully functional without Bedrock | Planned |
 | R-09 | Real and fictional assets have separate identities | Implemented and tested |
