@@ -1,44 +1,123 @@
+<div align="center">
+
 # FieldTwin
 
-FieldTwin is an industrial decision-support platform: asset registry, provenance-aware data integration, anomaly detection, inspection evidence, and human-approved maintenance. It is demonstrated on AETHER Field.
+### From field signals to approved action.
 
-> **AETHER Field is a fictional industrial production environment.** Public industrial datasets have been used for source-grounded experiments, while cross-source asset associations and operational scenarios are explicitly simulated.
+**Industrial decision support for inspection and maintenance.**
 
-These datasets do not describe one facility. Petrobras 3W was not measured at a New Mexico well, and no public record here was measured at AETHER Field. AETHER telemetry is synthetic and comes from a simplified physical model that isn't calibrated to any real well or validated as an engineering simulator. 3W stays a separate offshore benchmark.
+[Project page](https://abh2050.github.io/fieldtwin/) · [Run the demo](docs/demos/walkthrough.md) · [Architecture](#architecture) · [Results](#evaluation-results) · [Technical overview](docs/technical_overview.md)
 
-## Status
+[![CI](https://github.com/abh2050/fieldtwin/actions/workflows/ci.yml/badge.svg)](https://github.com/abh2050/fieldtwin/actions/workflows/ci.yml)
 
-**Complete (Gates 0 to 8 and 10, Diagnostic Milestone D1).** Gate 9, the AWS deployment, was removed from scope ([ADR 0022](docs/adr/0022-no-cloud-deployment.md)); everything runs on one machine.
+</div>
 
-**What it is:**
+![AI-generated illustration of a natural-gas gathering network at dusk](docs/assets/hero.jpg)
 
-- Real data acquisition and a canonical PostgreSQL/PostGIS schema with provenance enforced by the database.
-- A coupled simulation of the whole fictional field.
-- Anomaly detection evaluated on two tracks.
-- Aerial evidence that relates real methane plumes to real registry wells by proximity only.
-- A transparent decision engine with human-gated simulated work orders.
-- A preregistered physics-based diagnosis milestone.
-- A FastAPI and React application over all of it.
+<sub>Industrial illustration generated with Higgsfield.</sub>
 
-**What it found:**
+## The business problem
 
-- Detection is weak.
-- Alarm-driven dispatch didn't beat fixed rounds in the cost model.
-- The diagnosis milestone was NOT MET.
+**Decide where to send the next crew.** When gas flow falls, an operator must narrow the cause: a well, a shared gathering restriction, or an instrumentation problem. A maintenance supervisor then needs to decide whether the evidence justifies a site visit and which work takes priority. Unnecessary dispatch adds travel and labour cost. Delayed repair can extend production losses.
 
-Nothing is field-validated, and every economic figure is a modeled estimate for a fictional facility.
+The inputs span equipment hierarchies, sensor readings, production records, inspection evidence, and maintenance history. They use different identifiers, units, and reporting grains. The engineering challenge is to bring that context into a decision while preserving what each source actually establishes.
 
-- **See it:** [project page](https://abh2050.github.io/fieldtwin/) ([source](docs/index.html)) · [walkthrough](docs/demos/walkthrough.md) · [evaluation summary](reports/portfolio/evaluation_summary.md) · [technical overview](docs/technical_overview.md)
-- **Trust it:** [security review](docs/security_review.md) · [known limitations](docs/limitations.md) · [costs and teardown](reports/portfolio/costs.md) · [hardening roadmap](docs/roadmap.md)
-- **Run it:** `bash scripts/run_demo.sh`, then open http://127.0.0.1:8000.
+We built FieldTwin to connect monitoring, investigation, and maintenance in one auditable workflow, and to test whether alarm-driven dispatch can outperform scheduled rounds in a cost model. Every recommendation exposes its inputs and scoring terms; a supervisor approves the work; the audit trail records the decision and outcome.
 
-Gate evidence: [0](reports/gates/gate_0.md), [1](reports/gates/gate_1.md), [2](reports/gates/gate_2.md), [3](reports/gates/gate_3.md), [4](reports/gates/gate_4.md), [5](reports/gates/gate_5.md), [6](reports/gates/gate_6.md), [7](reports/gates/gate_7.md), [D1](reports/diagnostics/final_report.md), [8](reports/gates/gate_8.md), and [10](reports/gates/gate_10.md). Topic reports: [decision support](reports/decision/), [modeled economics](reports/economics/), [detection experiments](reports/experiments/), [aerial evidence](reports/inspection/), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
+| Investigate | Prioritize | Account for the decision |
+| --- | --- | --- |
+| Follow alarms through the equipment network and inspect the available readings. | Review candidate assets, scoring terms, response windows, and evidence gaps. | Record approval, rejection, or a request for evidence; compare modeled maintenance policies. |
 
-## Quick start
+## Inside the workspace
 
-The one-command demo is `bash scripts/run_demo.sh`; it needs uv, Node 20 or later, and Docker. The steps it runs, one gate at a time:
+Nine React screens cover asset exploration, network topology, telemetry replay, inspections, decisions, maintenance, data lineage, and evaluation. These captures show the local demonstration dataset; telemetry and work orders are synthetic, and financial figures are modeled estimates.
 
-Requires [uv](https://docs.astral.sh/uv/) and about 7 GB of free disk, because acquisition stops if it would leave under 5 GB free.
+### Investigate the signal
+
+[![Telemetry Lab showing stored synthetic gas-flow readings and a detector alarm](docs/assets/screens/telemetry.png)](docs/assets/screens/telemetry.png)
+
+Replay a stored run, inspect pressure and flow changes, and locate detector alarms on the scenario clock. The operational view uses operator-visible readings.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+<h3>Explain the recommendation</h3>
+<a href="docs/assets/screens/decisions.png"><img src="docs/assets/screens/decisions.png" alt="Decision Center with candidate assets, response priority, and a score broken into named terms" width="100%"></a>
+<p>Inspect the rule inputs and named terms behind each priority score before opening a work order.</p>
+</td>
+<td width="50%" valign="top">
+<h3>Approve and track the work</h3>
+<a href="docs/assets/screens/maintenance.png"><img src="docs/assets/screens/maintenance.png" alt="Maintenance screen showing a work order and its actor-labelled approval history" width="100%"></a>
+<p>Follow supervisor approval and completion through a database-enforced, append-only audit trail.</p>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<h3>Review the operating picture</h3>
+<a href="docs/assets/screens/overview.png"><img src="docs/assets/screens/overview.png" alt="Overview with asset counts, maintenance backlog, modeled annual costs, and evaluation findings" width="100%"></a>
+<p>See asset status, maintenance backlog, modeled policy costs, and evaluation outcomes together.</p>
+</td>
+<td width="50%" valign="top">
+<h3>Inspect the evaluation</h3>
+<a href="docs/assets/screens/reports.png"><img src="docs/assets/screens/reports.png" alt="Experiment Reports comparing diagnosis results with preregistered acceptance thresholds" width="100%"></a>
+<p>Compare held-out performance with acceptance thresholds and open the underlying reports.</p>
+</td>
+</tr>
+</table>
+
+Click any screenshot to open it at full resolution. [Walk through the application →](docs/demos/walkthrough.md)
+
+## Architecture
+
+Four public acquisition pipelines and a coupled field simulator feed PostgreSQL/PostGIS. Source records and simulation assets occupy separate tables. Detection, aerial proximity analysis, diagnosis, and decision support preserve those boundaries; FastAPI serves the results to React.
+
+[![FieldTwin architecture: public sources and a separate simulator feed PostGIS, analysis modules, and the API and web application](docs/assets/architecture.svg)](docs/assets/architecture.svg)
+
+Petrobras 3W is a separate offshore detection benchmark. Public aerial evidence relates real plume detections to real registered wells by proximity; it does not identify an AETHER asset or establish an emissions source.
+
+| Layer | Implementation | Responsibility |
+| --- | --- | --- |
+| Data acquisition | Python, source adapters, SHA-256 manifests | Immutable batches, validation, quarantine with reasons, source identity. |
+| Canonical store | PostgreSQL 16, PostGIS | Asset and source models, reporting grain, provenance, reconciliation history. |
+| Simulation and detection | NumPy, SciPy, scikit-learn | Coupled network scenarios, synthetic sensor series, five detectors on two separate evaluation tracks. |
+| Decisions and economics | Deterministic rules, OR-Tools | Named scoring terms, approval workflow, modeled scheduling and route comparisons. |
+| Application | FastAPI, React, TypeScript, MapLibre, ECharts | Nine screens, telemetry replay, role-based actions, source reports and audit history. |
+
+### From alarm to approved work
+
+[![Decision workflow: synthetic telemetry produces detector alarms; the rule engine uses operator-visible context; recommendations proceed through work orders, supervisor review, and audit history](reports/decision/decision_flow.png)](reports/decision/decision_flow.png)
+
+The engine uses alarms, planned operations, open inspection requests, and network consequence shares. A priority score is the sum of named terms, never a failure probability. A maintenance supervisor approves, rejects, or requests evidence. Actor labels distinguish `HUMAN`, `SCRIPTED_DEMO`, and `SYSTEM`. Simulator truth is reserved for outcome grading.
+
+<details>
+<summary><strong>Explore the physical network and simulation diagrams</strong></summary>
+
+The simplified simulation connects two pads, twelve wells, three gathering segments, and four compressors. Physical connectivity lives in `physical_nodes` and `physical_edges`, separate from asset identity and evidence relationships.
+
+[![Schematic of the synthetic gathering network: wellheads feed pad headers, a shared manifold, and four compressors](reports/simulation/diagrams/aether_physical_network.png)](reports/simulation/diagrams/aether_physical_network.png)
+
+[Asset hierarchy](reports/simulation/diagrams/aether_asset_topology.png) · [Simulation sequence](reports/simulation/diagrams/simulation_sequence.png) · [Detection evaluation](reports/experiments/detection_evaluation.png) · [Aerial evidence pipeline](reports/inspection/aerial_evidence.png)
+
+The [editable draw.io diagrams](docs/architecture.drawio) include system architecture, local runtime, physical connectivity, and evaluation. See the [technical overview](docs/technical_overview.md) for the layer-by-layer design.
+
+</details>
+
+## Run locally
+
+Requires [uv](https://docs.astral.sh/uv/), Node 20 or later, Docker running, and about 7 GB of free disk. The first run downloads roughly 1.7 GB of public data; completed batches are reused. Acquisition stops if it would leave less than 5 GB free.
+
+```bash
+git clone https://github.com/abh2050/fieldtwin.git
+cd fieldtwin
+bash scripts/run_demo.sh
+```
+
+Open **http://127.0.0.1:8000**. The script prints local tokens for viewer, operator, and maintenance supervisor roles. Sign in as an operator to open a work order from a recommendation, then as a maintenance supervisor to review it. [Full walkthrough →](docs/demos/walkthrough.md)
+
+The application runs on one machine without cloud accounts or paid API keys ([ADR 0022](docs/adr/0022-no-cloud-deployment.md)). The script rebuilds this project's local database and Docker volume. A first run can take tens of minutes while acquiring data and rebuilding the detector.
+
+<details>
+<summary><strong>Development commands, one gate at a time</strong></summary>
 
 ```bash
 make bootstrap   # create the Python 3.12 environment
@@ -73,21 +152,46 @@ make app-db app-tokens
 make app-api             # then, in another terminal: make app-web, and open http://127.0.0.1:5173
 ```
 
-`make acquire` reuses a completed batch. `make acquire REFRESH=1` checks upstream for a new version. A first run took about 11 minutes on the development machine, mostly scanning 48 million OCD production rows.
+`make acquire` reuses a completed batch. `make acquire REFRESH=1` checks upstream for a new version. Detection rules are fixed before fitting; development selection is committed before opening a holdout.
 
-## How data is classified
+</details>
 
-| Class | Meaning |
-|---|---|
-| `OBSERVED` | An original source record, tied to its actual source |
-| `DERIVED` | Computed from identified records |
-| `REPLAYED` | An existing sequence used in an experimental scenario, keeping its original identity |
-| `SYNTHETIC` | Generated values, assets, events, or relationships |
-| `INFERRED` | A tentative association that needs supporting evidence and a confidence assessment |
+## Evaluation results
 
-3W's simulated and hand-drawn instances are `SYNTHETIC`, since they did not come from a real well.
+Results are read from committed experiment files. The two detection tracks remain separate, and financial results are modeled estimates for the fictional simulation facility.
 
-## Layout
+| Evaluation | Recorded result | Implication |
+| --- | --- | --- |
+| Synthetic AETHER detection | Selected detector caught **33 of 80** held-out events: **41.3%** recall, versus **8.3%** by chance. | Recall remains below half of events. |
+| Offshore Petrobras 3W benchmark | Method selected on development wells caught **1 of 40** held-out events (**2.5%** recall). | Performance on AETHER does not establish performance on offshore wells. |
+| Modeled maintenance economics | Mean annual cost: **$285,201** for fixed rounds; **$386,676** for alarm-driven dispatch, over 200 replicates. | Fixed rounds had the lowest mean cost under the declared assumptions. |
+| Public aerial association | **34.7%** of plume origins had a registered well within 250 m, versus **17.0%** for a footprint-matched null. | Evidence of spatial proximity; source attribution remains unverified. |
+| D1 restriction diagnosis | Preregistered outcome: **NOT MET**. Top-1 localization was **0.412** under held-out degraded operations. | Diagnosis did not meet its acceptance criteria. |
+
+[Full evaluation tables and source hashes →](reports/portfolio/evaluation_summary.md) · [D1 final report](reports/diagnostics/final_report.md) · [Model assumptions and limitations](docs/limitations.md)
+
+## Engineering controls
+
+| Control | How it works |
+| --- | --- |
+| Complete provenance | Database triggers require a chain from synthetic readings to sensor, asset, scenario run, and parameters. |
+| Restricted application access | FastAPI connects as `fieldtwin_app`; source ingestion and analysis writes stay outside the application's privileges. |
+| Human approval | Role checks, allowed transitions, and required audit events are enforced in the database. |
+| Explicit failure states | Failed acquisition, unavailable services, and unbuilt results retain their errors and recovery information. |
+| Reproducible evaluation | Frozen configurations, source hashes, attempt ledgers, and committed result files support review. |
+
+```bash
+make test                                  # offline tests
+npm --workspace apps/web run test           # UI behavior
+npm --workspace apps/web run build          # type checking and production build
+bash scripts/ci_local.sh                    # CI commands in a clean copy; needs PostGIS
+bash scripts/clean_copy_demo.sh             # full rebuild and application smoke test
+```
+
+Implementation and evidence are organized by [development gate](docs/specification.md#18-development-gates): [0](reports/gates/gate_0.md), [1](reports/gates/gate_1.md), [2](reports/gates/gate_2.md), [3](reports/gates/gate_3.md), [4](reports/gates/gate_4.md), [5](reports/gates/gate_5.md), [6](reports/gates/gate_6.md), [7](reports/gates/gate_7.md), [D1](reports/diagnostics/final_report.md), [8](reports/gates/gate_8.md), and [10](reports/gates/gate_10.md). Cloud deployment (Gate 9) is outside scope.
+
+<details>
+<summary><strong>Repository map</strong></summary>
 
 | Path | Contents |
 |---|---|
@@ -113,10 +217,32 @@ make app-api             # then, in another terminal: make app-web, and open htt
 | `reports/` | Generated results and gate reports |
 | `docs/` | [Specification](docs/specification.md), requirements, ADRs, architecture, and dataset documentation |
 
-## Safety
+</details>
 
-FieldTwin is a simulation. It never connects to or operates a well, valve, compressor, PLC, or SCADA endpoint.
+## Data provenance
 
-## Data credits
+AETHER is a fictional simulation model. Its operational assets, telemetry, alarms, and work orders are synthetic, generated by a simplified physical model that is uncalibrated to real wells. Economic figures are modeled estimates. FieldTwin provides advisory decision support with human approval and has no connection to physical equipment.
 
-Petrobras 3W is licensed CC BY 4.0, and its code Apache 2.0. New Mexico OCD data comes from the Oil Conservation Division, which publishes no explicit license. See [the license inventory](docs/datasets/license_inventory.md).
+Public datasets retain their original identifiers, units, reporting grain, and quality flags. Petrobras 3W was measured offshore and stays a separate benchmark; New Mexico OCD, Carbon Mapper, and NAIP records retain their own source context.
+
+| Class | Meaning |
+| --- | --- |
+| `OBSERVED` | Original source measurement or record. |
+| `DERIVED` | Computed from identified source records. |
+| `REPLAYED` | Stored source sequence retaining its original identity. |
+| `SYNTHETIC` | Generated data, assets, events, or relationships. |
+| `INFERRED` | Tentative association requiring supporting evidence. |
+
+3W's simulated and hand-drawn instances are classified as `SYNTHETIC`.
+
+**Data credits:** Petrobras 3W (CC BY 4.0; code Apache 2.0). New Mexico Oil Conservation Division (no stated redistribution terms; raw rows are not redistributed). Data by Carbon Mapper®, from data.carbonmapper.org (non-commercial use). USDA NAIP, accessed through Microsoft Planetary Computer (2022 imagery licensing unconfirmed). [Licence inventory →](docs/datasets/license_inventory.md)
+
+## Explore further
+
+| Product and design | Evidence and operation |
+| --- | --- |
+| [Project page](https://abh2050.github.io/fieldtwin/) | [Evaluation summary](reports/portfolio/evaluation_summary.md) |
+| [Technical overview](docs/technical_overview.md) | [Security review](docs/security_review.md) |
+| [Specification](docs/specification.md) | [Costs and teardown](reports/portfolio/costs.md) |
+| [Architecture decisions](docs/adr/) | [Hardening roadmap](docs/roadmap.md) |
+| [Canonical data model](reports/data_quality/canonical_schema.md) | [Decision evidence audit](reports/decision/evidence_audit.md) |

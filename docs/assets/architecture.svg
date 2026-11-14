@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="300" viewBox="0 0 1140 300" role="img" aria-labelledby="title description">
+<title id="title">FieldTwin system architecture</title>
+<desc id="description">Four public sources feed immutable acquisition batches and source-specific PostGIS tables. The AETHER simulator feeds separate synthetic tables. Detection, aerial proximity evidence, decision economics, and diagnosis read from the canonical store. FastAPI and React expose the results. Petrobras 3W remains a separate offshore benchmark.</desc>
+<!-- Exported from the system architecture diagram in docs/index.html. -->
+<rect width="1140" height="300" rx="16" fill="#0b1220"/>
+<style>
+text{fill:#e7edf7;font:13px ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+text.m{fill:#aebcd5;font-size:11.5px}
+rect{rx:10;stroke-width:1.2}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#7f93b5"/></marker></defs>
+<g fill="none" stroke="#7f93b5" stroke-width="1.4" marker-end="url(#a)">
+<path d="M190 70C230 70 230 125 262 128"/><path d="M190 130C228 130 232 142 262 144"/><path d="M190 190C228 190 232 160 262 158"/><path d="M190 250C232 250 232 178 262 174"/>
+<path d="M432 150H502"/><path d="M432 60C470 60 470 110 502 120"/>
+<path d="M722 150C760 150 760 60 792 60"/><path d="M722 150C760 150 760 120 792 125"/><path d="M722 150C760 150 760 185 792 190"/><path d="M722 150C760 150 760 250 792 255"/>
+<path d="M992 150H1020"/>
+</g>
+<g>
+<rect x="20" y="45" width="170" height="50" fill="#19332e" stroke="#5cc98b"/><text x="34" y="66">NM OCD</text><text class="m" x="34" y="84">well registry, production</text>
+<rect x="20" y="105" width="170" height="50" fill="#19332e" stroke="#5cc98b"/><text x="34" y="126">Petrobras 3W</text><text class="m" x="34" y="144">labelled well failures</text>
+<rect x="20" y="165" width="170" height="50" fill="#19332e" stroke="#5cc98b"/><text x="34" y="186">Carbon Mapper</text><text class="m" x="34" y="204">methane plumes</text>
+<rect x="20" y="225" width="170" height="50" fill="#19332e" stroke="#5cc98b"/><text x="34" y="246">USDA NAIP</text><text class="m" x="34" y="264">aerial imagery</text>
+<rect x="264" y="30" width="168" height="60" fill="#352c25" stroke="#f2a93b"/><text x="278" y="54">AETHER simulator</text><text class="m" x="278" y="72">coupled network solver</text>
+<rect x="264" y="110" width="168" height="80" fill="#1a2943" stroke="#6aa2ff"/><text x="278" y="136">Acquisition</text><text class="m" x="278" y="154">immutable batches</text><text class="m" x="278" y="170">checksums, quarantine</text>
+<rect x="504" y="100" width="218" height="100" fill="#1a2943" stroke="#6aa2ff"/><text x="518" y="128">PostgreSQL + PostGIS</text><text class="m" x="518" y="148">source and simulation tables</text><text class="m" x="518" y="165">provenance enforced by triggers</text><text class="m" x="518" y="182">append-only audit</text>
+<rect x="794" y="35" width="198" height="50" fill="#2d1e2a" stroke="#ef6461"/><text x="808" y="56">Detection</text><text class="m" x="808" y="74">5 methods · 2 test tracks</text>
+<rect x="794" y="100" width="198" height="50" fill="#1a2943" stroke="#6aa2ff"/><text x="808" y="121">Aerial evidence</text><text class="m" x="808" y="139">spatial proximity evidence</text>
+<rect x="794" y="165" width="198" height="50" fill="#2d1e2a" stroke="#ef6461"/><text x="808" y="186">Decisions + economics</text><text class="m" x="808" y="204">modeled policy comparison</text>
+<rect x="794" y="230" width="198" height="50" fill="#2d1e2a" stroke="#ef6461"/><text x="808" y="251">D1 diagnosis</text><text class="m" x="808" y="269">preregistered · NOT MET</text>
+<rect x="1022" y="110" width="100" height="80" fill="#2a273d" stroke="#b18cc9"/><text x="1036" y="140">API +</text><text x="1036" y="158">web app</text>
+</g>
+</svg>
