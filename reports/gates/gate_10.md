@@ -48,7 +48,7 @@ The specification's Gate 10 deliverables, and the section 23 criteria that were 
 | 11 | Demo reproducible without hidden manual steps | **Met** | Clean-copy run, above |
 | 12 | Local deployment validated (replaces the AWS criterion, ADR 0022) | **Met** | Clean-copy run and live smoke test |
 | 13 | Costs and teardown documented (replaces the AWS criterion) | **Met** | [Costs and teardown](../portfolio/costs.md) |
-| 14 | Tests and CI | **Met locally** | 685 offline, 270 database, and 17 web tests. Every CI command in a clean copy. Hosted CI is recorded on the PR. |
+| 14 | Tests and CI | **Met** | 685 offline, 270 database, and 17 web tests. Every CI command in a clean copy. Hosted CI on PR #14 (commit `17c6301`): all 10 jobs passed on both the push and pull-request runs. |
 
 ## What the clean-copy rebuild changed
 
@@ -75,6 +75,5 @@ The check now fails only when a recorded result changes. That covers the experim
 
 ## Not done
 
-- The hosted CI result for this branch is recorded on the PR, not here.
 - No browser end-to-end test runs in CI, and MapLibre's WebGL drawing wasn't checked automatically; both are listed in the limitations.
 - No demo video was recorded; only its script exists.
