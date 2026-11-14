@@ -1,6 +1,6 @@
 # ADR 0002: PostgreSQL locally, DynamoDB read models in the cloud
 
-**Status:** Accepted for the MVP. Not yet implemented (Gates 2 and 9).
+**Status:** The PostgreSQL half was implemented in Gate 2 and remains. The cloud half (DynamoDB and S3 read models) is superseded by [ADR 0022](0022-no-cloud-deployment.md) and was never built.
 
 ## Context
 

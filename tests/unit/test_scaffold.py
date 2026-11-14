@@ -13,7 +13,9 @@ def test_required_paths_exist():
         ".env.example", ".gitignore", "docker-compose.yml", "docs/index.html",
         "docs/architecture.drawio", "scripts/bootstrap.sh", "scripts/validate.sh",
         "docs/product/charter.md", "docs/product/requirements.md",
-        "docs/datasets/license_inventory.md", "infra/cost/cost_and_security_plan.md",
+        "docs/datasets/license_inventory.md", "docs/security_review.md", "docs/limitations.md",
+        "docs/roadmap.md", "docs/technical_overview.md", "docs/demos/walkthrough.md",
+        "docs/demos/video_script.md", "reports/portfolio/evaluation_summary.md", "reports/portfolio/costs.md",
         "data_contracts/sources/nm_ocd.yaml", "data_contracts/sources/petrobras_3w.yaml",
         "data_contracts/sources/generated/nm_ocd.schema.json",
         "data_contracts/sources/generated/petrobras_3w.schema.json",
@@ -92,9 +94,18 @@ def test_facility_meets_declared_constraints():
     assert len(assets["compression_station"]["compressors"]) == limits["compressors"] == 4
 
 
-def test_aws_placeholders_refuse_rather_than_pretend():
-    for name in ("aws_plan.sh", "aws_destroy.sh", "run_demo.sh"):
-        assert "exit 2" in (REPO_ROOT / "scripts" / name).read_text()
+def test_no_cloud_deployment_remains_in_scope():
+    # ADR 0022: no cloud targets, scripts, or infrastructure code.
+    makefile = (REPO_ROOT / "Makefile").read_text()
+    assert "aws-" not in makefile
+    assert not (REPO_ROOT / "infra").exists()
+    assert not list((REPO_ROOT / "scripts").glob("aws_*"))
+
+
+def test_demo_script_is_real_and_not_a_placeholder():
+    body = (REPO_ROOT / "scripts" / "run_demo.sh").read_text()
+    assert "not implemented" not in body and "exit 2" not in body
+    assert "--without-work-orders" in body  # the demo holds no scripted decisions
 
 
 def test_no_raw_data_can_be_committed():

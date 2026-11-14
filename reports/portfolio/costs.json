@@ -1,0 +1,70 @@
+{
+ "measured_at": "2026-11-14T14:00:19-08:00",
+ "paid_services": {
+  "sdk_references": [],
+  "infrastructure_as_code_files": []
+ },
+ "ci": {
+  "repository": "abh2050/fieldtwin",
+  "visibility": "PUBLIC",
+  "workflow_runs": 103,
+  "jobs": 901,
+  "job_minutes": 560.5,
+  "billed": "not billed: GitHub-hosted runners are free for public repositories"
+ },
+ "rebuilds": [
+  {
+   "log": "reports/gates/gate_2_execution_log.txt",
+   "minutes": 1.2,
+   "failed_steps": 0
+  },
+  {
+   "log": "reports/gates/gate_3_execution_log.txt",
+   "minutes": 1.9,
+   "failed_steps": 0
+  },
+  {
+   "log": "reports/gates/gate_4_execution_log.txt",
+   "minutes": 3.5,
+   "failed_steps": 0
+  },
+  {
+   "log": "reports/gates/gate_5_execution_log.txt",
+   "minutes": 21.0,
+   "failed_steps": 0
+  },
+  {
+   "log": "reports/gates/gate_6_execution_log.txt",
+   "minutes": 5.1,
+   "failed_steps": 0
+  },
+  {
+   "log": "reports/gates/gate_7_execution_log.txt",
+   "minutes": 13.8,
+   "failed_steps": 0
+  },
+  {
+   "log": "reports/gates/gate_8_execution_log.txt",
+   "minutes": 9.7,
+   "failed_steps": 0
+  }
+ ],
+ "clean_copy_demo": {
+  "run_demo_minutes": 64.1,
+  "smoke_reads_ok": "28/28",
+  "smoke_failures": "[]",
+  "committed_files_changed": "6",
+  "recorded_result_files_changed": null
+ },
+ "disk": {
+  "data/raw": 1689948160,
+  "data/bronze": 630784,
+  "data/silver": 65536,
+  "data/gold": 548442112,
+  ".venv": 800878592,
+  "node_modules": 294088704,
+  "apps/web/dist": 2859008,
+  "mlflow.db": null,
+  "docker volume (local PostGIS)": "185.5MB"
+ }
+}

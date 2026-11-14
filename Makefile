@@ -1,4 +1,4 @@
-.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures aws-plan aws-deploy aws-smoke-test aws-stop aws-destroy acquire-carbon-mapper acquire-naip inspection-associate inspection-evidence inspection-load inspection-reports inspection-review gate6 decision-run decision-load decision-economics decision-reports decision-list gate7 app-db app-tokens app-api app-web app-build app-test
+.PHONY: gate5-audit gate5-data gate5-development gate5-holdout gate5-performance gate5-stress gate5-reports gate5 field field-reports gate4 scenario reconcile benchmark-events gate3-reports gate3 gate2-reports schema-docs db-up db-down db-reset db-migrate db-seed db-load schemas typecheck test-db test-contract gate2 bootstrap test lint validate acquire acquire-ocd acquire-3w profile fixtures acquire-carbon-mapper acquire-naip inspection-associate inspection-evidence inspection-load inspection-reports inspection-review gate6 decision-run decision-load decision-economics decision-reports decision-list gate7 app-db app-tokens app-api app-web app-build app-test demo portfolio
 
 bootstrap:
 	bash scripts/bootstrap.sh
@@ -169,16 +169,6 @@ fixtures:
 validate:
 	bash scripts/validate.sh
 
-# AWS targets are placeholders until Gate 9. They fail on purpose and create nothing.
-aws-plan:
-	bash scripts/aws_plan.sh
-
-aws-destroy:
-	bash scripts/aws_destroy.sh
-
-aws-deploy aws-smoke-test aws-stop:
-	@echo "$@ is not implemented until Gate 9. Nothing was done." >&2; exit 2
-
 # Gate 8: the application. `make app-db` rebuilds the local database for the demo (no scripted
 # decisions); `make app-tokens` creates local bearer tokens; run `make app-api` and `make app-web` in two
 # terminals, then open http://127.0.0.1:5173.
@@ -202,3 +192,11 @@ app-build:
 app-test:
 	uv run pytest apps/api/tests -q
 	npm --workspace apps/web run test
+
+# Gate 10: one command from a clean checkout to the app on :8000, and the generated portfolio files.
+demo:
+	bash scripts/run_demo.sh
+
+portfolio:
+	uv run python scripts/portfolio_summary.py
+	uv run python scripts/measure_costs.py

@@ -157,6 +157,20 @@ def test_filters_and_validation(client):
     assert bad.status_code == 422 and bad.json()["error"]["code"] == "VALIDATION_FAILED"
 
 
+def test_filters_are_parameters_not_sql(client):
+    hostile = "x'; DROP TABLE assets; --"
+    for path, params in (
+        ("/api/v1/assets", {"q": hostile}),
+        ("/api/v1/assets", {"asset_type": hostile}),
+        ("/api/v1/data-quality", {"status": hostile}),
+        ("/api/v1/audit-events", {"actor_id": hostile}),
+        ("/api/v1/recommendations", {"scenario_id": hostile}),
+    ):
+        response = client.get(path, params=params)
+        assert response.status_code == 200 and response.json()["total"] == 0, path
+    assert client.get("/api/v1/assets").json()["total"] > 0
+
+
 def test_asset_detail_relationships_and_missing_asset(client):
     assert client.get("/api/v1/assets/A-01").json()["sensors"]
     assert client.get("/api/v1/assets/GS-A/relationships").json()["physical"]

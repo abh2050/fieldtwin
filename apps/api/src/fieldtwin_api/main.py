@@ -9,10 +9,11 @@ import json
 import logging
 import time
 from collections.abc import Awaitable, Callable
+from pathlib import Path
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from . import errors
 from .context import HEADER, accept_or_new, correlation_id
@@ -72,7 +73,30 @@ def create_app(config: Settings | None = None) -> FastAPI:
     )
     for module in (system, facility, data, scenarios, anomalies, inspections, decisions, reports):
         app.include_router(module.router)
+    if app.state.settings.web_dist is not None:
+        _serve_web(app, app.state.settings.web_dist)
     return app
+
+
+def _serve_web(app: FastAPI, dist: Path) -> None:
+    """Serve the built web app from the API's origin (used by `scripts/run_demo.sh`).
+
+    Registered after the API routes, so it only sees paths no route matched. Files come only from
+    inside `dist`; any other path gets index.html so the app's client-side routes work on reload.
+    """
+    root = dist.resolve()
+    index = root / "index.html"
+    if not index.is_file():
+        raise RuntimeError(f"FIELDTWIN_WEB_DIST has no index.html: {dist}")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def web(path: str) -> FileResponse:
+        if path.startswith("api/"):
+            raise errors.ApiError(404, "NOT_FOUND", "Not Found")
+        candidate = (root / path).resolve()
+        if path and candidate.is_relative_to(root) and candidate.is_file():
+            return FileResponse(candidate)
+        return FileResponse(index)
 
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")

@@ -1341,7 +1341,13 @@ Never claim a gate passed without execution evidence.
 
 # 18. DEVELOPMENT GATES
 
-> **Roadmap changed on 2026-11-10 ([ADR 0020](adr/0020-diagnostic-reset.md)).** Gates 0 to 4 are the foundation and Gates 5 to 7 are completed experimental evidence. Gates 8 to 10 below are **paused**. Diagnostic Milestone D1 ([specification](product/d1_diagnostic_spec.md)) comes next, before any UI or deployment work. The gate definitions below are kept as originally written.
+> **Roadmap changed on 2026-11-10 ([ADR 0020](adr/0020-diagnostic-reset.md)).** Gates 0 to 4 are the foundation and Gates 5 to 7 are completed experimental evidence. Gates 8 to 10 were paused for Diagnostic Milestone D1 ([specification](product/d1_diagnostic_spec.md)).
+>
+> **Updated 2026-11-12 ([ADR 0021](adr/0021-resume-application-gates.md)):** D1 concluded NOT MET; Gates 8 and 10 resumed and no further research is planned.
+>
+> **Updated 2026-11-14 ([ADR 0022](adr/0022-no-cloud-deployment.md)):** Gate 9 (AWS deployment) is removed from scope. Section 23's two cloud criteria are replaced by local equivalents described in that ADR.
+>
+> The gate definitions below are kept as originally written.
 
 ## Gate 0 — Project foundation
 
@@ -1478,6 +1484,8 @@ Acceptance:
 The full scenario runs locally from a clean checkout, without hardcoded application responses.
 
 ## Gate 9 — AWS deployment
+
+> **Removed from scope on 2026-11-14 ([ADR 0022](adr/0022-no-cloud-deployment.md)).** No cloud resource is created. The text below is kept as originally written.
 
 Deliver:
 
@@ -1683,8 +1691,8 @@ The project is complete only when:
 - The decision engine produces traceable recommendations.
 - Human approvals and audit logging function.
 - The complete application runs locally.
-- The AWS deployment has been validated after authorization.
-- Deployment costs and teardown are documented.
+- The AWS deployment has been validated after authorization. *(Replaced by ADR 0022: the local deployment is validated from a clean copy.)*
+- Deployment costs and teardown are documented. *(Replaced by ADR 0022: local costs and teardown are measured and documented.)*
 - Architecture diagrams are complete.
 - `docs/index.html` functions.
 - Automated tests pass.
