@@ -36,6 +36,6 @@ A technical reviewer can run or inspect the product and distinguish measured out
 
 | Constraint | Value |
 |---|---|
-| Cloud | AWS, with profile and region set through configuration, environment `dev` |
-| Budget target | At most $150 per month for experimental infrastructure. This is a target, not a measured bill. |
-| Deployment | First deployment private and authenticated, and only after explicit approval |
+| Cloud | None. Cloud deployment was removed from scope on 2026-11-14 ([ADR 0022](../adr/0022-no-cloud-deployment.md)); everything runs locally |
+| Budget target | Zero cloud spend and zero paid model calls. Measured local costs are in `reports/portfolio/costs.md` |
+| Deployment | Local only: one command from a clean copy, with local bearer-token authentication for state changes |

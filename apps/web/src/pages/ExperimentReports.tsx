@@ -157,7 +157,7 @@ function Detection() {
                     ) : (
                       <Empty>Performance results not built. Run make gate5-performance.</Empty>
                     )}
-                    <p className="mt-2 text-[11px] text-muted-foreground">Cloud costs: none measured yet. AWS deployment (Gate 9) has not been run, so no cost figure is shown.</p>
+                    <p className="mt-2 text-[11px] text-muted-foreground">No cloud deployment (ADR 0022): cloud and paid-API spend are zero by design. Measured local costs are in reports/portfolio/costs.md.</p>
                   </div>
                 </div>
               </div>

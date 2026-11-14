@@ -57,8 +57,8 @@ Excluded from D1: work-order generation, approvals, routing, aerial evidence, cl
 | Gates 5 to 7 | Detection, aerial evidence, decision support | Complete. Kept unchanged as experimental evidence, including negative results |
 | **D1** | **Gathering-line restriction diagnosis** | **Evaluated 2026-11-11: NOT MET** ([final report](../../reports/diagnostics/final_report.md)) |
 | Gate 8 | Application | Resumed 2026-11-12 ([ADR 0021](../adr/0021-resume-application-gates.md)) |
-| Gate 9 | AWS deployment | Resumed; needs explicit approval before any AWS resource |
-| Gate 10 | Portfolio demonstration | Resumed |
+| Gate 9 | AWS deployment | Removed from scope 2026-11-14 ([ADR 0022](../adr/0022-no-cloud-deployment.md)) |
+| Gate 10 | Portfolio demonstration | In progress |
 
 ADR 0021 resumed Gates 8 to 10 after D1 concluded NOT MET. No further research milestones are planned.
 
@@ -71,7 +71,7 @@ ADR 0021 resumed Gates 8 to 10 after D1 concluded NOT MET. No further research m
 | R-03 | Invalid records are quarantined with a reason | Implemented and tested |
 | R-04 | Raw batches are immutable and verifiable by checksum | Implemented and tested |
 | R-05 | Every screen discloses that AETHER Field is fictional | Implemented in the Gate 8 layout and tested on every route; `docs/index.html` also does |
-| R-06 | State changes need authentication, server-side roles, and an audit event | Implemented in the Gate 8 API with local bearer tokens; the database enforces roles and audit again. Gate 9 replaces local tokens with a managed identity provider |
+| R-06 | State changes need authentication, server-side roles, and an audit event | Implemented in the Gate 8 API with local bearer tokens; the database enforces roles and audit again. A managed identity provider is a production-hardening item, not built (ADR 0022) |
 | R-07 | Nothing can actuate physical equipment | Enforced by design: no such integration exists |
 | R-08 | The product stays fully functional without Bedrock | Planned |
 | R-09 | Real and fictional assets have separate identities | Implemented and tested |

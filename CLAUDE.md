@@ -28,9 +28,12 @@ make decision-list                        # simulated work orders; record a pers
 bash scripts/gate7_evidence.sh            # the Gate 7 rebuild, with evidence
 make app-db app-tokens                    # Gate 8: demo database (no scripted decisions) and local tokens
 make app-api                              # API on :8000; then `make app-web` and open http://127.0.0.1:5173
-bash scripts/gate8_evidence.sh            # the latest rebuild: live API smoke test, web build, every CI command
+bash scripts/gate8_evidence.sh            # the Gate 8 rebuild: live API smoke test, web build, every CI command
+make demo                                 # Gate 10: clean checkout to the app on :8000 (scripts/run_demo.sh)
+bash scripts/clean_copy_demo.sh           # prove the demo needs no hidden step (downloads ~1.7 GB)
+bash scripts/gate10_evidence.sh LOG       # the latest rebuild: portfolio, costs, every check (LOG from clean_copy_demo)
 ```
 
 ## Cost
 
-Keep model spend at zero for one-time content: write it in the session rather than in scripts that call a paid API. Do not create AWS resources without explicit approval.
+Keep model spend at zero for one-time content: write it in the session rather than in scripts that call a paid API. Create no cloud resources: cloud deployment is out of scope (ADR 0022).

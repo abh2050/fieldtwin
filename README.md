@@ -8,11 +8,35 @@ These datasets do not describe one facility. Petrobras 3W was not measured at a 
 
 ## Status
 
-Gates 0 to 7 are the only gates worked on so far: real data acquisition, a canonical PostgreSQL schema, a reconciliation engine, a coupled simulation of the whole fictional field, an anomaly-detection evaluation on two separate tracks, an aerial evidence workflow that relates real methane plumes and imagery to real registry wells by proximity only, and a transparent decision engine with human-gated simulated work orders and a modeled scheduling comparison. There is no application UI or AWS deployment yet, no detection result is field-validated, no plume is attributed to any well, and every economic figure is a modeled estimate for a fictional facility.
+**Complete (Gates 0 to 8 and 10, Diagnostic Milestone D1).** Gate 9, the AWS deployment, was removed from scope ([ADR 0022](docs/adr/0022-no-cloud-deployment.md)); everything runs on one machine.
 
-Results and evidence: [Gate 0](reports/gates/gate_0.md), [Gate 1](reports/gates/gate_1.md), [Gate 2](reports/gates/gate_2.md), [Gate 3](reports/gates/gate_3.md), [Gate 4](reports/gates/gate_4.md), [Gate 5](reports/gates/gate_5.md), [Gate 6](reports/gates/gate_6.md), [Gate 7](reports/gates/gate_7.md), [decision support](reports/decision/), [modeled economics](reports/economics/), [detection experiments](reports/experiments/), [aerial evidence](reports/inspection/), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
+**What it is:**
+
+- Real data acquisition and a canonical PostgreSQL/PostGIS schema with provenance enforced by the database.
+- A coupled simulation of the whole fictional field.
+- Anomaly detection evaluated on two tracks.
+- Aerial evidence that relates real methane plumes to real registry wells by proximity only.
+- A transparent decision engine with human-gated simulated work orders.
+- A preregistered physics-based diagnosis milestone.
+- A FastAPI and React application over all of it.
+
+**What it found:**
+
+- Detection is weak.
+- Alarm-driven dispatch didn't beat fixed rounds in the cost model.
+- The diagnosis milestone was NOT MET.
+
+Nothing is field-validated, and every economic figure is a modeled estimate for a fictional facility.
+
+- **See it:** [project page](docs/index.html) · [walkthrough](docs/demos/walkthrough.md) · [evaluation summary](reports/portfolio/evaluation_summary.md) · [technical overview](docs/technical_overview.md)
+- **Trust it:** [security review](docs/security_review.md) · [known limitations](docs/limitations.md) · [costs and teardown](reports/portfolio/costs.md) · [hardening roadmap](docs/roadmap.md)
+- **Run it:** `bash scripts/run_demo.sh`, then open http://127.0.0.1:8000.
+
+Gate evidence: [0](reports/gates/gate_0.md), [1](reports/gates/gate_1.md), [2](reports/gates/gate_2.md), [3](reports/gates/gate_3.md), [4](reports/gates/gate_4.md), [5](reports/gates/gate_5.md), [6](reports/gates/gate_6.md), [7](reports/gates/gate_7.md), [D1](reports/diagnostics/final_report.md), [8](reports/gates/gate_8.md), and [10](reports/gates/gate_10.md). Topic reports: [decision support](reports/decision/), [modeled economics](reports/economics/), [detection experiments](reports/experiments/), [aerial evidence](reports/inspection/), [field simulation](reports/simulation/), [AETHER-FAULT-001](reports/scenarios/aether_fault_001.md), [canonical schema](reports/data_quality/canonical_schema.md), [production units](reports/data_quality/production_units.md), and [3W compatibility](reports/reconciliation/semantic_compatibility.md).
 
 ## Quick start
+
+The one-command demo is `bash scripts/run_demo.sh`; it needs uv, Node 20 or later, and Docker. The steps it runs, one gate at a time:
 
 Requires [uv](https://docs.astral.sh/uv/) and about 7 GB of free disk, because acquisition stops if it would leave under 5 GB free.
 
@@ -43,6 +67,10 @@ make inspection-review   # chips awaiting blinded human review
 # Decision support: recommendations, simulated work orders, modeled economics
 make gate7 decision-load decision-reports
 make decision-list       # then record a person's decision with pipelines.decision.decide
+
+# The application: demo database without scripted decisions, local tokens, API and web
+make app-db app-tokens
+make app-api             # then, in another terminal: make app-web, and open http://127.0.0.1:5173
 ```
 
 `make acquire` reuses a completed batch. `make acquire REFRESH=1` checks upstream for a new version. A first run took about 11 minutes on the development machine, mostly scanning 48 million OCD production rows.
@@ -73,13 +101,17 @@ make decision-list       # then record a person's decision with pipelines.decisi
 | `packages/scenario_engine/` | Synthetic physical model, sensors, invariants, and events |
 | `pipelines/normalize/` | Seeds, loaders, canonical validation, and generated reports |
 | `pipelines/reconcile/`, `pipelines/synthetic/` | Run the engine and the scenario, and generate their reports |
+| `packages/anomaly_detection/`, `pipelines/experiments/` | Gate 5 detectors, evaluation, and the attempt ledger |
+| `packages/inspection/`, `pipelines/inspection/` | Gate 6 aerial evidence: association, claim guard, blind review |
+| `packages/decision_engine/`, `packages/optimization/`, `pipelines/decision/` | Gate 7 rules, work orders, routing, modeled economics |
+| `packages/diagnostics/`, `pipelines/diagnostics/` | D1 inverse diagnosis, freeze guard, and attempt control |
+| `apps/api/`, `apps/web/` | The FastAPI API and the React dashboard (Gate 8) |
+| `scripts/run_demo.sh`, `scripts/clean_copy_demo.sh` | One-command demo, and its proof from a clean copy |
 | `data/manifests/` | Checksums and counts for each batch (tracked) |
 | `data/raw`, `data/bronze` | Downloaded and parsed data (not tracked, recreated by `make acquire`) |
 | `data/fixtures/` | Committed test data. Its OCD rows are hand-written, not source records. |
 | `reports/` | Generated results and gate reports |
 | `docs/` | [Specification](docs/specification.md), requirements, ADRs, architecture, and dataset documentation |
-
-Other directories are placeholders for later gates, and each README says which gate fills it.
 
 ## Safety
 

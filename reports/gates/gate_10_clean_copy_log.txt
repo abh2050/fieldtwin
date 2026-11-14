@@ -1,0 +1,632 @@
+clean_copy_tracked_files=525
+untracked_data_files_present=0
+raw_batches_present=0
+node_modules_present=no
+
+== Dependencies
+Using CPython 3.12.13
+Creating virtual environment at: .venv
+Installed 90 packages in 264ms
+ + absl-py==2.5.1
+ + affine==3.0.1
+ + alembic==1.20.1
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.16.0
+ + ast-serialize==0.13.1
+ + attrs==26.1.0
+ + cachetools==7.3.0
+ + certifi==2026.10.23
+ + cffi==2.1.1
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + cloudpickle==3.1.2
+ + cryptography==50.0.2
+ + databricks-sdk==0.162.0
+ + duckdb==2.0.0
+ + et-xmlfile==2.0.0
+ + fastapi==0.162.0
+ + gitdb==4.0.12
+ + gitpython==3.2.1
+ + google-auth==2.62.1
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + hypothesis==6.170.14
+ + idna==3.20
+ + immutabledict==4.3.1
+ + importlib-metadata==10.1.0
+ + iniconfig==2.3.1
+ + joblib==1.6.0
+ + librt==0.16.0
+ + mako==1.4.3
+ + mapbox-vector-tile==2.2.0
+ + markupsafe==3.0.4
+ + mlflow-skinny==3.18.0
+ + mypy==2.4.1
+ + mypy-extensions==1.2.0
+ + narwhals==2.28.0
+ + numpy==2.5.4
+ + openpyxl==3.1.5
+ + opentelemetry-api==1.45.2
+ + opentelemetry-proto==1.45.2
+ + opentelemetry-sdk==1.45.2
+ + opentelemetry-semantic-conventions==0.66b2
+ + ortools==9.15.6755
+ + packaging==26.3
+ + pandas==3.1.1
+ + pandera==0.35.0
+ + pathspec==1.1.1
+ + pluggy==1.7.0
+ + protobuf==6.33.6
+ + psycopg==3.3.8
+ + psycopg-binary==3.3.8
+ + pyarrow==26.0.1
+ + pyasn1==0.6.5
+ + pyasn1-modules==0.4.2
+ + pyclipper==1.4.0
+ + pycparser==3.12
+ + pydantic==2.14.3
+ + pydantic-core==2.50.4
+ + pygments==2.21.0
+ + pyparsing==3.3.3
+ + pytest==9.2.0
+ + python-dateutil==4.0.0
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.33
+ + pyyaml==6.0.3
+ + rasterio==1.5.2
+ + requests==2.34.2
+ + ruff==0.17.4
+ + scikit-learn==1.9.1
+ + scipy==1.18.1
+ + shapely==2.2.0
+ + smmap==5.0.3
+ + sortedcontainers==2.4.0
+ + sqlalchemy==2.1.8
+ + sqlparse==0.6.1
+ + starlette==1.10.0
+ + tenacity==9.2.1
+ + threadpoolctl==3.8.0
+ + typeguard==4.6.0
+ + types-pyyaml==6.0.12.20261103
+ + typing-extensions==4.16.0
+ + typing-inspect==0.9.0
+ + typing-inspection==0.4.5
+ + tzdata==2026.6
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + zipp==4.1.2
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+added 382 packages in 4s
+
+== Public sources (reuses completed batches)
+{"ts": "2026-11-14T20:27:11Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "batch started", "batch_id": "nm_ocd-20261114-15ddeb88ae", "bytes_to_download": 1020218530}
+{"ts": "2026-11-14T20:27:12Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "downloading", "file": "/Public/OCD/OCD Interface v1.1/OCD Interface v1.1 Data Dictionary.xlsx", "size_bytes": 30513}
+{"ts": "2026-11-14T20:27:13Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "downloading", "file": "/Public/OCD/OCD Interface v1.1/core/wellhistory/wellhistory.zip", "size_bytes": 44317591}
+{"ts": "2026-11-14T20:27:18Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "downloading", "file": "/Public/OCD/OCD Interface v1.1/volumes/wcproduction/wcproduction.zip", "size_bytes": 975870426}
+{"ts": "2026-11-14T20:37:03Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "parsing well history", "wells": 681}
+{"ts": "2026-11-14T20:37:11Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "parsing production", "first_month": [2023, 12]}
+{"ts": "2026-11-14T20:44:22Z", "level": "INFO", "logger": "acquire.nm_ocd", "message": "batch complete", "batch_id": "nm_ocd-20261114-15ddeb88ae", "accepted": 38924, "rejected": 4}
+{
+  "batch_id": "nm_ocd-20261114-15ddeb88ae",
+  "processing_status": "COMPLETE",
+  "accepted_count": 38924,
+  "rejected_count": 4,
+  "reused": false
+}
+{"ts": "2026-11-14T20:44:25Z", "level": "INFO", "logger": "acquire.petrobras_3w", "message": "batch started", "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631", "files": 498, "bytes": 566077191}
+{"ts": "2026-11-14T20:44:52Z", "level": "INFO", "logger": "acquire.petrobras_3w", "message": "batch complete", "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631", "files": 504}
+{
+  "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+  "processing_status": "COMPLETE",
+  "accepted_count": 498,
+  "rejected_count": 0,
+  "reused": false
+}
+nm_ocd: /private<temp-dir>
+petrobras_3w: /private<temp-dir>
+{
+  "validated_at": "2026-11-14T20:45:01Z",
+  "passed": true,
+  "sources": {
+    "nm_ocd": {
+      "batch_id": "nm_ocd-20261114-15ddeb88ae",
+      "files_verified": 5,
+      "files_verified_against_upstream_hash": 0,
+      "original_checksum": "b1969f8972b9d21f8ee9e990c411fbe530abd6ce08aadacf1fc16abace1f8cdd",
+      "accepted_count": 38924,
+      "rejected_count": 4,
+      "integrity_problems": [],
+      "failed_quality_checks": [],
+      "passed": true
+    },
+    "petrobras_3w": {
+      "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+      "files_verified": 504,
+      "files_verified_against_upstream_hash": 503,
+      "original_checksum": "d3f2463e3aa75eda128b0e355902fd62203b6b37ddfbefbc4e8b5069f3fb1fa2",
+      "accepted_count": 498,
+      "rejected_count": 0,
+      "integrity_problems": [],
+      "failed_quality_checks": [],
+      "passed": true
+    }
+  }
+}
+
+== Fresh database and the fictional field
+ Network fieldtwin-clean_default Creating 
+ Volume fieldtwin-clean_pgdata Creating 
+ Volume fieldtwin-clean_pgdata Creating 
+ Network fieldtwin-clean_default Creating 
+ Volume fieldtwin-clean_pgdata Created 
+ Volume fieldtwin-clean_pgdata Created 
+ Network fieldtwin-clean_default Created 
+ Network fieldtwin-clean_default Created 
+ Container fieldtwin-clean-postgres-1 Creating 
+ Container fieldtwin-clean-postgres-1 Created 
+ Container fieldtwin-clean-postgres-1 Starting 
+ Container fieldtwin-clean-postgres-1 Started 
+ Container fieldtwin-clean-postgres-1 Waiting 
+ Container fieldtwin-clean-postgres-1 Healthy 
+server_version=16.4 (Debian 16.4-1.pgdg110+2)
+postgis_version=3.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+applied 0001_foundation.sql
+applied 0002_assets.sql
+applied 0003_measurement_semantics.sql
+applied 0004_records.sql
+applied 0005_compatibility_scenarios.sql
+applied 0006_quality_reconciliation.sql
+applied 0007_operations.sql
+applied 0008_views.sql
+applied 0009_reconciliation_decisions.sql
+applied 0010_scenario_runs_and_events.sql
+applied 0011_domain_boundaries.sql
+applied 0012_application_role_and_provenance_chain.sql
+applied 0013_physical_network.sql
+applied 0014_aerial_evidence.sql
+applied 0015_decision_support.sql
+applied 0016_application_state.sql
+migrations_applied=16
+tables_in_public=51
+seeded source_systems: 5
+seeded units: 13
+seeded unit_conversions: 11
+seeded equipment_classes: 7
+seeded transformations: 22
+seeded physical_nodes: 32
+seeded physical_edges: 36
+seeded measurement_definitions: 41
+seeded equipment_measurement_capabilities: 41
+seeded sensor_tags: 68
+seeded sensor_tag_mappings: 68
+seeded production_unit_rules: 3
+seeded source_event_classes: 10
+seeded domain_compatibility_requirements: 7
+seeded domain_compatibility_assessments: 40
+seeded domain_boundaries: 4
+seeded assets: 47
+seeded asset_relationships: 21
+{
+  "nm_ocd": {
+    "batch_id": "nm_ocd-20261114-15ddeb88ae",
+    "wells": 681,
+    "completions": 441,
+    "history": 1098,
+    "production": 37145,
+    "reconciliation_evidence": 2724,
+    "exceptions": 40
+  },
+  "petrobras_3w": {
+    "batch_id": "petrobras_3w-2.0.0-8aaa303f9b-7bf6887631",
+    "wells": 40,
+    "events": 498,
+    "observations": 13446,
+    "exceptions": 10
+  }
+}
+benchmark_events=498
+nominal: sha256=d36fdd5afba2677cc9d5c6eb523e3659f9402b8fc657c9e78148a40f8811cd13 invariants=12 events=0
+fault: sha256=a365b1e3321c523e1ad84ddc15b693c581c3837b6fd6aecab50a258c03658403 invariants=12 events=2
+{"runs": 2, "series": 8, "links": 8, "events": 2, "assignments": 2}
+AETHER-NET-NORMAL: sha256=80caededec3c1eab5a3ab75dba272728ea1b0b6760ee5abb14c51c9b2cc634d1 checks=16 rows=78624
+AETHER-FAULT-001-NET: sha256=54009f1999deb4ffdbc915a1a61ef4bcc562d40c778d2dcf68b5d7ce64902cf8 checks=17 rows=78624
+AETHER-NET-COMPRESSOR-DERATE: sha256=718d71887d090b42e18a831987253ded5f9abb8594b48b512c4bfea083f753ab checks=17 rows=78624
+AETHER-NET-SENSOR-DRIFT: sha256=4ece8c1120925e1763520f7708c54b4b8b06a3e099a5415d262b106c1a5080c6 checks=16 rows=78624
+AETHER-NET-COMM-DROPOUT: sha256=59b5865ba4221bdacb7308991c6128ec0e06a0db537db9dd1661768f860cb8e7 checks=16 rows=78624
+AETHER-NET-PLANNED-SHUTDOWN: sha256=35f1ce1ae194ffda401ed01ef35c42c89241371a41e7d1c851026e795c74a9bc checks=17 rows=78624
+{"runs": 6, "series": 234, "links": 234, "events": 9}
+{
+  "identity": 1123,
+  "semantic": 164,
+  "geospatial": 711,
+  "provenance_audit_violations": 0,
+  "provenance_audit_rules": 13
+}
+
+== Gate 5 detector: rebuilding the synthetic dataset and both AETHER stages (several minutes)
+{
+ "cases": 272,
+ "category_counts": {
+  "COMM": 20,
+  "DERATE": 36,
+  "NORMAL": 36,
+  "PLANNED": 36,
+  "RESTRICTION": 36,
+  "SENSOR_BIAS": 36,
+  "SENSOR_DRIFT": 36,
+  "SENSOR_STUCK": 36
+ },
+ "dataset_sha256": "52e38b27fbea6443a9b0e7ea3a7acb9d9db7d8de42e3441de8290b496f698ec0",
+ "failed": [],
+ "max_case_seconds": 3.725,
+ "median_case_seconds": 2.348,
+ "outcomes": {
+  "OK": 272
+ },
+ "parameter_sets_sha256": "a844d831bde541f080908764d7e3c02aa9bb5f38bd537d6181c2961de0b028d7",
+ "provenance": "SYNTHETIC",
+ "regime_counts": {
+  "compressor_outside": 14,
+  "deliverability_outside": 14,
+  "fault_with_dropout": 14,
+  "in_regime": 160,
+  "noise_high": 14,
+  "onset_outside": 14,
+  "severity_high": 14,
+  "severity_low": 14,
+  "unseen_assets": 14
+ },
+ "split_counts": {
+  "held_out": 112,
+  "test": 32,
+  "train": 96,
+  "validation": 32
+ }
+}
+static_threshold recall 0.6 FA/h 0.0026 P 0.8163242518981688 R 0.3184094769391577
+rolling_deviation recall 0.85 FA/h 0.0087 P 0.42225859247135844 R 0.011236444405731457
+logistic_regression recall 0.85 FA/h 0.0035 P 0.9541944231562813 R 0.7049344540742999
+isolation_forest recall 0.55 FA/h 0.0087 P 0.23391812865497075 R 0.00522625321196812
+hist_gradient_boosting recall 0.5 FA/h 0.0 P 0.9988537952114112 R 0.3415791995122164
+{'preferred': 'hist_gradient_boosting', 'reason': '1 method(s) met both alarm limits. hist_gradient_boosting had the best event skill among them (0.500). 1 method(s) have skill intervals including it, and hist_gradient_boosting is the simplest of them.', 'tied': ['hist_gradient_boosting'], 'excluded': {'static_threshold': {'false_alarms_per_hour': np.float64(0.0026214228500691765), 'time_in_alarm': np.float64(0.05449161387412316)}, 'rolling_deviation': {'false_alarms_per_hour': np.float64(0.008738076166897256), 'time_in_alarm': np.float64(0.0596616422728707)}, 'logistic_regression': {'false_alarms_per_hour': np.float64(0.0034952304667589017), 'time_in_alarm': np.float64(0.05881210708997791)}, 'isolation_forest': {'false_alarms_per_hour': np.float64(0.008738076166897256), 'time_in_alarm': np.float64(0.06320541760722348)}}}
+2026/11/14 12:47:20 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+severity_high {'static_threshold': (4, 10, np.float64(0.001)), 'rolling_deviation': (8, 10, np.float64(0.01)), 'logistic_regression': (8, 10, np.float64(0.007)), 'isolation_forest': (5, 10, np.float64(0.007)), 'hist_gradient_boosting': (5, 10, np.float64(0.0))}
+severity_low {'static_threshold': (4, 10, np.float64(0.003)), 'rolling_deviation': (6, 10, np.float64(0.005)), 'logistic_regression': (5, 10, np.float64(0.004)), 'isolation_forest': (5, 10, np.float64(0.008)), 'hist_gradient_boosting': (3, 10, np.float64(0.0))}
+unseen_assets {'static_threshold': (5, 10, np.float64(0.003)), 'rolling_deviation': (8, 10, np.float64(0.007)), 'logistic_regression': (6, 10, np.float64(0.004)), 'isolation_forest': (6, 10, np.float64(0.009)), 'hist_gradient_boosting': (0, 10, np.float64(0.0))}
+noise_high {'static_threshold': (4, 10, np.float64(0.002)), 'rolling_deviation': (8, 10, np.float64(0.006)), 'logistic_regression': (8, 10, np.float64(0.002)), 'isolation_forest': (7, 10, np.float64(0.009)), 'hist_gradient_boosting': (6, 10, np.float64(0.001))}
+deliverability_outside {'static_threshold': (0, 10, np.float64(0.01)), 'rolling_deviation': (8, 10, np.float64(0.007)), 'logistic_regression': (3, 10, np.float64(0.01)), 'isolation_forest': (7, 10, np.float64(0.011)), 'hist_gradient_boosting': (3, 10, np.float64(0.0))}
+onset_outside {'static_threshold': (3, 10, np.float64(0.002)), 'rolling_deviation': (6, 10, np.float64(0.009)), 'logistic_regression': (9, 10, np.float64(0.003)), 'isolation_forest': (3, 10, np.float64(0.012)), 'hist_gradient_boosting': (6, 10, np.float64(0.002))}
+compressor_outside {'static_threshold': (0, 10, np.float64(0.01)), 'rolling_deviation': (4, 10, np.float64(0.002)), 'logistic_regression': (0, 10, np.float64(0.012)), 'isolation_forest': (2, 10, np.float64(0.004)), 'hist_gradient_boosting': (5, 10, np.float64(0.0))}
+fault_with_dropout {'static_threshold': (5, 10, np.float64(0.002)), 'rolling_deviation': (7, 10, np.float64(0.007)), 'logistic_regression': (8, 10, np.float64(0.003)), 'isolation_forest': (7, 10, np.float64(0.007)), 'hist_gradient_boosting': (5, 10, np.float64(0.004))}
+2026/11/14 12:48:28 INFO mlflow.agent.hint: Load the `mlflow-trace-instrumentation` skill at .venv/lib/python3.12/site-packages/mlflow/assistant/skills/mlflow-trace-instrumentation/SKILL.md before writing any tracing code; it ships with this MLflow install. Set MLFLOW_DISABLE_AGENT_HINT=1 to silence this.
+Gate 5 rebuild reproduced every recorded value, including 57 checksums.
+Rebuilt detector matches the committed checksum 2fca62fa8e8c0a217d865121f41f63534794586a1d522a6c0e1cba501553b813.
+
+== Aerial evidence (Gate 6; reuses completed batches)
+{"ts": "2026-11-14T20:49:55Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "batch started", "batch_id": "carbon_mapper-20261114-7e46740d69"}
+{"ts": "2026-11-14T20:52:39Z", "level": "INFO", "logger": "acquire.carbon_mapper", "message": "batch complete", "batch_id": "carbon_mapper-20261114-7e46740d69", "plumes": 455, "scenes": 243}
+{
+  "batch_id": "carbon_mapper-20261114-7e46740d69",
+  "processing_status": "COMPLETE",
+  "accepted_count": 698,
+  "rejected_count": 0,
+  "reused": false
+}
+{
+  "rules_version": 2,
+  "inputs": {
+    "nm_ocd_batch": "nm_ocd-20261114-15ddeb88ae",
+    "carbon_mapper_batch": "carbon_mapper-20261114-7e46740d69"
+  },
+  "wells": {
+    "registry": 681,
+    "by_spatial_status": {
+      "QUARANTINED": 1,
+      "UNRESOLVED_DATUM": 35,
+      "USABLE": 645
+    },
+    "used": 645
+  },
+  "plumes": 455,
+  "scenes": 243,
+  "scenes_with_footprint": 243,
+  "primary_radius_m": 250.0,
+  "links": 536,
+  "plumes_with_any_well_within_radius": 158,
+  "wells_with_any_plume_within_radius": 205,
+  "candidate_wells_per_linked_plume": {
+    "one": 45,
+    "two_to_four": 72,
+    "five_or_more": 41
+  },
+  "sensitivity_links": {
+    "100": 141,
+    "500": 1534,
+    "1000": 4485
+  },
+  "proximity_vs_matched_null": [
+    {
+      "radius_m": 100.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.14285714285714285,
+      "matched_null_share": 0.03468131868131868,
+      "difference": 0.10817582417582416,
+      "difference_low": 0.07687104034841026,
+      "difference_high": 0.13919846806674338
+    },
+    {
+      "radius_m": 250.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.34725274725274724,
+      "matched_null_share": 0.16962637362637364,
+      "difference": 0.1776263736263736,
+      "difference_low": 0.12799809521810215,
+      "difference_high": 0.22807817341483932
+    },
+    {
+      "radius_m": 500.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.6043956043956044,
+      "matched_null_share": 0.4479230769230769,
+      "difference": 0.15647252747252743,
+      "difference_low": 0.11111706933182601,
+      "difference_high": 0.20497000262605025
+    },
+    {
+      "radius_m": 1000.0,
+      "plumes": 455,
+      "scenes": 142,
+      "plume_share": 0.7450549450549451,
+      "matched_null_share": 0.7228791208791208,
+      "difference": 0.02217582417582431,
+      "difference_low": -0.021264416124367462,
+      "difference_high": 0.06485405601158857
+    }
+  ],
+  "proximity_vs_matched_null_one_per_location_group": [
+    {
+      "radius_m": 100.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.21768707482993196,
+      "matched_null_share": 0.03448979591836735,
+      "difference": 0.18319727891156462,
+      "difference_low": 0.11576946266521997,
+      "difference_high": 0.2503396506262359
+    },
+    {
+      "radius_m": 250.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.41496598639455784,
+      "matched_null_share": 0.16843537414965984,
+      "difference": 0.246530612244898,
+      "difference_low": 0.15704633510529542,
+      "difference_high": 0.3328234730062237
+    },
+    {
+      "radius_m": 500.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.6190476190476191,
+      "matched_null_share": 0.4404421768707483,
+      "difference": 0.17860544217687074,
+      "difference_low": 0.10455281818181816,
+      "difference_high": 0.2562270706704164
+    },
+    {
+      "radius_m": 1000.0,
+      "plumes": 147,
+      "scenes": 86,
+      "plume_share": 0.7482993197278912,
+      "matched_null_share": 0.713469387755102,
+      "difference": 0.03482993197278916,
+      "difference_low": -0.03488754891631549,
+      "difference_high": 0.1058482142857143
+    }
+  ],
+  "location_groups": 147,
+  "plumes_outside_own_scene_footprint": 1,
+  "scenes_with_plumes": 142,
+  "median_footprint_share_of_study_area": 0.193,
+  "geometric_reference_uniform_box": [
+    {
+      "radius_m": 100.0,
+      "plumes": 455,
+      "plumes_within": 65,
+      "plume_share": 0.14285714285714285,
+      "reference_share": 0.03235
+    },
+    {
+      "radius_m": 250.0,
+      "plumes": 455,
+      "plumes_within": 158,
+      "plume_share": 0.34725274725274724,
+      "reference_share": 0.1592
+    },
+    {
+      "radius_m": 500.0,
+      "plumes": 455,
+      "plumes_within": 275,
+      "plume_share": 0.6043956043956044,
+      "reference_share": 0.4195
+    },
+    {
+      "radius_m": 1000.0,
+      "plumes": 455,
+      "plumes_within": 339,
+      "plume_share": 0.7450549450549451,
+      "reference_share": 0.69455
+    }
+  ],
+  "coverage_status": {
+    "IMAGED_NO_PLUME_NEARBY": 439,
+    "NOT_IMAGED": 1,
+    "PLUME_NEARBY": 205
+  }
+}
+{"ts": "2026-11-14T20:52:41Z", "level": "INFO", "logger": "acquire.naip", "message": "batch started", "batch_id": "naip-20261114-231dde276e", "wells": 60}
+{"ts": "2026-11-14T20:59:08Z", "level": "INFO", "logger": "acquire.naip", "message": "batch complete", "batch_id": "naip-20261114-231dde276e", "chips": 60}
+{
+  "batch_id": "naip-20261114-231dde276e",
+  "processing_status": "COMPLETE",
+  "accepted_count": 60,
+  "rejected_count": 0,
+  "reused": false
+}
+{
+  "validated_at": "2026-11-14T20:59:08Z",
+  "passed": true,
+  "sources": {
+    "carbon_mapper": {
+      "batch_id": "carbon_mapper-20261114-7e46740d69",
+      "files_verified": 140,
+      "original_checksum": "7da445753b368e51a60598878709751de44eda9e058cdd284952e7752b1ab546",
+      "integrity_problems": [],
+      "passed": true
+    },
+    "naip": {
+      "batch_id": "naip-20261114-231dde276e",
+      "files_verified": 70,
+      "original_checksum": "ce3e0981eb7120f8a1b902cfe2220bf418574d3182f9ac9059be64cb8da5c7dd",
+      "integrity_problems": [],
+      "passed": true
+    }
+  }
+}
+{
+  "prioritization_inputs": 1,
+  "requests": 1
+}
+{
+  "cards": 60,
+  "chips_by_group": {
+    "NEAR_PLUME": 40,
+    "CONTROL": 20
+  },
+  "card_coverage_status": {
+    "PLUME_NEARBY": 40,
+    "IMAGED_NO_PLUME_NEARBY": 20
+  },
+  "cards_with_plume_quicklook": 17,
+  "rendered_lines_checked": 880,
+  "claim_violations": 0,
+  "pages": {
+    "review_queue": "data/gold/inspection/review_queue.html",
+    "evidence": "data/gold/inspection/evidence.html"
+  },
+  "coverage_status_values": [
+    "NOT_IMAGED",
+    "IMAGED_CLOUDY_ONLY",
+    "IMAGED_NO_PLUME_NEARBY",
+    "PLUME_NEARBY"
+  ]
+}
+{
+  "links": 596,
+  "links_skipped_unknown_well": 0,
+  "reviews": 0,
+  "inspection_requests": 1,
+  "inspection_requests_without_loaded_event": 0,
+  "plume_observations": 455,
+  "image_observations": 60
+}
+
+== Decisions (Gate 7), loaded without work orders
+{
+  "recommendations": 4,
+  "by_action": {
+    "FIELD_INSPECTION": 3,
+    "CHECK_INSTRUMENTATION": 0,
+    "NO_ACTION_PLANNED_OPERATION": 1,
+    "NEEDS_EVIDENCE": 0
+  },
+  "work_orders": 3,
+  "grades": [
+    [
+      "AETHER-FAULT-001-NET",
+      "DISPATCHED_TO_FAULTED_ASSET"
+    ],
+    [
+      "AETHER-NET-COMPRESSOR-DERATE",
+      "DISPATCHED_TO_FAULTED_ASSET"
+    ],
+    [
+      "AETHER-NET-PLANNED-SHUTDOWN",
+      "NOT_DISPATCHED"
+    ],
+    [
+      "AETHER-NET-PLANNED-SHUTDOWN",
+      "DISPATCH_WITHOUT_FAULT"
+    ]
+  ],
+  "faults_without_alarm": [
+    "AETHER-NET-SENSOR-DRIFT"
+  ]
+}
+{
+  "alarms": 4,
+  "recommendations": 4,
+  "work_orders": 0,
+  "transitions": 0
+}
+
+== Web app
+
+> @fieldtwin/web@0.8.0 build
+> tsc -b && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 2510 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                0.53 kB │ gzip:   0.33 kB
+dist/assets/index-CWcRBFm7.css                90.39 kB │ gzip:  14.56 kB
+dist/assets/NotFound-VC0tqKHJ.js               0.31 kB │ gzip:   0.24 kB
+dist/assets/format-c1WbPcXD.js                 0.71 kB │ gzip:   0.42 kB
+dist/assets/table-B2eQlKWT.js                  0.78 kB │ gzip:   0.38 kB
+dist/assets/card-B8B_FQTP.js                   1.25 kB │ gzip:   0.51 kB
+dist/assets/badges-DBePgqqa.js                 1.51 kB │ gzip:   0.74 kB
+dist/assets/Page-DlP1OiCN.js                   1.73 kB │ gzip:   0.73 kB
+dist/assets/useMutation-BVUJYYZc.js            3.16 kB │ gzip:   1.28 kB
+dist/assets/Overview-C6UIA5ej.js               5.02 kB │ gzip:   2.09 kB
+dist/assets/DecisionCenter-BTpFgXV7.js         5.28 kB │ gzip:   2.12 kB
+dist/assets/FieldMap-DK8rla3p.js               6.96 kB │ gzip:   2.92 kB
+dist/assets/AssetExplorer-Ds7-1e0o.js          8.29 kB │ gzip:   2.81 kB
+dist/assets/Maintenance-BJjCgOEY.js            8.61 kB │ gzip:   3.47 kB
+dist/assets/DataLineage-CUsfp_CK.js            9.28 kB │ gzip:   2.77 kB
+dist/assets/AerialInspection-cWLfdh45.js       9.41 kB │ gzip:   3.59 kB
+dist/assets/TelemetryLab-BJPYMGqQ.js          10.48 kB │ gzip:   3.92 kB
+dist/assets/ExperimentReports-zJsS6h93.js    175.82 kB │ gzip:  53.50 kB
+dist/assets/index-BCsvA2IU.js                264.56 kB │ gzip:  85.68 kB
+dist/assets/maplibre-gl-bhDH6jK-.js        1,072.28 kB │ gzip: 293.79 kB
+dist/assets/EChart-Cb9XjrFk.js             1,126.98 kB │ gzip: 378.27 kB
+✓ built in 4.61s
+
+== Ready
+Sign-in tokens, one per role (from .env.app; local only):
+  VIEWER                   local-viewer       <redacted>
+  OPERATOR                 local-operator     <redacted>
+  MAINTENANCE_SUPERVISOR   local-supervisor   <redacted>
+Built. Serve with: bash scripts/run_demo.sh (or make app-api and make app-web).
+run_demo_exit=0 seconds=3846
+committed_files_changed_by_rebuild:
+ M data/manifests/petrobras_3w/petrobras_3w-2.0.0-8aaa303f9b-7bf6887631.json
+ M reports/data_quality/nm_ocd.json
+ M reports/data_quality/nm_ocd.md
+ M reports/experiments/attempts/attempts.jsonl
+ M reports/experiments/results/aether_dataset.json
+ M reports/gates/gate_1_validation.json
+ M reports/gates/gate_6_validation.json
+committed_files_changed_outside_attempt_records=6
+web_app_index_served=1
+smoke_reads_ok=28/28
+smoke_workflow_steps=13
+smoke_failures=[]

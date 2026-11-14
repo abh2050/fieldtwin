@@ -1,6 +1,6 @@
 # ADR 0001: Host the API on Lambda rather than always-on Fargate
 
-**Status:** Accepted for the MVP. Not yet implemented (Gate 9).
+**Status:** Superseded by [ADR 0022](0022-no-cloud-deployment.md) on 2026-11-14. Never implemented: cloud deployment was removed from scope.
 
 ## Context
 

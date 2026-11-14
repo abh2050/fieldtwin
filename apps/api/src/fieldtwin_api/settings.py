@@ -30,6 +30,8 @@ class Settings:
     # sha256(token) -> principal. Tokens themselves are never kept.
     tokens: dict[str, Principal] = field(default_factory=dict)
     cors_origins: tuple[str, ...] = ()
+    # The built web app to serve from the API's origin, or None to serve the API only.
+    web_dist: Path | None = None
 
 
 def parse_tokens(spec: str) -> dict[str, Principal]:
@@ -57,4 +59,7 @@ def load_settings() -> Settings:
         repo_root=Path(os.environ.get("FIELDTWIN_REPO_ROOT", REPO_ROOT)),
         tokens=parse_tokens(os.environ.get("FIELDTWIN_API_TOKENS", "")),
         cors_origins=tuple(o for o in origins.split(",") if o),
+        web_dist=Path(os.environ["FIELDTWIN_WEB_DIST"])
+        if os.environ.get("FIELDTWIN_WEB_DIST")
+        else None,
     )

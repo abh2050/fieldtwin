@@ -26,14 +26,15 @@ def health(config: Settings = Depends(settings)) -> JSONResponse:
                 "SELECT current_user, (SELECT count(*) FROM schema_migrations), "
                 "(SELECT max(version) FROM schema_migrations)"
             ).fetchone()
-            assert row is not None
+            if row is None:
+                raise psycopg.DataError("health query returned no row")
             checks = {
                 "database": "ok",
                 "role": row[0],
                 "migrations_applied": row[1],
                 "latest_migration": row[2],
             }
-    except (psycopg.Error, AssertionError) as exc:
+    except psycopg.Error as exc:
         checks["detail"] = type(exc).__name__
     ok = checks["database"] == "ok"
     checks["writes_enabled"] = bool(config.tokens)

@@ -101,8 +101,8 @@ def test_no_large_files_are_tracked():
 
 def test_env_example_holds_only_placeholders():
     body = (REPO_ROOT / ".env.example").read_text()
-    assert "AWS_PROFILE=your-aws-profile" in body
-    assert "AWS_REGION=your-aws-region" in body
+    assert "change-me-local-only" in body
+    assert "AWS_" not in body  # no cloud configuration: ADR 0022
 
 
 # Specification

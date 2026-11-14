@@ -161,3 +161,19 @@ def test_paths_outside_the_repository_are_refused(tmp_path):
     with pytest.raises(ApiError) as refused:
         read_json(tmp_path, "../outside.json", "x")
     assert refused.value.code == "PATH_OUTSIDE_REPOSITORY"
+
+
+def test_the_built_web_app_is_served_without_leaving_its_folder(tmp_path):
+    dist = tmp_path / "dist"
+    (dist / "assets").mkdir(parents=True)
+    (dist / "index.html").write_text("<html>app</html>")
+    (dist / "assets" / "a.js").write_text("console.log(1)")
+    (tmp_path / "secret.txt").write_text("outside")
+    web = TestClient(create_app(Settings(database_url=DOWN, repo_root=REPO_ROOT, web_dist=dist)))
+    assert web.get("/assets/a.js").text == "console.log(1)"
+    assert web.get("/maintenance").text == "<html>app</html>"  # client-side route
+    assert "outside" not in web.get("/../secret.txt").text
+    assert "outside" not in web.get("/%2e%2e/secret.txt").text
+    missing = web.get("/api/v1/nothing")
+    assert missing.status_code == 404 and missing.json()["error"]["code"] == "NOT_FOUND"
+    assert web.get("/health").status_code == 503  # API routes still win
