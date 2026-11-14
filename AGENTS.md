@@ -34,7 +34,7 @@ Physical connectivity lives in `physical_nodes` and `physical_edges`, separate f
 ## Safety and cost
 
 1. Nothing here may connect to or operate physical equipment. Recommendations stay advisory.
-2. Create no cloud resources. Cloud deployment is out of scope ([ADR 0022](docs/adr/0022-no-cloud-deployment.md)); reopening it needs a new ADR. Never hardcode account IDs or credentials.
+2. Create no cloud resources. Full-stack cloud deployment is out of scope ([ADR 0022](docs/adr/0022-no-cloud-deployment.md)). [ADR 0023](docs/adr/0023-explicit-browser-demo.md) permits an explicit browser-only demo on the owner-provided static host, without creating resources; other hosting changes need a new ADR. Never hardcode account IDs or credentials.
 3. Bedrock, if ever enabled, only explains. It holds no decision or approval authority.
 
 ## Scope

@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 type EvidenceRow = { evidence_id: string; source_asset_id: string; headline: string; coverage_status: string; plume_count: number; nearest_plume_m: number | null; chip_id: string | null; footprint_wgs84: [number, number, number, number] | null; reviewed: boolean; provenance: string };
 type Inspections = {
   requests: { items: { request_id: string; asset_id: string; affected_asset_id: string; scenario_id: string; inspection_type: string; reason: string; status: string; created_at: string; provenance_class: string }[] };
-  evidence: { source: Source; note: string; coverage_counts: Record<string, number>; total: number; limit: number; offset: number; items: EvidenceRow[] };
+  evidence: { packaged?: boolean; source: Source | null; note: string; coverage_counts: Record<string, number>; total: number; limit: number; offset: number; items: EvidenceRow[] };
 };
 type Plume = { plume_id: string; observed_at: string; instrument: string; distance_m: number; wells_within_radius_of_plume: number; emission_kg_per_h: number | null; emission_uncertainty_kg_per_h: number | null; uncertainty_definition: string; caption: string };
 type Evidence = {
@@ -219,10 +219,13 @@ export function AerialInspection() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">Aerial evidence <RealRecord /></CardTitle>
+                <CardTitle className="flex items-center gap-2">Aerial evidence {d.evidence.packaged !== false && <RealRecord />}</CardTitle>
                 <CardDescription>{d.evidence.note}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
+                {d.evidence.packaged === false ? (
+                  <Empty>Review aggregate aerial-association results in Experiment Reports, or use the local API for per-location evidence. Public evidence and reviews are not generated in this demo.</Empty>
+                ) : <>
                 <div className="flex flex-wrap items-end gap-3 text-xs">
                   <div className="space-y-1">
                     <Label htmlFor="coverage">Coverage</Label>
@@ -233,7 +236,7 @@ export function AerialInspection() {
                       ))}
                     </Select>
                   </div>
-                  <span className="text-muted-foreground">Source <code>{d.evidence.source.path}</code></span>
+                  {d.evidence.source && <span className="text-muted-foreground">Source <code>{d.evidence.source.path}</code></span>}
                 </div>
                 <div className="grid gap-4 xl:grid-cols-[380px_1fr]">
                   <div className="space-y-2">
@@ -258,6 +261,7 @@ export function AerialInspection() {
                   <FootprintMap rows={d.evidence.items} selected={selected} onSelect={setSelected} />
                 </div>
                 <p className="text-[11px] text-muted-foreground">Footprints are drawn at their real positions with no basemap loaded. Red: a plume origin lies within the radius. Blue: imaged, no plume nearby.</p>
+                </>}
               </CardContent>
             </Card>
             {selected && <EvidenceDetail id={selected} />}
