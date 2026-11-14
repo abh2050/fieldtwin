@@ -65,7 +65,7 @@ function Decide({ order }: { order: WorkOrder }) {
           </Button>
         ))}
       </div>
-      {!role && <p className="text-[11px] text-muted-foreground">Sign in to decide. Approvals need a maintenance supervisor; the database refuses them from any other role.</p>}
+      {!role && <p className="text-[11px] text-muted-foreground">Sign in to record a decision. Approval requires a maintenance supervisor.</p>}
       {decide.isError && <ErrorState error={decide.error} />}
     </div>
   );
@@ -150,7 +150,7 @@ function RouteComparison() {
                   </TBody>
                 </Table>
                 <p className="text-[11px] text-muted-foreground">
-                  {e.replicates} replicates over {e.horizon_days} days. Source <code>{e.source.path}</code>. Technician assignment is not modeled: work orders carry no crew field, and crews appear only as travel and labour in this model.
+                  {e.replicates} replicates over {e.horizon_days} days. Source <code>{e.source.path}</code>. Crew costs cover modeled travel and labour; individual technician assignment is outside the model.
                 </p>
               </div>
             );
@@ -172,7 +172,7 @@ export function Maintenance() {
   });
   const order = q.data?.items.find((o) => o.work_order_id === selected) ?? null;
   return (
-    <Page title="Maintenance" description="Simulated work orders, their approval workflow, and the modeled route comparison. Every transition is checked by the database and audited.">
+    <Page title="Maintenance" description="Review simulated work orders, record approval decisions, and compare modeled maintenance policies. Each status transition has an audit trail.">
       <div className="grid gap-4 xl:grid-cols-[1fr_440px]">
         <Card>
           <CardHeader>

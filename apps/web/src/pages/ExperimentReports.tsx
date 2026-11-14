@@ -194,7 +194,7 @@ export function ExperimentReports() {
   const slug = params.get("report");
   const catalog = useQuery({ queryKey: ["reports"], queryFn: () => request<{ items: CatalogEntry[] }>("/api/v1/reports") });
   return (
-    <Page title="Experiment Reports" description="Actual results as committed: detection benchmarks, aerial association, decision economics, and the D1 diagnosis. Nothing is recomputed or reworded here.">
+    <Page title="Experiment Reports" description="Inspect detection benchmarks, aerial association, modeled decision economics, and diagnosis results with their source reports.">
       <D1Summary />
       <Detection />
       <div className="grid gap-4 lg:grid-cols-[300px_1fr]">

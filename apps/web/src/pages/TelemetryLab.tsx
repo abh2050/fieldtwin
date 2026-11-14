@@ -157,11 +157,11 @@ export function TelemetryLab() {
   const runAlarms = (alarms.data?.items ?? []).filter((a) => a.scenario_run_id === runId);
 
   return (
-    <Page title="Telemetry Lab" description="Stored synthetic sensor series from the field simulator, with replay, detector alarms overlaid, and the recorded detection evaluation.">
+    <Page title="Telemetry Lab" description="Replay synthetic sensor readings, inspect detector alarms, and compare recorded detection performance.">
       <Card>
         <CardHeader>
           <CardTitle>Series</CardTitle>
-          <CardDescription>Only operator-visible sensor readings are served. Simulator truth stays in separate files and is never sent to this screen.</CardDescription>
+          <CardDescription>Operator-visible sensor readings with detector alarms on the scenario clock.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           <QueryState q={scenarios} isEmpty={(d) => d.items.length === 0} empty="No scenarios loaded. Run make field.">

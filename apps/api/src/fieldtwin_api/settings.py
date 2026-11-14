@@ -11,9 +11,9 @@ from packages.repositories.database import REPO_ROOT, database_url
 
 ROLES = ("VIEWER", "OPERATOR", "MAINTENANCE_SUPERVISOR")
 DISCLOSURE = (
-    "AETHER Field is a fictional facility. Its assets, telemetry, alarms, and work orders are "
-    "synthetic. Real public records (New Mexico OCD, Carbon Mapper, NAIP, Petrobras 3W) are labelled "
-    "as such and are never presented as AETHER data."
+    "AETHER is a fictional simulation model. Assets, telemetry, alarms, and work orders are "
+    "synthetic. Public records retain their source identities; Petrobras 3W is a separate "
+    "offshore benchmark."
 )
 
 

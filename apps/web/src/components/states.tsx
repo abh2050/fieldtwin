@@ -41,7 +41,7 @@ export function ErrorState({ error }: { error: unknown }) {
       <p className="mt-1">{e?.message ?? String(error)}</p>
       {build && (
         <p className="mt-1 text-xs">
-          Build it with <code className="rounded bg-muted px-1 font-mono">{build}</code>. Nothing is shown in its place.
+          Build it with <code className="rounded bg-muted px-1 font-mono">{build}</code>.
         </p>
       )}
       {e && (

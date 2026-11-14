@@ -53,7 +53,7 @@ export function Overview() {
   return (
     <Page
       title="Overview"
-      description="Facility and scenario status for fictional AETHER Field, and what the experiments found. Every number is a database count or a value read from a committed result file."
+      description="Track asset status, review the maintenance backlog, and compare modeled policy costs and evaluation results."
     >
       <QueryState q={q}>
         {(d) => {
@@ -65,7 +65,7 @@ export function Overview() {
                 aria-label="Facility and scenario status"
                 className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-7"
               >
-                <Stat label="Fictional assets" value={d.counts.fictional_assets} />
+                <Stat label="Simulation assets" value={d.counts.fictional_assets} />
                 <Stat label="Scenarios" value={d.counts.scenarios} note={`${d.counts.scenario_runs} stored runs`} />
                 <Stat label="Detector alarms" value={d.counts.alarms} note="on simulated runs" />
                 <Stat label="Dispatching recommendations" value={d.counts.dispatching_recommendations} />
@@ -149,18 +149,18 @@ export function Overview() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>What the experiments found</CardTitle>
-                    <CardDescription>Negative results are shown as prominently as positive ones.</CardDescription>
+                    <CardTitle>Evaluation results</CardTitle>
+                    <CardDescription>Detection benchmarks, policy comparisons, and diagnosis outcomes.</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <Finding gate="Gate 5" title="Detection is weak" slug="detection">
+                    <Finding gate="Gate 5" title="Held-out detection performance" slug="detection">
                       {d.detection
                         ? `The selected detector (${d.detection.method}) caught ${d.detection.events_detected} of ${d.detection.events} held-out events: event recall ${pct(d.detection.event_recall)}, against ${pct(d.detection.chance_event_recall)} by chance.`
                         : "Detection results are not built."}
                     </Finding>
-                    <Finding gate="Gate 7" title="Alarm-driven dispatch did not pay in the model" slug="economics">
+                    <Finding gate="Gate 7" title="Modeled maintenance policy costs" slug="economics">
                       {cheapest
-                        ? `The cheapest policy on mean modeled cost was ${cheapest[0]} (${usd(cheapest[1])} a year). These are model estimates for a fictional field, not savings.`
+                        ? `The cheapest policy on mean modeled cost was ${cheapest[0]} (${usd(cheapest[1])} a year). Estimates apply to the simulation model.`
                         : "Economics are not built."}
                     </Finding>
                     <Finding
@@ -171,7 +171,7 @@ export function Overview() {
                         d.d1_outcome ? <Badge variant="destructive">{d.d1_outcome.replace("_", " ")}</Badge> : null
                       }
                     >
-                      Preregistered, frozen, and evaluated once. See the report for which acceptance lines failed.
+                      Compare the frozen method against its preregistered acceptance thresholds in the full report.
                     </Finding>
                   </CardContent>
                 </Card>

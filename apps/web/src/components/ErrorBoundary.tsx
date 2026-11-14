@@ -1,7 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 
-// A screen that throws while rendering shows this instead; the layout, and with it the fictional-
-// facility disclosure and navigation, stay on screen.
+// Keep navigation and the provenance note available when a screen fails to render.
 export class ErrorBoundary extends Component<{ children: ReactNode; resetKey: string }, { error: Error | null }> {
   state = { error: null as Error | null };
 
@@ -23,7 +22,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode; resetKey: st
         <div role="alert" className="m-6 rounded-md border border-destructive/40 bg-destructive/10 p-4 text-sm">
           <p className="font-medium">This screen failed to render.</p>
           <p className="mt-1 font-mono text-xs">{this.state.error.message}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Other screens still work. Nothing is shown in place of the missing data.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Use the navigation to open another screen.</p>
         </div>
       );
     return this.props.children;

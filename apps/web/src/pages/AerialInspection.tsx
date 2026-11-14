@@ -185,7 +185,7 @@ export function AerialInspection() {
   return (
     <Page
       title="Aerial Inspection"
-      description="Two separate things: inspection requests for fictional AETHER assets, and Gate 6 evidence that links real public plume detections to real registered wells by proximity only."
+      description="Track simulation inspection requests and explore public aerial evidence. Real plume detections and registered wells are associated by spatial proximity only."
     >
       <QueryState q={q}>
         {(d) => (
@@ -193,7 +193,7 @@ export function AerialInspection() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">Inspection requests <Provenance value="SYNTHETIC" /></CardTitle>
-                <CardDescription>Requested for fictional assets from simulated scenario events.</CardDescription>
+                <CardDescription>Simulation asset inspections triggered by scenario events.</CardDescription>
               </CardHeader>
               <CardContent>
                 {d.requests.items.length === 0 ? (

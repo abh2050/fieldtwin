@@ -60,7 +60,7 @@ function Detail({ assetId }: { assetId: string }) {
               <CardTitle className="flex items-center gap-2">
                 {a.asset_name} <Provenance value={a.provenance_class} />
               </CardTitle>
-              <CardDescription>Fictional asset {a.asset_id}. Nothing here describes a real well or facility.</CardDescription>
+              <CardDescription>Simulation asset {a.asset_id}.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4 md:grid-cols-2">
               <KV
@@ -184,7 +184,7 @@ export function AssetExplorer() {
     (a) => (!type || a.asset_type === type) && (!search || `${a.asset_id} ${a.asset_name}`.toLowerCase().includes(search.toLowerCase())),
   );
   return (
-    <Page title="Asset Explorer" description="The fictional AETHER asset hierarchy, equipment details, sensors, operating history, provenance, and relationships.">
+    <Page title="Asset Explorer" description="Explore the asset hierarchy, inspect equipment and sensors, and trace operating history and data provenance.">
       <div className="grid gap-4 lg:grid-cols-[300px_1fr]">
         <Card>
           <CardHeader>
@@ -219,7 +219,7 @@ export function AssetExplorer() {
                 )
               }
             </QueryState>
-            {all.data && <p className="mt-2 text-[11px] text-muted-foreground">{all.data.total} fictional assets</p>}
+            {all.data && <p className="mt-2 text-[11px] text-muted-foreground">{all.data.total} simulation assets</p>}
           </CardContent>
         </Card>
         {assetId ? <Detail assetId={assetId} /> : <Empty>Select an asset to see its details.</Empty>}

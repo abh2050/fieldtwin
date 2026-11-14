@@ -103,14 +103,13 @@ export function Layout() {
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-card focus:p-2">
         Skip to content
       </a>
-      <Disclosure text={health.data?.disclosure ?? null} />
       <div className="flex flex-1">
         <nav aria-label="Main" className="hidden w-56 shrink-0 border-r bg-card md:block">
           <div className="flex items-center gap-2 px-4 py-4">
             <BarChart3 className="h-5 w-5 text-primary" aria-hidden />
             <div>
               <div className="text-sm font-semibold">FieldTwin</div>
-              <div className="text-[11px] text-muted-foreground">AETHER Field · fictional</div>
+              <div className="text-[11px] text-muted-foreground">Operations workspace</div>
             </div>
           </div>
           <ul className="space-y-0.5 px-2">
@@ -153,6 +152,7 @@ export function Layout() {
           </main>
         </div>
       </div>
+      <Disclosure text={health.data?.disclosure ?? null} />
     </div>
   );
 }

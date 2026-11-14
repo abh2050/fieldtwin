@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FieldTwin · Industrial decision support, end to end</title>
-<meta name="description" content="FieldTwin: an industrial decision-support platform built end to end on real public data and a fictional gas field, with provenance enforced by the database, human-gated decisions, and honest negative results.">
+<title>FieldTwin · From signal to approved action</title>
+<meta name="description" content="FieldTwin addresses the inspection decision in natural-gas operations: where to investigate, when to send a crew, and how to justify the response. Explore the workflow and modeled maintenance economics.">
 <style>
 :root{
   --bg:#0b1220; --bg2:#0f1a2e; --card:#121e35; --line:#22314f; --ink:#e7edf7; --mute:#9fb0cb;
@@ -20,8 +20,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,
 a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
 code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
-.disclose{background:color-mix(in srgb,var(--amber) 14%,transparent);border-bottom:1px solid color-mix(in srgb,var(--amber) 35%,transparent);font-size:13px;padding:8px 0}
-.disclose strong{color:var(--amber)}
 nav.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 nav.top .wrap{display:flex;align-items:center;gap:22px;height:56px;overflow-x:auto;white-space:nowrap}
 nav.top b{font-size:15px;letter-spacing:.2px}
@@ -105,22 +103,18 @@ footer a{color:var(--mute);text-decoration:underline}
 </head>
 <body>
 
-<div class="disclose" role="note" aria-label="Fictional facility disclosure"><div class="wrap">
-<strong>Fictional facility.</strong> AETHER Field does not exist. Its assets, telemetry, alarms, and work orders are synthetic. Real public records (New Mexico OCD, Petrobras 3W, Carbon Mapper, USDA NAIP) are labelled as such and never presented as AETHER data.
-</div></div>
-
 <nav class="top" aria-label="Sections"><div class="wrap">
 <b>FieldTwin</b>
-<a href="#app">The app</a><a href="#how">How it works</a><a href="#results">Results</a><a href="#rigour">Rigour</a><a href="#run">Run it</a><a href="#docs">Docs</a>
+<a href="#problem">Why FieldTwin</a><a href="#app">Workspace</a><a href="#how">Architecture</a><a href="#results">Results</a><a href="#rigour">Engineering</a><a href="#run">Run it</a><a href="#docs">Docs</a>
 <a href="https://github.com/abh2050/fieldtwin">GitHub</a>
 </div></nav>
 
 <header class="hero"><div class="wrap">
-<div class="eyebrow">● Industrial AI · data engineering · full-stack · honest evaluation</div>
-<h1>Industrial decision support, built end to end, <em>and honest about what didn't work.</em></h1>
-<p class="lede">FieldTwin takes four real public datasets, a physics-based simulation of a fictional gas field, and five anomaly detectors, and turns them into explained recommendations and human-approved work orders, in a working application. Every record knows where it came from, every decision knows who made it, and every result is reported as it came out, including the ones that failed.</p>
+<div class="eyebrow">Industrial decision support</div>
+<h1>From field signals<br>to <em>approved action.</em></h1>
+<p class="lede">When gas flow falls, field teams need to know where to investigate, whether a site visit is justified, and what to do first. FieldTwin connects telemetry, equipment relationships, and maintenance approvals so each response has a traceable rationale.</p>
 <div class="cta">
-<a class="btn primary" href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md">▶ Run the demo</a>
+<a class="btn primary" href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md">▶ Launch locally</a>
 <a class="btn" href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/evaluation_summary.md">Results</a>
 <a class="btn" href="https://github.com/abh2050/fieldtwin/blob/main/docs/technical_overview.md">Architecture</a>
 <a class="btn" href="https://github.com/abh2050/fieldtwin">Source on GitHub</a>
@@ -134,30 +128,45 @@ footer a{color:var(--mute);text-decoration:underline}
 <div class="stat"><div class="n">$0</div><div class="l">cloud and paid-API spend, measured</div></div>
 </div>
 </div>
-<span class="credit" role="note">Background: AI-generated illustration (Higgsfield). Not a real site, and not AETHER data.</span>
+<span class="credit" role="note">Background: AI-generated industrial illustration · Higgsfield</span>
 </header>
 
 <main>
+<section id="problem" class="alt" aria-labelledby="problem-title"><div class="wrap">
+<span class="tag t-amber">The business problem</span>
+<h2 id="problem-title">Decide where to send the next crew.</h2>
+<p class="sub">A falling flow rate can point to a well, a shared gathering restriction, or an instrumentation problem. Operators and reliability engineers must narrow the candidates; maintenance supervisors must decide whether the evidence justifies a visit. Unnecessary dispatch adds travel and labour cost. Delayed repair can extend production losses.</p>
+<div class="grid3">
+<div class="card"><h3>Identify what needs attention</h3><p>Follow an alarm through the equipment network and inspect the available readings to establish which assets warrant investigation.</p></div>
+<div class="card"><h3>Justify the response</h3><p>Review the inputs and scoring terms behind a recommendation, identify evidence gaps, and put the proposed work before a supervisor.</p></div>
+<div class="card"><h3>Evaluate the cost</h3><p>Compare scheduled rounds with alarm-driven and route-optimized dispatch using modeled travel, labour, repair, and deferred-production costs.</p></div>
+</div>
+<div class="card" style="margin-top:18px">
+<h3>Why we built FieldTwin</h3>
+<p>We built FieldTwin to connect monitoring, investigation, and maintenance in one auditable workflow, and to test whether alarm-driven dispatch can outperform scheduled rounds in the cost model. The project carries a signal through candidate equipment, explained recommendations, human approval, and recorded outcomes. The goal is to make each inspection decision traceable and evaluate its cost under explicit model assumptions.</p>
+</div>
+</div></section>
+
 <section id="app"><div class="wrap">
-<h2>A working operations app</h2>
-<p class="sub">FastAPI over PostGIS and a React dashboard with nine screens. These are screenshots of the real app running on the demo database. Every number on screen comes from a query or a committed result file.</p>
+<h2>One workspace. The full decision workflow.</h2>
+<p class="sub">Follow a signal from telemetry to investigation, priority scoring, and maintenance approval. Nine React screens connect through FastAPI to PostGIS, with source records and audit history available throughout. Screenshots show the local demonstration dataset.</p>
 <div class="grid2">
-<figure class="shot feature"><a href="assets/screens/telemetry.png"><img src="assets/screens/telemetry.png" alt="Telemetry Lab: a gas well's flow falls as a gathering line restricts, with the detector's alarm marked in red" loading="lazy" width="1440" height="900"></a>
-<figcaption><b>Telemetry Lab</b>A well's flow drops as a gathering line chokes, and the red line is where the detector alarmed. Replay, pause, and reset move a cursor over the stored run; they simulate nothing new. Simulator truth never reaches this screen.</figcaption></figure>
+<figure class="shot feature"><a href="assets/screens/telemetry.png"><img src="assets/screens/telemetry.png" alt="Telemetry Lab: simulated gas flow falls as a gathering line restricts, with the detector alarm marked in red" loading="lazy" width="1440" height="900"></a>
+<figcaption><b>Telemetry Lab</b>Replay stored synthetic telemetry, inspect flow and pressure changes, and locate detector alarms on the scenario clock. The screen uses operator-visible readings.</figcaption></figure>
 <figure class="shot"><a href="assets/screens/decisions.png"><img src="assets/screens/decisions.png" alt="Decision Center: a field-inspection recommendation with its explanation and a table of scoring terms that sum to the priority score" loading="lazy" width="1440" height="900"></a>
-<figcaption><b>Decision Center</b>No black box. The priority score is a sum of named terms, each with its input, and the database refuses a score that doesn't add up.</figcaption></figure>
+<figcaption><b>Decision Center</b>Inspect the inputs and named terms behind each priority score. Database checks enforce the score total before a recommendation is stored.</figcaption></figure>
 <figure class="shot"><a href="assets/screens/maintenance.png"><img src="assets/screens/maintenance.png" alt="Maintenance: a work order timeline showing SYSTEM creation, then HUMAN approval and completion" loading="lazy" width="1440" height="900"></a>
-<figcaption><b>Maintenance</b>Only the engine creates a work order, and only a supervisor approves it. Both rules are enforced by the database, and each transition is labelled with who made it.</figcaption></figure>
+<figcaption><b>Maintenance</b>Move engine-created work orders through supervisor approval and completion. Database rules enforce each transition and record the responsible actor.</figcaption></figure>
 <figure class="shot"><a href="assets/screens/reports.png"><img src="assets/screens/reports.png" alt="Experiment Reports: D1 acceptance lines with one failed line highlighted, and held-out regimes with failing values in red" loading="lazy" width="1440" height="900"></a>
-<figcaption><b>Experiment Reports</b>Preregistered acceptance lines, with the failure highlighted rather than buried.</figcaption></figure>
-<figure class="shot"><a href="assets/screens/overview.png"><img src="assets/screens/overview.png" alt="Overview: facility counts, maintenance backlog, modeled cost by policy, and a findings card leading with negative results" loading="lazy" width="1440" height="900"></a>
-<figcaption><b>Overview</b>The first thing a user reads is what the experiments found, negative results first.</figcaption></figure>
+<figcaption><b>Experiment Reports</b>Compare diagnosis results with preregistered thresholds, inspect held-out regimes, and open the source reports.</figcaption></figure>
+<figure class="shot"><a href="assets/screens/overview.png"><img src="assets/screens/overview.png" alt="Overview: asset counts, maintenance backlog, modeled cost by policy, and evaluation findings" loading="lazy" width="1440" height="900"></a>
+<figcaption><b>Overview</b>Review asset status, maintenance backlog, modeled policy costs, and experiment outcomes from a single screen.</figcaption></figure>
 </div>
 </div></section>
 
 <section id="how" class="alt"><div class="wrap">
-<h2>How it works</h2>
-<p class="sub">Real data and fictional data flow side by side and never mix. Separate tables, separate maps, and a provenance class on every row, checked by the database.</p>
+<h2>Trace every signal. Audit every decision.</h2>
+<p class="sub">Four public data pipelines and a field simulator feed a canonical PostGIS store. Dedicated tables and row-level provenance preserve source identity through detection, investigation, and decision support.</p>
 <svg class="pipe" viewBox="0 0 1140 300" role="img" aria-label="Data flow: four public sources feed acquisition and a canonical PostGIS store; a fictional field simulator feeds the same store; detection, aerial evidence, decisions, and diagnosis read from it; an API and web app serve the results.">
 <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#7f93b5"/></marker></defs>
 <g fill="none" stroke="#7f93b5" stroke-width="1.4" marker-end="url(#a)">
@@ -173,33 +182,33 @@ footer a{color:var(--mute);text-decoration:underline}
 <rect x="20" y="225" width="170" height="50" fill="color-mix(in srgb,#5cc98b 18%,transparent)" stroke="#5cc98b"/><text x="34" y="246">USDA NAIP</text><text class="m" x="34" y="264">aerial imagery</text>
 <rect x="264" y="30" width="168" height="60" fill="color-mix(in srgb,#f2a93b 18%,transparent)" stroke="#f2a93b"/><text x="278" y="54">AETHER simulator</text><text class="m" x="278" y="72">coupled network solver</text>
 <rect x="264" y="110" width="168" height="80" fill="color-mix(in srgb,#6aa2ff 16%,transparent)" stroke="#6aa2ff"/><text x="278" y="136">Acquisition</text><text class="m" x="278" y="154">immutable batches</text><text class="m" x="278" y="170">checksums, quarantine</text>
-<rect x="504" y="100" width="218" height="100" fill="color-mix(in srgb,#6aa2ff 16%,transparent)" stroke="#6aa2ff"/><text x="518" y="128">PostgreSQL + PostGIS</text><text class="m" x="518" y="148">real and fictional tables apart</text><text class="m" x="518" y="165">provenance enforced by triggers</text><text class="m" x="518" y="182">append-only audit</text>
-<rect x="794" y="35" width="198" height="50" fill="color-mix(in srgb,#ef6461 15%,transparent)" stroke="#ef6461"/><text x="808" y="56">Detection</text><text class="m" x="808" y="74">5 methods · 2 tracks · weak</text>
-<rect x="794" y="100" width="198" height="50" fill="color-mix(in srgb,#6aa2ff 16%,transparent)" stroke="#6aa2ff"/><text x="808" y="121">Aerial evidence</text><text class="m" x="808" y="139">proximity, not attribution</text>
-<rect x="794" y="165" width="198" height="50" fill="color-mix(in srgb,#ef6461 15%,transparent)" stroke="#ef6461"/><text x="808" y="186">Decisions + economics</text><text class="m" x="808" y="204">fixed rounds won the model</text>
+<rect x="504" y="100" width="218" height="100" fill="color-mix(in srgb,#6aa2ff 16%,transparent)" stroke="#6aa2ff"/><text x="518" y="128">PostgreSQL + PostGIS</text><text class="m" x="518" y="148">source-specific tables</text><text class="m" x="518" y="165">provenance enforced by triggers</text><text class="m" x="518" y="182">append-only audit</text>
+<rect x="794" y="35" width="198" height="50" fill="color-mix(in srgb,#ef6461 15%,transparent)" stroke="#ef6461"/><text x="808" y="56">Detection</text><text class="m" x="808" y="74">5 methods · 2 test tracks</text>
+<rect x="794" y="100" width="198" height="50" fill="color-mix(in srgb,#6aa2ff 16%,transparent)" stroke="#6aa2ff"/><text x="808" y="121">Aerial evidence</text><text class="m" x="808" y="139">spatial proximity evidence</text>
+<rect x="794" y="165" width="198" height="50" fill="color-mix(in srgb,#ef6461 15%,transparent)" stroke="#ef6461"/><text x="808" y="186">Decisions + economics</text><text class="m" x="808" y="204">modeled policy comparison</text>
 <rect x="794" y="230" width="198" height="50" fill="color-mix(in srgb,#ef6461 15%,transparent)" stroke="#ef6461"/><text x="808" y="251">D1 diagnosis</text><text class="m" x="808" y="269">preregistered · NOT MET</text>
 <rect x="1022" y="110" width="100" height="80" fill="color-mix(in srgb,#9673a6 22%,transparent)" stroke="#b18cc9"/><text x="1036" y="140">API +</text><text x="1036" y="158">web app</text>
 </g>
 </svg>
 <div class="grid3" style="margin-top:26px">
-<div class="card"><span class="tag t-blue">Data engineering</span><h3>Real data, kept honest</h3><p>Streaming acquisition of a 975 MB production archive, immutable raw batches with SHA-256 manifests, quarantine with reasons, and cross-source reconciliation where unknown stays unknown.</p></div>
-<div class="card"><span class="tag t-amber">Simulation</span><h3>A field that obeys physics</h3><p>A coupled solver for wells, flowlines, gathering lines, and compressors. Six deterministic scenarios whose hashes match on Linux x86, Linux ARM, and macOS in CI.</p></div>
-<div class="card"><span class="tag t-green">Application</span><h3>Built to be trusted</h3><p>A least-privilege database role, bearer-token roles, idempotent writes, correlation IDs, structured errors, and loading, empty, error, and degraded states on every screen.</p></div>
+<div class="card"><span class="tag t-blue">Data engineering</span><h3>Provenance from the first byte</h3><p>Streaming acquisition of a 975 MB production archive, immutable raw batches with SHA-256 manifests, quarantine with reasons, and cross-source reconciliation where unknown stays unknown.</p></div>
+<div class="card"><span class="tag t-amber">Simulation</span><h3>Coupled network simulation</h3><p>A simplified physical solver couples wells, flowlines, gathering lines, and compressors. Six deterministic scenarios whose hashes match on Linux x86, Linux ARM, and macOS in CI.</p></div>
+<div class="card"><span class="tag t-green">Application</span><h3>Controlled access. Audited writes.</h3><p>A least-privilege database role, bearer-token roles, idempotent writes, correlation IDs, structured errors, and loading, empty, error, and degraded states on every screen.</p></div>
 </div>
 </div></section>
 
 <section id="results"><div class="wrap">
-<h2>Results, including the ones that didn't work</h2>
-<p class="sub">Hold-outs were opened once. Where a rule changed after a result was seen, the report says so. The last milestone was preregistered and frozen before its final cases existed, and it failed. These figures are generated from the committed result files.</p>
+<h2>Measured performance. Explicit thresholds.</h2>
+<p class="sub">Compare detection, maintenance economics, aerial association, and diagnosis against their evaluation criteria. Figures come from committed result files. Reports document holdout access and rule changes; D1 was frozen before final evaluation and did not meet its acceptance criteria.</p>
 <div class="grid2">
-<div class="card"><span class="tag t-red">Gate 5 · detection · weak</span>
-<div class="big"><span data-source="summary">33 of 80</span></div><div class="vs">held-out events caught by the selected detector: <span data-source="summary">41.3%</span> event recall, against <span data-source="summary">8.3%</span> by chance. Better than chance, and still weak. On real Petrobras 3W wells, the method chosen in development caught <span data-source="summary">1 of 40</span>.</div></div>
-<div class="card"><span class="tag t-red">Gate 7 · economics · alarm-driven dispatch lost</span>
-<div class="big"><span data-source="summary">$285,201</span></div><div class="vs">mean modeled annual cost of fixed monthly rounds, against <span data-source="summary">$386,676</span> for alarm-driven dispatch. Route optimization barely moved it. These are model estimates for a fictional field, not savings.</div></div>
+<div class="card"><span class="tag t-red">Gate 5 · detection benchmark</span>
+<div class="big"><span data-source="summary">33 of 80</span></div><div class="vs">held-out events caught by the selected detector: <span data-source="summary">41.3%</span> event recall, against <span data-source="summary">8.3%</span> by chance. In the separate offshore Petrobras 3W benchmark, the method chosen in development caught <span data-source="summary">1 of 40</span>.</div></div>
+<div class="card"><span class="tag t-red">Gate 7 · modeled maintenance economics</span>
+<div class="big"><span data-source="summary">$285,201</span></div><div class="vs">mean modeled annual cost of fixed monthly rounds, against <span data-source="summary">$386,676</span> for alarm-driven dispatch. Route optimization had little effect on modeled cost. Estimates apply to the fictional simulation facility.</div></div>
 <div class="card"><span class="tag t-blue">Gate 6 · aerial evidence · proximity only</span>
-<div class="big">+<span data-source="summary">17.8%</span></div><div class="vs">more real methane plumes have a registered well within 250 m than a footprint-matched null predicts (<span data-source="summary">34.7%</span> against <span data-source="summary">17.0%</span>). The app never calls that attribution.</div></div>
+<div class="big">+<span data-source="summary">17.8%</span></div><div class="vs">more real methane plumes have a registered well within 250 m than a footprint-matched null predicts (<span data-source="summary">34.7%</span> against <span data-source="summary">17.0%</span>). This measures spatial proximity only; source attribution remains unverified.</div></div>
 <div class="card"><span class="tag t-red">D1 · physics-based diagnosis · <span data-source="summary">NOT MET</span></span>
-<div class="big">0.992 → <span data-source="summary">0.412</span></div><div class="vs">top-1 localization inside its own model, against held-out degraded operations with missing telemetry. Preregistered, frozen with a checksum guard, scored once, and reported as failed because the thresholds were set before any data.</div></div>
+<div class="big">0.992 → <span data-source="summary">0.412</span></div><div class="vs">top-1 localization inside its own model, against held-out degraded operations with missing telemetry. The method was preregistered, frozen with a checksum guard, and scored once. Final results did not meet the preset acceptance thresholds.</div></div>
 </div>
 <div class="card" style="margin-top:18px;overflow-x:auto">
 <h3>D1 held-out regimes</h3>
@@ -211,53 +220,53 @@ footer a{color:var(--mute);text-decoration:underline}
 <tr><td>Deliverability outside training</td><td class="num">0.971</td><td class="num">0.824 / 0.853</td><td class="pass">Pass</td></tr>
 <tr><td>Extreme severity</td><td class="num">1.000</td><td class="num"><span class="fail">0.529 / 0.500</span></td><td class="fail">Overconfident</td></tr>
 <tr><td>Compressor outside range</td><td class="num">1.000</td><td class="num">0.882 / <span class="fail">0.029</span></td><td class="fail">Impact wrong</td></tr>
-<tr><td>Degraded operations</td><td class="num"><span class="fail">0.412</span></td><td class="num"><span class="fail">0.441 / 0.588</span></td><td class="fail">Can't see the fault</td></tr>
+<tr><td>Degraded operations</td><td class="num"><span class="fail">0.412</span></td><td class="num"><span class="fail">0.441 / 0.588</span></td><td class="fail">Localization below threshold</td></tr>
 </tbody></table>
 <p class="vs" style="margin-top:10px">Full tables and source hashes: <a href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/evaluation_summary.md">evaluation summary</a> · <a href="https://github.com/abh2050/fieldtwin/blob/main/reports/diagnostics/final_report.md">D1 final report</a> · <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/limitations.md">known limitations</a>.</p>
 </div>
 </div></section>
 
 <section id="rigour" class="alt"><div class="wrap">
-<h2>Engineering rigour you can check</h2>
-<p class="sub">The integrity rules live where they can't be bypassed, and the evidence for each claim is in the repository.</p>
+<h2>Controls enforced at the database</h2>
+<p class="sub">Database triggers enforce provenance, authorization, and audit history. Repository tests and reports document the controls and their verification.</p>
 <div class="grid2">
 <ul class="checks">
-<li><b>The database enforces the evidence.</b> A synthetic reading without a complete chain to its sensor, asset, run, and parameters is refused. History is append-only.</li>
-<li><b>Even a broken API can't forge an approval.</b> Allowed transitions, the supervisor role, and "no status change without an audit event" are triggers, tested by attempting to bypass each one.</li>
-<li><b>Human and scripted decisions are kept apart.</b> <code>HUMAN</code>, <code>SCRIPTED_DEMO</code>, and <code>SYSTEM</code> are stored per transition and shown on screen.</li>
-<li><b>Nothing is substituted.</b> A failed download or an unbuilt result is reported as such, never filled with stand-in data.</li>
+<li><b>Complete provenance chains.</b> A synthetic reading without a complete chain to its sensor, asset, run, and parameters is refused. History is append-only.</li>
+<li><b>Supervisor approval enforced.</b> Allowed transitions, the supervisor role, and "no status change without an audit event" are triggers, tested by attempting to bypass each one.</li>
+<li><b>Explicit actor identity.</b> <code>HUMAN</code>, <code>SCRIPTED_DEMO</code>, and <code>SYSTEM</code> are stored per transition and shown on screen.</li>
+<li><b>Acquisition failures stay visible.</b> Failed downloads and unbuilt results retain their error state and recovery details.</li>
 </ul>
 <ul class="checks">
-<li><b>Preregistration with teeth.</b> D1's method was frozen by a checksum guard over 43 files, and its final runs went through an append-only attempt ledger that refuses a second try.</li>
-<li><b>Reproducible from nothing.</b> One script rebuilds the system in a clean copy, retrains the detector, checks its hash against the committed results, and smoke-tests the app.</li>
-<li><b>Security checked, not asserted.</b> Bandit findings triaged, gitleaks, pip-audit, and npm audit clean, SQL-injection and path-traversal tests, and a critical frontend advisory fixed. <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/security_review.md">Review</a></li>
-<li><b>Mistakes are disclosed.</b> Every report has a disclosures section, including the overclaims caught in review and how they were corrected.</li>
+<li><b>Frozen evaluation methods.</b> D1's method was frozen by a checksum guard over 43 files, and its final runs went through an append-only attempt ledger that refuses a second try.</li>
+<li><b>Reproducible local builds.</b> One script rebuilds the system in a clean copy, retrains the detector, checks its hash against the committed results, and smoke-tests the app.</li>
+<li><b>Documented security checks.</b> Bandit findings triaged, gitleaks, pip-audit, and npm audit clean, SQL-injection and path-traversal tests, and a critical frontend advisory fixed. <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/security_review.md">Review</a></li>
+<li><b>Review decisions are traceable.</b> Report disclosures record methodological changes, review findings, and corrections.</li>
 </ul>
 </div>
 </div></section>
 
 <section id="run"><div class="wrap">
-<h2>Run it yourself</h2>
-<p class="sub">You need uv, Node, and Docker. There are no accounts, keys, or cloud.</p>
+<h2>Launch the workspace</h2>
+<p class="sub">Start locally with uv, Node, and Docker. The included workflow runs on your machine without cloud accounts or API keys.</p>
 <pre class="run"><span class="c"># from a clean checkout to the app on http://127.0.0.1:8000</span>
 git clone https://github.com/abh2050/fieldtwin.git && cd fieldtwin
 bash scripts/run_demo.sh
 
-<span class="c"># prove there are no hidden steps: rebuild in a clean copy and smoke-test it</span>
+<span class="c"># rebuild in a clean copy and smoke-test the application</span>
 bash scripts/clean_copy_demo.sh</pre>
 <p class="vs" style="margin-top:12px">Then sign in as an operator, open a work order from a recommendation, and approve it as a supervisor. The <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md">walkthrough</a> has every step.</p>
 </div></section>
 
 <section class="alt"><div class="wrap">
 <h2>How it was built</h2>
-<p class="sub">Gate by gate. Each gate had a branch, a pull request, an external review, and an evidence rebuild from an empty database.</p>
+<p class="sub">Development gates connect implementation, pull requests, external review, and evidence rebuilds from an empty database.</p>
 <div class="timeline">
 <div class="gate done"><b>Gate 0–1</b>Foundation and real data acquisition</div>
 <div class="gate done"><b>Gate 2–3</b>Canonical schema and reconciliation</div>
 <div class="gate done"><b>Gate 4</b>Coupled field simulator</div>
-<div class="gate neg"><b>Gate 5</b>Anomaly detection: weak</div>
+<div class="gate neg"><b>Gate 5</b>Detection benchmarks</div>
 <div class="gate done"><b>Gate 6</b>Aerial evidence, proximity only</div>
-<div class="gate neg"><b>Gate 7</b>Decisions: fixed rounds won</div>
+<div class="gate neg"><b>Gate 7</b>Decision workflow and economics</div>
 <div class="gate neg"><b>D1</b>Preregistered diagnosis: NOT MET</div>
 <div class="gate done"><b>Gate 8</b>API and nine-screen app</div>
 <div class="gate no"><b>Gate 9</b>Cloud deployment, removed from scope (<a href="https://github.com/abh2050/fieldtwin/blob/main/docs/adr/0022-no-cloud-deployment.md">ADR 0022</a>)</div>
@@ -266,14 +275,14 @@ bash scripts/clean_copy_demo.sh</pre>
 </div></section>
 
 <section id="docs"><div class="wrap">
-<h2>Read further</h2>
+<h2>Explore the engineering</h2>
 <div class="grid3">
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/technical_overview.md"><h3>Technical overview →</h3><p>Layers, design rules, quality gates, and the ADRs that shape the system.</p></a>
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/evaluation_summary.md"><h3>Evaluation summary →</h3><p>Every result table, generated from the committed result files with their hashes.</p></a>
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/demos/walkthrough.md"><h3>Walkthrough →</h3><p>From a clean checkout to an approved simulated work order.</p></a>
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/security_review.md"><h3>Security review →</h3><p>Threat model, controls with evidence, and findings.</p></a>
-<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/limitations.md"><h3>Known limitations →</h3><p>Everything this project does not show.</p></a>
-<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/roadmap.md"><h3>Hardening roadmap →</h3><p>What it would take to run on a real field.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/limitations.md"><h3>Known limitations →</h3><p>Model assumptions, evaluation boundaries, and operating constraints.</p></a>
+<a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/roadmap.md"><h3>Hardening roadmap →</h3><p>Requirements for calibration and operational readiness.</p></a>
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/reports/portfolio/costs.md"><h3>Costs and teardown →</h3><p>Measured compute, CI minutes, and disk; zero cloud and paid-API spend.</p></a>
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/architecture.drawio"><h3>Architecture diagrams →</h3><p>Editable draw.io file with the system, runtime, network, and evaluation pages.</p></a>
 <a class="card" href="https://github.com/abh2050/fieldtwin/blob/main/docs/specification.md"><h3>Specification →</h3><p>The original brief, with dated notes where the scope changed.</p></a>
@@ -282,7 +291,7 @@ bash scripts/clean_copy_demo.sh</pre>
 </main>
 
 <footer><div class="wrap">
-<p><strong>AETHER Field is fictional.</strong> Synthetic results describe an uncalibrated model of it and are not evidence about any real field. Nothing here connects to or operates equipment.</p>
+<p role="note" aria-label="Data provenance"><strong>Data provenance.</strong> Operational assets, telemetry, alarms, and work orders are synthetic. AETHER is a fictional simulation model, uncalibrated to real wells. Public source records retain their own identities; Petrobras 3W is a separate offshore benchmark. Economic figures are modeled estimates. The application provides advisory decision support with human approval and has no connection to physical equipment.</p>
 <p>Data: Petrobras 3W (CC BY 4.0). New Mexico Oil Conservation Division (no stated licence; raw rows are not redistributed). Data by Carbon Mapper®, from data.carbonmapper.org (non-commercial use). Imagery: USDA NAIP, accessed through Microsoft Planetary Computer. <a href="https://github.com/abh2050/fieldtwin/blob/main/docs/datasets/license_inventory.md">Licence inventory</a>.</p>
 </div></footer>
 </body>

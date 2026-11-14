@@ -69,7 +69,7 @@ function RecommendationCard({ rec }: { rec: Recommendation }) {
       </CardHeader>
       <CardContent className="grid gap-4 lg:grid-cols-2">
         <div>
-          <h3 className="mb-1 text-xs font-semibold">Why: the rule engine's explanation</h3>
+          <h3 className="mb-1 text-xs font-semibold">Recommendation rationale</h3>
           <ul className="list-disc space-y-1 pl-5 text-xs">{rec.explanation.map((e, i) => <li key={i}>{e}</li>)}</ul>
           <div className="mt-2 text-xs">
             <span className="text-muted-foreground">Candidates, most likely first: </span>
@@ -80,7 +80,7 @@ function RecommendationCard({ rec }: { rec: Recommendation }) {
           </div>
         </div>
         <div>
-          <h3 className="mb-1 text-xs font-semibold">Score: every point is a named term</h3>
+          <h3 className="mb-1 text-xs font-semibold">Priority score breakdown</h3>
           <Table>
             <THead><TR><TH>Term</TH><TH>Input</TH><TH className="text-right">Points</TH></TR></THead>
             <TBody>
@@ -105,7 +105,7 @@ export function DecisionCenter() {
   return (
     <Page
       title="Decision Center"
-      description="Recommendations from the transparent rule engine, ranked by priority. Each comes from a detector alarm on a simulated run, and every score point is a stored term."
+      description="Prioritize response to simulated detector alarms. Inspect the rule inputs, scoring terms, and recommended action before opening a work order."
       actions={
         <div className="space-y-1">
           <Label htmlFor="action">Action</Label>
@@ -120,8 +120,8 @@ export function DecisionCenter() {
       }
     >
       <p className="text-xs text-muted-foreground">
-        <Badge variant="warning" className="mr-1">caution</Badge>
-        The detector behind these alarms caught under half of held-out events, and in the economic model alarm-driven dispatch cost more than fixed rounds. See Experiment Reports.
+        <Badge variant="warning" className="mr-1">Evaluation context</Badge>
+        Held-out event recall was below 50%. Modeled alarm-driven dispatch cost exceeded fixed rounds. Review the benchmarks in Experiment Reports.
       </p>
       <QueryState q={q} isEmpty={(p) => p.total === 0} empty="No recommendations. Run make gate7 and make app-db.">
         {(p) => <div className="space-y-3">{p.items.map((r) => <RecommendationCard key={r.recommendation_id} rec={r} />)}</div>}

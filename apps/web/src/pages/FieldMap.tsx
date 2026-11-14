@@ -168,7 +168,7 @@ function NetworkMap({ net, highlighted }: { net: Network; highlighted: Set<strin
       ) : (
         <div className="space-y-1">
           <Schematic net={net} highlighted={highlighted} onSelect={setSelected} />
-          <p className="text-[11px] text-muted-foreground">This browser has no WebGL, so a static schematic of the same network is shown.</p>
+          <p className="text-[11px] text-muted-foreground">Static network schematic · WebGL unavailable in this browser.</p>
         </div>
       )}
       <div className="space-y-3">
@@ -240,7 +240,7 @@ export function FieldMap() {
   return (
     <Page
       title="Field Map"
-      description="The fictional gathering network from the database: wells, headers, gathering segments, and the compressor station, drawn in local metres."
+      description="Explore the simulated gathering network: wells, headers, gathering segments, and the compressor station, mapped in local metres."
     >
       <div className="flex flex-wrap gap-2 text-xs">
         <Badge variant="warning">Schematic · local metres · no real location</Badge>
