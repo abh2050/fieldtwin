@@ -6,7 +6,9 @@
 
 **Industrial decision support for inspection and maintenance.**
 
-[Project page](https://abh2050.github.io/fieldtwin/) · [Run the demo](docs/demos/walkthrough.md) · [Architecture](#architecture) · [Results](#evaluation-results) · [Technical overview](docs/technical_overview.md)
+**[Live app](https://web-chi-amber-14.vercel.app)** · [Project page](https://abh2050.github.io/fieldtwin/) · [Run it locally](docs/demos/walkthrough.md) · [Architecture](#architecture) · [Results](#evaluation-results) · [Technical overview](docs/technical_overview.md)
+
+> The live app is the browser demo build ([ADR 0023](docs/adr/0023-explicit-browser-demo.md)): the nine screens running on the six stored AETHER simulation runs, with work-order decisions kept in your browser session and labelled `SCRIPTED_DEMO`. The full system (FastAPI, PostGIS, database-enforced roles, aerial evidence) runs locally with `bash scripts/run_demo.sh`.
 
 [![CI](https://github.com/abh2050/fieldtwin/actions/workflows/ci.yml/badge.svg)](https://github.com/abh2050/fieldtwin/actions/workflows/ci.yml)
 
@@ -241,7 +243,7 @@ Public datasets retain their original identifiers, units, reporting grain, and q
 
 | Product and design | Evidence and operation |
 | --- | --- |
-| [Project page](https://abh2050.github.io/fieldtwin/) | [Evaluation summary](reports/portfolio/evaluation_summary.md) |
+| [Live app](https://web-chi-amber-14.vercel.app) · [Project page](https://abh2050.github.io/fieldtwin/) | [Evaluation summary](reports/portfolio/evaluation_summary.md) |
 | [Technical overview](docs/technical_overview.md) | [Security review](docs/security_review.md) |
 | [Specification](docs/specification.md) | [Costs and teardown](reports/portfolio/costs.md) |
 | [Architecture decisions](docs/adr/) | [Hardening roadmap](docs/roadmap.md) |
