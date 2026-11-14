@@ -8,6 +8,8 @@ import { ApiError, request } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import type { Health, Me } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { BROWSER_DEMO } from "@/lib/mode";
+import { DemoControls } from "./DemoControls";
 import { Disclosure } from "./Disclosure";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { Button } from "./ui/button";
@@ -35,6 +37,7 @@ function SignIn() {
   const me = useMe();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  if (BROWSER_DEMO) return <DemoControls />;
   if (token) {
     const failed = me.isError && me.error instanceof ApiError && me.error.status === 401;
     return (
@@ -74,6 +77,7 @@ function SignIn() {
 }
 
 function HealthDot({ health }: { health: Health | undefined; }) {
+  if (health?.status === "demo") return <span className="text-xs font-medium text-primary">Browser simulation · session only</span>;
   const ok = health?.status === "ok";
   return (
     <span className="flex items-center gap-1.5 text-xs text-muted-foreground" title={health ? JSON.stringify(health.checks) : "checking"}>
@@ -87,6 +91,7 @@ export function Layout() {
   const health = useQuery({
     queryKey: ["health"],
     queryFn: async () => {
+      if (BROWSER_DEMO) return request<Health>("/health");
       // /health answers 503 with a body when degraded; keep that body.
       const r = await fetch("/health");
       if (!r.ok && r.status !== 503) throw new ApiError(r.status, "HEALTH_FAILED", r.statusText, null, null);
@@ -145,6 +150,11 @@ export function Layout() {
             )}
             <SignIn />
           </div>
+          {BROWSER_DEMO && (
+            <div role="note" aria-label="Browser demo mode" className="border-b bg-primary/5 px-4 py-3 text-xs">
+              <strong>Simulation demo.</strong> Replay stored synthetic scenarios and try the work-order workflow. Role selection demonstrates the controls; it is not sign-in. Changes stay in this browser session.
+            </div>
+          )}
           <main id="main" className="flex-1">
             <ErrorBoundary resetKey={location.pathname}>
               <Outlet />

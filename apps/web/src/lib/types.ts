@@ -1,7 +1,7 @@
 // Shapes returned by the FieldTwin API (apps/api). Only fields the screens use are listed.
 
 export type Health = {
-  status: "ok" | "degraded";
+  status: "ok" | "degraded" | "demo";
   checks: { database: string; role?: string; latest_migration?: string; writes_enabled?: boolean };
   disclosure: string;
 };

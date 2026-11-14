@@ -5,8 +5,9 @@ import { defineConfig } from "vite";
 
 // In development the API runs on 127.0.0.1:8000 (`make app-api`); the dev server proxies to it so the
 // browser talks to one origin.
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
+  publicDir: mode === "demo" ? "demo-public" : "public",
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   server: {
     port: 5173,
@@ -22,4 +23,4 @@ export default defineConfig({
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.test.tsx", "tests/**/*.test.ts"],
   },
-});
+}));

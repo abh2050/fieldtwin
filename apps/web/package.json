@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "build:demo": "tsc -b && vite build --mode demo",
+    "dev:demo": "vite --mode demo --host 127.0.0.1"
   },
   "dependencies": {
     "@tanstack/react-query": "5.107.1",

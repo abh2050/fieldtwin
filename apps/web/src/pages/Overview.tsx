@@ -7,6 +7,7 @@ import { Empty, QueryState } from "@/components/states";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { request } from "@/lib/api";
+import { BROWSER_DEMO } from "@/lib/mode";
 import { pct, usd } from "@/lib/format";
 import type { Source } from "@/lib/types";
 
@@ -55,6 +56,19 @@ export function Overview() {
       title="Overview"
       description="Track asset status, review the maintenance backlog, and compare modeled policy costs and evaluation results."
     >
+      {BROWSER_DEMO && (
+        <Card className="border-primary/25">
+          <CardHeader>
+            <CardTitle>Start an investigation</CardTitle>
+            <CardDescription>Six stored scenarios cover a gathering restriction, compressor derating, sensor drift, communication dropout, planned shutdown, and normal operation.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap items-center gap-4 text-sm">
+            <Link to="/telemetry" className="rounded bg-primary px-4 py-2 font-medium text-primary-foreground">Replay a scenario</Link>
+            <Link to="/decisions" className="text-primary underline">Review recommendations</Link>
+            <span className="text-xs text-muted-foreground">Open a work order as Operator, then select Maintenance supervisor to review it. Public source records are outside this simulation bundle.</span>
+          </CardContent>
+        </Card>
+      )}
       <QueryState q={q}>
         {(d) => {
           const totals = d.economics ? Object.entries(d.economics.mean_total) : [];
